@@ -1,6 +1,6 @@
 CREATE DATABASE  IF NOT EXISTS `cl203271` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `cl203271`;
--- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: 143.106.241.4    Database: cl203271
 -- ------------------------------------------------------
@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `avaliacoes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `avaliacoes` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `id_user` int NOT NULL,
   `id_pratos` int NOT NULL,
   `avaliacao` varchar(255) DEFAULT NULL,
@@ -55,7 +55,7 @@ DROP TABLE IF EXISTS `cardapio`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cardapio` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `vegano` tinyint NOT NULL,
   `id_acompanhamento` int DEFAULT NULL,
   `id_prato_principal` int DEFAULT NULL,
@@ -96,7 +96,7 @@ DROP TABLE IF EXISTS `cardapio_dia`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cardapio_dia` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `data` date NOT NULL,
   `id_padrao_almoco` int DEFAULT NULL,
   `id_vegano_almoco` int DEFAULT NULL,
@@ -104,11 +104,11 @@ CREATE TABLE `cardapio_dia` (
   `id_vegano_jantar` int DEFAULT NULL,
   `id_user` int NOT NULL,
   PRIMARY KEY (`id`),
+  KEY `id_user_cardapio_dia_idx` (`id_user`),
   KEY `id_vegano_jantar_idx` (`id_vegano_jantar`),
   KEY `id_padrao_jantar_idx` (`id_padrao_jantar`),
   KEY `id_vegano_almoco_idx` (`id_vegano_almoco`),
   KEY `id_padrao_almoco_idx` (`id_padrao_almoco`),
-  KEY `id_user_cardapio_dia_idx` (`id_user`),
   CONSTRAINT `id_padrao_almoco` FOREIGN KEY (`id_padrao_almoco`) REFERENCES `cardapio` (`id`),
   CONSTRAINT `id_padrao_jantar` FOREIGN KEY (`id_padrao_jantar`) REFERENCES `cardapio` (`id`),
   CONSTRAINT `id_user_cardapio_dia` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`),
@@ -218,7 +218,7 @@ DROP TABLE IF EXISTS `pratos_favoritados`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pratos_favoritados` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `id_pratos` int NOT NULL,
   `id_user` int NOT NULL,
   PRIMARY KEY (`id`),
@@ -271,7 +271,7 @@ DROP TABLE IF EXISTS `valor_nutricional`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `valor_nutricional` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `id_prato` int NOT NULL,
   `medida` varchar(45) NOT NULL,
   `kcal` float NOT NULL,
@@ -302,4 +302,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-03-15 16:29:51
+-- Dump completed on 2026-03-18 19:30:22
