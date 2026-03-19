@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel</title>
+    <script>
+        // VERIFICAÇÃO DE RESTRIÇÃO
+        if (sessionStorage.getItem('logado') !== 'true') {
+            window.location.href = 'login.html'; // Volta pro login se não logado
+        }
+    </script>
+</head>
+<body>
+    <h1>Bem-vindo à área restrita!</h1>
+    <button onclick="logout()">Sair</button>
+    <script>
+        function logout() {
+            sessionStorage.setItem('logado', 'false');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
