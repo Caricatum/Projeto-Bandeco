@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name="user")
@@ -11,12 +13,16 @@ public class User {
 
     @Id
     private int id;
+    @NotBlank(message = "O Login não pode estar vazio")
     @Column
     private String login;
+    @NotBlank(message = "O nome não pode estar vazio")
     @Column
     private String nome;
+    @NotBlank(message = "A senha não pode estar vazia")
     @Column
     private String senha_hash;
+    @NotNull(message = "Funcionário não pode ser nullo")
     @Column
     private boolean funcionario;
 
