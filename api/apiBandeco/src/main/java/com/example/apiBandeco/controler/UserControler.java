@@ -2,6 +2,7 @@ package com.example.apiBandeco.controler;
 
 import com.example.apiBandeco.model.User;
 import com.example.apiBandeco.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.apache.catalina.LifecycleState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,7 @@ public class UserControler {
     public List<User> buscarTodosUsers(){return userRepo.findAll();}
 
     @PostMapping("/cadastrarUser")//cadastra um usuário
-    public void cadastroUser (@RequestBody User user){
+    public void cadastroUser (@RequestBody @Valid User user){
 
         user.setSenha_hash(encoder.encode(user.getSenha_hash()));
         userRepo.save(user);
@@ -65,7 +66,7 @@ public class UserControler {
     }
 
     @PutMapping("/atualizarUser") //Atualiza User
-    public void atualizaUser (@RequestBody User user){
+    public void atualizaUser (@RequestBody @Valid User user){
         userRepo.save(user);
     }
 
