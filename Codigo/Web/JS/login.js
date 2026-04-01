@@ -18,3 +18,5 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
         sessionStorage.setItem('logado', 'false');
     }
 });
+
+//teste
