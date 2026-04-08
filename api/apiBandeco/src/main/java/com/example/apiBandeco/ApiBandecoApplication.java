@@ -9,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
-public class ApiBandecoApplication {
+public class    ApiBandecoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiBandecoApplication.class, args);
