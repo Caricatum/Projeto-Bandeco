@@ -1,0 +1,15 @@
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\bin\Debug\net9.0\MeuAppCSharp.exe
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\bin\Debug\net9.0\MeuAppCSharp.deps.json
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\bin\Debug\net9.0\MeuAppCSharp.runtimeconfig.json
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\bin\Debug\net9.0\MeuAppCSharp.dll
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\bin\Debug\net9.0\MeuAppCSharp.pdb
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\obj\Debug\net9.0\MeuAppCSharp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\obj\Debug\net9.0\MeuAppCSharp.AssemblyInfoInputs.cache
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\obj\Debug\net9.0\MeuAppCSharp.AssemblyInfo.cs
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\obj\Debug\net9.0\MeuAppCSharp.csproj.CoreCompileInputs.cache
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\obj\Debug\net9.0\MeuAppCSharp.sourcelink.json
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\obj\Debug\net9.0\MeuAppCSharp.dll
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\obj\Debug\net9.0\refint\MeuAppCSharp.dll
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\obj\Debug\net9.0\MeuAppCSharp.pdb
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\obj\Debug\net9.0\MeuAppCSharp.genruntimeconfig.cache
+C:\Users\aluno\Downloads\Projeto-Bandeco\MeuAppCSharp\obj\Debug\net9.0\ref\MeuAppCSharp.dll
