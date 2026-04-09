@@ -1,4 +1,4 @@
-//using System;
+using System;
 
 class Program
 {
@@ -6,3 +6,4 @@ class Program
     {
         Console.WriteLine("Olá, C# no VS Code!");
     }
+}
