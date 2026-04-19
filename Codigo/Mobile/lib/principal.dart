@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tcc_flutter/cadastroPrato.dart';
-import 'package:tcc_flutter/cardapios.dart';
-import 'package:tcc_flutter/perfil.dart';
+import 'cardapios.dart';
+import 'cadastroPrato.dart';
+import 'perfil.dart';
 
 class Principal extends StatefulWidget {
   const Principal({super.key});
@@ -11,11 +11,16 @@ class Principal extends StatefulWidget {
 }
 
 class _PrincipalState extends State<Principal> {
+  int indexAtual = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Bem Vindo!", style: TextStyle(fontSize: 30)), //Colocar nome do Usuario no Bem Vindo
+        title: Text(
+          "Bem Vindo (nome do user)!",
+          style: TextStyle(fontSize: 30),
+        ), //Colocar nome do Usuario no Bem Vindo
         backgroundColor: Colors.orangeAccent,
         actions: [
           IconButton(
@@ -29,60 +34,45 @@ class _PrincipalState extends State<Principal> {
           ),
         ],
       ),
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Image.asset(
-              'assets/images/cotil_unicamp.png',
-              width: 300,
-              height: 200,
-            ),
-            TextField(
-              decoration: InputDecoration(
-                label: Text("Buscar", style: TextStyle(fontSize: 20)),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                suffixIcon: Icon(Icons.search),
-              ),
-            ),
-            Row(
+      body: IndexedStack(
+        index: indexAtual,
+        children: [
+          // Página Início
+          Container(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Cardapios()),
-                    );
-                  },
-                  child: Text("Cardápios"),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Cadastroprato()),
-                    );
-                  },
-                  child: Text("Cadastrar Prato"),
+                Image.asset(
+                  'assets/images/cotil_unicamp.png',
+                  width: 300,
+                  height: 200,
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+          Cardapios(),
+          Cadastroprato(),
+        ],
+      ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (index) {
+          setState(() {
+            indexAtual = index;
+          });
+        },
+        currentIndex: indexAtual,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Início"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu_book),
+            label: "Cardápios",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.new_label),
+            label: "Novo Prato",
+          ),
+        ],
       ),
     );
   }
