@@ -2,6 +2,7 @@ package com.example.apiBandeco.exception;
 
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,5 +19,14 @@ public class TratadorErros {
         });
 
         return erros;
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public Map<String, String> tratarResponseStatus(ResponseStatusException ex) {
+        Map<String, String> erro = new HashMap<>();
+
+        erro.put("erro", ex.getReason());
+
+        return erro;
     }
 }
