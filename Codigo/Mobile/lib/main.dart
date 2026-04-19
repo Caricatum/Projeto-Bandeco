@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tcc_flutter/cadastro.dart';
 import 'package:tcc_flutter/login.dart';
 import 'package:tcc_flutter/principal.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const Principal(),
+      home: const Cadastro(),
     );
   }
 }
