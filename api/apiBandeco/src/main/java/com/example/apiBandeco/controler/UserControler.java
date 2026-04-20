@@ -31,6 +31,11 @@ public class UserControler {
         return userRepo.findById(id);
     }
 
+    @GetMapping("/login/{login}")//busca um usuário pelo login
+    public Optional<User> buscarPorLogin(@PathVariable("login") String login){
+        return userRepo.findByLogin(login);
+    }
+
     @GetMapping("/all")//busca todos os usuários
     public List<User> buscarTodosUsers(){return userRepo.findAll();}
 

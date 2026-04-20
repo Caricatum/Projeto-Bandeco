@@ -1,21 +1,4 @@
-body #loginContainer{
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
-.login-container {
-    background-color: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-body #cadastroContainer{
+body #dadosContainer{
     font-family: Arial, sans-serif;
     background-color: #f0f2f5;
     display: flex;
@@ -26,14 +9,18 @@ body #cadastroContainer{
 }
 
 .section{
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
 }
 
 
-.input-group {
-    margin-bottom: 15px;
+#div-nome{
+    display: none;
+}
+
+.input-group{
+margin-bottom: 15px;
 }
 
 input {
