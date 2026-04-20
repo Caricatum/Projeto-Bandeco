@@ -1,6 +1,7 @@
 package com.example.apiBandeco.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -12,9 +13,11 @@ import jakarta.validation.constraints.NotNull;
 )
 public class Avaliacoes {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
     private String avaliacao;
+    @NotNull(message = "A nota não pode ser nula")
     @Column
     private int nota;
 

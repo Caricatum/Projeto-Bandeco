@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotNull;
 )
 public class PratosFavoritos {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     public int getId() {

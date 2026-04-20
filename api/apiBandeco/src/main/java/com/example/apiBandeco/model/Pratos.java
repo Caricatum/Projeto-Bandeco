@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 @Table(name="pratos")
 public class Pratos {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotBlank(message = "O nome não pode estar vazio")
     @Column
