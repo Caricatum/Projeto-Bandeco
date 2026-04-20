@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>cadastro Restrito</title>
-    <link rel="stylesheet" href="../Paginas/style.css">
+    <link rel="stylesheet" href="../CSS/style.css">
     
     <link rel="stylesheet" href="../../bootstrap-5.3.8-dist/css/bootstrap.min.css">
     <script src="../../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
@@ -52,13 +52,15 @@
                   <div class="row">Tipo de pessoa</div>  
                 <div class="row">
                     <label for="aluno">Aluno</label>   
-                <input type="radio" name="tipoDeUsuario" id="aluno" value="false" required>
+                <input type="radio" name="tipoDeUsuario" id="aluno" value="false" required checked>
+                </div>
+                <div class="row">
                 <label for="func">Funcionário</label>
                 <input type="radio" name="tipoDeUsuario" id="func" value="true" required>
                 </div>
                 </section>
             
-            <button type="submit" class="button">Entrar</button>
+            <button type="submit" class="button">Cadastrar</button>
             <p id="message"></p>
         </form>
     </div>

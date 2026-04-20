@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dados do perfil</title>
+  <link rel="stylesheet" href="../CSS/dadosperfil.css">
+
+  <link rel="stylesheet" href="../../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+  <script src="../../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container">
+      <img src="../Assets/Images/logo_unicamp.jpg" alt="Logo Unicamp" width="40" height="40"
+        class="d-inline-block align-text-top">
+      <a class="navbar-brand ms-3" href="">Inicio</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#sobre">Sobre Mim</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#projetos">Projetos</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <!--dados-->
+  <div id="dadosContainer" class="dados-container">
+    <form id="dadosForm">
+      <h2>Qual o seu Usuário?</h2>
+      <div class="input-group " id="div-usuario">
+        <label>Usuário</label>
+        <input type="text" id="username" required>
+      </div>
+
+      <div id="div-nome">
+        <div class="input-group" id="input-nome">
+          <label>Nome</label>
+          <input type="text" id="name" required disabled>
+        </div>
+      </div>
+
+
+      <section class="section" id="sectionTipodeUsuario">
+        <div class="row">Tipo de pessoa</div>
+        <div class="row">
+          <label for="aluno">Aluno</label>
+          <input type="radio" name="tipoDeUsuario" id="aluno" value="false" required checked disabled>
+        </div>
+        <div class="row">
+          <label for="func">Funcionário</label>
+          <input type="radio" name="tipoDeUsuario" id="func" value="true" required disabled>
+        </div>
+      </section>
+
+      <button type="submit" class="button">Buscar</button>
+      <p id="message"></p>
+
+
+    </form>
+  </div>
+  <script src="../JS/dadosperfil.js"></script>
+
+</body>
+
+</html>
