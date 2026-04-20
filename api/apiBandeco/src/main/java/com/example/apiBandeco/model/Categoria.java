@@ -1,8 +1,5 @@
 package com.example.apiBandeco.model;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -27,6 +24,7 @@ public class Categoria {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotBlank(message = "A descrição não pode estar vazia")
     @Size(min = 3, max = 100, message = "A descrição deve ter entre 3 e 45 caracteres")

@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 @Table(name="valor_nutricional")
 public class ValorNutricional {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull(message = "Preencha o campo kcal")
     @Column
