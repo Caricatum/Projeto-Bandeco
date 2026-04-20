@@ -62,7 +62,6 @@ flutter:
     - assets/images/cotil_unicamp.png
     - assets/images/cotilEntrada.jpeg
     - assets/images/bandejao.png
-    - assets/images/logoCotil.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
