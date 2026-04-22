@@ -5,10 +5,11 @@ import com.example.apiBandeco.repository.CategoriaRepository;
 import com.example.apiBandeco.repository.PratosRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -21,38 +22,55 @@ public class PratosControler {
     CategoriaRepository categoriaRepo;
 
     @GetMapping("/id/{id}")//busca pratos pelo id
-    public Optional<Pratos> buscarPorId(@PathVariable("id") int id){
-        return pratosRepository.findById(id);
+    public Pratos buscarPorId(@PathVariable("id") int id){
+        return pratosRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Prato não encontrado"
+                ));
     }
 
     @GetMapping("/all")//busca todos os pratos
     public List<Pratos> buscarTodosPratos(){return pratosRepository.findAll();}
 
-    @PostMapping("/cadastrarPratos")//cadastra um prato
-    public void cadastroPratos (@RequestBody @Valid Pratos prato){
-        int categoriaId = prato.getCategoria().getId();
+    @PostMapping("/cadastrar")//cadastra um prato
+    public Pratos cadastroPratos (@RequestBody @Valid Pratos prato){
+        Integer categoriaId = prato.getCategoria() != null
+                ? prato.getCategoria().getId() : null;
 
-        categoriaRepo.findById(categoriaId)
-                .orElseThrow(() -> new RuntimeException("Categoria não existe"));
-        pratosRepository.save(prato);
+        if (categoriaId != null){
+            var categoria = categoriaRepo.findById(categoriaId)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Categoria não encontrada"));
+            prato.setCategoria(categoria);
+        }
+        return pratosRepository.save(prato);
     }
 
-    @DeleteMapping("/deletarPratos/{id}") //deleta prato pelo id
+    @DeleteMapping("/deletar/{id}") //deleta prato pelo id
     public void deletarPrato(@PathVariable(value = "id") int id){
+        pratosRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Prato não encontrado"));
         pratosRepository.deleteById(id);
     }
 
-    @PutMapping("/atualizarPratos")
-    public void atualizaPratos (@RequestBody @Valid Pratos prato){
+    @PutMapping("/atualizar")
+    public Pratos atualizaPratos (@RequestBody @Valid Pratos prato){
+        pratosRepository.findById(prato.getId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Prato não encontrado"));
 
-        int categoriaId = prato.getCategoria().getId();
+        Integer categoriaId = prato.getCategoria() != null
+                ? prato.getCategoria().getId() : null;
 
-        var categoria = categoriaRepo.findById(categoriaId)
-                .orElseThrow(() -> new RuntimeException("Categoria não existe"));
+        if (categoriaId != null){
+            var categoria = categoriaRepo.findById(categoriaId)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Categoria não encontrada"));
+            prato.setCategoria(categoria);
+        }
 
-        prato.setCategoria(categoria);
-
-        pratosRepository.save(prato);
+        return pratosRepository.save(prato);
     }
 
 }
