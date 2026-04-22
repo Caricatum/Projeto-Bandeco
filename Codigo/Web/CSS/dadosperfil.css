@@ -49,6 +49,10 @@ h2 {
     display: none;
 }
 
+#volta {
+    display: none;
+}
+
 .input-group {
     margin-bottom: 18px;
 }
