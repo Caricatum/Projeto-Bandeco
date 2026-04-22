@@ -21,6 +21,7 @@ document.getElementById("dadosForm").addEventListener("submit", function (e) {
             document.getElementById("div-nome").style.display = "flex";
             document.getElementById("trocarinfo").style.display = "block";
             document.getElementById("deletar").style.display = "block";
+            document.getElementById("voltar").style.display = "block";
             document.getElementById("trocarinfo").disabled = false;
             document.getElementById("deletar").disabled = false;
 
