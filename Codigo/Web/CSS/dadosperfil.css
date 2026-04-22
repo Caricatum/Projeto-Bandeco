@@ -12,6 +12,7 @@ body #dadosContainer{
     display: none;
     justify-content: center;
     align-items: center;
+    margin-bottom: 15px;
 }
 
 
@@ -34,11 +35,24 @@ input {
 .button{
     width: 100%;
     padding: 10px;
+    margin-bottom: 15px;
     background-color: black;
     color: cadetblue;
     border: 2px solid black;
     border-radius: 6px;
     cursor: pointer;
+}
+
+#trocarinfo{
+    display: none;
+}
+
+#deletar{
+    display: none;
+}
+
+#trocarinfo{
+    display: none;
 }
 
 #message {
