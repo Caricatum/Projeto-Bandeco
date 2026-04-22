@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Painel</title>
+    <link rel="stylesheet" href="../CSS/inicio.css">
     <script>
         // VERIFICAÇÃO DE RESTRIÇÃO
         if (sessionStorage.getItem('logado') !== 'true') {
@@ -11,8 +12,19 @@
     </script>
 </head>
 <body>
-    <h1>Bem-vindo à área restrita!</h1>
-    <button onclick="logout()">Sair</button>
+    <div class="panel-container">
+        <h1>Olá</h1>
+
+        <div class="button-group">
+            <button onclick="window.location.href='dadosperfil.html'">
+                Dados do Perfil
+            </button>
+
+            <button onclick="logout()">
+                Sair
+            </button>
+        </div>
+    </div>
     <script>
         function logout() {
             sessionStorage.setItem('logado', 'false');
@@ -20,4 +32,5 @@
         }
     </script>
 </body>
+
 </html>

@@ -1,62 +1,118 @@
-body #dadosContainer{
+body {
     font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
+    background: linear-gradient(135deg, #f0f2f5, #d9e4ec);
+    margin: 0;
+    min-height: 100vh;
+}
+
+#dadosContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    min-height: 100vh;
+    padding: 20px;
 }
 
-.section{
+#dadosForm {
+    background-color: white;
+    padding: 35px;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    transition: 0.3s ease;
+}
+
+#dadosForm:hover {
+    transform: translateY(-2px);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #1f2937;
+    font-weight: bold;
+}
+
+.section {
     display: none;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 15px;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    background-color: #f8fafc;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
 }
 
-
-#div-nome{
+#div-nome {
     display: none;
 }
 
-.input-group{
-margin-bottom: 15px;
+.input-group {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #374151;
 }
 
 input {
     width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-.button{
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    background-color: black;
-    color: cadetblue;
-    border: 2px solid black;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-#trocarinfo{
-    display: none;
-}
-
-#deletar{
-    display: none;
-}
-
-#trocarinfo{
-    display: none;
-}
-
-#message {
-    color: red;
-    text-align: center;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
     font-size: 14px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #111827, #1f2937);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    margin-bottom: 12px;
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    background: linear-gradient(135deg, #1e293b, #334155);
+}
+
+.button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#trocarinfo {
+    display: none
+}
+
+#deletar {
+    display: none
 }

@@ -26,7 +26,7 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
         body: jsonUsuario
     })
     .then(res => {
-    if (!res.ok) throw new Error("Erro na requisição");
+    if (!res.ok) throw new Error("Erro na requisicao");
 
     const contentType = res.headers.get("content-type");
 
@@ -36,6 +36,8 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
         return null; // ou res.text()
     }
 })
-    .then(data => console.log(data))
+    .then(data => 
+        console.log(data, "Usuario cadastrado"),
+    )
     .catch(err => console.error("Erro:", err));
 });

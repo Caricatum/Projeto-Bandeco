@@ -1,62 +1,154 @@
-body #loginContainer{
+/* ===== Fundo geral ===== */
+body {
+    margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
+    background: linear-gradient(135deg, #eef2f7, #dbeafe);
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== Containers Login e Cadastro ===== */
+#loginContainer,
+#cadastroContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    padding: 40px 20px;
+    min-height: calc(100vh - 76px);
+    box-sizing: border-box;
 }
 
-.login-container {
+#cadastroContainer {
+    padding-top: 80px;
+}   
+
+/* ===== Card do formulário ===== */
+.login-container,
+.cadastro-container {
     background-color: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 430px;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    animation: fadeIn 0.35s ease;
 }
 
-body #cadastroContainer{
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
+/* ===== Título ===== */
+form h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #1f2937;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* ===== Grupo de inputs ===== */
+.input-group {
+    margin-bottom: 18px;
+}
+
+/* ===== Labels ===== */
+label {
+    display: block;
+    margin-bottom: 6px;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ===== Inputs ===== */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: 0.2s ease;
+    background-color: #f9fafb;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #2563eb;
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+/* ===== Área dos radios ===== */
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+/* ===== Radios ===== */
+.section .row {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    gap: 10px;
     margin: 0;
 }
 
-
-
-.section{
-    display: flex;
-    align-items: center;
+input[type="radio"] {
+    width: auto;
+    margin: 0;
 }
 
-
-.input-group {
-    margin-bottom: 15px;
-}
-
-input {
+/* ===== Botões (mantidos) ===== */
+.button {
     width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-.button{
-    width: 100%;
-    padding: 10px;
-    background-color: black;
-    color: cadetblue;
-    border: 2px solid black;
-    border-radius: 6px;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #111827, #1f2937);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
     cursor: pointer;
+    transition: all 0.25s ease;
+    margin-top: 10px;
 }
 
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    background: linear-gradient(135deg, #1e293b, #334155);
+}
+
+.button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ===== Mensagem ===== */
 #message {
-    color: red;
+    color: #dc2626;
     text-align: center;
     font-size: 14px;
+    margin-top: 15px;
+}
+
+/* ===== Animação ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
