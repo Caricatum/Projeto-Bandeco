@@ -1,6 +1,6 @@
 package com.example.apiBandeco.controler;
 
-import com.example.apiBandeco.model.Pratos;
+
 import com.example.apiBandeco.model.PratosFavoritos;
 import com.example.apiBandeco.repository.PratosFavoritosRepository;
 import com.example.apiBandeco.repository.PratosRepository;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -26,28 +25,34 @@ public class PratosFavoritosControler {
     UserRepository userRepository;
 
     @GetMapping("/id/{id}")//busca prato favorito pelo id
-    public Optional<PratosFavoritos> buscarPorId(@PathVariable("id") int id){
-        return pratosFavoritosRepository.findById(id);
+    public PratosFavoritos buscarPorId(@PathVariable("id") int id){
+        return pratosFavoritosRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Prato favorito não encontrado"
+                ));
     }
 
     @GetMapping("/all")//busca todos os pratos favoritos
     public List<PratosFavoritos> buscarTodosPratosFavoritos(){return pratosFavoritosRepository.findAll();}
 
-    @PostMapping("/cadastrarPratosFavoritos")//cadastra um prato favorito
+    @PostMapping("/cadastrar")//cadastra um prato favorito
     public PratosFavoritos cadastroPratosFavoritos (@RequestBody @Valid PratosFavoritos pratoFavoritos){
-        int pratoId = pratoFavoritos.getPrato().getId();
-        int userId = pratoFavoritos.getUser().getId();
+        Integer pratoId = pratoFavoritos.getPrato() != null
+                ? pratoFavoritos.getPrato().getId() : null;
+        Integer userId = pratoFavoritos.getUser() != null
+                ? pratoFavoritos.getUser().getId() : null;
 
-        var prato = pratosRepository.findById(pratoId)
-                .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Prato não existe"));
-
-        var user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "User não existe"));
-
-        pratoFavoritos.setPrato(prato);
-        pratoFavoritos.setUser(user);
+        if (pratoId != null){
+            var prato = pratosRepository.findById(pratoId)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Prato não encontrado"));
+            pratoFavoritos.setPrato(prato);
+        }if (userId != null){
+            var user = userRepository.findById(userId)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "User não encontrado"));
+            pratoFavoritos.setUser(user);
+        }
 
         boolean jaExiste = pratosFavoritosRepository
                 .existsByUserIdAndPratoId(userId, pratoId);
@@ -60,8 +65,11 @@ public class PratosFavoritosControler {
         return pratosFavoritosRepository.save(pratoFavoritos);
     }
 
-    @DeleteMapping("/deletarPratosFavoritos/{id}") //deleta prato favorito pelo id
+    @DeleteMapping("/deletar/{id}") //deleta prato favorito pelo id
     public void deletarPratoFavorito(@PathVariable(value = "id") int id){
+        pratosFavoritosRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Prato favorito não encontrado"));
         pratosFavoritosRepository.deleteById(id);
     }
 

@@ -13,6 +13,15 @@ import jakarta.validation.constraints.NotNull;
 public class PratosFavoritos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ManyToOne
+    @JoinColumn(name = "id_user", nullable = false)
+    @NotNull(message = "Usuário deve ser informado")
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "id_pratos", nullable = false)
+    @NotNull(message = "Prato deve ser informado")
+    private Pratos prato;
+
     private int id;
 
     public int getId() {
@@ -39,12 +48,5 @@ public class PratosFavoritos {
         this.prato = prato;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false)
-    @NotNull(message = "Usuário deve ser informado")
-    private User user;
-    @ManyToOne
-    @JoinColumn(name = "id_pratos", nullable = false)
-    @NotNull(message = "Prato deve ser informado")
-    private Pratos prato;
+
 }
