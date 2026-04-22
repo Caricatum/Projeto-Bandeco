@@ -9,15 +9,8 @@ body #dadosContainer{
 }
 
 .section{
-    display: none;
     justify-content: center;
     align-items: center;
-    margin-bottom: 15px;
-}
-
-
-#div-nome{
-    display: none;
 }
 
 .input-group{
@@ -41,18 +34,6 @@ input {
     border: 2px solid black;
     border-radius: 6px;
     cursor: pointer;
-}
-
-#trocarinfo{
-    display: none;
-}
-
-#deletar{
-    display: none;
-}
-
-#trocarinfo{
-    display: none;
 }
 
 #message {

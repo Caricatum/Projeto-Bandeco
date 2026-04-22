@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -70,9 +71,19 @@ public class UserControler {
         userRepo.deleteById(user);
     }
 
-    @PutMapping("/atualizarUser") //Atualiza User
-    public void atualizaUser (@RequestBody @Valid User user){
-        userRepo.save(user);
+    @PutMapping("/atualizarUser") //Atualiza User menos a senha
+    public User atualizaUser (@RequestBody @Valid User user){
+
+        User userAtualizado = userRepo.findById(user.getId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User não encontrado"));
+
+        userAtualizado.setLogin(user.getLogin());
+        userAtualizado.setNome(user.getNome());
+        userAtualizado.setFuncionario(user.isFuncionario());
+
+        return userRepo.save(userAtualizado);
     }
 
 
