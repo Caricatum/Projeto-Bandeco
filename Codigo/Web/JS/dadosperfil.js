@@ -2,7 +2,7 @@ document.getElementById("dadosForm").addEventListener("submit", function (e) {
     document.getElementById("aluno").checked = false;
     document.getElementById("func").checked = false;
     document.getElementById("name").value = "";
-    document.getElementById("message").value = "";
+    document.getElementById("message").innerText = "";
     e.preventDefault();
     const url = `http://localhost:8080/user/login/${document.getElementById("username").value}`;
 

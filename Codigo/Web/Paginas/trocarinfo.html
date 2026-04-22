@@ -54,11 +54,11 @@
 
       <section class="section" id="sectionTipodeUsuario">
         <div class="row">Tipo de pessoa</div>
-        <div class="row">
+        <div class="radio-option">
           <label for="aluno">Aluno</label>
-          <input type="radio" name="tipoDeUsuario" id="aluno" value="false" required checked >
+          <input type="radio" name="tipoDeUsuario" id="aluno" value="false" required checked>
         </div>
-        <div class="row">
+        <div class="radio-option">
           <label for="func">Funcionário</label>
           <input type="radio" name="tipoDeUsuario" id="func" value="true" required>
         </div>
@@ -73,9 +73,12 @@
 
 
 
-    <button type="button" class="button" id="trocarinfo">Trocar informações</button>
+      <button type="button" class="button" id="trocarinfo">Trocar informações</button>
 
-      
+      <button type="button"class="button" id="voltar" onclick="window.location.href='dadosperfil.html'">
+        Voltar
+      </button>
+
       <p id="message"></p>
 
 

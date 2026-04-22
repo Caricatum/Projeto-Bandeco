@@ -20,7 +20,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
         if (resultado == true) {
         // Logado com sucesso
         sessionStorage.setItem('logado', 'true'); // Define a sessão
-        window.location.href = 'dashboard.html'; // Redireciona
+        window.location.href = 'inicio.html'; // Redireciona
     } else {
         message.innerText = 'Usuário ou senha incorretos!';
         sessionStorage.setItem('logado', 'false');
