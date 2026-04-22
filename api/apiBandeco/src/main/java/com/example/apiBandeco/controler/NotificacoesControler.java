@@ -33,14 +33,14 @@ public class NotificacoesControler {
 
     @PostMapping("/cadastrar")//cadastra uma notificação
     public Notificacoes cadastroNotificacao (@RequestBody @Valid Notificacoes notificacao){
-        int userId = notificacao.getUser().getId();
-
-
-        var user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "User não existe"));
-
-        notificacao.setUser(user);
+        Integer userId = notificacao.getUser() != null
+                ? notificacao.getUser().getId() : null;
+        if (userId != null){
+            var user = userRepository.findById(userId)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "User não encontrado"));
+            notificacao.setUser(user);
+        }
 
         return notificacoesRepository.save(notificacao);
     }
@@ -52,14 +52,14 @@ public class NotificacoesControler {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Notificação não encontrada"));
 
-        int userId = notificacao.getUser().getId();
-
-        var user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "User não existe"));
-
-
-        notificacao.setUser(user);
+        Integer userId = notificacao.getUser() != null
+                ? notificacao.getUser().getId() : null;
+        if (userId != null){
+            var user = userRepository.findById(userId)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "User não encontrado"));
+            notificacao.setUser(user);
+        }
 
         return notificacoesRepository.save(notificacao);
     }
