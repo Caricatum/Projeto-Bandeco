@@ -9,32 +9,12 @@
     <link rel="stylesheet" href="../../bootstrap-5.3.8-dist/css/bootstrap.min.css">
     <script src="../../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container">
-    <img src="../Assets/Images/logo_unicamp.jpg" alt="Logo Unicamp" width="40" height="40" class="d-inline-block align-text-top">
-    <a class="navbar-brand ms-3" href="">Inicio</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="#sobre">Sobre Mim</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#projetos">Projetos</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<body class="bg-custom">
 
 <!--Login-->
-    <div id="loginContainer" class="login-container">
+    <div id="loginContainer" class="login-container p-4" >
         <form id="loginForm">
-            <h2>Login</h2>
+            <h2 class="">Login</h2>
             <div class="input-group">
                 <label>Usuário</label>
                 <input type="text" id="username" required>
@@ -44,11 +24,11 @@
                 <input type="password" id="password" required>
             </div>
             <button type="submit"  class="button">Entrar</button>
-            <p id="message"></p>
-
             <button class="button" onclick="window.location.href='cadastro.html'">
                 Não tem conta? Crie uma já!
             </button>
+
+            <p id="message"></p>
         </form>
     </div>
     <script src="../JS/login.js"></script>
