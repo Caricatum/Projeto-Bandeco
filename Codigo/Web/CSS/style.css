@@ -5,22 +5,46 @@ body {
     background: linear-gradient(135deg, #eef2f7, #dbeafe);
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 /* ===== Containers Login e Cadastro ===== */
-#loginContainer,
-#cadastroContainer {
+#loginContainer {
+    background: rgba(255, 255, 255, 0.4);
+    /* transparência */
+    backdrop-filter: blur(10px);
+    /* efeito de vidro */
+    -webkit-backdrop-filter: blur(10px);
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 40px 20px;
-    min-height: calc(100vh - 76px);
+    box-sizing: border-box;
+    padding: 30px;
+    border-radius: 10px;
+    width: 2000px;
+    color: white;
+}
+
+#cadastroContainer {
+    background: rgba(255, 255, 255, 0.4);
+    /* transparência */
+    backdrop-filter: blur(10px);
+    /* efeito de vidro */
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    border-radius: 10px;
+    width: 2000px;
+    color: white;
     box-sizing: border-box;
 }
 
 #cadastroContainer {
     padding-top: 80px;
-}   
+}
 
 /* ===== Card do formulário ===== */
 .login-container,
@@ -92,9 +116,12 @@ input[type="password"]:focus {
 
 /* ===== Radios ===== */
 .section .row {
+    font-family: Arial, sans-serif;
+    color: black;
     display: flex;
     justify-content: center;
     align-items: center;
+
     gap: 10px;
     margin: 0;
 }
@@ -130,6 +157,21 @@ input[type="radio"] {
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+}
+
+.bg-custom {
+    background-image: url('../Assets/Images/unicamp_de_cima.jpg');
+    background-size: cover;
+    /* cobre toda a tela */
+    background-position: center;
+    /* centraliza */
+    background-repeat: no-repeat;
+    /* não repete */
+    height: 100vh;
+}
+
+.nav-item {
+    display: none;
 }
 
 /* ===== Mensagem ===== */
