@@ -48,7 +48,7 @@ public class UserController {
 
     @GetMapping("/validar")//valida Login do usuário
     public ResponseEntity<Boolean> validarUser(@RequestParam String login,
-                                               @RequestParam String senha){
+                                               @RequestParam String senhaHash){
 
         Optional<User> optUser = userRepo.findByLogin(login);
         if (optUser.isEmpty()){
@@ -56,7 +56,7 @@ public class UserController {
         }
         boolean valid = false;
 
-        valid = encoder.matches(senha, optUser.get().getSenhaHash());
+        valid = encoder.matches(senhaHash, optUser.get().getSenhaHash());
 
         HttpStatus status = (valid) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
         if (!valid){
