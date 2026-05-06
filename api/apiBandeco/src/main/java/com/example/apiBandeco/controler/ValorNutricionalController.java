@@ -14,7 +14,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/valorNutricional")
-public class ValorNutricionalControler {
+public class ValorNutricionalController {
     @Autowired
     PratosRepository pratosRepository;
     @Autowired

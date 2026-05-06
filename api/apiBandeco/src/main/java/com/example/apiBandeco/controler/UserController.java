@@ -3,7 +3,6 @@ package com.example.apiBandeco.controler;
 import com.example.apiBandeco.model.User;
 import com.example.apiBandeco.repository.UserRepository;
 import jakarta.validation.Valid;
-import org.apache.catalina.LifecycleState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +16,12 @@ import java.util.Optional;
 @CrossOrigin
 @RestController
 @RequestMapping("/user")
-public class UserControler {
+public class UserController {
     @Autowired
     UserRepository userRepo;
     private final PasswordEncoder encoder;
 
-    public UserControler(PasswordEncoder encoder) {
+    public UserController(PasswordEncoder encoder) {
         this.encoder = encoder;
     }
 
@@ -40,14 +39,14 @@ public class UserControler {
     @GetMapping("/all")//busca todos os usuários
     public List<User> buscarTodosUsers(){return userRepo.findAll();}
 
-    @PostMapping("/cadastrarUser")//cadastra um usuário
+    @PostMapping("/cadastrar")//cadastra um usuário
     public void cadastroUser (@RequestBody @Valid User user){
 
-        user.setSenha_hash(encoder.encode(user.getSenha_hash()));
+        user.setSenhaHash(encoder.encode(user.getSenhaHash()));
         userRepo.save(user);
     }
 
-    @GetMapping("/validarUser")//valida Login do usuário
+    @GetMapping("/validar")//valida Login do usuário
     public ResponseEntity<Boolean> validarUser(@RequestParam String login,
                                                @RequestParam String senha){
 
@@ -57,7 +56,7 @@ public class UserControler {
         }
         boolean valid = false;
 
-        valid = encoder.matches(senha, optUser.get().getSenha_hash());
+        valid = encoder.matches(senha, optUser.get().getSenhaHash());
 
         HttpStatus status = (valid) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
         if (!valid){
@@ -66,12 +65,12 @@ public class UserControler {
         return ResponseEntity.status(status).body(valid);
     }
 
-    @DeleteMapping("/deletarUser/{id}") //deleta user pelo id
+    @DeleteMapping("/deletar/{id}") //deleta user pelo id
     public void deletarUser (@PathVariable(value = "id") int user){
         userRepo.deleteById(user);
     }
 
-    @PutMapping("/atualizarUser") //Atualiza User menos a senha
+    @PutMapping("/atualizar") //Atualiza User menos a senha
     public User atualizaUser (@RequestBody @Valid User user){
 
         User userAtualizado = userRepo.findById(user.getId())
@@ -83,6 +82,18 @@ public class UserControler {
         userAtualizado.setNome(user.getNome());
         userAtualizado.setFuncionario(user.isFuncionario());
 
+        return userRepo.save(userAtualizado);
+    }
+
+    @PutMapping("/mudarSenha") //Atualiza User menos a senha
+    public User mudarSenha (@RequestBody @Valid User user){
+
+        User userAtualizado = userRepo.findById(user.getId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User não encontrado"));
+
+        userAtualizado.setSenhaHash( encoder.encode(user.getSenhaHash()));
         return userRepo.save(userAtualizado);
     }
 

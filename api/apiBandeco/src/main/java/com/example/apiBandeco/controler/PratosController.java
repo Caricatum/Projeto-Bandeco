@@ -14,7 +14,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/pratos")
-public class PratosControler {
+public class PratosController {
 
     @Autowired
     PratosRepository pratosRepository;

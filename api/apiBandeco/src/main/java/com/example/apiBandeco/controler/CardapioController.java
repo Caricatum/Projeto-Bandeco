@@ -14,7 +14,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/cardapio")
-public class CardapioControler {
+public class CardapioController {
     @Autowired
     PratosRepository pratosRepository;
     @Autowired
