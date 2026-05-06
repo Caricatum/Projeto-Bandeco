@@ -18,7 +18,7 @@ public class User {
     @Column
     private String nome;
     @NotBlank(message = "A senha não pode estar vazia")
-    @Column
+    @Column (name = "senha_hash")
     private String senhaHash;
     @NotNull(message = "Funcionário não pode ser nullo")
     @Column
