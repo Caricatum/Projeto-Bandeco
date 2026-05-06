@@ -52,8 +52,8 @@ public class User {
         return senhaHash;
     }
 
-    public void setSenhaHash(String senha_hash) {
-        this.senhaHash = senha_hash;
+    public void setSenhaHash(String senhaHash) {
+        this.senhaHash = senhaHash;
     }
 
     public boolean isFuncionario() {
