@@ -19,7 +19,7 @@ public class User {
     private String nome;
     @NotBlank(message = "A senha não pode estar vazia")
     @Column
-    private String senha_hash;
+    private String senhaHash;
     @NotNull(message = "Funcionário não pode ser nullo")
     @Column
     private boolean funcionario;
@@ -48,12 +48,12 @@ public class User {
         this.nome = nome;
     }
 
-    public String getSenha_hash() {
-        return senha_hash;
+    public String getSenhaHash() {
+        return senhaHash;
     }
 
-    public void setSenha_hash(String senha_hash) {
-        this.senha_hash = senha_hash;
+    public void setSenhaHash(String senha_hash) {
+        this.senhaHash = senha_hash;
     }
 
     public boolean isFuncionario() {

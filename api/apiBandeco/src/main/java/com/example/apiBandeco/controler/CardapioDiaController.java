@@ -15,7 +15,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/cardapioDia")
-public class CardapioDiaControler {
+public class CardapioDiaController {
     @Autowired
     CardapioDiaRepository cardapioDiaRepository;
     @Autowired

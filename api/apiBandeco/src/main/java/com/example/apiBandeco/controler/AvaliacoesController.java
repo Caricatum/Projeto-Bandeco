@@ -2,7 +2,6 @@ package com.example.apiBandeco.controler;
 
 
 import com.example.apiBandeco.model.Avaliacoes;
-import com.example.apiBandeco.model.Pratos;
 import com.example.apiBandeco.repository.AvaliacoesRepository;
 import com.example.apiBandeco.repository.PratosRepository;
 import com.example.apiBandeco.repository.UserRepository;
@@ -16,7 +15,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/avaliacoes")
-public class AvaliacoesControler {
+public class AvaliacoesController {
     @Autowired
     AvaliacoesRepository avaliacoesRepository;
     @Autowired
