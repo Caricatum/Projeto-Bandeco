@@ -1,5 +1,18 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    // chatGPT 
+    const token = localStorage.getItem("token"); // ou sessionStorage
+    
+    if (!token) {
+        // Usuário não está logado, redireciona para o login
+        window.location.href = "login.html";
+    } else {
+        // Usuário está logado. Opcional: Validar o token com o backend
+        console.log("Usuário autenticado");
+    }
+
+
+
     const user = localStorage.getItem("username");
     const nome = localStorage.getItem("nome");
     const tipo = localStorage.getItem("tipo");
@@ -60,6 +73,7 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
             } else {
                 return null; // ou res.text()
             }
+            window.location.href = 'dadosperfil.html';
         })
         .then(data => console.log(data))
         .catch(err => console.error("Erro:", err));
