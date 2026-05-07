@@ -7,8 +7,8 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
     const tipoDeUsuario = document.querySelector('input[name="tipoDeUsuario"]:checked').value;
     const nomeDigitado = document.getElementById('name').value;
     
-    const url = 'http://localhost:8080/user/cadastrarUser';
-    console.log("Entrou na url");
+    const url = 'http://localhost:8080/user/cadastrar';
+    
 
     const usuario = {
         login: userDigitado,
@@ -35,6 +35,8 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
     } else {
         return null; // ou res.text()
     }
+
+    window.location.href = 'login.html';
 })
     .then(data => 
         console.log(data, "Usuario cadastrado"),

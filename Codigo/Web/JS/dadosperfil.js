@@ -108,6 +108,7 @@ document.getElementById("deletar").addEventListener("click", function () {
                     } else {
                         return null;
                     }
+                    
                 })
                 .then(data => {
                     console.log("deletou")
