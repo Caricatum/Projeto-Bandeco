@@ -1,1 +1,1 @@
-Preciso 
+Mexer no dadosperfil sessionStorage, voltando apra paginas.

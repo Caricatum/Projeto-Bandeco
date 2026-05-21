@@ -13,7 +13,7 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
     const usuario = {
         login: userDigitado,
         nome: nomeDigitado,
-        senha_hash: senhaDigitada,
+        senhaHash: senhaDigitada,
         funcionario: tipoDeUsuario === 'true',
     }
     const jsonUsuario = JSON.stringify(usuario);
@@ -35,11 +35,13 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
     } else {
         return null; // ou res.text()
     }
-
-    window.location.href = 'login.html';
 })
     .then(data => 
         console.log(data, "Usuario cadastrado"),
     )
     .catch(err => console.error("Erro:", err));
+
+
+    window.location.href = 'login.html'
+
 });
