@@ -1,3 +1,11 @@
+document.addEventListener("DOMContentLoaded", function(){
+    if(sessionStorage.getItem('logado') !== "true"){
+        window.location.href = 'login.html';
+    } else {
+        return ;
+    }
+});
+
 document.getElementById("dadosForm").addEventListener("submit", function (e) {
     document.getElementById("aluno").checked = false;
     document.getElementById("func").checked = false;
@@ -78,6 +86,8 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
 
 document.getElementById("deletar").addEventListener("click", function () {
 
+    const message = document.getElementById("message");
+
     const url = `http://localhost:8080/user/login/${document.getElementById("username").value}`;
 
     console.log("clicou");
@@ -92,7 +102,7 @@ document.getElementById("deletar").addEventListener("click", function () {
         .then(data => {
 
             const id = data.id
-            const urld = `http://localhost:8080/user/deletarUser/${id}`;
+            const urld = `http://localhost:8080/user/deletar/${id}`;
             console.log("entrou");
 
             fetch(urld, {
@@ -119,10 +129,14 @@ document.getElementById("deletar").addEventListener("click", function () {
                     document.getElementById("message").innerText = "Erro na requisição.";
                 })
         }) //Acaba o then
+        
 
         .catch(error => {
             console.error("Erro:", error);
             document.getElementById("message").innerText = "Usuário não encontrado.";
         });
+
+        window.location.href = 'inicio.html'
+        //sessionStorage.setItem("volta","true")
 
 });

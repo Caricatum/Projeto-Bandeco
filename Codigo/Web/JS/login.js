@@ -1,13 +1,15 @@
+
+
 document.getElementById('loginForm').addEventListener('submit', function (e) {
     e.preventDefault(); // Impede o envio real do formulário
 
     // Credenciais fictícias
     const userDigitado = document.getElementById('username').value;
     const senhaDigitada = document.getElementById('password').value;
-    const url = `http://localhost:8080/user/validarUser?login=${userDigitado}&senha=${senhaDigitada}`;
+    const url = `http://localhost:8080/user/validar?login=${userDigitado}&senhaHash=${senhaDigitada}`;
     const message = document.getElementById('message');
     resultado = false;
-
+    
     fetch(url)
         .then(res => {
             if (!res.ok) {
@@ -21,13 +23,6 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
                 // Logado com sucesso
                 sessionStorage.setItem('logado', 'true'); // Define a sessão
                 // salva no navegador
-                localStorage.setItem(
-                    "usuarioLogado",
-                    JSON.stringify(usuarioLogado)
-                );
-
-                // redireciona
-                window.location.href = "../Pages/mural.html";
                 window.location.href = 'inicio.html'; // Redireciona
             } else {
                 message.innerText = 'Usuário ou senha incorretos!';
@@ -37,7 +32,8 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
         .catch(error => {
             message.innerHTML = `Erro: ${error.message}`
         })
-
+        
+        
 
 });
 

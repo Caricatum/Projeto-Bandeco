@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     // chatGPT 
-    const token = localStorage.getItem("token"); // ou sessionStorage
+    const token = sessionStorage.getItem("logado"); // ou sessionStorage
     
     if (!token) {
         // Usuário não está logado, redireciona para o login
@@ -38,7 +38,7 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
     const tipo = localStorage.getItem("tipo");
     const id = localStorage.getItem("id");
 
-    const url = `http://localhost:8080/user/atualizarUser`;
+    const url = `http://localhost:8080/user/atualizar`;
 
     const userDigitado = document.getElementById("username").value;
     const nomeDigitado = document.getElementById("name").value;
@@ -51,7 +51,7 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
         id: id,
         login: userDigitado,
         nome: nomeDigitado,
-        senha_hash: senhaDigitada,
+        senhaHash: senhaDigitada,
         funcionario: tipoDeUsuario === 'true',
     }
     const jsonUsuario = JSON.stringify(usuario);
@@ -73,10 +73,12 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
             } else {
                 return null; // ou res.text()
             }
-            window.location.href = 'dadosperfil.html';
+            
         })
         .then(data => console.log(data))
         .catch(err => console.error("Erro:", err));
+
+        window.location.href = 'dadosperfil.html';
 
 
 });
