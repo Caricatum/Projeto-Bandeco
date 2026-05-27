@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name="user")
 public class User {
@@ -23,6 +25,26 @@ public class User {
     @NotNull(message = "Funcionário não pode ser nullo")
     @Column
     private boolean funcionario;
+    @Column
+    private String codigo;
+    @Column
+    private LocalDateTime expiracaoCodigo;
+
+    public LocalDateTime getExpiracaoCodigo() {
+        return expiracaoCodigo;
+    }
+
+    public void setExpiracaoCodigo(LocalDateTime expiracaoCodigo) {
+        this.expiracaoCodigo = expiracaoCodigo;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
 
     public int getId() {
         return id;
