@@ -110,7 +110,7 @@ public class UserController {
         emailService.enviarCodigo(login, codigo);
     }
 
-    @PutMapping("/resetSenha")
+    @PutMapping("/resetSenha") //resetar senha
     public void resetSenha(
             @RequestParam String login,
             @RequestParam String codigo,
