@@ -1,5 +1,6 @@
 package com.example.apiBandeco.controler;
 
+import com.example.apiBandeco.email.EmailService;
 import com.example.apiBandeco.model.User;
 import com.example.apiBandeco.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +22,9 @@ public class UserController {
     @Autowired
     UserRepository userRepo;
     private final PasswordEncoder encoder;
+
+    @Autowired
+    private EmailService emailService;
 
     public UserController(PasswordEncoder encoder) {
         this.encoder = encoder;
@@ -97,5 +102,56 @@ public class UserController {
         return userRepo.save(userAtualizado);
     }
 
+    @PostMapping("/solicitarResetSenha")
+    public void solicitarResetSenha(@RequestParam String login){
 
+        User user = userRepo.findByLogin(login)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Usuário não encontrado"));
+
+        String codigo = String.valueOf(
+                (int)(Math.random() * 900000) + 100000
+        );
+
+        user.setCodigo(codigo);
+        user.setExpiracaoCodigo(LocalDateTime.now().plusMinutes(15));
+
+        userRepo.save(user);
+
+        emailService.enviarCodigo(login, codigo);
+    }
+
+    @PutMapping("/resetSenha")
+    public void resetSenha(
+            @RequestParam String login,
+            @RequestParam String codigo,
+            @RequestParam String novaSenha){
+
+        User user = userRepo.findByLogin(login)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Usuário não encontrado"));
+
+        if(user.getCodigo() == null ||
+                !user.getCodigo().equals(codigo)){
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Código inválido");
+        }
+
+        if(LocalDateTime.now().isAfter(user.getExpiracaoCodigo())){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Código expirado");
+        }
+
+        user.setSenhaHash(encoder.encode(novaSenha));
+
+        user.setCodigo(null);
+        user.setExpiracaoCodigo(null);
+
+        userRepo.save(user);
+    }
 }
