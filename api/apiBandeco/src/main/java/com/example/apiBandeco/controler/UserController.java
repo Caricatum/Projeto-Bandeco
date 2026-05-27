@@ -90,18 +90,6 @@ public class UserController {
         return userRepo.save(userAtualizado);
     }
 
-    @PutMapping("/mudarSenha") //Atualiza User menos a senha
-    public User mudarSenha (@RequestBody @Valid User user){
-
-        User userAtualizado = userRepo.findById(user.getId())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "User não encontrado"));
-
-        userAtualizado.setSenhaHash( encoder.encode(user.getSenhaHash()));
-        return userRepo.save(userAtualizado);
-    }
-
     @PostMapping("/solicitarResetSenha")
     public void solicitarResetSenha(@RequestParam String login){
 
