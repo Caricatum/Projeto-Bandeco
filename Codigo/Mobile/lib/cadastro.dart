@@ -9,8 +9,9 @@ class Cadastro extends StatefulWidget {
 }
 
 class _CadastroState extends State<Cadastro> {
+  String tipoUsuario = "Aluno";
 
-bool _obscurePassword = true;
+  bool _obscurePassword = true;
 
   InputDecoration customInput(String hint, IconData icon, {Widget? suffix}) {
     return InputDecoration(
@@ -27,6 +28,9 @@ bool _obscurePassword = true;
     );
   }
 
+  TextEditingController nomeController = new TextEditingController();
+  TextEditingController senhaController = new TextEditingController();
+  TextEditingController loginController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -79,11 +83,15 @@ bool _obscurePassword = true;
               child: Column(
                 children: [
                   // Nome
-                  TextField(decoration: customInput("* Nome:", Icons.person)),
+                  TextField(
+                    controller: nomeController,
+                    decoration: customInput("* Nome:", Icons.person),
+                  ),
                   const SizedBox(height: 15),
 
                   // Senha
                   TextField(
+                    controller: senhaController,
                     obscureText: _obscurePassword,
                     decoration: customInput(
                       "* Senha:",
@@ -104,26 +112,43 @@ bool _obscurePassword = true;
                   ),
                   const SizedBox(height: 15),
 
-                  // Telefone
-                  TextField(
-                    keyboardType: TextInputType.phone,
-                    decoration: customInput("Telefone:", Icons.phone),
-                  ),
-                  const SizedBox(height: 15),
-
-                  // CPF
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    decoration: customInput("* CPF:", Icons.badge),
-                  ),
-                  const SizedBox(height: 15),
-
                   // Email
                   TextField(
+                    controller: loginController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: customInput("* Email:", Icons.email),
                   ),
                   const SizedBox(height: 25),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile<String>(
+                          title: const Text("Aluno"),
+                          value: "Aluno",
+                          groupValue: tipoUsuario,
+                          onChanged: (value) {
+                            setState(() {
+                              tipoUsuario = value!;
+                            });
+                          },
+                        ),
+                      ),
+
+                      Expanded(
+                        child: RadioListTile<String>(
+                          title: const Text("Funcionário"),
+                          value: "Funcionário",
+                          groupValue: tipoUsuario,
+                          onChanged: (value) {
+                            setState(() {
+                              tipoUsuario = value!;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
 
                   // BOTÃO
                   ElevatedButton(
