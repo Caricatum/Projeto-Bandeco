@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class Cadastro extends StatefulWidget {
   const Cadastro({super.key});
@@ -26,6 +28,42 @@ class _CadastroState extends State<Cadastro> {
         borderSide: BorderSide.none,
       ),
     );
+  }
+
+  Future<void> cadastrarUsuario() async {
+    final url = Uri.parse('http://localhost:8080/user/cadastrar');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'nome': nomeController.text,
+          'login': loginController.text,
+          'senhaHash': senhaController.text,
+          'tipoUsuario': tipoUsuario,
+        }),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Usuário cadastrado com sucesso!')),
+        );
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => Login()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao cadastrar: ${response.body}')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro de conexão: $e')));
+    }
   }
 
   TextEditingController nomeController = new TextEditingController();
@@ -75,7 +113,7 @@ class _CadastroState extends State<Cadastro> {
               ],
             ),
 
-            // 🟧 FORMULÁRIO
+            // FORMULÁRIO
             Container(
               width: double.infinity,
               color: const Color(0xFFE97824),
@@ -83,14 +121,21 @@ class _CadastroState extends State<Cadastro> {
               child: Column(
                 children: [
                   // Nome
-                  TextField(
+                  TextFormField(
                     controller: nomeController,
                     decoration: customInput("* Nome:", Icons.person),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Preencha o campo nome";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   const SizedBox(height: 15),
 
                   // Senha
-                  TextField(
+                  TextFormField(
                     controller: senhaController,
                     obscureText: _obscurePassword,
                     decoration: customInput(
@@ -109,14 +154,28 @@ class _CadastroState extends State<Cadastro> {
                         },
                       ),
                     ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Preencha o campo nome";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   const SizedBox(height: 15),
 
                   // Email
-                  TextField(
+                  TextFormField(
                     controller: loginController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: customInput("* Email:", Icons.email),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Preencha o campo nome";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   const SizedBox(height: 25),
 
@@ -163,7 +222,20 @@ class _CadastroState extends State<Cadastro> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (nomeController.text.isEmpty ||
+                          loginController.text.isEmpty ||
+                          senhaController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Preencha todos os campos'),
+                          ),
+                        );
+                        return;
+                      }
+
+                      await cadastrarUsuario();
+                    },
                     child: const Text(
                       "Cadastrar",
                       style: TextStyle(fontSize: 18),

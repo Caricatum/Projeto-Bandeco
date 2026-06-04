@@ -18,7 +18,7 @@ class _PrincipalState extends State<Principal> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Bem Vindo (nome do user)!",
+          "Bem Vindo "+ "!",
           style: TextStyle(fontSize: 15),
         ), //Colocar nome do Usuario no Bem Vindo
         backgroundColor: Colors.orangeAccent,
