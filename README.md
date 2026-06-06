@@ -1,1 +1,1 @@
-# Projeto-Bandeco
+Mexer no dadosperfil sessionStorage, voltando apra paginas.

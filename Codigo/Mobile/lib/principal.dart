@@ -19,7 +19,7 @@ class _PrincipalState extends State<Principal> {
       appBar: AppBar(
         title: Text(
           "Bem Vindo (nome do user)!",
-          style: TextStyle(fontSize: 30),
+          style: TextStyle(fontSize: 15),
         ), //Colocar nome do Usuario no Bem Vindo
         backgroundColor: Colors.orangeAccent,
         actions: [

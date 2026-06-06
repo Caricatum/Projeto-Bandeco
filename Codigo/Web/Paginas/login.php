@@ -24,7 +24,7 @@
                 <input type="password" id="password" required>
             </div>
             <button type="submit"  class="button">Entrar</button>
-            <button class="button" onclick="window.location.href='cadastro.html'">
+            <button class="button" onclick="window.location.href='cadastro.php'">
                 Não tem conta? Crie uma já!
             </button>
 

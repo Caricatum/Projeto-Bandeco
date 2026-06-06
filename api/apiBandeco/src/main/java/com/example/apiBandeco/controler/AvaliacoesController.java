@@ -2,7 +2,6 @@ package com.example.apiBandeco.controler;
 
 
 import com.example.apiBandeco.model.Avaliacoes;
-import com.example.apiBandeco.model.Pratos;
 import com.example.apiBandeco.repository.AvaliacoesRepository;
 import com.example.apiBandeco.repository.PratosRepository;
 import com.example.apiBandeco.repository.UserRepository;
@@ -16,7 +15,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/avaliacoes")
-public class AvaliacoesControler {
+public class AvaliacoesController {
     @Autowired
     AvaliacoesRepository avaliacoesRepository;
     @Autowired
@@ -37,19 +36,22 @@ public class AvaliacoesControler {
 
     @PostMapping("/cadastrar")//cadastra uma avaliação
     public Avaliacoes cadastroAvaliacoes (@RequestBody @Valid Avaliacoes avaliacao){
-        int pratoId = avaliacao.getPrato().getId();
-        int userId = avaliacao.getUser().getId();
+        Integer pratoId = avaliacao.getPrato() != null
+                ? avaliacao.getPrato().getId() : null;
+        Integer userId = avaliacao.getUser() != null
+                ? avaliacao.getUser().getId() : null;
 
-        var prato = pratosRepository.findById(pratoId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Prato não existe"));
-
-        var user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "User não existe"));
-
-        avaliacao.setPrato(prato);
-        avaliacao.setUser(user);
+        if (pratoId != null){
+            var prato = pratosRepository.findById(pratoId)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Prato não encontrado"));
+            avaliacao.setPrato(prato);
+        }if (userId != null){
+            var user = userRepository.findById(userId)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "User não encontrado"));
+            avaliacao.setUser(user);
+        }
 
         boolean jaExiste = avaliacoesRepository
                 .existsByUserIdAndPratoId(userId, pratoId);
@@ -69,8 +71,10 @@ public class AvaliacoesControler {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Avaliação não encontrada"));
 
-        int pratoId = avaliacao.getPrato().getId();
-        int userId = avaliacao.getUser().getId();
+        Integer pratoId = avaliacao.getPrato() != null
+                ? avaliacao.getPrato().getId() : null;
+        Integer userId = avaliacao.getUser() != null
+                ? avaliacao.getUser().getId() : null;
 
         boolean jaExiste = avaliacoesRepository
                 .existsByUserIdAndPratoIdAndIdNot(userId, pratoId, avaliacao.getId());
@@ -80,18 +84,17 @@ public class AvaliacoesControler {
                     HttpStatus.BAD_REQUEST, "Avaliação já feita para este prato");
         }
 
-        var prato = pratosRepository.findById(pratoId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Prato não existe"));
-
-        var user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "User não existe"));
-
-
-        avaliacao.setPrato(prato);
-        avaliacao.setUser(user);
-
+        if (pratoId != null){
+            var prato = pratosRepository.findById(pratoId)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Prato não encontrado"));
+            avaliacao.setPrato(prato);
+        }if (userId != null){
+            var user = userRepository.findById(userId)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "User não encontrado"));
+            avaliacao.setUser(user);
+        }
         return avaliacoesRepository.save(avaliacao);
     }
 
