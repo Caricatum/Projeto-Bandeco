@@ -8,7 +8,11 @@ class Login extends StatefulWidget {
   @override
   State<Login> createState() => _LoginState();
 }
+
 /*
+
+base da API
+
 Future<void> cadastrarUsuario() async {
     final url = Uri.parse('http://localhost:8080/user/login');
 
