@@ -23,7 +23,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
                 // Logado com sucesso
                 sessionStorage.setItem('logado', 'true'); // Define a sessão
                 // salva no navegador
-                window.location.href = 'inicio.html'; // Redireciona
+                window.location.href = 'inicio.php'; // Redireciona
             } else {
                 message.innerText = 'Usuário ou senha incorretos!';
                 sessionStorage.setItem('logado', 'false');

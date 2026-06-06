@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(){
     if(sessionStorage.getItem('logado') !== "true"){
-        window.location.href = 'login.html';
+        window.location.href = 'login.php'; // Redireciona para a página de login
     } else {
         return ;
     }
@@ -74,7 +74,7 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
             localStorage.setItem("nome", nomeBanco);
             localStorage.setItem("tipo", tipoDeUsuarioBanco);
             localStorage.setItem("id", idBanco);
-            window.location.href = "trocarinfo.html";
+            window.location.href = "trocarinfo.php";
         })
         .catch(error => {
             console.error("Erro:", error);
@@ -136,7 +136,7 @@ document.getElementById("deletar").addEventListener("click", function () {
             document.getElementById("message").innerText = "Usuário não encontrado.";
         });
 
-        window.location.href = 'inicio.html'
+        window.location.href = 'inicio.php'; // Redireciona para a página inicial
         //sessionStorage.setItem("volta","true")
 
 });

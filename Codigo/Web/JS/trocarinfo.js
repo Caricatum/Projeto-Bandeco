@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     if (!token) {
         // Usuário não está logado, redireciona para o login
-        window.location.href = "login.html";
+        window.location.href = "login.php";
     } else {
         // Usuário está logado. Opcional: Validar o token com o backend
         console.log("Usuário autenticado");
@@ -78,7 +78,7 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
         .then(data => console.log(data))
         .catch(err => console.error("Erro:", err));
 
-        window.location.href = 'dadosperfil.html';
+        window.location.href = 'dadosperfil.php';
 
 
 });

@@ -42,6 +42,6 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
     .catch(err => console.error("Erro:", err));
 
 
-    window.location.href = 'login.html'
+    window.location.href = 'login.php'; // Redireciona para a página de login
 
 });
