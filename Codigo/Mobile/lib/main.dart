@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'login.dart';
 import 'principal.dart';
 
 
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const Principal(),
+      home: const Login(),
     );
   }
 }
