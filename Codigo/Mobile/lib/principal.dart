@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'cardapios.dart';
-import 'cadastroPrato.dart';
+import 'cadastroprato.dart';
 import 'perfil.dart';
 
 class Principal extends StatefulWidget {
