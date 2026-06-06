@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'cadastro.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -7,6 +8,47 @@ class Login extends StatefulWidget {
   @override
   State<Login> createState() => _LoginState();
 }
+
+/*
+
+base da API
+
+Future<void> cadastrarUsuario() async {
+    final url = Uri.parse('http://localhost:8080/user/login');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'login': loginController.text,
+          'senhaHash': senhaController.text,
+        }),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Usuário cadastrado com sucesso!')),
+        );
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => Login()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao cadastrar: ${response.body}')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro de conexão: $e')));
+    }
+  }*/
+
+TextEditingController loginController = new TextEditingController();
+TextEditingController senhaController = new TextEditingController();
 
 class _LoginState extends State<Login> {
   @override
@@ -46,10 +88,11 @@ class _LoginState extends State<Login> {
 
                 const SizedBox(height: 30),
 
-                TextField(
+                TextFormField(
+                  controller: loginController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.person),
-                    hintText: "Nome",
+                    hintText: "Email",
                     filled: true,
                     fillColor: Colors.grey[200],
                     border: OutlineInputBorder(
@@ -57,11 +100,19 @@ class _LoginState extends State<Login> {
                       borderSide: BorderSide.none,
                     ),
                   ),
+                  validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Preencha o campo email";
+                      } else {
+                        return null;
+                      }
+                    },
                 ),
 
                 const SizedBox(height: 30),
 
-                TextField(
+                TextFormField(
+                  controller: senhaController,
                   obscureText: true,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.lock),
@@ -73,6 +124,13 @@ class _LoginState extends State<Login> {
                       borderSide: BorderSide.none,
                     ),
                   ),
+                  validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Preencha o campo senha";
+                      } else {
+                        return null;
+                      }
+                    },
                 ),
 
                 const SizedBox(height: 30),
