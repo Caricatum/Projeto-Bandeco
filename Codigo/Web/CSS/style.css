@@ -1,0 +1,196 @@
+/* ===== Fundo geral ===== */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #eef2f7, #dbeafe);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ===== Containers Login e Cadastro ===== */
+#loginContainer {
+    background: rgba(255, 255, 255, 0.4);
+    /* transparência */
+    backdrop-filter: blur(10px);
+    /* efeito de vidro */
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 30px;
+    border-radius: 10px;
+    width: 2000px;
+    color: white;
+}
+
+#cadastroContainer {
+    background: rgba(255, 255, 255, 0.4);
+    /* transparência */
+    backdrop-filter: blur(10px);
+    /* efeito de vidro */
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    border-radius: 10px;
+    width: 2000px;
+    color: white;
+    box-sizing: border-box;
+}
+
+#cadastroContainer {
+    padding-top: 80px;
+}
+
+/* ===== Card do formulário ===== */
+.login-container,
+.cadastro-container {
+    background-color: white;
+    width: 100%;
+    max-width: 430px;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    animation: fadeIn 0.35s ease;
+}
+
+/* ===== Título ===== */
+form h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #1f2937;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* ===== Grupo de inputs ===== */
+.input-group {
+    margin-bottom: 18px;
+}
+
+/* ===== Labels ===== */
+label {
+    display: block;
+    margin-bottom: 6px;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ===== Inputs ===== */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: 0.2s ease;
+    background-color: #f9fafb;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #2563eb;
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+/* ===== Área dos radios ===== */
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+/* ===== Radios ===== */
+.section .row {
+    font-family: Arial, sans-serif;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 10px;
+    margin: 0;
+}
+
+input[type="radio"] {
+    width: auto;
+    margin: 0;
+}
+
+/* ===== Botões (mantidos) ===== */
+.button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #111827, #1f2937);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    margin-top: 10px;
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    background: linear-gradient(135deg, #1e293b, #334155);
+}
+
+.button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.bg-custom {
+    background-image: url('../Assets/Images/unicamp_de_cima.jpg');
+    background-size: cover;
+    /* cobre toda a tela */
+    background-position: center;
+    /* centraliza */
+    background-repeat: no-repeat;
+    /* não repete */
+    height: 100vh;
+}
+
+.nav-item {
+    display: none;
+}
+
+/* ===== Mensagem ===== */
+#message {
+    color: #dc2626;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+/* ===== Animação ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Restrito</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+    
+    <link rel="stylesheet" href="../../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <script src="../../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="bg-custom">
+
+<!--Login-->
+    <div id="loginContainer" class="login-container p-4" >
+        <form id="loginForm">
+            <h2 class="">Login</h2>
+            <div class="input-group">
+                <label>Usuário</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="input-group">
+                <label>Senha</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit"  class="button">Entrar</button>
+            <button class="button" onclick="window.location.href='cadastro.php'">
+                Não tem conta? Crie uma já!
+            </button>
+
+            <p id="message"></p>
+        </form>
+    </div>
+    <script src="../JS/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cadastro Restrito</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+    
+    <link rel="stylesheet" href="../../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <script src="../../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body id="bodyCadastro" class="bg-custom">
+<!--cadastro-->
+    <div id="cadastroContainer" class="cadastro-container">
+        <form id="cadastroForm">
+            <h2>Cadastro</h2>
+            <div class="input-group">
+                <label>Usuário</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="input-group">
+                <label>Senha</label>
+                <input type="password" id="password" required>
+            </div>
+            <div class="input-group">
+                <label>Nome</label>
+                <input type="text" id="name" required>
+            </div>
+            
+                <section class="section">
+                  <div class="row">Tipo de pessoa</div>
+                <div class="row">
+                    <label for="aluno">Aluno</label>
+                <input type="radio" name="tipoDeUsuario" id="aluno" value="false" required checked>
+                </div>
+                <div class="row">
+                <label for="func">Funcionário</label>
+                <input type="radio" name="tipoDeUsuario" id="func" value="true" required>
+                </div>
+                </section>
+            
+            <button type="submit" class="button">Cadastrar</button>
+
+            <button type="button"class="button" id="voltar" onclick="window.location.href='login.php'">
+        Voltar
+      </button>
+            <p id="message"></p>
+        </form>
+    </div>
+    <script src="../JS/cadastro.js"></script>
+</body>
+</html>
