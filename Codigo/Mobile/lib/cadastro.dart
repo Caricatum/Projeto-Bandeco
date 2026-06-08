@@ -30,7 +30,6 @@ class _CadastroState extends State<Cadastro> {
     );
   }
 
-<<<<<<< HEAD
   Future<void> cadastrarUsuario() async {
     final url = Uri.parse('http://localhost:8080/user/cadastrar');
 
@@ -67,8 +66,6 @@ class _CadastroState extends State<Cadastro> {
     }
   }
 
-=======
->>>>>>> e52568ced87f6907c536932cc436cb9e099dd0c5
   TextEditingController nomeController = new TextEditingController();
   TextEditingController senhaController = new TextEditingController();
   TextEditingController loginController = new TextEditingController();
@@ -124,7 +121,6 @@ class _CadastroState extends State<Cadastro> {
               child: Column(
                 children: [
                   // Nome
-<<<<<<< HEAD
                   TextFormField(
                     controller: nomeController,
                     decoration: customInput("* Nome:", Icons.person),
@@ -135,20 +131,11 @@ class _CadastroState extends State<Cadastro> {
                         return null;
                       }
                     },
-=======
-                  TextField(
-                    controller: nomeController,
-                    decoration: customInput("* Nome:", Icons.person),
->>>>>>> e52568ced87f6907c536932cc436cb9e099dd0c5
                   ),
                   const SizedBox(height: 15),
 
                   // Senha
-<<<<<<< HEAD
                   TextFormField(
-=======
-                  TextField(
->>>>>>> e52568ced87f6907c536932cc436cb9e099dd0c5
                     controller: senhaController,
                     obscureText: _obscurePassword,
                     decoration: customInput(
@@ -167,7 +154,6 @@ class _CadastroState extends State<Cadastro> {
                         },
                       ),
                     ),
-<<<<<<< HEAD
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Preencha o campo nome";
@@ -175,17 +161,11 @@ class _CadastroState extends State<Cadastro> {
                         return null;
                       }
                     },
-=======
->>>>>>> e52568ced87f6907c536932cc436cb9e099dd0c5
                   ),
                   const SizedBox(height: 15),
 
                   // Email
-<<<<<<< HEAD
                   TextFormField(
-=======
-                  TextField(
->>>>>>> e52568ced87f6907c536932cc436cb9e099dd0c5
                     controller: loginController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: customInput("* Email:", Icons.email),
