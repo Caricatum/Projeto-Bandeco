@@ -1,8 +1,35 @@
     document.addEventListener("DOMContentLoaded", function () {
         
-        localStorage.setItem("")
+        localStorage.setItem("");
         
-    });
+        if(sessionStorage.getItem('logado') === 'true'){
+            document.getElementById("btnLogin").classList.add = ("d-none");
+        }
+
+        const url = `http://localhost:8080/user/login/${localStorage.getItem("username").value}`;
+
+    fetch(url, {
+        method: 'GET',
+    })
+        .then(res => {
+            if (!res.ok) { throw new Error("Erro na requisição."); }
+            return res.json();
+        })
+        .then(data => {
+            const nomeBanco = data.nome;
+            const tipoDeUsuarioBanco = data.funcionario;
+
+            localStorage.setItem("username", localStorage.getItem("username"));
+            localStorage.setItem("nome", nomeBanco);
+            localStorage.setItem("tipo", tipoDeUsuarioBanco);
+        })
+        .catch(error => {
+            console.error("Erro:", error);
+            document.getElementById("message").innerText = "Erro na requisição.";
+        });
+
+
+});
 
 
     // =========================
@@ -10,8 +37,9 @@
     // =========================
 
     const usuarioLogado = {
-        nome: "Caue",
-        tipoDeUsuario: true
+        nome: localStorage.getItem("nome"),
+        username: localStorage.getItem("username"),
+        tipoDeUsuario: localStorage.getItem("tipo"),
     };
 
 
@@ -21,56 +49,15 @@
 
     let avisos = JSON.parse(localStorage.getItem("avisos"));
 
-
-
-    // =========================
-    // SE NÃO EXISTIR NADA
-    // =========================
-
-    if (!avisos) {
-
-        avisos = [
-
-            {
-                titulo: "Prova de Matemática",
-                descricao: "Dia 10/05 - Conteúdo: Análise Combinatória",
-                cor: "warning"
-            },
-
-            {
-                titulo: "Entrega de Projeto",
-                descricao: "Prazo final: 15/05",
-                cor: "info"
-            },
-
-            {
-                titulo: "Reunião",
-                descricao: "Hoje às 14h na sala 3",
-                cor: "success"
-            }
-
-        ];
-
-        // salva os avisos iniciais
-        localStorage.setItem(
-            "avisos",
-            JSON.stringify(avisos)
-        );
-    }
-
-
     // =========================
     // ELEMENTOS
     // =========================
 
     const mural = document.getElementById("mural");
 
-    const btnNovoAviso =
-        document.getElementById("btnNovoAviso");
+    const btnNovoAviso = document.getElementById("btnNovoAviso");
 
-    const modal = new bootstrap.Modal(
-        document.getElementById("modalAviso")
-    );
+    const modal = new bootstrap.Modal(document.getElementById("modalAviso"));
 
 
     // =========================
@@ -91,6 +78,26 @@
     function renderizarAvisos() {
 
         mural.innerHTML = "";
+
+        if (avisos.length === 0) {
+
+    // =========================
+    // SE NÃO EXISTIR NADA
+    // =========================
+
+        mural.innerHTML = `
+            <div class="col-12">
+                <div class="p-5 text-center rounded border bg-light-subtle">
+                    <h4>📭 Por hoje não tem nada</h4>
+                    <p class="text-muted mb-0">
+                        Nenhum aviso foi publicado até o momento.
+                    </p>
+                </div>
+            </div>
+        `;
+
+        return;
+    }
 
         avisos.forEach((aviso, index) => {
 

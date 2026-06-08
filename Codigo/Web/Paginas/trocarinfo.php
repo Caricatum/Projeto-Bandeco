@@ -24,31 +24,23 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
 
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="window.location.href='login.php'">
-                            <button id="btnLogin" class="btn btn-dark">
-                                Login
-                            </button>
-                        </a>
-                    </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="window.location.href='sobrenos.php'">
+              <button id="btnSobrenos" class="btn btn-dark">
+                Sobre nós
+              </button>
+            </a>
+          </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="window.location.href='sobrenos.php'">
-                            <button id="btnSobrenos" class="btn btn-dark">
-                                Sobre nós
-                            </button>
-                        </a>
-                    </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="window.location.href='projetos.php'">
+              <button id="btnProjetos" class="btn btn-dark">
+                Projetos
+              </button>
+            </a>
+          </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="window.location.href='projetos.php'">
-                            <button id="btnProjetos" class="btn btn-dark">
-                                Projetos
-                            </button>
-                        </a>
-                    </li>
-
-                </ul>
+        </ul>
       </div>
     </div>
   </nav>
@@ -92,9 +84,9 @@
 
 
 
-      <button type="button" class="button" id="trocarinfo" >Trocar informações</button>
+      <button type="button" class="button" id="trocarinfo">Trocar informações</button>
 
-      <button type="button"class="button" id="voltar" onclick="window.location.href='dadosperfil.php'">
+      <button type="button" class="button" id="voltar" onclick="window.location.href='dadosperfil.php'">
         Voltar
       </button>
 
