@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tcc_flutter/cadastro.dart';
-import 'package:tcc_flutter/login.dart';
-import 'package:tcc_flutter/principal.dart';
+import 'login.dart';
+import 'principal.dart';
+
 
 void main() {
   runApp(const MyApp());

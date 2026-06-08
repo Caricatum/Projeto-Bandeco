@@ -23,15 +23,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="window.location.href='login.php'">
-                            <button id="btnLogin" class="btn btn-dark">
-                                Login
-                            </button>
-                        </a>
-                    </li>
-
+          
                     <li class="nav-item">
                         <a class="nav-link" onclick="window.location.href='sobrenos.php'">
                             <button id="btnSobrenos" class="btn btn-dark">

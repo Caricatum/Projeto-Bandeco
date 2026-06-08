@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mural de avisos</title>
+    <title>Mural de avisos e Cardápio</title>
 
     <!-- JS -->
     <script src="../JS/mural.js" defer></script>
@@ -34,6 +34,14 @@
             <div class="collapse navbar-collapse" id="navbarNav">
 
                 <ul class="navbar-nav ms-auto">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="window.location.href='login.php'">
+                            <button id="btnLogin" class="btn btn-dark">
+                                Login
+                            </button>
+                        </a>
+                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link" onclick="window.location.href='sobrenos.php'">
@@ -77,7 +85,6 @@
 
         <!-- MURAL -->
         <div id="mural" class="row g-3">
-
             <!-- Avisos serão inseridos via JS -->
 
         </div>
@@ -158,8 +165,91 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
-    <!-- JAVASCRIPT -->
+        
+    <div class="container mt-4">
 
+    <h1 class="text-center mb-4">Cardápio do Dia</h1>
+
+    <!-- ALMOÇO -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="bg-primary text-white p-2 rounded">Almoço</h2>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h4>Cardápio Padrão</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Acompanhamento:</strong> Arroz e Feijão</p>
+                    <p><strong>Prato Principal:</strong> Frango Grelhado</p> <!-- Preciso adicionar API nisso -->
+                    <p><strong>Guarnição:</strong> Batata Sauté</p> <!-- Preciso adicionar API nisso -->
+                    <p><strong>Salada:</strong> Alface e Tomate</p> <!-- Preciso adicionar API nisso -->
+                    <p><strong>Sobremesa:</strong> Gelatina</p> <!-- Preciso adicionar API nisso -->
+                    <p><strong>Refresco:</strong> Suco de Laranja</p> <!-- Preciso adicionar API nisso -->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h4>Cardápio Vegano</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Acompanhamento:</strong> Arroz Integral</p>
+                    <p><strong>Prato Principal:</strong> Hambúrguer de Lentilha</p> <!-- Preciso adicionar API nisso -->
+                    <p><strong>Guarnição:</strong> Legumes Assados</p> <!-- Preciso adicionar API nisso -->
+                    <p><strong>Salada:</strong> Mix de Folhas</p> <!-- Preciso adicionar API nisso -->
+                    <p><strong>Sobremesa:</strong> Fruta</p> <!-- Preciso adicionar API nisso -->
+                    <p><strong>Refresco:</strong> Suco de Uva</p> <!-- Preciso adicionar API nisso -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JANTA -->
+    <div class="row">
+        <div class="col-12">
+            <h2 class="bg-dark text-white p-2 rounded">Janta</h2>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h4>Cardápio Padrão</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Acompanhamento:</strong> Arroz e Feijão</p>
+                    <p><strong>Prato Principal:</strong> Carne Assada</p>
+                    <p><strong>Guarnição:</strong> Purê de Batata</p>
+                    <p><strong>Salada:</strong> Repolho</p>
+                    <p><strong>Sobremesa:</strong> Pudim</p>
+                    <p><strong>Refresco:</strong> Suco de Limão</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h4>Cardápio Vegano</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Acompanhamento:</strong> Arroz Integral</p>
+                    <p><strong>Prato Principal:</strong> Tofu Grelhado</p>
+                    <p><strong>Guarnição:</strong> Abobrinha Refogada</p>
+                    <p><strong>Salada:</strong> Cenoura Ralada</p>
+                    <p><strong>Sobremesa:</strong> Banana</p>
+                    <p><strong>Refresco:</strong> Chá Gelado</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+    
 
 </body>
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Restrito</title>
+    <title>Login</title>
     <link rel="stylesheet" href="../CSS/style.css">
     
     <link rel="stylesheet" href="../../bootstrap-5.3.8-dist/css/bootstrap.min.css">
@@ -24,6 +24,7 @@
                 <input type="password" id="password" required>
             </div>
             <button type="submit"  class="button">Entrar</button>
+            
             <button class="button" onclick="window.location.href='cadastro.php'">
                 Não tem conta? Crie uma já!
             </button>
