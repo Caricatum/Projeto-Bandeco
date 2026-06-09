@@ -33,17 +33,23 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.getElementById("trocarinfo").addEventListener("click", function () {
+    const url = `http://localhost:8080/user/atualizar`;
+
     const user = localStorage.getItem("username");
     const nome = localStorage.getItem("nome");
     const tipo = localStorage.getItem("tipo");
     const id = localStorage.getItem("id");
 
-    const url = `http://localhost:8080/user/atualizar`;
-
     const userDigitado = document.getElementById("username").value;
     const nomeDigitado = document.getElementById("name").value;
     const tipoDeUsuario = document.querySelector('input[name="tipoDeUsuario"]:checked').value;
     const senhaDigitada = document.getElementById("senha").value;
+    const mensagemErro = document.getElementById("message");
+
+    if (senhaDigitada == "") {
+        mensagemErro.textContent = "Por favor, digite sua senha para trocar as informações.";
+        return;
+    }
 
     
 

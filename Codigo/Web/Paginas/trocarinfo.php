@@ -78,7 +78,7 @@
       <div id="div-senha">
         <div class="input-group" id="input-senha">
           <label>Senha:</label>
-          <input type="password" id="senha" placeholder="Digite sua senha para trocar as informações">
+          <input type="password" id="senha" placeholder="Digite sua senha para trocar as informações" required>
         </div>
       </div>
 
