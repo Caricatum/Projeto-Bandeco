@@ -1,6 +1,7 @@
 package com.example.apiBandeco.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -13,8 +14,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Email(message = "Email inválido")
     @NotBlank(message = "O Login não pode estar vazio")
-    @Column
+    @Column(unique = true, nullable = false)
     private String login;
     @NotBlank(message = "O nome não pode estar vazio")
     @Column
@@ -22,28 +24,57 @@ public class User {
     @NotBlank(message = "A senha não pode estar vazia")
     @Column (name = "senha_hash")
     private String senhaHash;
-    @NotNull(message = "Funcionário não pode ser nullo")
     @Column
     private boolean funcionario;
     @Column
-    private String codigo;
+    boolean emailConfirmado;
     @Column
-    private LocalDateTime expiracaoCodigo;
+    private String codigoConfirmacao;
+    @Column
+    private LocalDateTime expiracaoConfirmacao;
+    @Column
+    private String codigoResetSenha;
+    @Column
+    private LocalDateTime expiracaoResetSenha;
 
-    public LocalDateTime getExpiracaoCodigo() {
-        return expiracaoCodigo;
+    public String getCodigoConfirmacao() {
+        return codigoConfirmacao;
     }
 
-    public void setExpiracaoCodigo(LocalDateTime expiracaoCodigo) {
-        this.expiracaoCodigo = expiracaoCodigo;
+    public void setCodigoConfirmacao(String codigoConfirmacao) {
+        this.codigoConfirmacao = codigoConfirmacao;
     }
 
-    public String getCodigo() {
-        return codigo;
+    public LocalDateTime getExpiracaoConfirmacao() {
+        return expiracaoConfirmacao;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setExpiracaoConfirmacao(LocalDateTime expiracaoConfirmacao) {
+        this.expiracaoConfirmacao = expiracaoConfirmacao;
+    }
+
+    public String getCodigoResetSenha() {
+        return codigoResetSenha;
+    }
+
+    public void setCodigoResetSenha(String codigoResetSenha) {
+        this.codigoResetSenha = codigoResetSenha;
+    }
+
+    public LocalDateTime getExpiracaoResetSenha() {
+        return expiracaoResetSenha;
+    }
+
+    public void setExpiracaoResetSenha(LocalDateTime expiracaoResetSenha) {
+        this.expiracaoResetSenha = expiracaoResetSenha;
+    }
+
+    public boolean isEmailConfirmado() {
+        return emailConfirmado;
+    }
+
+    public void setEmailConfirmado(boolean emailConfirmado) {
+        this.emailConfirmado = emailConfirmado;
     }
 
     public int getId() {
