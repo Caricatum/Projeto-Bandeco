@@ -4,7 +4,7 @@ import 'cadastroprato.dart';
 import 'perfil.dart';
 
 class Principal extends StatefulWidget {
-  const Principal({super.key});
+  const Principal({super.key, required usuario});
 
   @override
   State<Principal> createState() => _PrincipalState();
@@ -18,9 +18,10 @@ class _PrincipalState extends State<Principal> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Bem Vindo (nome do user)!",
+
+          "Bem Vindo",
           style: TextStyle(fontSize: 15),
-        ), //Colocar nome do Usuario no Bem Vindo
+        ), //Colocar nome do Usuario no Bem Vindo ou não
         backgroundColor: Colors.orangeAccent,
         actions: [
           IconButton(
