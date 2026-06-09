@@ -142,6 +142,44 @@ public class UserController {
         return ResponseEntity.status(status).body(valid);
     }
 
+    @GetMapping("/validarFunc")//valida Login do usuário
+    public ResponseEntity<Boolean> validarFunc(@RequestParam String login,
+                                               @RequestParam String senhaHash){
+        Optional<User> optUser = userRepo.findByLogin(login);
+
+        if (optUser.isEmpty()){
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(false);
+        }
+
+        User user = optUser.get();
+
+        if(!user.isEmailConfirmado()){
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(false);
+        }
+
+        if (!user.isFuncionario()){
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "User não é um funcionário"
+            );
+        }
+
+        boolean valid =
+                encoder.matches(senhaHash, user.getSenhaHash());
+
+
+        HttpStatus status =
+                valid ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
+
+        return ResponseEntity.status(status).body(valid);
+    }
+
+
+
     @DeleteMapping("/deletar/{id}") //deleta user pelo id
     public void deletarUser (@PathVariable(value = "id") int user){
         userRepo.deleteById(user);
