@@ -22,7 +22,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
             if (resultado == true) {
                 // Logado com sucesso
                 sessionStorage.setItem('logado', 'true'); // Define a sessão
-                localStorage.setItem('username', userDigitado); // Armazena o nome do usuário na sessão
+                localStorage.setItem('username', userDigitado); // Armazena o nome do usuário na local
                 // salva no navegador
                 window.location.href = 'inicio.php'; // Redireciona
             } else {

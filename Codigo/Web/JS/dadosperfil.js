@@ -136,7 +136,7 @@ document.getElementById("deletar").addEventListener("click", function () {
             document.getElementById("message").innerText = "Usuário não encontrado.";
         });
 
-        window.location.href = 'inicio.php'; // Redireciona para a página inicial
+        window.location.href = 'login.php'; // Redireciona para a página inicial
         //sessionStorage.setItem("volta","true")
 
 });
