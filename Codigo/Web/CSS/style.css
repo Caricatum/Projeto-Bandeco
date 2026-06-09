@@ -1,8 +1,11 @@
+/* ===== PALETA ===== */
+/* #D92243 vermelho | #F69D39 laranja | #E0C375 dourado | #FFF5E5 creme */
+
 /* ===== Fundo geral ===== */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #eef2f7, #dbeafe);
+    background: linear-gradient(135deg, #D92243, #F69D39);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -11,10 +14,8 @@ body {
 
 /* ===== Containers Login e Cadastro ===== */
 #loginContainer {
-    background: rgba(255, 255, 255, 0.4);
-    /* transparência */
+    background: rgba(255, 245, 229, 0.25);
     backdrop-filter: blur(10px);
-    /* efeito de vidro */
     -webkit-backdrop-filter: blur(10px);
     display: flex;
     justify-content: center;
@@ -27,10 +28,8 @@ body {
 }
 
 #cadastroContainer {
-    background: rgba(255, 255, 255, 0.4);
-    /* transparência */
+    background: rgba(255, 245, 229, 0.25);
     backdrop-filter: blur(10px);
-    /* efeito de vidro */
     -webkit-backdrop-filter: blur(10px);
     display: flex;
     justify-content: center;
@@ -49,12 +48,12 @@ body {
 /* ===== Card do formulário ===== */
 .login-container,
 .cadastro-container {
-    background-color: white;
+    background-color: #FFF5E5;
     width: 100%;
     max-width: 430px;
     padding: 40px;
     border-radius: 20px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 12px 35px rgba(217, 34, 67, 0.2);
     animation: fadeIn 0.35s ease;
 }
 
@@ -62,7 +61,7 @@ body {
 form h2 {
     text-align: center;
     margin-bottom: 30px;
-    color: #1f2937;
+    color: #D92243;
     font-size: 30px;
     font-weight: bold;
 }
@@ -76,7 +75,7 @@ form h2 {
 label {
     display: block;
     margin-bottom: 6px;
-    color: #374151;
+    color: #7a1728;
     font-size: 14px;
     font-weight: 600;
 }
@@ -86,20 +85,20 @@ input[type="text"],
 input[type="password"] {
     width: 100%;
     padding: 12px;
-    border: 1px solid #d1d5db;
+    border: 1px solid #E0C375;
     border-radius: 10px;
     font-size: 14px;
     transition: 0.2s ease;
-    background-color: #f9fafb;
+    background-color: #fffaf3;
     box-sizing: border-box;
 }
 
 input[type="text"]:focus,
 input[type="password"]:focus {
     outline: none;
-    border-color: #2563eb;
+    border-color: #D92243;
     background-color: white;
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    box-shadow: 0 0 0 4px rgba(217, 34, 67, 0.12);
 }
 
 /* ===== Área dos radios ===== */
@@ -109,19 +108,18 @@ input[type="password"]:focus {
     gap: 10px;
     margin-bottom: 20px;
     padding: 15px;
-    background-color: #f8fafc;
+    background-color: #fff8ee;
     border-radius: 12px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #E0C375;
 }
 
 /* ===== Radios ===== */
 .section .row {
     font-family: Arial, sans-serif;
-    color: black;
+    color: #7a1728;
     display: flex;
     justify-content: center;
     align-items: center;
-
     gap: 10px;
     margin: 0;
 }
@@ -129,15 +127,16 @@ input[type="password"]:focus {
 input[type="radio"] {
     width: auto;
     margin: 0;
+    accent-color: #D92243;
 }
 
-/* ===== Botões (mantidos) ===== */
+/* ===== Botões ===== */
 .button {
     width: 100%;
     padding: 14px;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(135deg, #111827, #1f2937);
+    background: linear-gradient(135deg, #D92243, #b91a35);
     color: white;
     font-size: 15px;
     font-weight: bold;
@@ -148,12 +147,12 @@ input[type="radio"] {
 
 .button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
-    background: linear-gradient(135deg, #1e293b, #334155);
+    box-shadow: 0 8px 20px rgba(217, 34, 67, 0.35);
+    background: linear-gradient(135deg, #F69D39, #D92243);
 }
 
 .button:disabled {
-    background: #9ca3af;
+    background: #d4a5a5;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
@@ -162,11 +161,8 @@ input[type="radio"] {
 .bg-custom {
     background-image: url('../Assets/Images/unicamp_de_cima.jpg');
     background-size: cover;
-    /* cobre toda a tela */
     background-position: center;
-    /* centraliza */
     background-repeat: no-repeat;
-    /* não repete */
     height: 100vh;
 }
 
@@ -176,7 +172,7 @@ input[type="radio"] {
 
 /* ===== Mensagem ===== */
 #message {
-    color: #dc2626;
+    color: #D92243;
     text-align: center;
     font-size: 14px;
     margin-top: 15px;
@@ -188,7 +184,6 @@ input[type="radio"] {
         opacity: 0;
         transform: translateY(12px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);

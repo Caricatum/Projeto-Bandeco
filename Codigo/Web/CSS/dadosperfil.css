@@ -1,8 +1,19 @@
+/* ===== PALETA ===== */
+/* #D92243 vermelho | #F69D39 laranja | #E0C375 dourado | #FFF5E5 creme */
+
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #f0f2f5, #d9e4ec);
+    background: linear-gradient(135deg, #F69D39, #E0C375);
     margin: 0;
     min-height: 100vh;
+}
+
+/* Navbar com a cor da paleta */
+.navbar {
+    background-color: #D92243 !important;
+}
+.navbar-brand, .nav-link {
+    color: #FFF5E5 !important;
 }
 
 #dadosContainer {
@@ -14,12 +25,12 @@ body {
 }
 
 #dadosForm {
-    background-color: white;
+    background-color: #FFF5E5;
     padding: 35px;
     width: 100%;
     max-width: 450px;
     border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 10px 30px rgba(217, 34, 67, 0.18);
     transition: 0.3s ease;
 }
 
@@ -30,7 +41,7 @@ body {
 h2 {
     text-align: center;
     margin-bottom: 25px;
-    color: #1f2937;
+    color: #D92243;
     font-weight: bold;
 }
 
@@ -39,10 +50,10 @@ h2 {
     flex-direction: column;
     gap: 10px;
     margin-bottom: 20px;
-    background-color: #f8fafc;
+    background-color: #fff8ee;
     padding: 15px;
     border-radius: 10px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #E0C375;
 }
 
 #div-nome {
@@ -61,23 +72,28 @@ label {
     display: block;
     margin-bottom: 6px;
     font-weight: 600;
-    color: #374151;
+    color: #7a1728;
 }
 
 input {
     width: 100%;
     padding: 12px;
-    border: 1px solid #d1d5db;
+    border: 1px solid #E0C375;
     border-radius: 10px;
     font-size: 14px;
     transition: all 0.2s ease;
     box-sizing: border-box;
+    background-color: #fffaf3;
 }
 
 input:focus {
     outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    border-color: #D92243;
+    box-shadow: 0 0 0 3px rgba(217, 34, 67, 0.15);
+}
+
+input[type="radio"] {
+    accent-color: #D92243;
 }
 
 .button {
@@ -85,7 +101,7 @@ input:focus {
     padding: 14px;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(135deg, #111827, #1f2937);
+    background: linear-gradient(135deg, #D92243, #b91a35);
     color: white;
     font-size: 15px;
     font-weight: bold;
@@ -96,12 +112,12 @@ input:focus {
 
 .button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
-    background: linear-gradient(135deg, #1e293b, #334155);
+    box-shadow: 0 8px 20px rgba(217, 34, 67, 0.3);
+    background: linear-gradient(135deg, #F69D39, #D92243);
 }
 
 .button:disabled {
-    background: #9ca3af;
+    background: #d4a5a5;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
@@ -114,9 +130,16 @@ input:focus {
 }
 
 #trocarinfo {
-    display: none
+    display: none;
 }
 
 #deletar {
-    display: none
+    display: none;
+}
+
+#message {
+    color: #D92243;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 10px;
 }
