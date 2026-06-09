@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @CrossOrigin
@@ -78,6 +79,16 @@ public class CardapioDiaController {
                         HttpStatus.NOT_FOUND, "Cardápio do dia não encontrado"
                 ));
     }
+
+    @GetMapping("/data/{data}")//busca cardapio do dia pela data
+    public CardapioDia buscarPorData(@PathVariable("data") LocalDate data){
+        return cardapioDiaRepository.findByData(data)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Cardápio do dia não encontrado"
+                ));
+    }
+
+
 
     @GetMapping("/all")//busca todos os cardápios de todos os dias
     public List<CardapioDia> buscarTodosCardapiosDias(){return cardapioDiaRepository.findAll();}
