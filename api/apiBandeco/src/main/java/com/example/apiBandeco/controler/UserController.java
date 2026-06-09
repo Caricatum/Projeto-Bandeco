@@ -46,27 +46,99 @@ public class UserController {
 
     @PostMapping("/cadastrar")//cadastra um usuário
     public void cadastroUser (@RequestBody @Valid User user){
+        if(userRepo.findByLogin(user.getLogin()).isPresent()){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "E-mail já cadastrado");
+        }
 
-        user.setSenhaHash(encoder.encode(user.getSenhaHash()));
+        String codigo = String.valueOf(
+                (int)(Math.random() * 900000) + 100000
+        );
+
+        user.setSenhaHash(
+                encoder.encode(user.getSenhaHash())
+        );
+
+        user.setEmailConfirmado(false);
+        user.setCodigoConfirmacao(codigo);
+        user.setExpiracaoConfirmacao(
+                LocalDateTime.now().plusMinutes(15)
+        );
+
+        userRepo.save(user);
+
+        emailService.enviarCodigo(
+                user.getLogin(),
+                codigo
+        );
+    }
+
+    @PostMapping("/confirmarEmail")
+    public void confirmarEmail(
+            @RequestParam String email,
+            @RequestParam String codigo){
+
+
+        User user = userRepo.findByLogin(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Usuário não encontrado"));
+
+        if(user.isEmailConfirmado()){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "E-mail já confirmado");
+        }
+
+        if(user.getCodigoConfirmacao() == null ||
+                !user.getCodigoConfirmacao().equals(codigo)){
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Código inválido");
+        }
+
+        if(LocalDateTime.now().isAfter(
+                user.getExpiracaoConfirmacao())){
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Código expirado");
+        }
+
+        user.setEmailConfirmado(true);
+        user.setCodigoConfirmacao(null);
+        user.setExpiracaoConfirmacao(null);
+
         userRepo.save(user);
     }
 
     @GetMapping("/validar")//valida Login do usuário
     public ResponseEntity<Boolean> validarUser(@RequestParam String login,
                                                @RequestParam String senhaHash){
-
         Optional<User> optUser = userRepo.findByLogin(login);
+
         if (optUser.isEmpty()){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(false);
         }
-        boolean valid = false;
 
-        valid = encoder.matches(senhaHash, optUser.get().getSenhaHash());
+        User user = optUser.get();
 
-        HttpStatus status = (valid) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
-        if (!valid){
-
+        if(!user.isEmailConfirmado()){
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(false);
         }
+
+        boolean valid =
+                encoder.matches(senhaHash, user.getSenhaHash());
+
+        HttpStatus status =
+                valid ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
+
         return ResponseEntity.status(status).body(valid);
     }
 
@@ -102,8 +174,8 @@ public class UserController {
                 (int)(Math.random() * 900000) + 100000
         );
 
-        user.setCodigo(codigo);
-        user.setExpiracaoCodigo(LocalDateTime.now().plusMinutes(15));
+        user.setCodigoResetSenha(codigo);
+        user.setExpiracaoResetSenha(LocalDateTime.now().plusMinutes(15));
 
         userRepo.save(user);
 
@@ -121,15 +193,15 @@ public class UserController {
                         HttpStatus.NOT_FOUND,
                         "Usuário não encontrado"));
 
-        if(user.getCodigo() == null ||
-                !user.getCodigo().equals(codigo)){
+        if(user.getCodigoResetSenha() == null ||
+                !user.getCodigoResetSenha().equals(codigo)){
 
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "Código inválido");
         }
 
-        if(LocalDateTime.now().isAfter(user.getExpiracaoCodigo())){
+        if(LocalDateTime.now().isAfter(user.getExpiracaoResetSenha())){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "Código expirado");
@@ -137,8 +209,8 @@ public class UserController {
 
         user.setSenhaHash(encoder.encode(novaSenha));
 
-        user.setCodigo(null);
-        user.setExpiracaoCodigo(null);
+        user.setCodigoResetSenha(null);
+        user.setExpiracaoResetSenha(null);
 
         userRepo.save(user);
     }
