@@ -20,6 +20,10 @@
                 Dados do Perfil
             </button>
 
+            <button onclick="window.location.href='buscaPratos.php'">
+                Buscar pratos
+            </button>
+
             <button onclick="window.location.href='mural.php'">
                 Mural e Cardapio do dia
             </button>
