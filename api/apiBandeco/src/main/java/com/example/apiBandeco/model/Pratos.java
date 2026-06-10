@@ -21,6 +21,16 @@ public class Pratos {
     private boolean vegano;
     @Column
     private String imagem;
+    @Column
+    private String notaTecnica;
+
+    public String getNotaTecnica() {
+        return notaTecnica;
+    }
+
+    public void setNotaTecnica(String notaTecnica) {
+        this.notaTecnica = notaTecnica;
+    }
 
     public Categoria getCategoria() {
         return categoria;
