@@ -243,34 +243,34 @@
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Prato Principal</b></label>
-                                        <input type="text" class="form-control">
+                                    <input type="text" class="form-control" id="">
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Guarnição</b></label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" id="">
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Salada</b></label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" id="">
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Sobremesa</b></label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" id="sobremesaVJ">
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Refresco</b></label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" id="refrescoVJ">
                                     </div>
                                     <hr>
                                     Pão e Café
 <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Nota Técnica</b></label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" id="nt">
                                     </div>
                                 </form>
                             </div>

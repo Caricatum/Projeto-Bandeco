@@ -3,8 +3,8 @@
 // =============================================
 const API = 'http://localhost:8080';
 
-const userId   = parseInt(localStorage.getItem('id'))   || null;
-const username = localStorage.getItem('username')        || '';
+const userId = parseInt(localStorage.getItem('id')) || null;
+const username = localStorage.getItem('username') || '';
 const isFuncionario = localStorage.getItem('tipo') === 'true';
 
 // Redireciona se não logado
@@ -15,16 +15,16 @@ if (sessionStorage.getItem('logado') !== 'true') {
 // =============================================
 // ESTADO LOCAL
 // =============================================
-let todosPratos    = [];
+let todosPratos = [];
 let todasAvaliacoes = [];
-let meusFavoritos  = []; // lista de { id, prato: { id } }
+let meusFavoritos = []; // lista de { id, prato: { id } }
 
 // =============================================
 // INIT
 // =============================================
 document.addEventListener('DOMContentLoaded', async () => {
     if (isFuncionario) {
-        document.getElementById('btnNovoCardapio').classList.remove('d-none');
+        document.getElementById('btnNovoPrato').classList.remove('d-none');
     }
 
     await Promise.all([
@@ -39,6 +39,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     configurarModalAvaliar();
     configurarModalFavoritar();
 });
+
+const btnNovoPrato = document.getElementById('btnNovoPrato');
+const modalNovoPrato = new bootstrap.Modal(document.getElementById('modalNovoPrato'));
+
+// ---- Novo Cardapio do dia ----
+if (btnNovoPrato) {
+    btnNovoPrato.addEventListener('click', () => modalNovoPrato.show());
+}
 
 // =============================================
 // BUSCAR DADOS DA API
@@ -82,7 +90,7 @@ async function carregarCategorias() {
         cats.forEach(c => {
             const opt = document.createElement('option');
             opt.value = c.id;
-            opt.textContent = c.nome || `Categoria ${c.id}`;
+            opt.textContent = c.descricao || `Categoria ${c.id}`;
             sel.appendChild(opt);
         });
     } catch (e) { /* silencioso */ }
@@ -105,7 +113,7 @@ function totalLikes(pratoId) {
 function euJaAvalieiEsre(pratoId) {
     return todasAvaliacoes.some(a =>
         a.prato && a.prato.id === pratoId &&
-        a.user  && a.user.id  === userId
+        a.user && a.user.id === userId
     );
 }
 
@@ -128,13 +136,13 @@ function estrelasPorNota(nota) {
 // RENDERIZAR CARDS
 // =============================================
 function pratosVisiveis() {
-    const busca   = document.getElementById('campoBusca').value.toLowerCase().trim();
-    const catId   = document.getElementById('filtroCategoria').value;
-    const vegano  = document.getElementById('filtroVegano').checked;
+    const busca = document.getElementById('campoBusca').value.toLowerCase().trim();
+    const catId = document.getElementById('filtroCategoria').value;
+    const vegano = document.getElementById('filtroVegano').checked;
 
     return todosPratos.filter(p => {
-        if (busca  && !p.nome.toLowerCase().includes(busca)) return false;
-        if (catId  && p.categoria && String(p.categoria.id) !== catId) return false;
+        if (busca && !p.nome.toLowerCase().includes(busca)) return false;
+        if (catId && p.categoria && String(p.categoria.id) !== catId) return false;
         if (vegano && !p.vegano) return false;
         return true;
     });
@@ -156,11 +164,11 @@ function renderizarPratos() {
     }
 
     area.innerHTML = lista.map(p => {
-        const media     = mediaNotas(p.id);
-        const likes     = totalLikes(p.id);
+        const media = mediaNotas(p.id);
+        const likes = totalLikes(p.id);
         const jaAvaliou = euJaAvalieiEsre(p.id);
         const jaFavoritou = euJaFavoriteeiEsse(p.id);
-        const catNome   = p.categoria ? (p.categoria.nome || `Cat. ${p.categoria.id}`) : '—';
+        const catNome = p.categoria ? (p.categoria.nome || `Cat. ${p.categoria.id}`) : '—';
 
         return `
         <div class="col-md-6 col-lg-4">
@@ -199,9 +207,9 @@ function renderizarPratos() {
                             class="btn-fav ${jaFavoritou ? 'ativo' : ''}"
                             id="btnFav-${p.id}"
                             onclick="${jaFavoritou
-                                ? `desfavoritar(${p.id}, ${idFavoritoDoPrato(p.id)})`
-                                : `abrirModalFavoritar(${p.id}, '${p.nome.replace(/'/g, "\\'")}')`
-                            }">
+                ? `desfavoritar(${p.id}, ${idFavoritoDoPrato(p.id)})`
+                : `abrirModalFavoritar(${p.id}, '${p.nome.replace(/'/g, "\\'")}')`
+            }">
                             ${jaFavoritou ? '⭐ Favoritado' : '☆ Favoritar'}
                         </button>
 
@@ -256,9 +264,9 @@ function configurarModalAvaliar() {
 
     document.getElementById('btnSalvarAvaliacao').addEventListener('click', async () => {
         const pratoId = parseInt(document.getElementById('pratoIdAvaliar').value);
-        const nota    = parseInt(document.getElementById('notaSelecionada').value);
-        const coment  = document.getElementById('comentarioAvaliar').value.trim();
-        const msg     = document.getElementById('msgAvaliar');
+        const nota = parseInt(document.getElementById('notaSelecionada').value);
+        const coment = document.getElementById('comentarioAvaliar').value.trim();
+        const msg = document.getElementById('msgAvaliar');
 
         if (!nota) { msg.textContent = 'Selecione uma nota!'; return; }
 
@@ -270,7 +278,7 @@ function configurarModalAvaliar() {
                     nota,
                     avaliacao: coment || null,
                     prato: { id: pratoId },
-                    user:  { id: userId }
+                    user: { id: userId }
                 })
             });
 
@@ -300,9 +308,9 @@ function abrirModalFavoritar(pratoId, nomePrato) {
 
 function configurarModalFavoritar() {
     document.getElementById('btnConfirmarFavorito').addEventListener('click', async () => {
-        const pratoId        = parseInt(document.getElementById('pratoIdFavoritar').value);
-        const notificar      = document.getElementById('ativarNotificacao').checked;
-        const msg            = document.getElementById('msgFavoritar');
+        const pratoId = parseInt(document.getElementById('pratoIdFavoritar').value);
+        const notificar = document.getElementById('ativarNotificacao').checked;
+        const msg = document.getElementById('msgFavoritar');
 
         try {
             // 1. Cadastra favorito
@@ -311,7 +319,7 @@ function configurarModalFavoritar() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     prato: { id: pratoId },
-                    user:  { id: userId }
+                    user: { id: userId }
                 })
             });
 
@@ -357,6 +365,87 @@ async function desfavoritar(pratoId, favId) {
         alert('Erro ao remover favorito: ' + e.message);
     }
 }
+
+// =============================================
+// CADASTRAR PRATO
+// =============================================
+document.getElementById("salvarNovoPrato").addEventListener("click",async function (e) {
+    e.preventDefault();
+
+    // Pegando o que foi digitado
+    const nomeDigitado = document.getElementById('nomePrato').value;
+    const descDigitado = document.getElementById('descPrato').value;
+    const categoriaDigitado = document.getElementById('categoriaPrato').value;
+    const veganoDigitado = document.getElementById('veganoPrato').value;
+    const imagemDigitado = document.getElementById('imagemPrato').value;
+
+    const categoriaDigitadoNome = "";
+   
+    const urlCategoria = `${API}/categoria/${categoriaDigitado}`;
+console.log("Variaveis feitas")
+    fetch(urlCategoria)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("Categoria incorreta!");
+            }
+            return res.json();
+        })
+        .then(dados => {
+            categoriaDigitadoNome = dados.descricao;
+            console.log(dados.descricao);
+        })
+        .catch(error => {
+            message.innerHTML = `Erro: ${error.message}`
+        })
+
+    const url = `${API}/pratos/cadastrar`;
+
+    const prato = {
+        nome: nomeDigitado,
+        descricao: descDigitado,
+        vegano: veganoDigitado,
+        imagem: imagemDigitado,
+        categoria: {
+            id: categoriaDigitado,
+            descricao: categoriaDigitadoNome,
+        },
+    }
+    const jsonPrato = JSON.stringify(prato);
+    
+    console.log("Passou no Fetch de categoria"),
+    console.log
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: jsonPrato
+    })
+        .then(res => {
+            if (!res.ok) throw new Error("Erro na requisicao");
+
+            const contentType = res.headers.get("content-type");
+
+            if (contentType && contentType.includes("application/json")) {
+                return res.json();
+            } else {
+                return null; // ou res.text()
+            }
+        })
+        .then(data =>
+            console.log(data, "Prato cadastrado"),
+        )
+        .catch(err => console.error("Erro:", err));
+
+        console.log("passou do fetch")
+    document.getElementById('nomePrato').value = '';
+    document.getElementById('descPrato').value = '';
+    document.getElementById('categoriaPrato').value = '';
+    document.getElementById('veganoPrato').value = '';
+    document.getElementById('imagemPrato').value = '';
+    modalNovoPrato.hide();
+})
 
 // =============================================
 // LOGOUT
