@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (btnNovo) {
         btnNovo.addEventListener('click', () => modal.show());
     }
-
+    // ---- Novo Cardapio do dia ----
     if (btnNovoCardapioDoDia) {
         btnNovoCardapioDoDia.addEventListener('click', () => modalCardapioDia.show());
     }
@@ -172,6 +172,7 @@ function cardapioCard(titulo, cardapio, vegano) {
         ['Salada',          cardapio.salada],
         ['Sobremesa',       cardapio.sobremesa],
         ['Refresco',        cardapio.refresco],
+        ['Nota Tecnica',    cardapio.nota_tecnica]
     ];
 
     return `
