@@ -25,7 +25,7 @@
             </button>
 
             <button onclick="window.location.href='mural.php'">
-                Mural e Cardapio do dia
+                Mural e Cardápio do dia
             </button>
 
             <button onclick="logout()">

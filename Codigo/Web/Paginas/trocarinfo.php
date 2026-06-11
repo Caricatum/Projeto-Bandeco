@@ -64,14 +64,16 @@
 
 
       <section class="section" id="sectionTipodeUsuario">
-        <div class="row">Tipo de pessoa</div>
+        <div class="row content-align-center">Tipo de pessoa</div>
+
         <div class="radio-option">
-          <label for="aluno">Aluno</label>
           <input type="radio" name="tipoDeUsuario" id="aluno" value="false" required checked>
+          <label for="aluno">Aluno</label>
         </div>
+
         <div class="radio-option">
-          <label for="func">Funcionário</label>
           <input type="radio" name="tipoDeUsuario" id="func" value="true" required>
+          <label for="func">Funcionário</label>
         </div>
       </section>
 
