@@ -95,7 +95,7 @@
 
     </form>
   </div>
-  <script src="../JS/trocarinfo.js"></script>
+  <script type="module" src="../JS/trocarinfo.js"></script>
 
 </body>
 

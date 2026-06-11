@@ -1,8 +1,12 @@
+import { validaFunc } from './validaFunc.js';
+
+validaFunc();
+
 document.addEventListener("DOMContentLoaded", function () {
 
     // chatGPT 
     const token = sessionStorage.getItem("logado"); // ou sessionStorage
-    
+
     if (!token) {
         // Usuário não está logado, redireciona para o login
         window.location.href = "login.php";
@@ -17,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const nome = localStorage.getItem("nome");
     const tipo = localStorage.getItem("tipo");
     const id = localStorage.getItem("id");
-    
+
 
     document.getElementById("username").value = user;
     document.getElementById("name").value = nome;
@@ -34,10 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.getElementById("trocarinfo").addEventListener("click", function () {
     const url = `http://localhost:8080/user/atualizar`;
-
-    const user = localStorage.getItem("username");
-    const nome = localStorage.getItem("nome");
-    const tipo = localStorage.getItem("tipo");
     const id = localStorage.getItem("id");
 
     const userDigitado = document.getElementById("username").value;
@@ -51,7 +51,7 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
         return;
     }
 
-    
+
 
     const usuario = {
         id: id,
@@ -79,12 +79,18 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
             } else {
                 return null; // ou res.text()
             }
-            
+
         })
-        .then(data => console.log(data))
+        .then(data => {
+            if (localStorage.getItem("username") == userDigitado) {
+                localStorage.setItem("nome") = nomeDigitado;
+                localStorage.setItem("tipo") = nomeDigitado;
+            }
+        }
+        ) //trocar para 
         .catch(err => console.error("Erro:", err));
 
-        window.location.href = 'dadosperfil.php';
+    window.location.href = 'dadosperfil.php';
 
 
 });
