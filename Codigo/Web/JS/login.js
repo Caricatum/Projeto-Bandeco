@@ -1,41 +1,45 @@
-
-
 document.getElementById('loginForm').addEventListener('submit', function (e) {
     e.preventDefault(); // Impede o envio real do formulário
 
-    // Credenciais fictícias
     const userDigitado = document.getElementById('username').value;
     const senhaDigitada = document.getElementById('password').value;
-    const url = `http://localhost:8080/user/validar?login=${userDigitado}&senhaHash=${senhaDigitada}`;
+    const url = `http://localhost:8080/user/validar?login=${encodeURIComponent(userDigitado)}&senhaHash=${encodeURIComponent(senhaDigitada)}`;
     const message = document.getElementById('message');
-    resultado = false;
-    
+
+    message.style.color = '';
+    message.innerText = '';
+
     fetch(url)
         .then(res => {
+            // E-mail ainda não confirmado
+            if (res.status === 403) {
+                sessionStorage.setItem('emailParaConfirmar', userDigitado);
+                message.innerText = 'Seu e-mail ainda não foi confirmado. Redirecionando...';
+                setTimeout(() => {
+                    window.location.href = 'confirmarEmail.php';
+                }, 1000);
+                return null;
+            }
+
             if (!res.ok) {
                 throw new Error("Usuário ou senha incorretos!");
             }
             return res.json();
         })
         .then(dados => {
-            resultado = dados;
-            if (resultado == true) {
+            if (dados === null) return; // já tratado acima (e-mail não confirmado)
+
+            if (dados === true) {
                 // Logado com sucesso
-                sessionStorage.setItem('logado', 'true'); // Define a sessão
-                localStorage.setItem('username', userDigitado); // Armazena o nome do usuário na local
-                // salva no navegador
-                window.location.href = 'inicio.php'; // Redireciona
+                sessionStorage.setItem('logado', 'true');
+                localStorage.setItem('username', userDigitado);
+                window.location.href = 'inicio.php';
             } else {
                 message.innerText = 'Usuário ou senha incorretos!';
                 sessionStorage.setItem('logado', 'false');
             }
         })
         .catch(error => {
-            message.innerHTML = `Erro: ${error.message}`
-        })
-        
-        
-
+            message.innerText = `Erro: ${error.message}`;
+        });
 });
-
-//teste

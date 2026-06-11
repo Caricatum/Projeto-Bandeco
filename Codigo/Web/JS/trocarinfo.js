@@ -1,6 +1,6 @@
-import { validaFunc } from './validaFunc.js';
+/*import { validaFunc } from './validaFunc.js';
 
-validaFunc();
+validaFunc();*/
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-document.getElementById("trocarinfo").addEventListener("click", function () {
+document.getElementById("trocarinfo").addEventListener("click",function () {
     const url = `http://localhost:8080/user/atualizar`;
     const id = localStorage.getItem("id");
 
@@ -44,11 +44,15 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
     const nomeDigitado = document.getElementById("name").value;
     const tipoDeUsuario = document.querySelector('input[name="tipoDeUsuario"]:checked').value;
     const senhaDigitada = document.getElementById("senha").value;
-    const mensagemErro = document.getElementById("message");
+    const mensagem = document.getElementById("message");
+    
 
     if (senhaDigitada == "") {
-        mensagemErro.textContent = "Por favor, digite sua senha para trocar as informações.";
+        mensagem.textContent = "Por favor, digite sua senha para trocar as informações.";
         return;
+    }
+    if (senhaDigitada !== "") {
+        mensagem.textContent = "";
     }
 
 
@@ -61,6 +65,9 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
         funcionario: tipoDeUsuario === 'true',
     }
     const jsonUsuario = JSON.stringify(usuario);
+
+    console.log("tipoDeUsuario:", tipoDeUsuario);
+    console.log("nome:", nomeDigitado);
 
     fetch(url, {
         method: 'PUT',
@@ -83,14 +90,22 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
         })
         .then(data => {
             if (localStorage.getItem("username") == userDigitado) {
-                localStorage.setItem("nome") = nomeDigitado;
-                localStorage.setItem("tipo") = nomeDigitado;
+                localStorage.setItem("nome", nomeDigitado);
+                console.log("Antes:", data.funcionario);
+
+                localStorage.setItem("tipo", tipoDeUsuario);
+
+                console.log("Depois:", data.funcionario);
             }
+            mensagem.style='Informações atualizadas.';
+            mensagem.textContent='Informações atualizadas.';
+
+            window.location.href='dadosperfil.php';
         }
         ) //trocar para 
         .catch(err => console.error("Erro:", err));
 
-    window.location.href = 'dadosperfil.php';
 
+        
 
 });
