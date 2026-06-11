@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="../CSS/mural.css">
 
     <!-- JS -->
-    <script src="../JS/mural.js" defer></script>
+    <script type="module" src="../JS/mural.js" defer></script>
 </head>
 
 <body>

@@ -1,3 +1,7 @@
+import { validaFunc } from './validaFunc.js';
+
+validaFunc();
+
 document.addEventListener("DOMContentLoaded", function(){
     if(sessionStorage.getItem('logado') !== "true"){
         window.location.href = 'login.php'; // Redireciona para a página de login

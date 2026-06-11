@@ -1,3 +1,7 @@
+import { validaFunc } from './validaFunc.js';
+
+validaFunc();
+
 // =============================================
 // CONFIGURAÇÃO
 // =============================================
@@ -369,7 +373,7 @@ async function desfavoritar(pratoId, favId) {
 // =============================================
 // CADASTRAR PRATO
 // =============================================
-document.getElementById("salvarNovoPrato").addEventListener("click",async function (e) {
+document.getElementById("salvarNovoPrato").addEventListener("click",function (e) {
     e.preventDefault();
 
     // Pegando o que foi digitado
@@ -379,41 +383,31 @@ document.getElementById("salvarNovoPrato").addEventListener("click",async functi
     const veganoDigitado = document.getElementById('veganoPrato').value;
     const imagemDigitado = document.getElementById('imagemPrato').value;
 
-    const categoriaDigitadoNome = "";
-   
-    const urlCategoria = `${API}/categoria/${categoriaDigitado}`;
-console.log("Variaveis feitas")
-    fetch(urlCategoria)
-        .then(res => {
-            if (!res.ok) {
-                throw new Error("Categoria incorreta!");
-            }
-            return res.json();
-        })
-        .then(dados => {
-            categoriaDigitadoNome = dados.descricao;
-            console.log(dados.descricao);
-        })
-        .catch(error => {
-            message.innerHTML = `Erro: ${error.message}`
-        })
+    let vegano = null;
+
+    if (veganoDigitado === "true") {
+        vegano = true;
+    }else{
+        vegano = false;
+    }
+    console.log("Vegano digitado: " + vegano);
+
+    console.log("Variaveis feitas")
 
     const url = `${API}/pratos/cadastrar`;
 
     const prato = {
         nome: nomeDigitado,
         descricao: descDigitado,
-        vegano: veganoDigitado,
+        vegano: vegano,
         imagem: imagemDigitado,
-        categoria: {
-            id: categoriaDigitado,
-            descricao: categoriaDigitadoNome,
-        },
-    }
+        categoria: {"id": parseInt(categoriaDigitado)},
+    };
     const jsonPrato = JSON.stringify(prato);
+
+    
     
     console.log("Passou no Fetch de categoria"),
-    console.log
 
     fetch(url, {
         method: 'POST',
@@ -445,6 +439,8 @@ console.log("Variaveis feitas")
     document.getElementById('veganoPrato').value = '';
     document.getElementById('imagemPrato').value = '';
     modalNovoPrato.hide();
+
+    window.location.reload();
 })
 
 // =============================================

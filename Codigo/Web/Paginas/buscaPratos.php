@@ -218,8 +218,8 @@
                             <div class="mb-3">
                                 <label class="form-label"><b>Vegano</b></label>
                                 <select id="veganoPrato" class="form-control">
-                                    <option value="1">Sim</option>
-                                    <option value="0">Não</option>
+                                    <option value="true">Sim</option>
+                                    <option value="false">Não</option>
                                 </select>
                             </div>
 
@@ -319,7 +319,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../JS/buscaPratos.js"></script>
+    <script type="module" src="../JS/buscaPratos.js"></script>
 </body>
 
 </html>
