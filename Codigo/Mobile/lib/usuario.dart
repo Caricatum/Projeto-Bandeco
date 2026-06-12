@@ -19,6 +19,6 @@ class Usuario {
   String get senha => _senha;
   set senha(String value) => _senha = value;
 
-  String get login => this._login;
+  String get login => _login;
   set login(String value) => _login = value;
 }
