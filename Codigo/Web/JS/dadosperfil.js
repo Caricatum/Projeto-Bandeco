@@ -126,6 +126,8 @@ document.getElementById("deletar").addEventListener("click", function () {
                 })
                 .then(data => {
                     console.log("deletou")
+
+                    window.location.href = 'login.php';
                 })
 
                 .catch(error => {
@@ -140,7 +142,7 @@ document.getElementById("deletar").addEventListener("click", function () {
             document.getElementById("message").innerText = "Usuário não encontrado.";
         });
 
-        window.location.href = 'login.php'; // Redireciona para a página inicial
+         // Redireciona para a página inicial
         //sessionStorage.setItem("volta","true")
 
 });

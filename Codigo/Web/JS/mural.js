@@ -1,7 +1,3 @@
-import { validaFunc } from './validaFunc.js';
-
-validaFunc();
-
 // =============================================
 // CONFIGURAÇÃO
 // =============================================
@@ -78,7 +74,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     // ---- Novo Cardapio do dia ----
     if (btnNovoCardapioDoDia) {
-        btnNovoCardapioDoDia.addEventListener('click', () => modalCardapioDia.show());
+        btnNovoCardapioDoDia.addEventListener('click', async () => {
+            await carregarTodosPratos();
+            popularSelectsDePratos();
+            modalCardapioDia.show();
+        });
+    }
+
+    const btnSalvarCardapioDia = document.getElementById('salvarCardapioDia');
+    if (btnSalvarCardapioDia) {
+        btnSalvarCardapioDia.addEventListener('click', salvarCardapioDia);
     }
 
     document.getElementById('salvarAviso').addEventListener('click', () => {
@@ -193,4 +198,153 @@ function cardapioCard(titulo, cardapio, vegano) {
                 </div>
             </div>
         </div>`;
+}
+
+
+// =============================================
+// CADASTRAR CARDÁPIO DO DIA (4 cardápios + data)
+// =============================================
+
+let todosPratos = [];
+
+async function carregarTodosPratos() {
+    try {
+        const res = await fetch(`${API}/pratos/all`);
+        if (!res.ok) throw new Error('Erro ao buscar pratos');
+        todosPratos = await res.json();
+    } catch (e) {
+        todosPratos = [];
+    }
+}
+
+// Popula cada <select class="select-prato"> com os pratos da
+// categoria correspondente, filtrando vegano quando necessário
+function popularSelectsDePratos() {
+    document.querySelectorAll('.select-prato').forEach(select => {
+        const categoriaId = parseInt(select.dataset.categoria);
+        const exigeVegano = select.dataset.vegano === 'true';
+
+        select.innerHTML = '<option value="">Nenhum</option>';
+
+        const pratosFiltrados = todosPratos.filter(p => {
+            const mesmaCategoria = p.categoria && p.categoria.id === categoriaId;
+            if (!mesmaCategoria) return false;
+            if (exigeVegano && !p.vegano) return false;
+            return true;
+        });
+
+        pratosFiltrados.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = p.nome + (p.vegano ? ' 🥦' : '');
+            select.appendChild(opt);
+        });
+    });
+}
+
+// Monta os 4 objetos Cardapio a partir dos selects, cadastra cada
+// um em /cardapio/cadastrar e depois cadastra o CardapioDia com a
+// data digitada e os 4 ids retornados.
+async function salvarCardapioDia() {
+    const msg  = document.getElementById('msgCardapioDia');
+    const btn  = document.getElementById('salvarCardapioDia');
+    const data = document.getElementById('dataCardapio').value;
+
+    msg.textContent = '';
+    msg.style.color = '';
+
+    if (!data) {
+        msg.textContent = '⚠️ Selecione a data do cardápio.';
+        return;
+    }
+
+    // chave -> { vegano: bool, campos preenchidos com { id: ... } }
+    const cardapios = {
+        padraoAlmoco: { vegano: false },
+        veganoAlmoco: { vegano: true  },
+        padraoJantar: { vegano: false },
+        veganoJantar: { vegano: true  },
+    };
+
+    document.querySelectorAll('.select-prato').forEach(select => {
+        const cardapioKey = select.dataset.cardapio;
+        const campo       = select.dataset.campo;
+        const valor       = select.value;
+
+        if (valor) {
+            cardapios[cardapioKey][campo] = { id: parseInt(valor) };
+        }
+    });
+
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+
+    try {
+        // 1) Cadastra cada um dos 4 cardápios em /cardapio/cadastrar
+        const idsCardapios = {};
+
+        for (const chave of Object.keys(cardapios)) {
+            const res = await fetch(`${API}/cardapio/cadastrar`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(cardapios[chave])
+            });
+
+            if (!res.ok) {
+                throw new Error(`Erro ao salvar cardápio "${chave}": ${await res.text()}`);
+            }
+
+            const cardapioSalvo = await res.json();
+            idsCardapios[chave] = cardapioSalvo.id;
+        }
+
+        // 2) Cadastra o CardapioDia com a data + os 4 ids + usuário logado (obrigatório na API)
+        if (!usuarioLogado.id) {
+            throw new Error('Usuário não identificado. Faça login novamente.');
+        }
+
+        const cardapioDiaPayload = {
+            data: data,
+            padraoAlmoco: { id: idsCardapios.padraoAlmoco },
+            veganoAlmoco: { id: idsCardapios.veganoAlmoco },
+            padraoJantar: { id: idsCardapios.padraoJantar },
+            veganoJantar: { id: idsCardapios.veganoJantar },
+            user: { id: usuarioLogado.id },
+        };
+
+        const resDia = await fetch(`${API}/cardapioDia/cadastrar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cardapioDiaPayload)
+        });
+
+        if (!resDia.ok) {
+            const texto = await resDia.text();
+            if (resDia.status === 400 && texto.includes('Já existe')) {
+                throw new Error('Já existe um cardápio cadastrado para esta data.');
+            }
+            throw new Error(texto || 'Erro ao salvar o cardápio do dia.');
+        }
+
+        msg.style.color = 'green';
+        msg.textContent = '✅ Cardápio do dia salvo com sucesso!';
+
+        // Atualiza a área de cardápio do dia se a data salva for hoje
+        await carregarCardapioDia();
+
+        setTimeout(() => {
+            const modalEl = document.getElementById('modalCardapioDia');
+            bootstrap.Modal.getInstance(modalEl).hide();
+            msg.textContent = '';
+            msg.style.color = '';
+            document.getElementById('dataCardapio').value = '';
+        }, 1200);
+
+    } catch (e) {
+        msg.style.color = '';
+        msg.textContent = '❌ ' + e.message;
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Salvar';
+    }
 }

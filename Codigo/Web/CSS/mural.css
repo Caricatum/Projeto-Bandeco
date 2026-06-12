@@ -6,22 +6,6 @@ body {
     font-family: Arial, sans-serif;
 }
 
-/* ===== Navbar ===== */
-.navbar {
-    background-color: #D92243 !important;
-    box-shadow: 0 2px 10px rgba(217, 34, 67, 0.3);
-}
-.navbar-brand {
-    color: #FFF5E5 !important;
-    font-weight: bold;
-}
-.nav-link {
-    color: #FFF5E5 !important;
-}
-.navbar-toggler-icon {
-    filter: brightness(10);
-}
-
 /* ===== Botões navbar ===== */
 .btn-dark {
     background-color: #b91a35 !important;
