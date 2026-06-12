@@ -11,43 +11,9 @@ class Login extends StatefulWidget {
   @override
   State<Login> createState() => _LoginState();
 }
-/*
-Future<void> cadastrarUsuario() async {
-    final url = Uri.parse('http://localhost:8080/user/login');
 
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'login': loginController.text,
-          'senhaHash': senhaController.text,
-        }),
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Usuário cadastrado com sucesso!')),
-        );
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => Login()),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao cadastrar: ${response.body}')),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Erro de conexão: $e')));
-    }
-  }*/
-
-TextEditingController loginController = new TextEditingController();
-TextEditingController senhaController = new TextEditingController();
+TextEditingController loginController = TextEditingController();
+TextEditingController senhaController = TextEditingController();
 
 class _LoginState extends State<Login> {
   final TextEditingController loginController = TextEditingController();
@@ -74,7 +40,7 @@ class _LoginState extends State<Login> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Principal(usuario: usuario)),
+          MaterialPageRoute(builder: (context) => Principal()),
         );
       } else {
         ScaffoldMessenger.of(
