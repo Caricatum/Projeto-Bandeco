@@ -8,20 +8,15 @@ body {
     min-height: 100vh;
 }
 
-/* Navbar com a cor da paleta */
-.navbar {
-    background-color: #D92243 !important;
-}
-.navbar-brand, .nav-link {
-    color: #FFF5E5 !important;
-}
+/* Navbar — ver navbar.css */
 
 #dadosContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    min-height: calc(100vh - 56px);
     padding: 20px;
+    box-sizing: border-box;
 }
 
 #dadosForm {
