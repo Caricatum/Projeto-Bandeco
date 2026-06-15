@@ -20,12 +20,12 @@ class _LoginState extends State<Login> {
   final TextEditingController senhaController = TextEditingController();
 
   Future<void> fazerLogin(BuildContext context) async {
+
     final url = Uri.parse('http://localhost:8080/user/login' + loginController.text + "&senhaHash=" + senhaController.text);
     try {
       final response = await http.get(
         url,
         headers: {'Content-Type': 'application/json'},
-        
       );
 
       if (response.statusCode == 200) {
@@ -85,72 +85,6 @@ class _LoginState extends State<Login> {
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18),
                 ),
-
-                const SizedBox(height: 30),
-
-                TextFormField(
-                  controller: loginController,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.person),
-                    hintText: "Email",
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Preencha o campo email";
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    TextFormField(
-                      controller: senhaController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.lock),
-                        hintText: "Senha",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Preencha o campo senha";
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-
-                    const Text(
-                      "Entre ou cadastre-se agora!",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18),
-                    ),
-
-                    const SizedBox(height: 30),
-
                     TextFormField(
                       controller: loginController,
                       decoration: InputDecoration(
@@ -243,9 +177,7 @@ class _LoginState extends State<Login> {
                 ),
               ],
             ),
-          ],
         ),
-      ),
-    );
+      );
   }
 }
