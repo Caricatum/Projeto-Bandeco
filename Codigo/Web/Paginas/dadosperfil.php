@@ -6,33 +6,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dados do perfil</title>
   <link rel="stylesheet" href="../CSS/dadosperfil.css">
-
+  
   <link rel="stylesheet" href="../../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../CSS/navbar.css">
   <script src="../../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container">
-      <img src="../Assets/Images/logo_unicamp.jpg" alt="Logo Unicamp" width="40" height="40"
-        class="d-inline-block align-text-top">
-      <a class="navbar-brand ms-3" href="">Inicio</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#sobre">Sobre Mim</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#projetos">Projetos</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+ 
+            <img src="../Assets/Images/logo_unicamp.jpg" alt="Logo Unicamp" width="40" height="40"
+                class="d-inline-block align-text-top">
+ 
+            <a class="navbar-brand ms-3" href="inicio.php">Bandeco</a>
+ 
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+ 
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto gap-2">
+ 
+                    <li class="nav-item">
+                        <button class="btn-nav" onclick="window.location.href='inicio.php'">🏠 Início</button>
+                    </li>
+ 
+                    <li class="nav-item">
+                        <button class="btn-nav" onclick="window.location.href='buscaPratos.php'">🍽️ Buscar Pratos</button>
+                    </li>
+ 
+                    <li class="nav-item">
+                        <button class="btn-nav" onclick="window.location.href='sobrenos.php'">ℹ️ Sobre nós</button>
+                    </li>
+ 
+                    <!-- Botão Login: visível se não logado, some se logado (via JS) -->
+                    <li class="nav-item" id="itemLogin">
+                        <button id="btnLogin" class="btn-nav" onclick="window.location.href='login.php'">Login</button>
+                    </li>
+ 
+                </ul>
+            </div>
+        </div>
+    </nav>
 
 
   <!--dados-->
@@ -71,7 +88,7 @@
 
     <button type="button" class="button" id="deletar" disabled>Deletar usuário</button>
 
-    <button type="button"class="button" id="voltar" onclick="window.location.href='dadosperfil.html'">
+    <button type="button"class="button" id="voltar" onclick="window.location.href='inicio.php'">
         Voltar
       </button>
 
@@ -80,7 +97,7 @@
 
     </form>
   </div>
-  <script src="../JS/dadosperfil.js"></script>
+  <script type="module" src="../JS/dadosperfil.js"></script>
 
 </body>
 

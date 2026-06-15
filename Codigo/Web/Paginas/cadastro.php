@@ -41,7 +41,7 @@
             
             <button type="submit" class="button">Cadastrar</button>
 
-            <button type="button"class="button" id="voltar" onclick="window.location.href='login.html'">
+            <button type="button"class="button" id="voltar" onclick="window.location.href='login.php'">
         Voltar
       </button>
             <p id="message"></p>

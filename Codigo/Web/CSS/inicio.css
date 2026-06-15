@@ -1,7 +1,10 @@
+/* ===== PALETA ===== */
+/* #D92243 vermelho | #F69D39 laranja | #E0C375 dourado | #FFF5E5 creme */
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #e0f2fe, #f8fafc);
+    background: linear-gradient(135deg, #F69D39, #E0C375);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,10 +12,10 @@ body {
 }
 
 .panel-container {
-    background-color: white;
+    background-color: #FFF5E5;
     padding: 40px;
     border-radius: 20px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 12px 35px rgba(217, 34, 67, 0.18);
     text-align: center;
     width: 100%;
     max-width: 420px;
@@ -20,7 +23,7 @@ body {
 }
 
 h1 {
-    color: #1f2937;
+    color: #D92243;
     margin-bottom: 30px;
     font-size: 32px;
 }
@@ -36,7 +39,7 @@ button {
     padding: 14px;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(135deg, #111827, #1f2937);
+    background: linear-gradient(135deg, #D92243, #b91a35);
     color: white;
     font-size: 15px;
     font-weight: bold;
@@ -46,16 +49,17 @@ button {
 
 button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
-    background: linear-gradient(135deg, #1e293b, #334155);
+    box-shadow: 0 8px 20px rgba(217, 34, 67, 0.3);
+    background: linear-gradient(135deg, #F69D39, #D92243);
 }
 
+/* Botão Sair — mantém vermelho mais escuro */
 button:last-child {
-    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    background: linear-gradient(135deg, #9b1b30, #D92243);
 }
 
 button:last-child:hover {
-    background: linear-gradient(135deg, #b91c1c, #991b1b);
+    background: linear-gradient(135deg, #D92243, #9b1b30);
 }
 
 @keyframes fadeIn {
