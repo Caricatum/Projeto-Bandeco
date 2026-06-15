@@ -1,7 +1,11 @@
 package com.example.apiBandeco.controler;
 
 import com.example.apiBandeco.model.Cardapio;
+import com.example.apiBandeco.model.CardapioDia;
+import com.example.apiBandeco.model.Pratos;
+import com.example.apiBandeco.repository.CardapioDiaRepository;
 import com.example.apiBandeco.repository.CardapioRepository;
+import com.example.apiBandeco.repository.CategoriaRepository;
 import com.example.apiBandeco.repository.PratosRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,8 @@ public class CardapioController {
     PratosRepository pratosRepository;
     @Autowired
     CardapioRepository cardapioRepository;
+    @Autowired
+    CardapioDiaRepository cardapioDiaRepository;
 
     private void validaPratos(Cardapio cardapio){
         Integer acompanhamentoId = cardapio.getAcompanhamento() != null
@@ -98,11 +104,40 @@ public class CardapioController {
         return cardapioRepository.save(cardapio);
     }
 
-    @DeleteMapping("/deletar/{id}") //deleta Cardápio pelo id
-    public void deletarCardapio(@PathVariable(value = "id") int id){
-        var cardapio = cardapioRepository.findById(id)
+    @DeleteMapping("/deletar/{id}")
+    public void deletarCardapio(@PathVariable int id) {
+
+        Cardapio cardapio = cardapioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Cardápio não encontrado"));
+                        HttpStatus.NOT_FOUND,
+                        "Cardápio não encontrado"));
+
+        List<CardapioDia> cardapioDias = cardapioDiaRepository.findAll();
+
+        for (CardapioDia c : cardapioDias) {
+
+            if (c.getPadraoAlmoco() != null &&
+                    c.getPadraoAlmoco().getId() == id) {
+                c.setPadraoAlmoco(null);
+            }
+
+            if (c.getPadraoJantar() != null &&
+                    c.getPadraoJantar().getId() == id) {
+                c.setPadraoJantar(null);
+            }
+
+            if (c.getVeganoAlmoco() != null &&
+                    c.getVeganoAlmoco().getId() == id) {
+                c.setVeganoAlmoco(null);
+            }
+
+            if (c.getVeganoJantar() != null &&
+                    c.getVeganoJantar().getId() == id) {
+                c.setVeganoJantar(null);
+            }
+        }
+
+        cardapioDiaRepository.saveAll(cardapioDias);
 
         cardapioRepository.delete(cardapio);
     }

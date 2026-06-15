@@ -31,6 +31,7 @@ public class Notificacoes {
     @NotNull(message = "Usuário deve ser informado")
     private User user;
 
+
     public int getId() {
         return id;
     }
