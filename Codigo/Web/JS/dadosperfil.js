@@ -1,148 +1,170 @@
-import { validaFunc } from './validaFunc.js';
+const API = 'http://localhost:8080';
 
-validaFunc();
-
-document.addEventListener("DOMContentLoaded", function(){
-    if(sessionStorage.getItem('logado') !== "true"){
-        window.location.href = 'login.php'; // Redireciona para a página de login
-    } else {
-        return ;
+// ── Redireciona se não logado ─────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+    if (sessionStorage.getItem('logado') !== 'true') {
+        window.location.href = 'login.php';
     }
 });
 
-document.getElementById("dadosForm").addEventListener("submit", function (e) {
-    document.getElementById("aluno").checked = false;
-    document.getElementById("func").checked = false;
-    document.getElementById("name").value = "";
-    document.getElementById("message").innerText = "";
+// ── Estado ───────────────────────────────────────────────────────────────────
+let acaoPendente = null; // 'trocar' ou 'deletar'
+let usuarioBuscado = null; // objeto { id, login, nome, funcionario }
+
+// ── BUSCAR USUÁRIO ────────────────────────────────────────────────────────────
+document.getElementById('dadosForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    const url = `http://localhost:8080/user/login/${document.getElementById("username").value}`;
 
+    const username = document.getElementById('username').value.trim();
+    const message  = document.getElementById('message');
 
-    fetch(url, {
-        method: 'GET',
-    })
+    // Resetar exibição
+    document.getElementById('aluno').checked = false;
+    document.getElementById('func').checked  = false;
+    document.getElementById('name').value    = '';
+    message.innerText = '';
+    esconderBotoes();
+
+    if (!username) return;
+
+    fetch(`${API}/user/login/${username}`)
         .then(res => {
-            if (!res.ok) { throw new Error("Usuário não encontrado"); }
+            if (!res.ok) throw new Error('Usuário não encontrado.');
             return res.json();
         })
         .then(data => {
+            usuarioBuscado = data;
 
-            // Mostrar os elementos só depois da resposta
-            document.getElementById("sectionTipodeUsuario").style.display = "flex";
-            document.getElementById("div-nome").style.display = "flex";
-            document.getElementById("trocarinfo").style.display = "block";
-            document.getElementById("deletar").style.display = "block";
-            document.getElementById("voltar").style.display = "block";
-            document.getElementById("trocarinfo").disabled = false;
-            document.getElementById("deletar").disabled = false;
-
-
-            // Exemplo: preencher dados na tela
-            if (data.funcionario === true) {
-                document.getElementById("func").checked = true;
-                document.getElementById("aluno").checked = false;
+            // Preenche os campos
+            document.getElementById('name').value = data.nome;
+            if (data.funcionario) {
+                document.getElementById('func').checked = true;
             } else {
-                document.getElementById("aluno").checked = true;
-                document.getElementById("func").checked = false;
+                document.getElementById('aluno').checked = true;
             }
-            document.getElementById("name").value = data.nome;
 
+            // Revela seções
+            document.getElementById('div-nome').style.display           = 'flex';
+            document.getElementById('sectionTipodeUsuario').style.display = 'flex';
+            document.getElementById('trocarinfo').style.display         = 'block';
+            document.getElementById('voltar').style.display             = 'block';
 
+            // Deletar só aparece para funcionários logados
+            if (localStorage.getItem('tipo') === 'true') {
+                document.getElementById('deletar').style.display = 'block';
+            }
         })
-        .catch(error => {
-            console.error("Erro:", error);
-            document.getElementById("message").innerText = "Usuário não encontrado.";
+        .catch(err => {
+            message.innerText = err.message;
         });
-
-
 });
 
-document.getElementById("trocarinfo").addEventListener("click", function () {
-
-    const url = `http://localhost:8080/user/login/${document.getElementById("username").value}`;
-
-    fetch(url, {
-        method: 'GET',
-    })
-        .then(res => {
-            if (!res.ok) { throw new Error("Erro na requisição."); }
-            return res.json();
-        })
-        .then(data => {
-            const nomeBanco = data.nome;
-            const tipoDeUsuarioBanco = data.funcionario;
-            const idBanco = data.id;
-
-            localStorage.setItem("username", document.getElementById("username").value);
-            localStorage.setItem("nome", nomeBanco);
-            localStorage.setItem("tipo", tipoDeUsuarioBanco);
-            localStorage.setItem("id", idBanco);
-            window.location.href = "trocarinfo.php";
-        })
-        .catch(error => {
-            console.error("Erro:", error);
-            document.getElementById("message").innerText = "Erro na requisição.";
-        });
-
-
+// ── ABRIR MODAL: TROCAR INFORMAÇÕES ──────────────────────────────────────────
+document.getElementById('trocarinfo').addEventListener('click', function () {
+    acaoPendente = 'trocar';
+    abrirModalSenha(
+        '✏️ Trocar Informações',
+        'Para editar os dados do usuário <strong>' + (usuarioBuscado ? usuarioBuscado.login : '') + '</strong>, confirme sua senha.'
+    );
 });
 
-document.getElementById("deletar").addEventListener("click", function () {
-
-    const message = document.getElementById("message");
-
-    const url = `http://localhost:8080/user/login/${document.getElementById("username").value}`;
-
-    console.log("clicou");
-
-    fetch(url, {
-        method: 'GET',
-    })
-        .then(res => {
-            if (!res.ok) { throw new Error("Usuário não encontrado"); }
-            return res.json();
-        })
-        .then(data => {
-
-            const id = data.id
-            const urld = `http://localhost:8080/user/deletar/${id}`;
-            console.log("entrou");
-
-            fetch(urld, {
-                method: 'DELETE',
-            })
-                .then(res => {
-                    if (!res.ok) throw new Error("Erro na requisição");
-
-                    const contentType = res.headers.get("content-type");
-
-                    if (contentType && contentType.includes("application/json")) {
-                        return res.json();
-                    } else {
-                        return null;
-                    }
-                    
-                })
-                .then(data => {
-                    console.log("deletou")
-
-                    window.location.href = 'login.php';
-                })
-
-                .catch(error => {
-                    console.error("Erro:", error);
-                    document.getElementById("message").innerText = "Erro na requisição.";
-                })
-        }) //Acaba o then
-        
-
-        .catch(error => {
-            console.error("Erro:", error);
-            document.getElementById("message").innerText = "Usuário não encontrado.";
-        });
-
-         // Redireciona para a página inicial
-        //sessionStorage.setItem("volta","true")
-
+// ── ABRIR MODAL: DELETAR ─────────────────────────────────────────────────────
+document.getElementById('deletar').addEventListener('click', function () {
+    acaoPendente = 'deletar';
+    abrirModalSenha(
+        '🗑️ Deletar Usuário',
+        'Você está prestes a <strong>deletar</strong> o usuário <strong>' + (usuarioBuscado ? usuarioBuscado.login : '') + '</strong>. Esta ação não pode ser desfeita. Confirme sua senha para continuar.'
+    );
 });
+
+// ── MODAL: abrir e resetar ────────────────────────────────────────────────────
+function abrirModalSenha(titulo, descricao) {
+    document.getElementById('modalSenhaTitulo').innerHTML    = titulo;
+    document.getElementById('modalSenhaDescricao').innerHTML = descricao;
+    document.getElementById('inputSenhaModal').value         = '';
+    document.getElementById('msgSenhaModal').textContent     = '';
+    new bootstrap.Modal(document.getElementById('modalSenha')).show();
+}
+
+// ── MODAL: confirmar senha e executar ação ─────────────────────────────────────
+document.getElementById('btnConfirmarSenha').addEventListener('click', async function () {
+    const senha  = document.getElementById('inputSenhaModal').value;
+    const msgEl  = document.getElementById('msgSenhaModal');
+    const btnEl  = document.getElementById('btnConfirmarSenha');
+
+    msgEl.textContent = '';
+
+    if (!senha) {
+        msgEl.textContent = 'Digite sua senha.';
+        return;
+    }
+
+    // Login do usuário logado (dono da sessão, não o usuário buscado)
+    const loginLogado = localStorage.getItem('username');
+
+    btnEl.disabled       = true;
+    btnEl.textContent    = 'Verificando...';
+
+    try {
+        // 1) Valida a senha do usuário LOGADO
+        const resValidar = await fetch(
+            `${API}/user/validar?login=${encodeURIComponent(loginLogado)}&senhaHash=${encodeURIComponent(senha)}`
+        );
+
+        if (!resValidar.ok) throw new Error('Senha incorreta.');
+
+        const senhaCorreta = await resValidar.json();
+        if (!senhaCorreta) throw new Error('Senha incorreta.');
+
+        // 2) Senha válida — executa a ação pendente
+        if (acaoPendente === 'trocar') {
+            // Salva dados do usuário A SER EDITADO em chaves separadas,
+            // sem sobrescrever os dados do usuário logado
+            localStorage.setItem('usernameTroca', usuarioBuscado.login);
+            localStorage.setItem('nomeTroca',     usuarioBuscado.nome);
+            localStorage.setItem('tipoTroca',     usuarioBuscado.funcionario);
+            localStorage.setItem('idTroca',       usuarioBuscado.id);
+
+            bootstrap.Modal.getInstance(document.getElementById('modalSenha')).hide();
+            window.location.href = 'trocarinfo.php';
+
+        } else if (acaoPendente === 'deletar') {
+            // Deleta o usuário buscado
+            const resDel = await fetch(`${API}/user/deletar/${usuarioBuscado.id}`, {
+                method: 'DELETE'
+            });
+
+            if (!resDel.ok) throw new Error('Erro ao deletar o usuário.');
+
+            bootstrap.Modal.getInstance(document.getElementById('modalSenha')).hide();
+
+            // Se deletou a si mesmo, faz logout
+            if (usuarioBuscado.login === loginLogado) {
+                sessionStorage.setItem('logado', 'false');
+                localStorage.clear();
+                window.location.href = 'login.php';
+            } else {
+                document.getElementById('message').style.color = 'green';
+                document.getElementById('message').innerText   = 'Usuário deletado com sucesso.';
+                esconderBotoes();
+                document.getElementById('username').value = '';
+                usuarioBuscado = null;
+            }
+        }
+
+    } catch (err) {
+        msgEl.textContent = err.message;
+    } finally {
+        btnEl.disabled    = false;
+        btnEl.textContent = 'Confirmar';
+    }
+});
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function esconderBotoes() {
+    document.getElementById('div-nome').style.display             = 'none';
+    document.getElementById('sectionTipodeUsuario').style.display = 'none';
+    document.getElementById('trocarinfo').style.display           = 'none';
+    document.getElementById('deletar').style.display              = 'none';
+    document.getElementById('voltar').style.display               = 'none';
+}

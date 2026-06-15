@@ -20,15 +20,12 @@ class _LoginState extends State<Login> {
   final TextEditingController senhaController = TextEditingController();
 
   Future<void> fazerLogin(BuildContext context) async {
-    final url = Uri.parse('http://localhost:8080/user/login');
+    final url = Uri.parse('http://localhost:8080/user/login' + loginController.text + "&senhaHash=" + senhaController.text);
     try {
-      final response = await http.post(
+      final response = await http.get(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'login': loginController.text,
-          'senhaHash': senhaController.text,
-        }),
+        
       );
 
       if (response.statusCode == 200) {
