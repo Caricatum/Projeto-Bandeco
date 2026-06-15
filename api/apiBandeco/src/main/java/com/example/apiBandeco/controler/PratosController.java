@@ -1,6 +1,8 @@
 package com.example.apiBandeco.controler;
 
+import com.example.apiBandeco.model.Cardapio;
 import com.example.apiBandeco.model.Pratos;
+import com.example.apiBandeco.repository.CardapioRepository;
 import com.example.apiBandeco.repository.CategoriaRepository;
 import com.example.apiBandeco.repository.PratosRepository;
 import jakarta.validation.Valid;
@@ -20,6 +22,8 @@ public class PratosController {
     PratosRepository pratosRepository;
     @Autowired
     CategoriaRepository categoriaRepo;
+    @Autowired
+    CardapioRepository cardapioRepository;
 
     @GetMapping("/id/{id}")//busca pratos pelo id
     public Pratos buscarPorId(@PathVariable("id") int id){
@@ -46,12 +50,52 @@ public class PratosController {
         return pratosRepository.save(prato);
     }
 
-    @DeleteMapping("/deletar/{id}") //deleta prato pelo id
-    public void deletarPrato(@PathVariable(value = "id") int id){
-        pratosRepository.findById(id)
+    @DeleteMapping("/deletar/{id}")
+    public void deletarPrato(@PathVariable int id) {
+
+        Pratos prato = pratosRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Prato não encontrado"));
-        pratosRepository.deleteById(id);
+                        HttpStatus.NOT_FOUND,
+                        "Prato não encontrado"));
+
+        List<Cardapio> cardapios = cardapioRepository.findAll();
+
+        for (Cardapio c : cardapios) {
+
+            if (c.getAcompanhamento() != null &&
+                    c.getAcompanhamento().getId() == id) {
+                c.setAcompanhamento(null);
+            }
+
+            if (c.getPrato_principal() != null &&
+                    c.getPrato_principal().getId() == id) {
+                c.setPrato_principal(null);
+            }
+
+            if (c.getGuarnicao() != null &&
+                    c.getGuarnicao().getId() == id) {
+                c.setGuarnicao(null);
+            }
+
+            if (c.getSalada() != null &&
+                    c.getSalada().getId() == id) {
+                c.setSalada(null);
+            }
+
+            if (c.getSobremesa() != null &&
+                    c.getSobremesa().getId() == id) {
+                c.setSobremesa(null);
+            }
+
+            if (c.getRefresco() != null &&
+                    c.getRefresco().getId() == id) {
+                c.setRefresco(null);
+            }
+        }
+
+        cardapioRepository.saveAll(cardapios);
+
+        pratosRepository.delete(prato);
     }
 
     @PutMapping("/atualizar")

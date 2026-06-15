@@ -4,6 +4,8 @@ package com.example.apiBandeco.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 @Entity
 @Table(name = "cardapio")
 public class Cardapio {
