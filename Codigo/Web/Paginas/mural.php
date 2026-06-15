@@ -51,10 +51,26 @@
                         <button id="btnLogin" class="btn-nav" onclick="window.location.href='login.php'">Login</button>
                     </li>
 
+                    <li class="nav-item">
+                    <button class="btn-nav btn-sair" onclick="logout()">Sair</button>
+                    </li>
+
                 </ul>
             </div>
         </div>
     </nav>
+
+    <script>
+            // =============================================
+// LOGOUT
+// =============================================
+function logout() {
+    sessionStorage.setItem('logado', 'false');
+    localStorage.clear();
+    window.location.href = 'login.php';
+}
+
+    </script>
 
 
 

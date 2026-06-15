@@ -36,6 +36,9 @@
           <li class="nav-item">
             <button class="btn-nav" onclick="window.location.href='sobrenos.php'">ℹ️ Sobre nós</button>
           </li>
+          <li class="nav-item">
+                    <button class="btn-nav btn-sair" onclick="logout()">Sair</button>
+                </li>
         </ul>
       </div>
     </div>
@@ -89,6 +92,17 @@
       <p id="message"></p>
     </form>
   </div>
+
+  <script>
+                // =============================================
+// LOGOUT
+// =============================================
+function logout() {
+    sessionStorage.setItem('logado', 'false');
+    localStorage.clear();
+    window.location.href = 'login.php';
+}
+  </script>
 
 
   <!-- ===== MODAL: CONFIRMAR SENHA ===== -->

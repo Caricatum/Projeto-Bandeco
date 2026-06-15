@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.getElementById("trocarinfo").addEventListener("click", function () {
     const url = `http://localhost:8080/user/atualizar`;
-    const id = localStorage.getItem("id");
+    const id = localStorage.getItem("idTroca");
 
     const userDigitado = document.getElementById("username").value;
     const nomeDigitado = document.getElementById("name").value;
@@ -66,9 +66,6 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
     }
     const jsonUsuario = JSON.stringify(usuario);
 
-    console.log("tipoDeUsuario:", tipoDeUsuario);
-    console.log("nome:", nomeDigitado);
-
     fetch(url, {
         method: 'PUT',
         headers: {
@@ -95,6 +92,8 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
             }
             mensagem.style = 'Informações atualizadas.';
             mensagem.textContent = 'Informações atualizadas.';
+            console.log("tipoDeUsuario:", tipoDeUsuario);
+            console.log("nome:", nomeDigitado);
 
             localStorage.setItem("usernameTroca", "");
             localStorage.setItem("nomeTroca", "");
