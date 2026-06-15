@@ -443,10 +443,4 @@ document.getElementById("salvarNovoPrato").addEventListener("click",function (e)
     window.location.reload();
 })
 
-// =============================================
-// LOGOUT
-// =============================================
-function logout() {
-    sessionStorage.setItem('logado', 'false');
-    window.location.href = 'login.php';
-}
+

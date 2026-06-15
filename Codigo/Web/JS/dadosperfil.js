@@ -1,10 +1,19 @@
 const API = 'http://localhost:8080';
-
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        location.reload();
+    }
+});
 // ── Redireciona se não logado ─────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
     if (sessionStorage.getItem('logado') !== 'true') {
         window.location.href = 'login.php';
     }
+
+    localStorage.setItem("usernameTroca", "");
+    localStorage.setItem("nomeTroca", "");
+    localStorage.setItem("tipoTroca", "");
+    localStorage.setItem("idTroca", "");
 });
 
 // ── Estado ───────────────────────────────────────────────────────────────────

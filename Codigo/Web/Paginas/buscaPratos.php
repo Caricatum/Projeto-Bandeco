@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../CSS/navbar.css">
     <link rel="stylesheet" href="../CSS/buscaPratos.css">
+    <script type="module" src="../JS/buscaPratos.js"></script>
     <style>
         body {
             background: #f8fafc;
@@ -106,6 +107,17 @@
         }
     </style>
 </head>
+
+<script>
+    // =============================================
+// LOGOUT
+// =============================================
+function logout() {
+    sessionStorage.setItem('logado', 'false');
+    localStorage.clear();
+    window.location.href = 'login.php';
+}
+</script>
 
 <body>
 
@@ -326,7 +338,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="../JS/buscaPratos.js"></script>
+    
 </body>
 
 </html>
