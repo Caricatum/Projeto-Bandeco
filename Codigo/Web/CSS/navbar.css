@@ -1,0 +1,38 @@
+/* ===== NAVBAR COMPARTILHADA — Bandeco ===== */
+.navbar {
+    background-color: #D92243 !important;
+    box-shadow: 0 2px 10px rgba(217, 34, 67, 0.3);
+}
+.navbar-brand {
+    color: #FFF5E5 !important;
+    font-weight: bold;
+}
+.nav-link { color: #FFF5E5 !important; }
+.navbar-toggler { border-color: rgba(255,245,229,0.5); }
+.navbar-toggler-icon { filter: brightness(10); }
+
+.btn-nav {
+    background-color: rgba(255,245,229,0.15);
+    border: 1px solid rgba(255,245,229,0.4);
+    color: #FFF5E5;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.btn-nav:hover {
+    background-color: #F69D39;
+    border-color: #F69D39;
+    color: white;
+}
+.btn-nav.btn-sair {
+    background-color: rgba(0,0,0,0.2);
+    border-color: rgba(255,245,229,0.3);
+}
+.btn-nav.btn-sair:hover {
+    background-color: #9b1b30;
+    border-color: #9b1b30;
+}

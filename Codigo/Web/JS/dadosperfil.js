@@ -1,3 +1,15 @@
+import { validaFunc } from './validaFunc.js';
+
+validaFunc();
+
+document.addEventListener("DOMContentLoaded", function(){
+    if(sessionStorage.getItem('logado') !== "true"){
+        window.location.href = 'login.php'; // Redireciona para a página de login
+    } else {
+        return ;
+    }
+});
+
 document.getElementById("dadosForm").addEventListener("submit", function (e) {
     document.getElementById("aluno").checked = false;
     document.getElementById("func").checked = false;
@@ -66,7 +78,7 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
             localStorage.setItem("nome", nomeBanco);
             localStorage.setItem("tipo", tipoDeUsuarioBanco);
             localStorage.setItem("id", idBanco);
-            window.location.href = "trocarinfo.html";
+            window.location.href = "trocarinfo.php";
         })
         .catch(error => {
             console.error("Erro:", error);
@@ -77,6 +89,8 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
 });
 
 document.getElementById("deletar").addEventListener("click", function () {
+
+    const message = document.getElementById("message");
 
     const url = `http://localhost:8080/user/login/${document.getElementById("username").value}`;
 
@@ -92,7 +106,7 @@ document.getElementById("deletar").addEventListener("click", function () {
         .then(data => {
 
             const id = data.id
-            const urld = `http://localhost:8080/user/deletarUser/${id}`;
+            const urld = `http://localhost:8080/user/deletar/${id}`;
             console.log("entrou");
 
             fetch(urld, {
@@ -108,9 +122,12 @@ document.getElementById("deletar").addEventListener("click", function () {
                     } else {
                         return null;
                     }
+                    
                 })
                 .then(data => {
                     console.log("deletou")
+
+                    window.location.href = 'login.php';
                 })
 
                 .catch(error => {
@@ -118,10 +135,14 @@ document.getElementById("deletar").addEventListener("click", function () {
                     document.getElementById("message").innerText = "Erro na requisição.";
                 })
         }) //Acaba o then
+        
 
         .catch(error => {
             console.error("Erro:", error);
             document.getElementById("message").innerText = "Usuário não encontrado.";
         });
+
+         // Redireciona para a página inicial
+        //sessionStorage.setItem("volta","true")
 
 });

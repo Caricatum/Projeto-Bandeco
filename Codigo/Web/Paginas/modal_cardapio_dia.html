@@ -1,0 +1,225 @@
+<!-- ============================================================
+     BOTÃO: abrir modal de Cardápio do Dia (só funcionário)
+     Coloque ao lado do botão "btnNovoPrato" no buscaPratos.php
+============================================================ -->
+<button id="btnNovoCardapio" class="btn btn-success d-none">
+    + Cardápio do Dia
+</button>
+
+
+<!-- ============================================================
+     MODAL: CADASTRAR CARDÁPIO DO DIA
+     Monta 4 cardápios (almoço padrão/vegano, jantar padrão/vegano)
+     e envia tudo junto para /cardapioDia/cadastrar
+============================================================ -->
+<div class="modal fade" id="modalCardapioDia" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">📅 Cadastrar Cardápio do Dia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="mb-4">
+                    <label class="form-label"><b>Data do cardápio</b></label>
+                    <input type="date" id="dataCardapioDia" class="form-control" style="max-width: 250px;">
+                </div>
+
+                <div class="row g-3">
+
+                    <!-- ===== ALMOÇO PADRÃO ===== -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-primary text-white">🌞 Almoço — Padrão</div>
+                            <div class="card-body">
+                                <div class="mb-2">
+                                    <label class="form-label">Acompanhamento</label>
+                                    <select class="form-select select-prato" data-cardapio="padraoAlmoco" data-campo="acompanhamento" data-categoria="1">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Prato Principal</label>
+                                    <select class="form-select select-prato" data-cardapio="padraoAlmoco" data-campo="prato_principal" data-categoria="3">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Guarnição</label>
+                                    <select class="form-select select-prato" data-cardapio="padraoAlmoco" data-campo="guarnicao" data-categoria="2">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Salada</label>
+                                    <select class="form-select select-prato" data-cardapio="padraoAlmoco" data-campo="salada" data-categoria="5">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Sobremesa</label>
+                                    <select class="form-select select-prato" data-cardapio="padraoAlmoco" data-campo="sobremesa" data-categoria="6">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label">Refresco</label>
+                                    <select class="form-select select-prato" data-cardapio="padraoAlmoco" data-campo="refresco" data-categoria="4">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== ALMOÇO VEGANO ===== -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header" style="background:#E0C375; color:#3d2a00;">🥦 Almoço — Vegano</div>
+                            <div class="card-body">
+                                <div class="mb-2">
+                                    <label class="form-label">Acompanhamento</label>
+                                    <select class="form-select select-prato" data-cardapio="veganoAlmoco" data-campo="acompanhamento" data-categoria="1" data-vegano="true">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Prato Principal</label>
+                                    <select class="form-select select-prato" data-cardapio="veganoAlmoco" data-campo="prato_principal" data-categoria="3" data-vegano="true">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Guarnição</label>
+                                    <select class="form-select select-prato" data-cardapio="veganoAlmoco" data-campo="guarnicao" data-categoria="2" data-vegano="true">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Salada</label>
+                                    <select class="form-select select-prato" data-cardapio="veganoAlmoco" data-campo="salada" data-categoria="5" data-vegano="true">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Sobremesa</label>
+                                    <select class="form-select select-prato" data-cardapio="veganoAlmoco" data-campo="sobremesa" data-categoria="6" data-vegano="true">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label">Refresco</label>
+                                    <select class="form-select select-prato" data-cardapio="veganoAlmoco" data-campo="refresco" data-categoria="4" data-vegano="true">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== JANTAR PADRÃO ===== -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-dark text-white">🌙 Jantar — Padrão</div>
+                            <div class="card-body">
+                                <div class="mb-2">
+                                    <label class="form-label">Acompanhamento</label>
+                                    <select class="form-select select-prato" data-cardapio="padraoJantar" data-campo="acompanhamento" data-categoria="1">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Prato Principal</label>
+                                    <select class="form-select select-prato" data-cardapio="padraoJantar" data-campo="prato_principal" data-categoria="3">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Guarnição</label>
+                                    <select class="form-select select-prato" data-cardapio="padraoJantar" data-campo="guarnicao" data-categoria="2">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Salada</label>
+                                    <select class="form-select select-prato" data-cardapio="padraoJantar" data-campo="salada" data-categoria="5">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Sobremesa</label>
+                                    <select class="form-select select-prato" data-cardapio="padraoJantar" data-campo="sobremesa" data-categoria="6">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label">Refresco</label>
+                                    <select class="form-select select-prato" data-cardapio="padraoJantar" data-campo="refresco" data-categoria="4">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== JANTAR VEGANO ===== -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header" style="background:#7a1728; color:#FFF5E5;">🥦 Jantar — Vegano</div>
+                            <div class="card-body">
+                                <div class="mb-2">
+                                    <label class="form-label">Acompanhamento</label>
+                                    <select class="form-select select-prato" data-cardapio="veganoJantar" data-campo="acompanhamento" data-categoria="1" data-vegano="true">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Prato Principal</label>
+                                    <select class="form-select select-prato" data-cardapio="veganoJantar" data-campo="prato_principal" data-categoria="3" data-vegano="true">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Guarnição</label>
+                                    <select class="form-select select-prato" data-cardapio="veganoJantar" data-campo="guarnicao" data-categoria="2" data-vegano="true">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Salada</label>
+                                    <select class="form-select select-prato" data-cardapio="veganoJantar" data-campo="salada" data-categoria="5" data-vegano="true">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Sobremesa</label>
+                                    <select class="form-select select-prato" data-cardapio="veganoJantar" data-campo="sobremesa" data-categoria="6" data-vegano="true">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label">Refresco</label>
+                                    <select class="form-select select-prato" data-cardapio="veganoJantar" data-campo="refresco" data-categoria="4" data-vegano="true">
+                                        <option value="">Nenhum</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <p id="msgCardapioDia" class="text-danger mt-3 mb-0"></p>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button id="salvarCardapioDia" class="btn btn-success">💾 Salvar Cardápio do Dia</button>
+            </div>
+
+        </div>
+    </div>
+</div>

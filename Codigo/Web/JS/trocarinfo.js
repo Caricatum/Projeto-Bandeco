@@ -1,10 +1,27 @@
+/*import { validaFunc } from './validaFunc.js';
+
+validaFunc();*/
+
 document.addEventListener("DOMContentLoaded", function () {
+
+    // chatGPT 
+    const token = sessionStorage.getItem("logado"); // ou sessionStorage
+
+    if (!token) {
+        // Usuário não está logado, redireciona para o login
+        window.location.href = "login.php";
+    } else {
+        // Usuário está logado. Opcional: Validar o token com o backend
+        console.log("Usuário autenticado");
+    }
+
+
 
     const user = localStorage.getItem("username");
     const nome = localStorage.getItem("nome");
     const tipo = localStorage.getItem("tipo");
     const id = localStorage.getItem("id");
-    
+
 
     document.getElementById("username").value = user;
     document.getElementById("name").value = nome;
@@ -19,29 +36,38 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-document.getElementById("trocarinfo").addEventListener("click", function () {
-    const user = localStorage.getItem("username");
-    const nome = localStorage.getItem("nome");
-    const tipo = localStorage.getItem("tipo");
+document.getElementById("trocarinfo").addEventListener("click",function () {
+    const url = `http://localhost:8080/user/atualizar`;
     const id = localStorage.getItem("id");
-
-    const url = `http://localhost:8080/user/atualizarUser`;
 
     const userDigitado = document.getElementById("username").value;
     const nomeDigitado = document.getElementById("name").value;
     const tipoDeUsuario = document.querySelector('input[name="tipoDeUsuario"]:checked').value;
     const senhaDigitada = document.getElementById("senha").value;
-
+    const mensagem = document.getElementById("message");
     
+
+    if (senhaDigitada == "") {
+        mensagem.textContent = "Por favor, digite sua senha para trocar as informações.";
+        return;
+    }
+    if (senhaDigitada !== "") {
+        mensagem.textContent = "";
+    }
+
+
 
     const usuario = {
         id: id,
         login: userDigitado,
         nome: nomeDigitado,
-        senha_hash: senhaDigitada,
+        senhaHash: senhaDigitada,
         funcionario: tipoDeUsuario === 'true',
     }
     const jsonUsuario = JSON.stringify(usuario);
+
+    console.log("tipoDeUsuario:", tipoDeUsuario);
+    console.log("nome:", nomeDigitado);
 
     fetch(url, {
         method: 'PUT',
@@ -60,9 +86,26 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
             } else {
                 return null; // ou res.text()
             }
+
         })
-        .then(data => console.log(data))
+        .then(data => {
+            if (localStorage.getItem("username") == userDigitado) {
+                localStorage.setItem("nome", nomeDigitado);
+                console.log("Antes:", data.funcionario);
+
+                localStorage.setItem("tipo", tipoDeUsuario);
+
+                console.log("Depois:", data.funcionario);
+            }
+            mensagem.style='Informações atualizadas.';
+            mensagem.textContent='Informações atualizadas.';
+
+            window.location.href='dadosperfil.php';
+        }
+        ) //trocar para 
         .catch(err => console.error("Erro:", err));
 
+
+        
 
 });
