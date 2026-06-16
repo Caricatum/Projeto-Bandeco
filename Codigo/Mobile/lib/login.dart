@@ -23,7 +23,7 @@ class _LoginState extends State<Login> {
     final url = Uri.parse('http://localhost:8080/user/login' + loginController.text + "&senhaHash=" + senhaController.text,
     );
     try {
-      final response = await http.post(
+      final response = await http.get(
         url,
         headers: {'Content-Type': 'application/json'},
       );

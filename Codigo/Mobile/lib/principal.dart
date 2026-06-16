@@ -5,6 +5,8 @@ import 'perfil.dart';
 import 'login.dart';
 
 class Principal extends StatefulWidget {
+  const Principal({super.key});
+
 
   @override
   State<Principal> createState() => _PrincipalState();

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'principal.dart';
 import 'login.dart';
+import 'cadastro.dart';
+import 'perfil.dart';
+import 'cardapios.dart';
+import 'cadastroPrato.dart';
 
 
 void main() {
@@ -19,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const Login(),
+      home: const Cardapios(),
     );
   }
 }

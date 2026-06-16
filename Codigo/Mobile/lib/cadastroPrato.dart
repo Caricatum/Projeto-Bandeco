@@ -59,59 +59,198 @@ class _CadastropratoState extends State<Cadastroprato> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                controller: nomeController,
-                decoration: const InputDecoration(labelText: "Nome"),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Informe o nome";
-                  }
-                  return null;
-                },
-              ),
+      appBar: AppBar(
+        title: const Text(
+          "Cadastro de Prato",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.red.shade700,
+        elevation: 0,
+      ),
 
-              TextFormField(
-                controller: descricaoController,
-                decoration: const InputDecoration(labelText: "Descrição"),
-              ),
-
-              TextFormField(
-                controller: imagemController,
-                decoration: const InputDecoration(labelText: "URL da Imagem"),
-              ),
-
-              TextFormField(
-                controller: notaController,
-                decoration: const InputDecoration(labelText: "Nota Técnica"),
-              ),
-
-              TextFormField(
-                controller: categoriaController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: "ID da Categoria"),
-              ),
-
-              SwitchListTile(
-                title: const Text("Vegano"),
-                value: vegano,
-                onChanged: (value) {
-                  setState(() {
-                    vegano = value;
-                  });
-                },
-              ),
-
-              ElevatedButton(
-                onPressed: cadastrarPrato,
-                child: const Text("Cadastrar"),
-              ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.red.shade700,
+              Colors.orange.shade500,
+              Colors.amber.shade300,
             ],
+          ),
+        ),
+
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: formKey,
+            child: ListView(
+              children: [
+                const SizedBox(height: 20),
+
+                const Icon(
+                  Icons.restaurant_menu,
+                  size: 80,
+                  color: Colors.white,
+                ),
+
+                const SizedBox(height: 10),
+
+                const Text(
+                  "Novo Prato",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+
+                const SizedBox(height: 25),
+
+                Card(
+                  elevation: 10,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: nomeController,
+                          decoration: InputDecoration(
+                            labelText: "Nome",
+                            prefixIcon: const Icon(Icons.fastfood),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Informe o nome";
+                            }
+                            return null;
+                          },
+                        ),
+
+                        const SizedBox(height: 15),
+
+                        TextFormField(
+                          controller: descricaoController,
+                          maxLines: 3,
+                          decoration: InputDecoration(
+                            labelText: "Descrição",
+                            prefixIcon: const Icon(Icons.description),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 15),
+
+                        TextFormField(
+                          controller: imagemController,
+                          decoration: InputDecoration(
+                            labelText: "URL da Imagem",
+                            prefixIcon: const Icon(Icons.image),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 15),
+
+                        TextFormField(
+                          controller: notaController,
+                          decoration: InputDecoration(
+                            labelText: "Nota Técnica",
+                            prefixIcon: const Icon(Icons.star),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 15),
+
+                        TextFormField(
+                          controller: categoriaController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: "ID da Categoria",
+                            prefixIcon: const Icon(Icons.category),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 15),
+
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade50,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: SwitchListTile(
+                            title: const Text(
+                              "Prato Vegano",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            secondary: const Icon(
+                              Icons.eco,
+                              color: Colors.green,
+                            ),
+                            value: vegano,
+                            activeColor: Colors.green,
+                            onChanged: (value) {
+                              setState(() {
+                                vegano = value;
+                              });
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(height: 25),
+
+                        SizedBox(
+                          width: double.infinity,
+                          height: 55,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                cadastrarPrato();
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red.shade700,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            child: const Text(
+                              "Cadastrar Prato",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),
