@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'cadastroPrato.dart';
+import 'menuNavegacao.dart';
 
 //Aviso, o código abaixo está como placeholder, mostrando apenas os pratos cadastrados e não os cardapios inteiros,
 // prncipalmente porque não deu tempo de fazer o resto das classes pra fazer o cardapio completo.
@@ -72,6 +73,7 @@ class _CardapiosState extends State<Cardapios> {
           ),
         ],
       ),
+      drawer: const MenuNavegacao(),
       body: Column(
         children: [
           Padding(

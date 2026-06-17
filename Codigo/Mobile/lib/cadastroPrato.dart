@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'cardapios.dart';
+import 'menuNavegacao.dart';
 
 class Cadastroprato extends StatefulWidget {
   const Cadastroprato({super.key});
@@ -68,7 +69,7 @@ class _CadastropratoState extends State<Cadastroprato> {
         backgroundColor: Colors.red.shade700,
         elevation: 0,
       ),
-
+      drawer: const MenuNavegacao(),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
