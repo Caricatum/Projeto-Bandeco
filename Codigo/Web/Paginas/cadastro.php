@@ -15,7 +15,7 @@
         <form id="cadastroForm">
             <h2>Cadastro</h2>
             <div class="input-group">
-                <label>Usuário</label>
+                <label>Email</label>
                 <input type="text" id="username" required>
             </div>
             <div class="input-group">
