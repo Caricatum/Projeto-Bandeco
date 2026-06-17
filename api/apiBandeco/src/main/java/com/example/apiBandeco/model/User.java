@@ -1,11 +1,13 @@
 package com.example.apiBandeco.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="user")
@@ -36,6 +38,58 @@ public class User {
     private String codigoResetSenha;
     @Column
     private LocalDateTime expiracaoResetSenha;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Avaliacoes> avaliacoes;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<PratosFavoritos> favoritos;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<CardapioDia> cardapiosDia;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Notificacoes> notificacoes;
+
+    public List<Notificacoes> getNotificacoes() {
+        return notificacoes;
+    }
+
+    public void setNotificacoes(List<Notificacoes> notificacoes) {
+        this.notificacoes = notificacoes;
+    }
+
+    public List<CardapioDia> getCardapiosDia() {
+        return cardapiosDia;
+    }
+
+    public void setCardapiosDia(List<CardapioDia> cardapiosDia) {
+        this.cardapiosDia = cardapiosDia;
+    }
+
+    public List<PratosFavoritos> getFavoritos() {
+        return favoritos;
+    }
+
+    public void setFavoritos(List<PratosFavoritos> favoritos) {
+        this.favoritos = favoritos;
+    }
+
+    public List<Avaliacoes> getAvaliacoes() {
+        return avaliacoes;
+    }
+
+    public void setAvaliacoes(List<Avaliacoes> avaliacoes) {
+        this.avaliacoes = avaliacoes;
+    }
 
     public String getCodigoConfirmacao() {
         return codigoConfirmacao;

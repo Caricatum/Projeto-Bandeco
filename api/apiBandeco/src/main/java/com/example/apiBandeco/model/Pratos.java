@@ -1,8 +1,11 @@
 package com.example.apiBandeco.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
 
 @Entity
 @Table(name="pratos")
@@ -23,6 +26,45 @@ public class Pratos {
     private String imagem;
     @Column
     private String notaTecnica;
+    @JsonIgnore
+    @OneToMany(mappedBy = "prato",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Avaliacoes> avaliacoes;
+    @JsonIgnore
+    @OneToMany(mappedBy = "prato",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<PratosFavoritos> favoritos;
+    @JsonIgnore
+    @OneToOne(mappedBy = "prato",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private ValorNutricional valorNutricional;
+
+    public ValorNutricional getValorNutricional() {
+        return valorNutricional;
+    }
+
+    public void setValorNutricional(ValorNutricional valorNutricional) {
+        this.valorNutricional = valorNutricional;
+    }
+
+    public List<Avaliacoes> getAvaliacoes() {
+        return avaliacoes;
+    }
+
+    public void setAvaliacoes(List<Avaliacoes> avaliacoes) {
+        this.avaliacoes = avaliacoes;
+    }
+
+    public List<PratosFavoritos> getFavoritos() {
+        return favoritos;
+    }
+
+    public void setFavoritos(List<PratosFavoritos> favoritos) {
+        this.favoritos = favoritos;
+    }
 
     public String getNotaTecnica() {
         return notaTecnica;

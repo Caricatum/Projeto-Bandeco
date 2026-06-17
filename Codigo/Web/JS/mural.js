@@ -4,10 +4,10 @@
 const API = 'http://localhost:8080';
 
 const usuarioLogado = {
-    nome:     localStorage.getItem('nome')     || '',
+    nome: localStorage.getItem('nome') || '',
     username: localStorage.getItem('username') || '',
-    tipo:     localStorage.getItem('tipo'),    // string 'true' / 'false'
-    id:       parseInt(localStorage.getItem('id')) || null,
+    tipo: localStorage.getItem('tipo'),    // string 'true' / 'false'
+    id: parseInt(localStorage.getItem('id')) || null,
 };
 
 // =============================================
@@ -30,12 +30,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Carrega avisos do localStorage (ainda não há endpoint de notificações para isso)
     let avisos = JSON.parse(localStorage.getItem('avisos') || '[]');
 
-    const mural    = document.getElementById('mural');
-    const modal    = new bootstrap.Modal(document.getElementById('modalAviso'));
+    const mural = document.getElementById('mural');
+    const modal = new bootstrap.Modal(document.getElementById('modalAviso'));
     const modalCardapioDia = new bootstrap.Modal(document.getElementById('modalCardapioDia'));
-    const btnNovo  = document.getElementById('btnNovoAviso');
-    
-    const btnNovoCardapioDoDia  = document.getElementById('btnCardapioDia');
+    const btnNovo = document.getElementById('btnNovoAviso');
+
+    const btnNovoCardapioDoDia = document.getElementById('btnCardapioDia');
 
     // ---- Renderizar avisos ----
     function renderizarAvisos() {
@@ -59,8 +59,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <div class="d-flex justify-content-between">
                             <h5 class="fw-bold">${aviso.titulo}</h5>
                             ${usuarioLogado.tipo === 'true'
-                                ? `<button class="btn btn-danger btn-sm" onclick="deletarAviso(${index})">✕</button>`
-                                : ''}
+                    ? `<button class="btn btn-danger btn-sm" onclick="deletarAviso(${index})">✕</button>`
+                    : ''}
                         </div>
                         <p class="mb-0">${aviso.descricao}</p>
                     </div>
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     document.getElementById('salvarAviso').addEventListener('click', () => {
-        const titulo    = document.getElementById('tituloAviso').value.trim();
+        const titulo = document.getElementById('tituloAviso').value.trim();
         const descricao = document.getElementById('descricaoAviso').value.trim();
         if (!titulo || !descricao) { alert('Preencha todos os campos!'); return; }
 
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         modal.hide();
     });
 
-    window.deletarAviso = function(index) {
+    window.deletarAviso = function (index) {
         avisos.splice(index, 1);
         localStorage.setItem('avisos', JSON.stringify(avisos));
         renderizarAvisos();
@@ -127,7 +127,7 @@ async function carregarCardapioDia() {
         const todos = await res.json();
 
         // Pega o cardápio de hoje (data = hoje)
-        const hoje     = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        const hoje = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
         const cardapio = todos.find(c => c.data === hoje);
 
         if (!cardapio) {
@@ -154,8 +154,8 @@ async function carregarCardapioDia() {
 
 function renderizarCardapio(c, area) {
     const secoes = [
-        { titulo: '🌞 Almoço',  padrao: c.padraoAlmoco,  vegano: c.veganoAlmoco,  cor: 'primary' },
-        { titulo: '🌙 Jantar',  padrao: c.padraoJantar,  vegano: c.veganoJantar,  cor: 'dark'    },
+        { titulo: '🌞 Almoço', padrao: c.padraoAlmoco, vegano: c.veganoAlmoco, cor: 'primary' },
+        { titulo: '🌙 Jantar', padrao: c.padraoJantar, vegano: c.veganoJantar, cor: 'dark' },
     ];
 
     area.innerHTML = secoes.map(s => `
@@ -177,11 +177,11 @@ function cardapioCard(titulo, cardapio, vegano) {
     const campos = [
         ['Acompanhamento', cardapio.acompanhamento],
         ['Prato Principal', cardapio.prato_principal],
-        ['Guarnição',       cardapio.guarnicao],
-        ['Salada',          cardapio.salada],
-        ['Sobremesa',       cardapio.sobremesa],
-        ['Refresco',        cardapio.refresco],
-        ['Nota Tecnica',    cardapio.nota_tecnica]
+        ['Guarnição', cardapio.guarnicao],
+        ['Salada', cardapio.salada],
+        ['Sobremesa', cardapio.sobremesa],
+        ['Refresco', cardapio.refresco],
+        ['Nota Tecnica', cardapio.nota_tecnica]
     ];
 
     return `
@@ -192,9 +192,9 @@ function cardapioCard(titulo, cardapio, vegano) {
                 </div>
                 <div class="card-body">
                     ${campos.map(([label, prato]) => prato
-                        ? `<p><strong>${label}:</strong> ${prato.nome}</p>`
-                        : ''
-                    ).join('')}
+        ? `<p><strong>${label}:</strong> ${prato.nome}</p>`
+        : ''
+    ).join('')}
                 </div>
             </div>
         </div>`;
@@ -246,8 +246,8 @@ function popularSelectsDePratos() {
 // um em /cardapio/cadastrar e depois cadastra o CardapioDia com a
 // data digitada e os 4 ids retornados.
 async function salvarCardapioDia() {
-    const msg  = document.getElementById('msgCardapioDia');
-    const btn  = document.getElementById('salvarCardapioDia');
+    const msg = document.getElementById('msgCardapioDia');
+    const btn = document.getElementById('salvarCardapioDia');
     const data = document.getElementById('dataCardapio').value;
 
     msg.textContent = '';
@@ -261,15 +261,15 @@ async function salvarCardapioDia() {
     // chave -> { vegano: bool, campos preenchidos com { id: ... } }
     const cardapios = {
         padraoAlmoco: { vegano: false },
-        veganoAlmoco: { vegano: true  },
+        veganoAlmoco: { vegano: true },
         padraoJantar: { vegano: false },
-        veganoJantar: { vegano: true  },
+        veganoJantar: { vegano: true },
     };
 
     document.querySelectorAll('.select-prato').forEach(select => {
         const cardapioKey = select.dataset.cardapio;
-        const campo       = select.dataset.campo;
-        const valor       = select.value;
+        const campo = select.dataset.campo;
+        const valor = select.value;
 
         if (valor) {
             cardapios[cardapioKey][campo] = { id: parseInt(valor) };

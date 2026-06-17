@@ -17,10 +17,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    const user = localStorage.getItem("username");
-    const nome = localStorage.getItem("nome");
-    const tipo = localStorage.getItem("tipo");
-    const id = localStorage.getItem("id");
+    const user = localStorage.getItem("usernameTroca");
+    const nome = localStorage.getItem("nomeTroca");
+    const tipo = localStorage.getItem("tipoTroca");
+    const id = localStorage.getItem("idTroca");
 
 
     document.getElementById("username").value = user;
@@ -36,16 +36,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-document.getElementById("trocarinfo").addEventListener("click",function () {
+document.getElementById("trocarinfo").addEventListener("click", function () {
     const url = `http://localhost:8080/user/atualizar`;
-    const id = localStorage.getItem("id");
+    const id = localStorage.getItem("idTroca");
 
     const userDigitado = document.getElementById("username").value;
     const nomeDigitado = document.getElementById("name").value;
     const tipoDeUsuario = document.querySelector('input[name="tipoDeUsuario"]:checked').value;
     const senhaDigitada = document.getElementById("senha").value;
     const mensagem = document.getElementById("message");
-    
+
 
     if (senhaDigitada == "") {
         mensagem.textContent = "Por favor, digite sua senha para trocar as informações.";
@@ -65,9 +65,6 @@ document.getElementById("trocarinfo").addEventListener("click",function () {
         funcionario: tipoDeUsuario === 'true',
     }
     const jsonUsuario = JSON.stringify(usuario);
-
-    console.log("tipoDeUsuario:", tipoDeUsuario);
-    console.log("nome:", nomeDigitado);
 
     fetch(url, {
         method: 'PUT',
@@ -91,21 +88,26 @@ document.getElementById("trocarinfo").addEventListener("click",function () {
         .then(data => {
             if (localStorage.getItem("username") == userDigitado) {
                 localStorage.setItem("nome", nomeDigitado);
-                console.log("Antes:", data.funcionario);
-
                 localStorage.setItem("tipo", tipoDeUsuario);
-
-                console.log("Depois:", data.funcionario);
             }
-            mensagem.style='Informações atualizadas.';
-            mensagem.textContent='Informações atualizadas.';
+            mensagem.style = 'Informações atualizadas.';
+            mensagem.textContent = 'Informações atualizadas.';
+            console.log("tipoDeUsuario:", tipoDeUsuario);
+            console.log("nome:", nomeDigitado);
 
-            window.location.href='dadosperfil.php';
+            localStorage.setItem("usernameTroca", "");
+            localStorage.setItem("nomeTroca", "");
+            localStorage.setItem("tipoTroca", "");
+            localStorage.setItem("idTroca", "");
+
+            setTimeout(() => {
+            window.location.href = 'dadosperfil.php';
+        }, 1500);
         }
         ) //trocar para 
         .catch(err => console.error("Erro:", err));
 
 
-        
+
 
 });

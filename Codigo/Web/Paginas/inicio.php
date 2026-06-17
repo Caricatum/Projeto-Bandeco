@@ -42,6 +42,7 @@
         function logout() {
             sessionStorage.setItem('logado', 'false');
             window.location.href = 'login.php';
+            localStorage.clear()
         }
 
         if(voltou == "true"){
