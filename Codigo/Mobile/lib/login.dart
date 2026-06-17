@@ -20,8 +20,8 @@ class _LoginState extends State<Login> {
   final TextEditingController senhaController = TextEditingController();
 
   Future<void> fazerLogin(BuildContext context) async {
-    final url = Uri.parse('http://localhost:8080/user/login' + loginController.text + "&senhaHash=" + senhaController.text,
-    );
+
+    final url = Uri.parse('http://localhost:8080/user/login' + loginController.text + "&senhaHash=" + senhaController.text);
     try {
       final response = await http.get(
         url,
