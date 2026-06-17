@@ -16,7 +16,7 @@
         <form id="loginForm">
             <h2 class="">Login</h2>
             <div class="input-group">
-                <label>Usuário</label>
+                <label>Email</label>
                 <input type="text" id="username" required>
             </div>
             <div class="input-group">

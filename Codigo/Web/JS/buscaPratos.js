@@ -172,7 +172,7 @@ function renderizarPratos() {
         const likes = totalLikes(p.id);
         const jaAvaliou = euJaAvalieiEsre(p.id);
         const jaFavoritou = euJaFavoriteeiEsse(p.id);
-        const catNome = p.categoria ? (p.categoria.nome || `Cat. ${p.categoria.id}`) : '—';
+        const catNome = p.categoria ? (p.categoria.descricao || `Cat. ${p.categoria.id}`) : '—';
 
         return `
         <div class="col-md-6 col-lg-4">
