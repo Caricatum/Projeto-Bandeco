@@ -69,7 +69,7 @@ public class UserController {
         userRepo.save(user);
 
         emailService.enviarCodigo(
-                user.getLogin(),
+                user,
                 codigo
         );
     }
@@ -217,7 +217,7 @@ public class UserController {
 
         userRepo.save(user);
 
-        emailService.enviarCodigo(login, codigo);
+        emailService.enviarCodigo(user, codigo);
     }
 
     @PutMapping("/resetSenha") //resetar senha
