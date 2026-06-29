@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -86,6 +87,22 @@ public class CardapioDiaController {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Cardápio do dia não encontrado"
                 ));
+    }
+
+
+    @GetMapping("/semana") //Busca os cardápios da semana atual
+    public List<CardapioDia> buscarCardapiosSemana() {
+        LocalDate hoje = LocalDate.now();
+
+        int diasDesdeDomingo = hoje.getDayOfWeek().getValue() % 7;
+
+        LocalDate inicioSemana = hoje.minusDays(diasDesdeDomingo);
+        LocalDate fimSemana = inicioSemana.plusDays(7);
+
+        return cardapioDiaRepository.findByDataBetween(
+                inicioSemana,
+                fimSemana
+        );
     }
 
 

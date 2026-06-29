@@ -453,6 +453,7 @@ class _CardapiosState extends State<Cardapios> {
 
                           Padding(
                             padding: const EdgeInsets.all(18),
+
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -533,6 +534,7 @@ class _CardapiosState extends State<Cardapios> {
 
                                 const SizedBox(height: 16),
 
+                                const SizedBox(height: 16),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
@@ -543,8 +545,7 @@ class _CardapiosState extends State<Cardapios> {
                                         await Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (_) =>
-                                                AtualizaPrato(prato: prato),
+                                            builder: (_) => AtualizaPrato(prato: prato),
                                           ),
                                         );
 
@@ -567,6 +568,41 @@ class _CardapiosState extends State<Cardapios> {
                                     ),
                                   ],
                                 ),
+
+                                const SizedBox(height: 10),
+
+                                Text(
+                                  prato['descricao'] ?? 'Sem descrição.',
+                                  style: TextStyle(
+                                    color: Colors.grey[700],
+                                    fontSize: 14,
+                                    height: 1.5,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 12),
+
+                                if (prato['vegano'] == true)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFFF3CD),
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                        color: const Color(0xFFFFC107),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      '🌱 Vegano',
+                                      style: TextStyle(
+                                        color: Color(0xFFF57C00),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
                               ],
                             ),
                           ),

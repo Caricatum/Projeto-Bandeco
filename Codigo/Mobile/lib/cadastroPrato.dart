@@ -27,6 +27,7 @@ class _CadastropratoState extends State<Cadastroprato> {
           'imagem': imagemController.text,
           'notaTecnica': notaController.text,
           'categoria': {'id': categoriaSelecionada},
+
         }),
       );
 
