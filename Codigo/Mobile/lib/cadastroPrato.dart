@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:tcc_flutter/categoria.dart';
 import 'cardapios.dart';
 import 'menuNavegacao.dart';
 
@@ -21,10 +22,11 @@ class _CadastropratoState extends State<Cadastroprato> {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'nome': nomeController.text,
-          'imagem': imagemController.text,
           'descricao': descricaoController.text,
-          'nota': notaController.text,
-          'categoriaId': categoriaController.text,
+          'vegano': vegano,
+          'imagem': imagemController.text,
+          'notaTecnica': notaController.text,
+          'categoria': {'id': categoriaSelecionada},
         }),
       );
 
@@ -53,9 +55,11 @@ class _CadastropratoState extends State<Cadastroprato> {
   TextEditingController descricaoController = TextEditingController();
   TextEditingController imagemController = TextEditingController();
   TextEditingController notaController = TextEditingController();
-  TextEditingController categoriaController = TextEditingController();
+
   bool vegano = false;
   final formKey = GlobalKey<FormState>();
+
+  int categoriaSelecionada = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -179,16 +183,26 @@ class _CadastropratoState extends State<Cadastroprato> {
 
                         const SizedBox(height: 15),
 
-                        TextFormField(
-                          controller: categoriaController,
-                          keyboardType: TextInputType.number,
+                        DropdownButtonFormField<int>(
+                          value: categoriaSelecionada,
                           decoration: InputDecoration(
-                            labelText: "ID da Categoria",
+                            labelText: "Categoria",
                             prefixIcon: const Icon(Icons.category),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
+                          items: categorias.map((categoria) {
+                            return DropdownMenuItem<int>(
+                              value: categoria.id,
+                              child: Text(categoria.descricao),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              categoriaSelecionada = value!;
+                            });
+                          },
                         ),
 
                         const SizedBox(height: 15),
@@ -211,7 +225,7 @@ class _CadastropratoState extends State<Cadastroprato> {
                             activeColor: Colors.green,
                             onChanged: (value) {
                               setState(() {
-                                vegano = value;
+                                vegano = value!;
                               });
                             },
                           ),
