@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36717.8 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetoBandejao", "ProjetoBandejao\ProjetoBandejao.csproj", "{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F20F0ABA-49AA-46EC-AE25-99BE698E8DD2}
+	EndGlobalSection
+EndGlobal

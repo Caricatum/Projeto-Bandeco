@@ -58,57 +58,157 @@ class _PrincipalState extends State<Principal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
+
       appBar: AppBar(
-        // BÔNUS: Já incluído o nome do usuário dinamicamente no título!
-        title: Text("Bem-vindo", style: const TextStyle(fontSize: 15)),
-        backgroundColor: Colors.orangeAccent,
+        elevation: 0,
+        backgroundColor: Colors.orange,
+        title: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Olá 👋",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+            ),
+            Text(
+              "Bem-vindo ao RU",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Perfil()),
-              );
-            },
-            icon: const Icon(Icons.account_circle),
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: IconButton(
+              icon: const Icon(Icons.account_circle, size: 32),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Perfil()),
+                );
+              },
+            ),
           ),
         ],
       ),
 
       drawer: const MenuNavegacao(),
 
-      body: Column(
-        children: [
-          const SizedBox(height: 10),
-          const Text(
-            "Mural de Avisos",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: avisos.isEmpty
-                ? const Center(child: Text("Nenhum aviso ainda."))
-                : ListView.builder(
-                    itemCount: avisos.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        child: ListTile(
-                          leading: const Icon(Icons.announcement),
-                          title: Text(avisos[index]),
-                        ),
-                      );
-                    },
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Card de destaque
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.orange,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "🍽 Restaurante Universitário",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-          ),
-        ],
+                  SizedBox(height: 8),
+                  Text(
+                    "Confira avisos, cardápio e horários atualizados.",
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            const Row(
+              children: [
+                Icon(Icons.campaign, color: Colors.orange),
+                SizedBox(width: 8),
+                Text(
+                  "Mural de Avisos",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            Expanded(
+              child: avisos.isEmpty
+                  ? const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.notifications_off_outlined,
+                            size: 70,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(height: 12),
+                          Text(
+                            "Nenhum aviso disponível",
+                            style: TextStyle(fontSize: 16, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: avisos.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          child: Card(
+                            elevation: 3,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
+                              ),
+                              leading: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.orange.shade100,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: const Icon(
+                                  Icons.announcement,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                              title: Text(
+                                avisos[index],
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
+
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.orange,
         onPressed: _mostrarDialogoAdicionarAviso,
-        child: const Icon(Icons.add),
+        icon: const Icon(Icons.add),
+        label: const Text("Novo Aviso"),
       ),
     );
   }

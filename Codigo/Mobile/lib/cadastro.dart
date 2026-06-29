@@ -76,7 +76,6 @@ class _CadastroState extends State<Cadastro> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 🔝 IMAGEM COM TEXTO SOBREPOSTO
             Stack(
               children: [
                 Image.asset(
@@ -113,7 +112,6 @@ class _CadastroState extends State<Cadastro> {
               ],
             ),
 
-            // FORMULÁRIO
             Container(
               width: double.infinity,
               color: const Color(0xFFE97824),
@@ -209,7 +207,6 @@ class _CadastroState extends State<Cadastro> {
                     ],
                   ),
 
-                  // BOTÃO
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.grey[300],
@@ -244,7 +241,6 @@ class _CadastroState extends State<Cadastro> {
 
                   const SizedBox(height: 15),
 
-                  // LINK LOGIN
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

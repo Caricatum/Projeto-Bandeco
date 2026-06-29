@@ -33,6 +33,11 @@ public class PratosController {
                 ));
     }
 
+    @GetMapping("/nome")//Busca o prato através do nome
+    public List<Pratos> buscarPorNome(@RequestParam String nome) {
+        return pratosRepository.findByNomeContainingIgnoreCase(nome);
+    }
+
     @GetMapping("/all")//busca todos os pratos
     public List<Pratos> buscarTodosPratos(){return pratosRepository.findAll();}
 
