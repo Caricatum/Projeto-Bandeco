@@ -6,9 +6,6 @@ import 'package:tcc_flutter/categoria.dart';
 import 'cadastroPrato.dart';
 import 'menuNavegacao.dart';
 
-//Aviso, o código abaixo está como placeholder, mostrando apenas os pratos cadastrados e não os cardapios inteiros,
-// prncipalmente porque não deu tempo de fazer o resto das classes pra fazer o cardapio completo.
-
 class Cardapios extends StatefulWidget {
   const Cardapios({super.key});
 
@@ -34,9 +31,11 @@ class _CardapiosState extends State<Cardapios> {
     }
   }
 
-  // Busca por ID
-  Future<Map<String, dynamic>> buscarPratoId(int id) async {
-    Uri url = Uri.parse('http://localhost:8080/pratos/id/$id');
+  // Busca de prato
+  Future<List<dynamic>> buscarPratoNome(String nome) async {
+    Uri url = Uri.parse(
+      'http://localhost:8080/pratos/nome?nome=${Uri.encodeComponent(nome)}',
+    );
 
     try {
       http.Response response = await http.get(url);
@@ -106,9 +105,26 @@ class _CardapiosState extends State<Cardapios> {
     }
   }
 
-  TextEditingController idController = TextEditingController();
+  TextEditingController nomeController = TextEditingController();
 
-  Map<String, dynamic>? pratoEncontrado;
+  bool somenteVeganos = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    nomeController.addListener(() {
+      if (nomeController.text.trim().isEmpty) {
+        setState(() {
+          pratosEncontrados.clear();
+        });
+      }
+    });
+  }
+
+  List<dynamic> pratosEncontrados = [];
+  List<dynamic> todosPratos = [];
+  List<dynamic> pratosExibidos = [];
 
   @override
   Widget build(BuildContext context) {
@@ -158,8 +174,8 @@ class _CardapiosState extends State<Cardapios> {
               children: [
                 Expanded(
                   child: TextField(
-                    controller: idController,
-                    keyboardType: TextInputType.number,
+                    controller: nomeController,
+                    keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: const Color(0xFFFFF3E6),
@@ -167,13 +183,27 @@ class _CardapiosState extends State<Cardapios> {
                         Icons.search,
                         color: Color(0xFFE76F51),
                       ),
-                      labelText: "Buscar prato por ID",
+                      labelText: "Buscar prato",
                       labelStyle: const TextStyle(color: Color(0xFFE76F51)),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: BorderSide.none,
                       ),
                     ),
+                    onChanged: (texto) async {
+                      if (texto.trim().isEmpty) {
+                        setState(() {
+                          pratosEncontrados.clear();
+                        });
+                        return;
+                      }
+
+                      final resultado = await buscarPratoNome(texto);
+
+                      setState(() {
+                        pratosEncontrados = resultado;
+                      });
+                    },
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -188,145 +218,182 @@ class _CardapiosState extends State<Cardapios> {
                   ),
                   onPressed: () async {
                     try {
-                      Map<String, dynamic> resultado = await buscarPratoId(
-                        int.parse(idController.text),
+                      List<dynamic> resultado = await buscarPratoNome(
+                        nomeController.text,
                       );
 
                       setState(() {
-                        pratoEncontrado = resultado;
+                        pratosEncontrados = resultado;
                       });
                     } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Text(e.toString()),
-                        ),
-                      );
+                      setState(() {
+                        pratosEncontrados.clear();
+                      });
+
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(e.toString())));
                     }
                   },
+
                   child: const Icon(Icons.search),
                 ),
               ],
             ),
           ),
 
-          if (pratoEncontrado != null)
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              child: Card(
-                color: const Color(0xFFFFE8D6),
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: ListTile(
-                  leading: const CircleAvatar(
-                    backgroundColor: Color(0xFFE76F51),
-                    child: Icon(Icons.restaurant_menu, color: Colors.white),
-                  ),
-                  title: Text(
-                    pratoEncontrado!['nome'],
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(pratoEncontrado!['descricao'] ?? "Sem descrição"),
-                      const SizedBox(height: 15),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+          Row( mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FilterChip(
+                label: const Text("🌱 Veganos"),
+                selected: somenteVeganos,
+                onSelected: (value) {
+                  setState(() {
+                    somenteVeganos = value;
+                  });
+                },
+              ),
+              const SizedBox(width: 12),
+            FilterChip(
+                label: const Text("🍽️ Categoria"),
+                selected: false,
+                onSelected: (value) {
+                  // Implementar lógica de filtro por categoria
+                },
+              ),
+            ],
+          ),
+
+          if (pratosEncontrados.isNotEmpty)
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: pratosEncontrados.length,
+              itemBuilder: (context, index) {
+                final prato = pratosEncontrados[index];
+
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Card(
+                    color: const Color(0xFFFFE8D6),
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: ListTile(
+                      leading: const CircleAvatar(
+                        backgroundColor: Color(0xFFE76F51),
+                        child: Icon(Icons.restaurant_menu, color: Colors.white),
+                      ),
+                      title: Text(
+                        prato['nome'],
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Botão Editar
-                          OutlinedButton.icon(
-                            icon: const Icon(Icons.edit),
-                            label: const Text("Editar"),
-                            onPressed: () async {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const Cadastroprato(),
-                                ),
-                              );
+                          Text(prato['descricao'] ?? "Sem descrição"),
+                          const SizedBox(height: 15),
 
-                              setState(() {});
-                            },
-                          ),
-
-                          const SizedBox(width: 10),
-
-                          // Botão Excluir
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              foregroundColor: Colors.white,
-                            ),
-                            icon: const Icon(Icons.delete),
-                            label: const Text("Excluir"),
-                            onPressed: () async {
-                              bool? confirmar = await showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  title: const Text("Excluir prato"),
-                                  content: Text(
-                                    "Deseja realmente excluir '${pratoEncontrado!['nome']}'?",
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context, false);
-                                      },
-                                      child: const Text("Cancelar"),
-                                    ),
-
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.red,
-                                      ),
-                                      onPressed: () {
-                                        Navigator.pop(context, true);
-                                      },
-                                      child: const Text("Excluir"),
-                                    ),
-                                  ],
-                                ),
-                              );
-
-                              if (confirmar == true) {
-                                try {
-                                  await deletarPrato(pratoEncontrado!['id']);
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        "Prato excluído com sucesso.",
-                                      ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // Botão Editar
+                              OutlinedButton.icon(
+                                icon: const Icon(Icons.edit),
+                                label: const Text("Editar"),
+                                onPressed: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          AtualizaPrato(prato: prato),
                                     ),
                                   );
 
                                   setState(() {});
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(e.toString())),
+                                },
+                              ),
+
+                              const SizedBox(width: 10),
+
+                              // Botão Excluir
+                              ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                ),
+                                icon: const Icon(Icons.delete),
+                                label: const Text("Excluir"),
+                                onPressed: () async {
+                                  bool? confirmar = await showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                      title: const Text("Excluir prato"),
+                                      content: Text(
+                                        "Deseja realmente excluir '${prato['nome']}'?",
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, false),
+                                          child: const Text("Cancelar"),
+                                        ),
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.red,
+                                          ),
+                                          onPressed: () =>
+                                              Navigator.pop(context, true),
+                                          child: const Text("Excluir"),
+                                        ),
+                                      ],
+                                    ),
                                   );
-                                }
-                              }
-                            },
+
+                                  if (confirmar == true) {
+                                    try {
+                                      await deletarPrato(prato['id']);
+
+                                      setState(() {
+                                        pratosEncontrados.removeAt(index);
+                                      });
+
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            "Prato excluído com sucesso.",
+                                          ),
+                                        ),
+                                      );
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(content: Text(e.toString())),
+                                      );
+                                    }
+                                  }
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-
-                  trailing: Chip(
-                    backgroundColor: const Color(0xFFE76F51),
-                    label: Text(
-                      "ID ${pratoEncontrado!['id']}",
-                      style: const TextStyle(color: Colors.white),
+                      trailing: Chip(
+                        backgroundColor: const Color(0xFFE76F51),
+                        label: Text(
+                          "ID ${prato['id']}",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
 
           Expanded(
@@ -357,7 +424,13 @@ class _CardapiosState extends State<Cardapios> {
                   );
                 }
 
-                final pratos = snapshot.data!;
+                List<dynamic> pratos = snapshot.data!;
+
+                if (somenteVeganos) {
+                  pratos = pratos
+                      .where((prato) => prato['vegano'] == true)
+                      .toList();
+                }
 
                 return ListView.builder(
                   padding: const EdgeInsets.all(16),
@@ -479,6 +552,41 @@ class _CardapiosState extends State<Cardapios> {
 
                                 Row(
                                   children: [
+                                    const SizedBox(height: 12),
+
+                                    if (prato['categoria'] != null)
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 7,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.blue.shade50,
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Icon(
+                                              Icons.restaurant_menu,
+                                              size: 18,
+                                              color: Colors.blue,
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Text(
+                                              prato['categoria']['descricao'],
+                                              style: const TextStyle(
+                                                color: Colors.blue,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                    const SizedBox(height: 16),
+
                                     if (prato['vegano'] == true)
                                       Container(
                                         padding: const EdgeInsets.symmetric(
@@ -545,10 +653,10 @@ class _CardapiosState extends State<Cardapios> {
                                         await Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (_) => AtualizaPrato(prato: prato),
+                                            builder: (_) =>
+                                                AtualizaPrato(prato: prato),
                                           ),
                                         );
-
                                         setState(() {});
                                       },
                                     ),
@@ -568,41 +676,6 @@ class _CardapiosState extends State<Cardapios> {
                                     ),
                                   ],
                                 ),
-
-                                const SizedBox(height: 10),
-
-                                Text(
-                                  prato['descricao'] ?? 'Sem descrição.',
-                                  style: TextStyle(
-                                    color: Colors.grey[700],
-                                    fontSize: 14,
-                                    height: 1.5,
-                                  ),
-                                ),
-
-                                const SizedBox(height: 12),
-
-                                if (prato['vegano'] == true)
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFFFF3CD),
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                        color: const Color(0xFFFFC107),
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      '🌱 Vegano',
-                                      style: TextStyle(
-                                        color: Color(0xFFF57C00),
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
                               ],
                             ),
                           ),
