@@ -41,6 +41,11 @@ public class PratosController {
     @GetMapping("/all")//busca todos os pratos
     public List<Pratos> buscarTodosPratos(){return pratosRepository.findAll();}
 
+    @GetMapping("/veganos")//busca todos os pratos veganos
+    public List<Pratos> buscarTodosPratosVeganos(){
+        return pratosRepository.findByVeganoTrue();
+    }
+
     @PostMapping("/cadastrar")//cadastra um prato
     public Pratos cadastroPratos (@RequestBody @Valid Pratos prato){
         Integer categoriaId = prato.getCategoria() != null
