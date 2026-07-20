@@ -1,0 +1,10 @@
+﻿# Visual Studio
+.vs/
+bin/
+obj/
+
+# Arquivos temporários
+*.user
+*.suo
+*.cache
+*.pdb
