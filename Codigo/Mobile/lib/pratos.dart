@@ -6,6 +6,7 @@ class Pratos {
   String _imagem;
   String _notaTecnica;
   int _categoriaId;
+ 
 
   int get id => _id;
   set id(int value) => _id = value;
