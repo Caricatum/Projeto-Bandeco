@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../CSS/navbar.css">
     <link rel="stylesheet" href="../CSS/buscaPratos.css">
     <script type="module" src="../JS/buscaPratos.js"></script>
+    <script src="../JS/cardapioDia.js"></script>
     <style>
         body {
             background: #f8fafc;

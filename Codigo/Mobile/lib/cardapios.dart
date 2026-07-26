@@ -16,7 +16,7 @@ class Cardapios extends StatefulWidget {
 class _CardapiosState extends State<Cardapios> {
   // Função que vai buscar os pratos na API
   Future<List<dynamic>> listarPratos() async {
-    final url = Uri.parse('http://localhost:8080/pratos');
+    final url = Uri.parse('http://localhost:8080/pratos/all');
 
     try {
       final response = await http.get(url);
