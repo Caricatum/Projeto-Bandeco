@@ -126,9 +126,37 @@ async function carregarCardapioDia() {
         if (!res.ok) throw new Error('Erro na API');
         const todos = await res.json();
 
-        // Pega o cardápio de hoje (data = hoje)
-        const hoje = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-        const cardapio = todos.find(c => c.data === hoje);
+        // Pega o cardápio de hoje
+        // A API pode retornar data como string "2026-06-17" ou array [2026,6,17]
+        // dependendo da versão do Jackson — normaliza os dois casos
+        //
+        // BUG: toISOString() converte o instante atual para UTC antes de
+        // cortar a data. No horário de Brasília (UTC-3), qualquer horário
+        // entre ~21h e 23h59 local já corresponde ao dia seguinte em UTC,
+        // então "hoje" ficava adiantado em 1 dia e nunca batia com a data
+        // (local, correta) do cardápio cadastrado — por isso ele "não
+        // aparecia" mesmo existindo. Usamos a data local do navegador.
+        function dataLocalISO(date) {
+            const a = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${a}-${m}-${d}`;
+        }
+
+        const hoje = dataLocalISO(new Date()); // "YYYY-MM-DD" no fuso local
+
+        function normalizarData(data) {
+            if (!data) return '';
+            if (Array.isArray(data)) {
+                // formato [ano, mes, dia]
+                const [a, m, d] = data;
+                return `${a}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            }
+            // já é string, mas pode vir com hora junto (ex: "2026-06-17T00:00:00")
+            return String(data).split('T')[0];
+        }
+
+        const cardapio = todos.find(c => normalizarData(c.data) === hoje);
 
         if (!cardapio) {
             area.innerHTML = `
