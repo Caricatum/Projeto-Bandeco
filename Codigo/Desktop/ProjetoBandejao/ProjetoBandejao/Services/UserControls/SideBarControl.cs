@@ -16,5 +16,25 @@ namespace ProjetoBandejao.Services.UserControls
         {
             InitializeComponent();
         }
+
+        private void guna2HtmlLabel2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnLogo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void guna2HtmlLabel3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnRefeicoes_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
