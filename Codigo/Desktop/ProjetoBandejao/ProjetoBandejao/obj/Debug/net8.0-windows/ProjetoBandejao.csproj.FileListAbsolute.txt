@@ -168,3 +168,4 @@ C:\Users\maste\source\repos\Projeto-Bandeco\Codigo\Desktop\ProjetoBandejao\Proje
 C:\Users\maste\source\repos\Projeto-Bandeco\Codigo\Desktop\ProjetoBandejao\ProjetoBandejao\bin\Debug\net8.0-windows\System.Management.dll
 C:\Users\maste\source\repos\Projeto-Bandeco\Codigo\Desktop\ProjetoBandejao\ProjetoBandejao\bin\Debug\net8.0-windows\runtimes\win\lib\net7.0\System.Management.dll
 C:\Users\maste\source\repos\Projeto-Bandeco\Codigo\Desktop\ProjetoBandejao\ProjetoBandejao\obj\Debug\net8.0-windows\ProjetoBandejao.Forms.Home.frmRefeicoes.resources
+C:\Users\maste\source\repos\Projeto-Bandeco\Codigo\Desktop\ProjetoBandejao\ProjetoBandejao\obj\Debug\net8.0-windows\ProjetoBandejao.Services.UserControls.SideBarControl.resources
