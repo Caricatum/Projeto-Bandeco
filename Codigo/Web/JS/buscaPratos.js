@@ -443,4 +443,7 @@ document.getElementById("salvarNovoPrato").addEventListener("click",function (e)
     window.location.reload();
 })
 
-
+window.abrirModalAvaliar    = abrirModalAvaliar;
+window.abrirModalFavoritar  = abrirModalFavoritar;
+window.desfavoritar         = desfavoritar;
+window.limparFiltros        = limparFiltros;
