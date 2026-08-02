@@ -109,6 +109,8 @@ class _CardapiosState extends State<Cardapios> {
 
   bool somenteVeganos = false;
 
+  Categoria? categoriaSelecionada;
+
   @override
   void initState() {
     super.initState();
@@ -242,7 +244,8 @@ class _CardapiosState extends State<Cardapios> {
             ),
           ),
 
-          Row( mainAxisAlignment: MainAxisAlignment.center,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               FilterChip(
                 label: const Text("🌱 Veganos"),
@@ -254,11 +257,20 @@ class _CardapiosState extends State<Cardapios> {
                 },
               ),
               const SizedBox(width: 12),
-            FilterChip(
-                label: const Text("🍽️ Categoria"),
-                selected: false,
-                onSelected: (value) {
-                  // Implementar lógica de filtro por categoria
+
+              DropdownButton<Categoria>(
+                value: categoriaSelecionada,
+                hint: const Text("Categoria"),
+                items: categorias.map((categoria) {
+                  return DropdownMenuItem(
+                    value: categoria,
+                    child: Text(categoria.descricao),
+                  );
+                }).toList(),
+                onChanged: (Categoria? value) {
+                  setState(() {
+                    categoriaSelecionada = value;
+                  });
                 },
               ),
             ],
@@ -430,6 +442,13 @@ class _CardapiosState extends State<Cardapios> {
                   pratos = pratos
                       .where((prato) => prato['vegano'] == true)
                       .toList();
+                }
+
+                if (categoriaSelecionada != null) {
+                  pratos = pratos.where((prato) {
+                    return prato['categoria'] != null &&
+                        prato['categoria']['id'] == categoriaSelecionada!.id;
+                  }).toList();
                 }
 
                 return ListView.builder(

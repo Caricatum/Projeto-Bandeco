@@ -22,13 +22,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-<<<<<<< HEAD
-      home: Principal(),
-=======
       home: const Principal(),
->>>>>>> 994247aba882dc8ba4aa4ec73b6918298ff6d26e
     );
   }
 }
