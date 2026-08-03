@@ -58,6 +58,19 @@ public class User {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private List<Notificacoes> notificacoes;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Avisos> avisos;
+
+    public List<Avisos> getAvisos() {
+        return avisos;
+    }
+
+    public void setAvisos(List<Avisos> avisos) {
+        this.avisos = avisos;
+    }
 
     public List<Notificacoes> getNotificacoes() {
         return notificacoes;
