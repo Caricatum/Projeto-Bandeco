@@ -66,9 +66,9 @@ class _CadastroState extends State<Cadastro> {
     }
   }
 
-  TextEditingController nomeController = new TextEditingController();
-  TextEditingController senhaController = new TextEditingController();
-  TextEditingController loginController = new TextEditingController();
+  TextEditingController nomeController = TextEditingController();
+  TextEditingController senhaController = TextEditingController();
+  TextEditingController loginController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +86,7 @@ class _CadastroState extends State<Cadastro> {
                   fit: BoxFit.cover,
                 ),
 
-                Container(height: 260, color: Colors.black.withOpacity(0.3)),
+                Container(height: 260, color: Colors.black.withValues(alpha: 0.3)),
 
                 Positioned(
                   left: 20,
