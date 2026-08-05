@@ -46,8 +46,8 @@ Future<void> cadastrarUsuario() async {
     }
   }*/
 
-TextEditingController loginController = new TextEditingController();
-TextEditingController senhaController = new TextEditingController();
+TextEditingController loginController = TextEditingController();
+TextEditingController senhaController = TextEditingController();
 
 class _LoginState extends State<Login> {
   final TextEditingController loginController = TextEditingController();
