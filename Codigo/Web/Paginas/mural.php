@@ -9,47 +9,69 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- CSS da paleta -->
+    <link rel="stylesheet" href="../CSS/navbar.css">
     <link rel="stylesheet" href="../CSS/mural.css">
 
     <!-- JS -->
-    <script type="module" src="../JS/mural.js" defer></script>
+    <script src="../JS/mural.js" defer></script>
 </head>
 
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg shadow-sm">
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
 
             <img src="../Assets/Images/logo_unicamp.jpg" alt="Logo Unicamp" width="40" height="40"
                 class="d-inline-block align-text-top">
 
-            <a class="navbar-brand ms-3" href="inicio.php">Início</a>
+            <a class="navbar-brand ms-3" href="inicio.php">Bandeco</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto gap-2">
 
                     <li class="nav-item">
-                        <a class="nav-link" href="buscaPratos.php">
-                            <button class="btn btn-dark">Buscar Pratos</button>
-                        </a>
+                        <button class="btn-nav" onclick="window.location.href='inicio.php'">🏠 Início</button>
+                    </li>
+
+                    <li class="nav-item">
+                        <button class="btn-nav" onclick="window.location.href='buscaPratos.php'">🍽️ Buscar Pratos</button>
+                    </li>
+
+                    <li class="nav-item">
+                        <button class="btn-nav" onclick="window.location.href='sobrenos.php'">ℹ️ Sobre nós</button>
                     </li>
 
                     <!-- Botão Login: visível se não logado, some se logado (via JS) -->
                     <li class="nav-item" id="itemLogin">
-                        <a class="nav-link" href="login.php">
-                            <button id="btnLogin" class="btn btn-dark">Login</button>
-                        </a>
+                        <button id="btnLogin" class="btn-nav" onclick="window.location.href='login.php'">Login</button>
+                    </li>
+
+                    <li class="nav-item">
+                    <button class="btn-nav btn-sair" onclick="logout()">Sair</button>
                     </li>
 
                 </ul>
             </div>
         </div>
     </nav>
+
+    <script>
+            // =============================================
+// LOGOUT
+// =============================================
+function logout() {
+    sessionStorage.setItem('logado', 'false');
+    localStorage.clear();
+    window.location.href = 'login.php';
+}
+
+    </script>
+
 
 
     <!-- CONTAINER AVISOS -->
@@ -98,186 +120,225 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Cadastrar Cardápio do Dia</h5>
+                    <h5 class="modal-title">📅 Cadastrar Cardápio do Dia</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
+
+                    <div class="text-center mb-4">
+                        <label for="dataCardapio" class="form-label">
+                            <h5 class="mb-1"><b>Data em que esse cardápio será servido:</b></h5>
+                        </label>
+                        <input type="date" id="dataCardapio" class="form-control w-auto mx-auto">
+                    </div>
+
                     <div class="container text-center">
+
                         <h3>Almoço</h3>
                         <div class="row">
-                            <div class="col-md-6 text-center"> <!-- Primeira coluna com form-->
-                                <h4 class="titulo-padrao">Padrão</h4> <!--Almoço padrão-->
+
+                            <!-- ALMOÇO PADRÃO -->
+                            <div class="col-md-6 text-center">
+                                <h4 class="titulo-padrao">Padrão</h4>
                                 <form class="form-padrao">
                                     <div class="mb-3">
-                                        <label class="form-label"><b>Acompanhamento</b></label> <br>
-                                        Arroz e Feijão
+                                        <label class="form-label"><b>Acompanhamento</b></label>
+                                        <select class="form-select select-prato" data-cardapio="padraoAlmoco" data-campo="acompanhamento" data-categoria="1">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Prato Principal</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="padraoAlmoco" data-campo="prato_principal" data-categoria="3">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Guarnição</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="padraoAlmoco" data-campo="guarnicao" data-categoria="2">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Salada</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="padraoAlmoco" data-campo="salada" data-categoria="5">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Sobremesa</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="padraoAlmoco" data-campo="sobremesa" data-categoria="6">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Refresco</b></label>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                    <hr>
-                                    Pão e Café
-                                    <hr>
-                                    <div class="mb-3">
-                                        <label class="form-label"><b>Nota Técnica</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="padraoAlmoco" data-campo="refresco" data-categoria="4">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                 </form>
                             </div>
 
-                            <div class="col-md-6"> <!-- Segunda coluna com form-->
-                                <h4 class="titulo-vegano">Vegano</h4> <!--Almoço vegano-->
+                            <!-- ALMOÇO VEGANO -->
+                            <div class="col-md-6">
+                                <h4 class="titulo-vegano">Vegano</h4>
                                 <form class="form-vegano">
                                     <div class="mb-3">
-                                        <label class="form-label"><b>Acompanhamento</b></label> <br>
-                                        Arroz Integral e Feijão
+                                        <label class="form-label"><b>Acompanhamento</b></label>
+                                        <select class="form-select select-prato" data-cardapio="veganoAlmoco" data-campo="acompanhamento" data-categoria="1" data-vegano="true">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Prato Principal</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="veganoAlmoco" data-campo="prato_principal" data-categoria="3" data-vegano="true">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Guarnição</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="veganoAlmoco" data-campo="guarnicao" data-categoria="2" data-vegano="true">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Salada</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="veganoAlmoco" data-campo="salada" data-categoria="5" data-vegano="true">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Sobremesa</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="veganoAlmoco" data-campo="sobremesa" data-categoria="6" data-vegano="true">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Refresco</b></label>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                    <hr>
-                                    Pão e Café
-                                    <hr>
-                                    <div class="mb-3">
-                                        <label class="form-label"><b>Nota Técnica</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="veganoAlmoco" data-campo="refresco" data-categoria="4" data-vegano="true">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                 </form>
                             </div>
                         </div>
+
                         <h3>Jantar</h3>
                         <div class="row">
-                            <div class="col-md-6"> <!-- Terceira coluna com form-->
-                                <h4 class="titulo-padrao">Padrão</h4> <!--Jantar padrão-->
+
+                            <!-- JANTAR PADRÃO -->
+                            <div class="col-md-6">
+                                <h4 class="titulo-padrao">Padrão</h4>
                                 <form class="form-padrao">
                                     <div class="mb-3">
-                                        <label class="form-label"><b>Acompanhamento</b></label> <br>
-                                        Arroz e Feijão
+                                        <label class="form-label"><b>Acompanhamento</b></label>
+                                        <select class="form-select select-prato" data-cardapio="padraoJantar" data-campo="acompanhamento" data-categoria="1">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Prato Principal</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="padraoJantar" data-campo="prato_principal" data-categoria="3">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Guarnição</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="padraoJantar" data-campo="guarnicao" data-categoria="2">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Salada</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="padraoJantar" data-campo="salada" data-categoria="5">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Sobremesa</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="padraoJantar" data-campo="sobremesa" data-categoria="6">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Refresco</b></label>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                    <hr>
-                                    Pão e Café
-<hr>
-                                    <div class="mb-3">
-                                        <label class="form-label"><b>Nota Técnica</b></label>
-                                        <input type="text" class="form-control">
+                                        <select class="form-select select-prato" data-cardapio="padraoJantar" data-campo="refresco" data-categoria="4">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                 </form>
                             </div>
 
-                            <div class="col-md-6"> <!-- Quarta coluna com form-->
-                                <h4 class="titulo-vegano">Vegano</h4> <!--Jantar vegano-->
+                            <!-- JANTAR VEGANO -->
+                            <div class="col-md-6">
+                                <h4 class="titulo-vegano">Vegano</h4>
                                 <form class="form-vegano">
                                     <div class="mb-3">
-                                        <label class="form-label"><b>Acompanhamento</b></label> <br>
-                                        Arroz e Feijão
+                                        <label class="form-label"><b>Acompanhamento</b></label>
+                                        <select class="form-select select-prato" data-cardapio="veganoJantar" data-campo="acompanhamento" data-categoria="1" data-vegano="true">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Prato Principal</b></label>
-                                    <input type="text" class="form-control" id="">
+                                        <select class="form-select select-prato" data-cardapio="veganoJantar" data-campo="prato_principal" data-categoria="3" data-vegano="true">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Guarnição</b></label>
-                                        <input type="text" class="form-control" id="">
+                                        <select class="form-select select-prato" data-cardapio="veganoJantar" data-campo="guarnicao" data-categoria="2" data-vegano="true">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Salada</b></label>
-                                        <input type="text" class="form-control" id="">
+                                        <select class="form-select select-prato" data-cardapio="veganoJantar" data-campo="salada" data-categoria="5" data-vegano="true">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Sobremesa</b></label>
-                                        <input type="text" class="form-control" id="sobremesaVJ">
+                                        <select class="form-select select-prato" data-cardapio="veganoJantar" data-campo="sobremesa" data-categoria="6" data-vegano="true">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <label class="form-label"><b>Refresco</b></label>
-                                        <input type="text" class="form-control" id="refrescoVJ">
-                                    </div>
-                                    <hr>
-                                    Pão e Café
-<hr>
-                                    <div class="mb-3">
-                                        <label class="form-label"><b>Nota Técnica</b></label>
-                                        <input type="text" class="form-control" id="nt">
+                                        <select class="form-select select-prato" data-cardapio="veganoJantar" data-campo="refresco" data-categoria="4" data-vegano="true">
+                                            <option value="">Nenhum</option>
+                                        </select>
                                     </div>
                                 </form>
                             </div>
                         </div>
 
                     </div>
+
+                    <p id="msgCardapioDia" class="text-danger text-center mt-3 mb-0"></p>
                 </div>
+
                 <div class="modal-footer d-flex justify-content-center">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancelar
@@ -288,17 +349,11 @@
                     </button>
                 </div>
 
-                <div class="text-center mt-3 mb-3">
-                    <label for="dataCardapio" class="form-label">
-                        <h5><b>Digite a data que será servida esse cardápio:</b></h5>
-                    </label>
-
-                    <input type="date" id="dataCardapio" class="form-control w-auto mx-auto">
-
-                </div>
             </div>
         </div>
     </div>
+
+
 
 
     <!-- Bootstrap JS -->
@@ -326,5 +381,3 @@
 
 
 </body>
-
-</html>

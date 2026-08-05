@@ -25,7 +25,7 @@
             </button>
 
             <button onclick="window.location.href='mural.php'">
-                Mural e Cardapio do dia
+                Mural e Cardápio do dia
             </button>
 
             <button onclick="logout()">
@@ -42,6 +42,7 @@
         function logout() {
             sessionStorage.setItem('logado', 'false');
             window.location.href = 'login.php';
+            localStorage.clear()
         }
 
         if(voltou == "true"){
