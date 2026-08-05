@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'login.dart';
+=======
+import 'package:tcc_flutter/cardapios.dart';
+import 'principal.dart';
+import 'login.dart';
+import 'cadastro.dart';
+import 'perfil.dart';
+import 'cardapios.dart';
+import 'cadastroPrato.dart';
+>>>>>>> 2b32ebda870f19b304906a4e8d78f2288ff3cc81
 
 
 void main() {
@@ -16,9 +26,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const Login(),
+      home: const Principal(),
     );
   }
 }

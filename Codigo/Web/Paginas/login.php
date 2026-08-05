@@ -16,17 +16,22 @@
         <form id="loginForm">
             <h2 class="">Login</h2>
             <div class="input-group">
-                <label>Usuário</label>
+                <label>Email</label>
                 <input type="text" id="username" required>
             </div>
             <div class="input-group">
                 <label>Senha</label>
                 <input type="password" id="password" required>
             </div>
-            <button type="submit"  class="button">Entrar</button>
+            <button type="submit" class="button">Entrar</button>
             
-            <button class="button" onclick="window.location.href='cadastro.php'">
+            <button type="button" class="button" onclick="window.location.href='cadastro.php'">
                 Não tem conta? Crie uma já!
+            </button>
+
+            <button type="button" class="button" onclick="window.location.href='resetSenha.php'"
+                style="background:linear-gradient(135deg,#b96800,#F69D39);">
+                Esqueceu a senha?
             </button>
 
             <p id="message"></p>

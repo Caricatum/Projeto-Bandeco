@@ -1,7 +1,3 @@
-import { validaFunc } from './validaFunc.js';
-
-validaFunc();
-
 // =============================================
 // CONFIGURAÇÃO
 // =============================================
@@ -172,14 +168,32 @@ function renderizarPratos() {
         const likes = totalLikes(p.id);
         const jaAvaliou = euJaAvalieiEsre(p.id);
         const jaFavoritou = euJaFavoriteeiEsse(p.id);
-        const catNome = p.categoria ? (p.categoria.nome || `Cat. ${p.categoria.id}`) : '—';
+        const catNome = p.categoria ? (p.categoria.descricao || `Cat. ${p.categoria.id}`) : '—';
 
         return `
         <div class="col-md-6 col-lg-4">
             <div class="card card-prato h-100">
+
+                <!-- Imagem do prato -->
+                ${p.imagem
+                    ? `<img src="${p.imagem}" alt="${p.nome}"
+                            style="width:100%;height:160px;object-fit:cover;border-radius:12px 12px 0 0;">`
+                    : `<div style="width:100%;height:120px;background:linear-gradient(135deg,#F69D39,#E0C375);
+                            border-radius:12px 12px 0 0;display:flex;align-items:center;
+                            justify-content:center;font-size:3rem;">🍽️</div>`
+                }
+
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h5 class="card-title mb-0">${p.nome}</h5>
+                        <!-- Nome como link para a página de detalhes -->
+                        <h5 class="card-title mb-0">
+                            <a href="pratoDet.php?id=${p.id}"
+                               style="color:#7a1728;text-decoration:none;"
+                               onmouseover="this.style.textDecoration='underline'"
+                               onmouseout="this.style.textDecoration='none'">
+                                ${p.nome}
+                            </a>
+                        </h5>
                         <div class="d-flex gap-1">
                             ${p.vegano ? '<span class="badge badge-vegano text-white">🥦 Vegano</span>' : ''}
                             <span class="badge badge-categoria text-white">${catNome}</span>
@@ -443,10 +457,9 @@ document.getElementById("salvarNovoPrato").addEventListener("click",function (e)
     window.location.reload();
 })
 
-// =============================================
-// LOGOUT
-// =============================================
-function logout() {
-    sessionStorage.setItem('logado', 'false');
-    window.location.href = 'login.php';
-}
+
+
+window.abrirModalAvaliar   = abrirModalAvaliar;
+window.abrirModalFavoritar = abrirModalFavoritar;
+window.desfavoritar        = desfavoritar;
+window.limparFiltros       = limparFiltros;

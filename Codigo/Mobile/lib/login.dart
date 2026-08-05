@@ -11,10 +11,8 @@ class Login extends StatefulWidget {
   @override
   State<Login> createState() => _LoginState();
 }
-/*
-Future<void> cadastrarUsuario() async {
-    final url = Uri.parse('http://localhost:8080/user/login');
 
+<<<<<<< HEAD
     try {
       final response = await http.post(
         url,
@@ -46,6 +44,8 @@ Future<void> cadastrarUsuario() async {
     }
   }*/
 
+=======
+>>>>>>> 2b32ebda870f19b304906a4e8d78f2288ff3cc81
 TextEditingController loginController = TextEditingController();
 TextEditingController senhaController = TextEditingController();
 
@@ -54,15 +54,12 @@ class _LoginState extends State<Login> {
   final TextEditingController senhaController = TextEditingController();
 
   Future<void> fazerLogin(BuildContext context) async {
-    final url = Uri.parse('http://localhost:8080/user/login');
+
+    final url = Uri.parse('http://localhost:8080/user/login' + loginController.text + "&senhaHash=" + senhaController.text);
     try {
-      final response = await http.post(
+      final response = await http.get(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'login': loginController.text,
-          'senhaHash': senhaController.text,
-        }),
       );
 
       if (response.statusCode == 200) {
@@ -74,7 +71,7 @@ class _LoginState extends State<Login> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Principal(usuario: usuario)),
+          MaterialPageRoute(builder: (context) => Principal()),
         );
       } else {
         ScaffoldMessenger.of(
@@ -122,72 +119,6 @@ class _LoginState extends State<Login> {
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18),
                 ),
-
-                const SizedBox(height: 30),
-
-                TextFormField(
-                  controller: loginController,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.person),
-                    hintText: "Email",
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Preencha o campo email";
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    TextFormField(
-                      controller: senhaController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.lock),
-                        hintText: "Senha",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Preencha o campo senha";
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-
-                    const Text(
-                      "Entre ou cadastre-se agora!",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18),
-                    ),
-
-                    const SizedBox(height: 30),
-
                     TextFormField(
                       controller: loginController,
                       decoration: InputDecoration(
@@ -280,9 +211,7 @@ class _LoginState extends State<Login> {
                 ),
               ],
             ),
-          ],
         ),
-      ),
-    );
+      );
   }
 }

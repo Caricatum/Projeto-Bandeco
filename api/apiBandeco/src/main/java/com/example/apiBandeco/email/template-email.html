@@ -1,0 +1,186 @@
+<!--
+/* ===== PALETA =====
+   #FF5770 rosa forte | #ecf0f1 cinza claro (fundo do email original)
+   #ffffff branco | #2d2d2d texto escuro
+*/
+-->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Código de verificação — bandeco</title>
+<style>
+  :root{
+    --accent:#FF5770;
+    --bg:#ecf0f1;
+    --card:#ffffff;
+    --text:#2d2d2d;
+    --muted:#666666;
+  }
+
+  /* Reset minimal */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+
+  body{
+    font-family: "Open Sans", Arial, sans-serif;
+    background: linear-gradient(135deg, #F69D39 0%, #E0C375 100%); /* mantém referência ao exemplo gradiente */
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px;
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .email-card{
+    width:100%;
+    max-width:640px;
+    background:var(--card);
+    border-radius:14px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.08);
+    overflow:hidden;
+    animation:fadeIn .36s ease;
+  }
+
+  .header{
+    background:transparent;
+    text-align:center;
+    padding:48px 24px 24px;
+  }
+
+  .title{
+    font-family: "Epilogue", "Open Sans", Arial, sans-serif;
+    font-size:28px;
+    color:var(--text);
+    font-weight:600;
+    letter-spacing:0.2px;
+  }
+
+  .body{
+    padding:28px 32px;
+    line-height:1.5;
+    color:var(--text);
+  }
+
+  .greeting{
+    font-weight:700;
+    margin-bottom:12px;
+  }
+
+  .intro{
+    margin-bottom:18px;
+    color:#111;
+    font-size:15px;
+  }
+
+  .note{
+    color:var(--muted);
+    font-size:14px;
+    margin-bottom:22px;
+  }
+
+  .code-box{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(90deg, rgba(255,87,112,0.95), rgba(217,34,67,0.95));
+    color:#fff;
+    padding:18px 22px;
+    border-radius:10px;
+    font-family: "Courier New", Courier, monospace;
+    font-size:22px;
+    letter-spacing:4px;
+    margin:0 auto 12px;
+    width:fit-content;
+    box-shadow:0 10px 30px rgba(255,87,112,0.18);
+  }
+
+  .copy-hint{
+    text-align:center;
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:22px;
+  }
+
+  .footer{
+    padding:0 32px 36px;
+    color:var(--muted);
+    font-size:14px;
+  }
+
+  .brand{
+    color:var(--accent);
+    font-weight:700;
+  }
+
+  /* CTA estilo botão (opcional) */
+  .btn{
+    display:inline-block;
+    text-decoration:none;
+    background:var(--accent);
+    color:#fff;
+    padding:12px 18px;
+    border-radius:10px;
+    font-weight:600;
+    margin-top:6px;
+    box-shadow:0 8px 24px rgba(255,87,112,0.16);
+  }
+
+  @keyframes fadeIn{
+    from{opacity:0; transform:translateY(12px)}
+    to{opacity:1; transform:none}
+  }
+
+  /* Responsivo */
+  @media (max-width:520px){
+    .email-card{margin:0 12px}
+    .header{padding:36px 18px 18px}
+    .body{padding:20px}
+    .title{font-size:24px}
+    .code-box{font-size:20px;padding:14px 18px}
+  }
+</style>
+</head>
+<body>
+  <div class="email-card" role="article" aria-label="Email de código de verificação">
+    <div class="header">
+      <h1 class="title">Código de verificação</h1>
+    </div>
+
+    <div class="body">
+      <div class="greeting">Olá, <span id="nome"><strong>#{nome}</strong></span></div>
+
+      <div class="intro">
+        Foi requisitado o envio de um código de verificação para este e‑mail. Caso não tenha solicitado, por favor ignore esta mensagem.
+      </div>
+
+      <div class="note">
+        Esse código é válido por tempo limitado.
+      </div>
+
+      <div style="text-align:center">
+        <div class="code-box" aria-hidden="true">#{codigo}</div>
+        <div class="copy-hint">Copie o código acima</div>
+
+        <!-- botão opcional — por exemplo "Verificar" -->
+        <a class="btn" href="#" onclick="event.preventDefault()">Verificar código</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>Atenciosamente,</div>
+      <div style="margin-top:6px"><span class="brand">Equipe bandeco</span> — Cotil</div>
+    </div>
+  </div>
+
+  <!--
+    Observações:
+    - Os placeholders #{nome} e #{codigo} devem ser substituídos pelo seu backend antes do envio.
+    - Esse HTML é pensado para ser usado como página/preview ou template em sistemas que aceitam HTML com CSS embutido.
+    - Se pretende usar este HTML como template para envios de e‑mail (transacional), considere inlinar estilos para compatibilidade com clientes como Outlook.
+  -->
+</body>
+</html>
