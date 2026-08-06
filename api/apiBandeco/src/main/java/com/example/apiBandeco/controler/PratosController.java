@@ -8,6 +8,7 @@ import com.example.apiBandeco.repository.PratosRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -55,8 +56,11 @@ public class PratosController {
         return pratosRepository.findByVeganoTrue();
     }
 
-    @PostMapping("/cadastrar")//cadastra um prato
-    public Pratos cadastroPratos (@RequestBody @Valid Pratos prato){
+
+    @PostMapping(value = "/cadastrar",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)//cadastra um prato
+    public Pratos cadastroPratos (@RequestPart("prato") @Valid Pratos prato,
+                                  @RequestPart(value = "imagem", required = false) MultipartFile arquivo)
+            throws IOException{
         Integer categoriaId = prato.getCategoria() != null
                 ? prato.getCategoria().getId() : null;
 
@@ -66,6 +70,15 @@ public class PratosController {
                             HttpStatus.NOT_FOUND, "Categoria não encontrada"));
             prato.setCategoria(categoria);
         }
+
+        if (arquivo != null && !arquivo.isEmpty()) {
+            String urlImagem = uploadImagem(arquivo);
+            prato.setImagem(urlImagem);
+        } else {
+            prato.setImagem(null);
+        }
+
+
         return pratosRepository.save(prato);
     }
 
@@ -114,22 +127,16 @@ public class PratosController {
 
         cardapioRepository.saveAll(cardapios);
 
-        if (prato.getImagem() != null && !prato.getImagem().isBlank()) {
-
-            String nomeArquivo = prato.getImagem()
-                    .substring(prato.getImagem().lastIndexOf("/") + 1);
-
-            Path caminho = Paths.get("uploads/pratos", nomeArquivo);
-
-            Files.deleteIfExists(caminho);
-        }
+        deletarImagem(prato.getId());
 
         pratosRepository.delete(prato);
     }
 
-    @PutMapping("/atualizar")
-    public Pratos atualizaPratos (@RequestBody @Valid Pratos prato){
-        pratosRepository.findById(prato.getId())
+    @PutMapping(value = "/atualizar",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Pratos atualizaPratos (@RequestPart("prato") @Valid Pratos prato,
+                                  @RequestPart(value = "imagem", required = false) MultipartFile arquivo)
+            throws IOException{
+        Pratos pratoAtual = pratosRepository.findById(prato.getId())
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Prato não encontrado"));
 
@@ -143,13 +150,27 @@ public class PratosController {
             prato.setCategoria(categoria);
         }
 
-        return pratosRepository.save(prato);
+        if (arquivo != null && !arquivo.isEmpty()) {
+            String urlImagem = uploadImagem(arquivo);
+            deletarImagem(prato.getId());
+            pratoAtual.setImagem(urlImagem);
+        } else {
+            prato.setImagem(
+                    pratoAtual.getImagem()
+            );
+        }
+
+        pratoAtual.setNome(prato.getNome());
+        pratoAtual.setDescricao(prato.getDescricao());
+        pratoAtual.setVegano(prato.isVegano());
+        pratoAtual.setCategoria(prato.getCategoria());
+
+        return pratosRepository.save(pratoAtual);
     }
 
 
-    @PostMapping("/upload") //envia a imagem e retorna seu link
-    public Map<String, String> uploadImagem(
-            @RequestParam("imagem") MultipartFile arquivo)
+     //envia a imagem e retorna seu link
+    private String uploadImagem(MultipartFile arquivo)
             throws IOException {
         if (arquivo.isEmpty()) {
             throw new ResponseStatusException(
@@ -176,21 +197,22 @@ public class PratosController {
 
         extensao = extensao.toLowerCase();
 
-        String nomeArquivo = UUID.randomUUID() + "." + extensao;
 
         List<String> permitidas = List.of("jpg", "jpeg", "png", "webp");
-
-        if (!permitidas.contains(extensao.toLowerCase())) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Formato de imagem inválido");
-        }
 
         if (extensao.isBlank()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "Arquivo sem extensão");
         }
+
+        if (!permitidas.contains(extensao)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Formato inválido");
+        }
+
+        String nomeArquivo = UUID.randomUUID() + "." + extensao;
 
         Path destino = Paths.get("uploads/pratos", nomeArquivo);
 
@@ -202,16 +224,16 @@ public class PratosController {
                 StandardCopyOption.REPLACE_EXISTING
         );
 
-        String url = ServletUriComponentsBuilder
+        return ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .path("/uploads/pratos/")
                 .path(nomeArquivo)
                 .toUriString();
-        return Map.of("url", url);
+
     }
 
-    @DeleteMapping("/imagem/{id}") // Deleta a imagem do prato
-    public void deletarImagem(@PathVariable Integer id) throws IOException {
+     // Deleta a imagem do prato
+    private void deletarImagem(Integer id) throws IOException {
 
         Pratos prato = pratosRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -219,9 +241,7 @@ public class PratosController {
                         "Prato não encontrado"));
 
         if (prato.getImagem() == null || prato.getImagem().isBlank()) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "O prato não possui imagem");
+            return;
         }
 
         String nomeArquivo = prato.getImagem()
@@ -230,12 +250,6 @@ public class PratosController {
         Path caminho = Paths.get("uploads/pratos", nomeArquivo);
 
         Files.deleteIfExists(caminho);
-
-        Files.deleteIfExists(caminho);
-
-        prato.setImagem(null);
-
-        pratosRepository.save(prato);
     }
 
 }
