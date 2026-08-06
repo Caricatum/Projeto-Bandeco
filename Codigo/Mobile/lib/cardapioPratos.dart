@@ -137,7 +137,7 @@ class _CardapiosState extends State<Cardapios> {
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          '🍽️ Cardápio Completo',
+          '🍽️ Pratos',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         actions: [
@@ -663,8 +663,17 @@ class _CardapiosState extends State<Cardapios> {
 
                                 const SizedBox(height: 16),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
+                                    IconButton(
+                                      onPressed: () {
+
+                                      },
+                                      icon: Icon(
+                                        Icons.star, 
+                                      ),
+                                    ),
+
                                     OutlinedButton.icon(
                                       icon: const Icon(Icons.edit),
                                       label: const Text("Editar"),
