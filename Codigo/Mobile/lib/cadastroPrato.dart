@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:tcc_flutter/categoria.dart';
-import 'cardapios.dart';
+import 'cardapioPratos.dart';
 import 'menuNavegacao.dart';
 
 class Cadastroprato extends StatefulWidget {
@@ -71,7 +71,7 @@ class _CadastropratoState extends State<Cadastroprato> {
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: Colors.red.shade700,
+        backgroundColor: const Color.fromARGB(255, 211, 47, 47),
         elevation: 0,
       ),
       drawer: const MenuNavegacao(),

@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'login.dart';
-=======
-import 'package:tcc_flutter/cardapios.dart';
+import 'package:tcc_flutter/cardapioPratos.dart';
 import 'principal.dart';
 import 'login.dart';
 import 'cadastro.dart';
 import 'perfil.dart';
-import 'cardapios.dart';
+import 'cardapioPratos.dart';
 import 'cadastroPrato.dart';
->>>>>>> 2b32ebda870f19b304906a4e8d78f2288ff3cc81
+
 
 
 void main() {
