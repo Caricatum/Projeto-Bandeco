@@ -36,5 +36,15 @@ namespace ProjetoBandejao.Services.UserControls
         {
 
         }
+
+        private void btnCardapio_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pnlSideBar_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
