@@ -132,6 +132,18 @@ public class PratosController {
         pratosRepository.delete(prato);
     }
 
+    @DeleteMapping(value = "/excluirImagem/{id}")
+    public void excluirImagem(@PathVariable int id) throws IOException{
+        Pratos prato = pratosRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Prato não encontrado"));
+
+        deletarImagem(prato.getId());
+        prato.setImagem(null);
+        pratosRepository.save(prato);
+    }
+
     @PutMapping(value = "/atualizar",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Pratos atualizaPratos (@RequestPart("prato") @Valid Pratos prato,
                                   @RequestPart(value = "imagem", required = false) MultipartFile arquivo)
