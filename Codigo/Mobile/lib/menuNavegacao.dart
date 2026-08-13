@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tcc_flutter/cadastraCardapio.dart';
+import 'package:tcc_flutter/cardapio.dart';
+import 'package:tcc_flutter/favoritos.dart';
 import 'principal.dart';
 import 'cadastroprato.dart';
-import 'cardapios.dart';
+import 'cardapioPratos.dart';
 
 class MenuNavegacao extends StatelessWidget {
   const MenuNavegacao({super.key});
@@ -41,8 +44,8 @@ class MenuNavegacao extends StatelessWidget {
           ),
 
           ListTile(
-            leading: const Icon(Icons.restaurant_menu),
-            title: const Text('Cardápios'),
+            leading: const Icon(Icons.book),
+            title: const Text('Pratos'),
             onTap: () {
               Navigator.push(
                 context,
@@ -61,6 +64,45 @@ class MenuNavegacao extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const Cadastroprato(),
+                ),
+              );
+            },
+          ),
+
+          ListTile(
+            leading: const Icon(Icons.star),
+            title: const Text('Favoritos'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Favoritos(),
+                ),
+              );
+            },
+          ),
+
+          ListTile(
+            leading: const Icon(Icons.restaurant_menu),
+            title: const Text('Cardapios'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Cardapio(),
+                ),
+              );
+            },
+          ),
+
+          ListTile(
+            leading: const Icon(Icons.playlist_add),
+            title: const Text('Criar Cardápio'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Cadastracardapio(),
                 ),
               );
             },

@@ -37,7 +37,7 @@ namespace ProjetoBandejao.Forms
             AddEstoqueAlert("Arroz", "Min: 20 kg", "12 kg");
             AddEstoqueAlert("Feijão", "Min: 15 kg", "9 kg");
             AddEstoqueAlert("Óleo", "Min: 10 L", "5 L");
-            
+
             // Relógio
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
             timer.Interval = 1000;
@@ -52,12 +52,12 @@ namespace ProjetoBandejao.Forms
             var dot = new Label { Text = "•", ForeColor = Color.ForestGreen, Font = new Font("Segoe UI", 14, FontStyle.Bold), AutoSize = true, Location = new Point(5, 5) };
             var lblText = new Label { Text = text, Font = new Font("Segoe UI", 9, FontStyle.Regular), AutoSize = true, Location = new Point(25, 10), ForeColor = Color.DimGray };
             var lblTime = new Label { Text = time, Font = new Font("Segoe UI", 9, FontStyle.Regular), AutoSize = true, ForeColor = Color.Silver, Anchor = AnchorStyles.Top | AnchorStyles.Right };
-            
+
             pnl.Controls.Add(dot);
             pnl.Controls.Add(lblText);
             pnl.Controls.Add(lblTime);
             pnlAtividadesList.Controls.Add(pnl);
-            
+
             pnl.Resize += (s, e) => { lblTime.Left = pnl.Width - lblTime.Width - 10; lblTime.Top = 10; };
             lblTime.Left = pnl.Width - lblTime.Width - 10;
             pnl.BringToFront(); // Ensures list stacks correctly from top to bottom
@@ -69,7 +69,7 @@ namespace ProjetoBandejao.Forms
             var icon = new Label { Text = "📢", Font = new Font("Segoe UI", 12), AutoSize = true, Location = new Point(5, 5), ForeColor = Color.CornflowerBlue };
             var lblTitle = new Label { Text = title, Font = new Font("Segoe UI", 9, FontStyle.Bold), AutoSize = true, Location = new Point(35, 5), ForeColor = Color.Black };
             var lblDesc = new Label { Text = desc, Font = new Font("Segoe UI", 8, FontStyle.Regular), AutoSize = true, Location = new Point(35, 22), ForeColor = Color.Gray };
-            
+
             pnl.Controls.Add(icon);
             pnl.Controls.Add(lblTitle);
             pnl.Controls.Add(lblDesc);
@@ -83,7 +83,7 @@ namespace ProjetoBandejao.Forms
             var icon = new Label { Text = "⚠️", Font = new Font("Segoe UI", 11), AutoSize = true, Location = new Point(5, 10) };
             var lblItem = new Label { Text = item, Font = new Font("Segoe UI", 9, FontStyle.Bold), AutoSize = true, Location = new Point(35, 8), ForeColor = Color.Black };
             var lblMin = new Label { Text = min, Font = new Font("Segoe UI", 8, FontStyle.Regular), AutoSize = true, Location = new Point(130, 10), ForeColor = Color.Gray };
-            
+
             var badge = new Guna2Panel { BorderRadius = 5, FillColor = Color.FromArgb(255, 235, 235), Size = new Size(50, 25), Anchor = AnchorStyles.Top | AnchorStyles.Right };
             var lblCurrent = new Label { Text = current, ForeColor = Color.Crimson, Font = new Font("Segoe UI", 9, FontStyle.Bold), AutoSize = false, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter, BackColor = Color.Transparent };
             badge.Controls.Add(lblCurrent);
@@ -93,7 +93,7 @@ namespace ProjetoBandejao.Forms
             pnl.Controls.Add(lblMin);
             pnl.Controls.Add(badge);
             pnlEstoqueList.Controls.Add(pnl);
-            
+
             pnl.Resize += (s, e) => { badge.Left = pnl.Width - badge.Width - 10; badge.Top = 7; };
             badge.Left = pnl.Width - badge.Width - 10;
             pnl.BringToFront();
@@ -101,6 +101,11 @@ namespace ProjetoBandejao.Forms
 
         private void HomeForm_Load(object sender, EventArgs e)
         {
+        }
+
+        private void sidebar_Load(object sender, EventArgs e)
+        {
+
         }
     }
 

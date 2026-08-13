@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'cardapios.dart';
+import 'cardapioPratos.dart';
 import 'cadastroprato.dart';
 import 'perfil.dart';
 import 'login.dart';
