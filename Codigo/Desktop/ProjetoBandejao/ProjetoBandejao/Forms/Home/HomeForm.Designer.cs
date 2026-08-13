@@ -114,6 +114,7 @@ namespace ProjetoBandejao.Forms
             sidebar.Name = "sidebar";
             sidebar.Size = new Size(268, 750);
             sidebar.TabIndex = 0;
+            sidebar.Load += sidebar_Load;
             // 
             // pnlTop
             // 
@@ -127,7 +128,7 @@ namespace ProjetoBandejao.Forms
             pnlTop.Location = new Point(268, 0);
             pnlTop.Name = "pnlTop";
             pnlTop.ShadowDecoration.CustomizableEdges = customizableEdges2;
-            pnlTop.Size = new Size(798, 50);
+            pnlTop.Size = new Size(828, 50);
             pnlTop.TabIndex = 1;
             // 
             // lblTopTime
@@ -136,7 +137,7 @@ namespace ProjetoBandejao.Forms
             lblTopTime.AutoSize = true;
             lblTopTime.Font = new Font("Segoe UI", 9F);
             lblTopTime.ForeColor = Color.Gray;
-            lblTopTime.Location = new Point(632, 18);
+            lblTopTime.Location = new Point(662, 18);
             lblTopTime.Name = "lblTopTime";
             lblTopTime.Size = new Size(34, 15);
             lblTopTime.TabIndex = 0;
@@ -148,7 +149,7 @@ namespace ProjetoBandejao.Forms
             lblTopUser.AutoSize = true;
             lblTopUser.Font = new Font("Segoe UI", 9F);
             lblTopUser.ForeColor = Color.Gray;
-            lblTopUser.Location = new Point(712, 18);
+            lblTopUser.Location = new Point(742, 18);
             lblTopUser.Name = "lblTopUser";
             lblTopUser.Size = new Size(69, 15);
             lblTopUser.TabIndex = 1;
@@ -187,7 +188,7 @@ namespace ProjetoBandejao.Forms
             pnlMain.Location = new Point(268, 50);
             pnlMain.Name = "pnlMain";
             pnlMain.Padding = new Padding(20);
-            pnlMain.Size = new Size(798, 700);
+            pnlMain.Size = new Size(828, 700);
             pnlMain.TabIndex = 0;
             // 
             // tlpBottom
@@ -202,7 +203,7 @@ namespace ProjetoBandejao.Forms
             tlpBottom.Name = "tlpBottom";
             tlpBottom.Padding = new Padding(0, 10, 0, 0);
             tlpBottom.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tlpBottom.Size = new Size(758, 220);
+            tlpBottom.Size = new Size(788, 231);
             tlpBottom.TabIndex = 0;
             // 
             // pnlMural
@@ -217,7 +218,7 @@ namespace ProjetoBandejao.Forms
             pnlMural.Margin = new Padding(10);
             pnlMural.Name = "pnlMural";
             pnlMural.ShadowDecoration.CustomizableEdges = customizableEdges4;
-            pnlMural.Size = new Size(434, 190);
+            pnlMural.Size = new Size(452, 201);
             pnlMural.TabIndex = 0;
             // 
             // pnlMuralList
@@ -227,7 +228,7 @@ namespace ProjetoBandejao.Forms
             pnlMuralList.Location = new Point(0, 23);
             pnlMuralList.Name = "pnlMuralList";
             pnlMuralList.Padding = new Padding(15, 0, 15, 15);
-            pnlMuralList.Size = new Size(434, 167);
+            pnlMuralList.Size = new Size(452, 178);
             pnlMuralList.TabIndex = 0;
             // 
             // lblMuralTitle
@@ -238,7 +239,7 @@ namespace ProjetoBandejao.Forms
             lblMuralTitle.Location = new Point(0, 0);
             lblMuralTitle.Name = "lblMuralTitle";
             lblMuralTitle.Padding = new Padding(15, 15, 0, 10);
-            lblMuralTitle.Size = new Size(434, 23);
+            lblMuralTitle.Size = new Size(452, 23);
             lblMuralTitle.TabIndex = 1;
             lblMuralTitle.Text = "Mural";
             // 
@@ -250,11 +251,11 @@ namespace ProjetoBandejao.Forms
             pnlEstoqueAlert.CustomizableEdges = customizableEdges5;
             pnlEstoqueAlert.Dock = DockStyle.Fill;
             pnlEstoqueAlert.FillColor = Color.White;
-            pnlEstoqueAlert.Location = new Point(464, 20);
+            pnlEstoqueAlert.Location = new Point(482, 20);
             pnlEstoqueAlert.Margin = new Padding(10);
             pnlEstoqueAlert.Name = "pnlEstoqueAlert";
             pnlEstoqueAlert.ShadowDecoration.CustomizableEdges = customizableEdges6;
-            pnlEstoqueAlert.Size = new Size(284, 190);
+            pnlEstoqueAlert.Size = new Size(296, 201);
             pnlEstoqueAlert.TabIndex = 1;
             // 
             // pnlEstoqueList
@@ -264,7 +265,7 @@ namespace ProjetoBandejao.Forms
             pnlEstoqueList.Location = new Point(0, 23);
             pnlEstoqueList.Name = "pnlEstoqueList";
             pnlEstoqueList.Padding = new Padding(15, 0, 15, 15);
-            pnlEstoqueList.Size = new Size(284, 167);
+            pnlEstoqueList.Size = new Size(296, 178);
             pnlEstoqueList.TabIndex = 0;
             // 
             // lblEstTitle
@@ -275,7 +276,7 @@ namespace ProjetoBandejao.Forms
             lblEstTitle.Location = new Point(0, 0);
             lblEstTitle.Name = "lblEstTitle";
             lblEstTitle.Padding = new Padding(15, 15, 0, 10);
-            lblEstTitle.Size = new Size(284, 23);
+            lblEstTitle.Size = new Size(296, 23);
             lblEstTitle.TabIndex = 1;
             lblEstTitle.Text = "⚠️ Estoque com Atenção";
             // 
@@ -291,7 +292,7 @@ namespace ProjetoBandejao.Forms
             tlpMiddle.Name = "tlpMiddle";
             tlpMiddle.Padding = new Padding(0, 10, 0, 0);
             tlpMiddle.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tlpMiddle.Size = new Size(758, 220);
+            tlpMiddle.Size = new Size(788, 220);
             tlpMiddle.TabIndex = 1;
             // 
             // pnlChart
@@ -306,7 +307,7 @@ namespace ProjetoBandejao.Forms
             pnlChart.Margin = new Padding(10);
             pnlChart.Name = "pnlChart";
             pnlChart.ShadowDecoration.CustomizableEdges = customizableEdges8;
-            pnlChart.Size = new Size(434, 190);
+            pnlChart.Size = new Size(452, 190);
             pnlChart.TabIndex = 0;
             // 
             // pnlChartContent
@@ -315,7 +316,7 @@ namespace ProjetoBandejao.Forms
             pnlChartContent.Dock = DockStyle.Fill;
             pnlChartContent.Location = new Point(0, 23);
             pnlChartContent.Name = "pnlChartContent";
-            pnlChartContent.Size = new Size(434, 167);
+            pnlChartContent.Size = new Size(452, 167);
             pnlChartContent.TabIndex = 0;
             // 
             // lblChartTitle
@@ -326,7 +327,7 @@ namespace ProjetoBandejao.Forms
             lblChartTitle.Location = new Point(0, 0);
             lblChartTitle.Name = "lblChartTitle";
             lblChartTitle.Padding = new Padding(15, 15, 0, 10);
-            lblChartTitle.Size = new Size(434, 23);
+            lblChartTitle.Size = new Size(452, 23);
             lblChartTitle.TabIndex = 1;
             lblChartTitle.Text = "Refeições da Semana";
             // 
@@ -338,11 +339,11 @@ namespace ProjetoBandejao.Forms
             pnlAtividades.CustomizableEdges = customizableEdges9;
             pnlAtividades.Dock = DockStyle.Fill;
             pnlAtividades.FillColor = Color.White;
-            pnlAtividades.Location = new Point(464, 20);
+            pnlAtividades.Location = new Point(482, 20);
             pnlAtividades.Margin = new Padding(10);
             pnlAtividades.Name = "pnlAtividades";
             pnlAtividades.ShadowDecoration.CustomizableEdges = customizableEdges10;
-            pnlAtividades.Size = new Size(284, 190);
+            pnlAtividades.Size = new Size(296, 190);
             pnlAtividades.TabIndex = 1;
             // 
             // pnlAtividadesList
@@ -352,7 +353,7 @@ namespace ProjetoBandejao.Forms
             pnlAtividadesList.Location = new Point(0, 23);
             pnlAtividadesList.Name = "pnlAtividadesList";
             pnlAtividadesList.Padding = new Padding(15, 0, 15, 15);
-            pnlAtividadesList.Size = new Size(284, 167);
+            pnlAtividadesList.Size = new Size(296, 167);
             pnlAtividadesList.TabIndex = 0;
             // 
             // lblAtivTitle
@@ -363,7 +364,7 @@ namespace ProjetoBandejao.Forms
             lblAtivTitle.Location = new Point(0, 0);
             lblAtivTitle.Name = "lblAtivTitle";
             lblAtivTitle.Padding = new Padding(15, 15, 0, 10);
-            lblAtivTitle.Size = new Size(284, 23);
+            lblAtivTitle.Size = new Size(296, 23);
             lblAtivTitle.TabIndex = 1;
             lblAtivTitle.Text = "Últimas Atividades";
             // 
@@ -382,7 +383,7 @@ namespace ProjetoBandejao.Forms
             tlpCards.Location = new Point(20, 85);
             tlpCards.Name = "tlpCards";
             tlpCards.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tlpCards.Size = new Size(758, 100);
+            tlpCards.Size = new Size(788, 100);
             tlpCards.TabIndex = 2;
             // 
             // card1
@@ -399,7 +400,7 @@ namespace ProjetoBandejao.Forms
             card1.Margin = new Padding(10);
             card1.Name = "card1";
             card1.ShadowDecoration.CustomizableEdges = customizableEdges14;
-            card1.Size = new Size(169, 80);
+            card1.Size = new Size(177, 80);
             card1.TabIndex = 0;
             // 
             // lblNum1
@@ -472,11 +473,11 @@ namespace ProjetoBandejao.Forms
             card2.CustomizableEdges = customizableEdges17;
             card2.Dock = DockStyle.Fill;
             card2.FillColor = Color.White;
-            card2.Location = new Point(199, 10);
+            card2.Location = new Point(207, 10);
             card2.Margin = new Padding(10);
             card2.Name = "card2";
             card2.ShadowDecoration.CustomizableEdges = customizableEdges18;
-            card2.Size = new Size(169, 80);
+            card2.Size = new Size(177, 80);
             card2.TabIndex = 1;
             // 
             // lblNum2
@@ -549,11 +550,11 @@ namespace ProjetoBandejao.Forms
             card3.CustomizableEdges = customizableEdges21;
             card3.Dock = DockStyle.Fill;
             card3.FillColor = Color.White;
-            card3.Location = new Point(388, 10);
+            card3.Location = new Point(404, 10);
             card3.Margin = new Padding(10);
             card3.Name = "card3";
             card3.ShadowDecoration.CustomizableEdges = customizableEdges22;
-            card3.Size = new Size(169, 80);
+            card3.Size = new Size(177, 80);
             card3.TabIndex = 2;
             // 
             // lblNum3
@@ -626,11 +627,11 @@ namespace ProjetoBandejao.Forms
             card4.CustomizableEdges = customizableEdges25;
             card4.Dock = DockStyle.Fill;
             card4.FillColor = Color.White;
-            card4.Location = new Point(577, 10);
+            card4.Location = new Point(601, 10);
             card4.Margin = new Padding(10);
             card4.Name = "card4";
             card4.ShadowDecoration.CustomizableEdges = customizableEdges26;
-            card4.Size = new Size(171, 80);
+            card4.Size = new Size(177, 80);
             card4.TabIndex = 3;
             // 
             // lblNum4
@@ -722,7 +723,7 @@ namespace ProjetoBandejao.Forms
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(248, 250, 252);
-            ClientSize = new Size(1066, 750);
+            ClientSize = new Size(1096, 750);
             Controls.Add(pnlMain);
             Controls.Add(pnlTop);
             Controls.Add(sidebar);

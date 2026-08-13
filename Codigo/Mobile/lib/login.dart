@@ -12,7 +12,7 @@ class Login extends StatefulWidget {
   State<Login> createState() => _LoginState();
 }
 
-<<<<<<< HEAD
+/*
     try {
       final response = await http.post(
         url,
@@ -42,10 +42,9 @@ class Login extends StatefulWidget {
         context,
       ).showSnackBar(SnackBar(content: Text('Erro de conexão: $e')));
     }
-  }*/
+  };*/
 
-=======
->>>>>>> 2b32ebda870f19b304906a4e8d78f2288ff3cc81
+
 TextEditingController loginController = TextEditingController();
 TextEditingController senhaController = TextEditingController();
 
