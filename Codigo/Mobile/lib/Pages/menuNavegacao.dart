@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tcc_flutter/cadastraCardapio.dart';
-import 'package:tcc_flutter/cardapio.dart';
-import 'package:tcc_flutter/favoritos.dart';
+import 'cadastraCardapio.dart';
+import 'cardapio.dart';
+import 'favoritos.dart';
 import 'principal.dart';
 import 'cadastroprato.dart';
 import 'cardapioPratos.dart';
@@ -50,7 +50,7 @@ class MenuNavegacao extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Cardapios(),
+                  builder: (context) => const CardapioPratos(),
                 ),
               );
             },
@@ -89,7 +89,7 @@ class MenuNavegacao extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Cardapio(),
+                  builder: (context) => const CardapioPage(),
                 ),
               );
             },
@@ -102,7 +102,7 @@ class MenuNavegacao extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Cadastracardapio(),
+                  builder: (context) => const CadastraCardapio(),
                 ),
               );
             },

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:tcc_flutter/atualizaPrato.dart';
-import 'package:tcc_flutter/categoria.dart';
+import 'atualizaPrato.dart';
+import 'package:tcc_flutter/Class/categoriaClass.dart';
 import 'cadastroPrato.dart';
 import 'menuNavegacao.dart';
 
-class Cardapios extends StatefulWidget {
-  const Cardapios({super.key});
+class CardapioPratos extends StatefulWidget {
+  const CardapioPratos({super.key});
 
   @override
-  State<Cardapios> createState() => _CardapiosState();
+  State<CardapioPratos> createState() => _CardapioPratosState();
 }
 
-class _CardapiosState extends State<Cardapios> {
+class _CardapioPratosState extends State<CardapioPratos> {
   //Mostra tudo
   Future<List<dynamic>> listarPratos() async {
     final url = Uri.parse('http://localhost:8080/pratos/all');
