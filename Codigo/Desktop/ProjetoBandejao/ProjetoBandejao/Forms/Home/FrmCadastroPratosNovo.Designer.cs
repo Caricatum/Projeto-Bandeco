@@ -121,7 +121,7 @@ namespace ProjetoBandejao.Forms.Home
             // 
             // pnlMain
             // 
-            pnlMain.BackColor = Color.WhiteSmoke;
+            pnlMain.BackColor = Color.Salmon;
             pnlMain.Controls.Add(cardMain);
             pnlMain.Controls.Add(pnlTop);
             pnlMain.Dock = DockStyle.Fill;
@@ -184,7 +184,7 @@ namespace ProjetoBandejao.Forms.Home
             // 
             btnSalvar.BorderRadius = 8;
             btnSalvar.CustomizableEdges = customizableEdges1;
-            btnSalvar.FillColor = Color.ForestGreen;
+            btnSalvar.FillColor = Color.OrangeRed;
             btnSalvar.Font = new Font("Segoe UI Semibold", 10F);
             btnSalvar.ForeColor = Color.White;
             btnSalvar.Location = new Point(510, 500);
@@ -201,7 +201,7 @@ namespace ProjetoBandejao.Forms.Home
             btnLimpar.BorderRadius = 8;
             btnLimpar.BorderThickness = 1;
             btnLimpar.CustomizableEdges = customizableEdges3;
-            btnLimpar.FillColor = Color.White;
+            btnLimpar.FillColor = Color.Silver;
             btnLimpar.Font = new Font("Segoe UI Semibold", 10F);
             btnLimpar.ForeColor = Color.DimGray;
             btnLimpar.Location = new Point(370, 500);
@@ -418,9 +418,10 @@ namespace ProjetoBandejao.Forms.Home
             // 
             // btnAdicionarIngrediente
             // 
+            btnAdicionarIngrediente.BorderColor = Color.Transparent;
             btnAdicionarIngrediente.BorderRadius = 8;
             btnAdicionarIngrediente.CustomizableEdges = customizableEdges19;
-            btnAdicionarIngrediente.FillColor = Color.ForestGreen;
+            btnAdicionarIngrediente.FillColor = Color.OrangeRed;
             btnAdicionarIngrediente.Font = new Font("Segoe UI Semibold", 10F);
             btnAdicionarIngrediente.ForeColor = Color.White;
             btnAdicionarIngrediente.Location = new Point(540, 215);

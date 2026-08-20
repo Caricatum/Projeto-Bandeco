@@ -99,8 +99,45 @@ namespace ProjetoBandejao.Forms
             pnl.BringToFront();
         }
 
+        private Form activeForm = null;
+
         private void HomeForm_Load(object sender, EventArgs e)
         {
+            sidebar.OnHomeClick += (s, ev) => OpenChildForm(null);
+            sidebar.OnRefeicoesClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.frmRefeicoes());
+            sidebar.OnFuncionariosClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.FuncionariosForm());
+            sidebar.OnConfiguracoesClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.ConfiguracoesForm());
+            sidebar.OnMuralClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.MuralForm());
+            // Outras abas podem ser conectadas aqui futuramente, ex: Cardápio
+        }
+
+        private void OpenChildForm(Form childForm)
+        {
+            if (activeForm != null)
+            {
+                activeForm.Close();
+                activeForm = null;
+            }
+
+            // Esconde os controles padrão do dashboard se não for a Home
+            bool isHome = childForm == null;
+            foreach (Control ctrl in pnlMain.Controls)
+            {
+                if (ctrl is Form) continue;
+                ctrl.Visible = isHome;
+            }
+
+            if (!isHome)
+            {
+                activeForm = childForm;
+                childForm.TopLevel = false;
+                childForm.FormBorderStyle = FormBorderStyle.None;
+                childForm.Dock = DockStyle.Fill;
+                pnlMain.Controls.Add(childForm);
+                pnlMain.Tag = childForm;
+                childForm.BringToFront();
+                childForm.Show();
+            }
         }
 
         private void sidebar_Load(object sender, EventArgs e)

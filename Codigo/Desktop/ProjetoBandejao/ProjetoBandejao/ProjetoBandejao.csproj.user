@@ -7,6 +7,9 @@
     <Compile Update="Forms\ConfirmarCodigoForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\Home\ConfiguracoesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\Home\FrmCadastroPratosNovo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -14,6 +17,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Home\HomeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Home\MuralForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Home\RefeicoesForm.cs">

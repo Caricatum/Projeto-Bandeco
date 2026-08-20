@@ -214,3 +214,6 @@ C:\Users\aluno\source\repos\ProjetoBandeco\Codigo\Desktop\ProjetoBandejao\Projet
 C:\Users\aluno\source\repos\ProjetoBandeco\Codigo\Desktop\ProjetoBandejao\ProjetoBandejao\obj\Debug\net8.0-windows\ProjetoBandejao.genruntimeconfig.cache
 C:\Users\aluno\source\repos\ProjetoBandeco\Codigo\Desktop\ProjetoBandejao\ProjetoBandejao\obj\Debug\net8.0-windows\ref\ProjetoBandejao.dll
 C:\Users\aluno\source\repos\ProjetoBandeco\Codigo\Desktop\ProjetoBandejao\ProjetoBandejao\obj\Debug\net8.0-windows\ProjetoBandejao.Forms.Home.FrmCadastroPratosNovo.resources
+C:\Users\aluno\source\repos\ProjetoBandeco\Codigo\Desktop\ProjetoBandejao\ProjetoBandejao\obj\Debug\net8.0-windows\ProjetoBandejao.Forms.Home.FuncionariosForm.resources
+C:\Users\aluno\source\repos\ProjetoBandeco\Codigo\Desktop\ProjetoBandejao\ProjetoBandejao\obj\Debug\net8.0-windows\ProjetoBandejao.Forms.Home.ConfiguracoesForm.resources
+C:\Users\aluno\source\repos\ProjetoBandeco\Codigo\Desktop\ProjetoBandejao\ProjetoBandejao\obj\Debug\net8.0-windows\ProjetoBandejao.Forms.Home.MuralForm.resources
