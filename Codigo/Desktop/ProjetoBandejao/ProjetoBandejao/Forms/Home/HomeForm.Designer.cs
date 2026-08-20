@@ -179,6 +179,7 @@ namespace ProjetoBandejao.Forms
             // pnlMain
             // 
             pnlMain.AutoScroll = true;
+            pnlMain.BackColor = Color.Tomato;
             pnlMain.Controls.Add(tlpBottom);
             pnlMain.Controls.Add(tlpMiddle);
             pnlMain.Controls.Add(tlpCards);
