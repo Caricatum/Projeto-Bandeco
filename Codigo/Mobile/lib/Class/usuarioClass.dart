@@ -2,10 +2,16 @@ class Usuario {
   int _id;
   String _nome;
   bool _funcionario;
-  String _senha;
   String _login;
+  bool _emailConfirmado;
 
-  Usuario(this._id, this._nome, this._funcionario, this._senha, this._login);
+  Usuario(
+    this._id,
+    this._nome,
+    this._funcionario,
+    this._login,
+    this._emailConfirmado,
+  );
 
   int get id => _id;
   set id(int value) => _id = value;
@@ -16,9 +22,9 @@ class Usuario {
   bool get funcionario => _funcionario;
   set funcionario(bool value) => _funcionario = value;
 
-  String get senha => _senha;
-  set senha(String value) => _senha = value;
-
   String get login => _login;
   set login(String value) => _login = value;
+
+  bool get emailConfirmado => _emailConfirmado;
+  set emailConfirmado(bool value) => _emailConfirmado = value;
 }
