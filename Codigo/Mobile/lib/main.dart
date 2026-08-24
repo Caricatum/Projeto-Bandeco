@@ -8,8 +8,6 @@ import 'Pages/perfil.dart';
 import 'Pages/cardapioPratos.dart';
 import 'Pages/cadastroPrato.dart';
 
-
-
 void main() {
   runApp(const MyApp());
 }
