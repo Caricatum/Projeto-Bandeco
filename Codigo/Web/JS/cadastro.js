@@ -4,7 +4,7 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
     // Pegando os valores dos campos
     const userDigitado = document.getElementById('username').value.trim();
     const senhaDigitada = document.getElementById('password').value.trim();
-    const tipoDeUsuario = document.querySelector('input[name="tipoDeUsuario"]:checked').value;
+    const tipoDeUsuario = false;
     const nomeDigitado = document.getElementById('name').value.trim();
     const message = document.getElementById('message');
 
@@ -12,7 +12,7 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
         login: userDigitado,
         nome: nomeDigitado,
         senhaHash: senhaDigitada,
-        funcionario: tipoDeUsuario === 'true',
+        funcionario: tipoDeUsuario,
     };
     const jsonUsuario = JSON.stringify(usuario);
 
@@ -49,4 +49,3 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
         message.innerText = err.message;
     });
 });
-
