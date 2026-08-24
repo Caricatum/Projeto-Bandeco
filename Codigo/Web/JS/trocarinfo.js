@@ -37,25 +37,21 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.getElementById("trocarinfo").addEventListener("click", function () {
-    const url = `http://localhost:8080/user/atualizar`;
     const id = localStorage.getItem("idTroca");
 
-    const userDigitado = document.getElementById("username").value;
-    const nomeDigitado = document.getElementById("name").value;
+    const userDigitado = document.getElementById("username").value.trim();
+    const nomeDigitado = document.getElementById("name").value.trim();
     const tipoDeUsuario = document.querySelector('input[name="tipoDeUsuario"]:checked').value;
-    const senhaDigitada = document.getElementById("senha").value;
+    const senhaDigitada = document.getElementById("senha").value.trim();
     const mensagem = document.getElementById("message");
 
-
-    if (senhaDigitada == "") {
+    if (senhaDigitada === "") {
+        mensagem.style.color = 'red';
         mensagem.textContent = "Por favor, digite sua senha para trocar as informações.";
         return;
     }
-    if (senhaDigitada !== "") {
-        mensagem.textContent = "";
-    }
-
-
+    mensagem.style.color = '';
+    mensagem.textContent = "Atualizando informações...";
 
     const usuario = {
         id: id,
@@ -63,37 +59,30 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
         nome: nomeDigitado,
         senhaHash: senhaDigitada,
         funcionario: tipoDeUsuario === 'true',
-    }
-    const jsonUsuario = JSON.stringify(usuario);
+    };
 
-    fetch(url, {
+    fetchAPI('/user/atualizar', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: jsonUsuario
+        body: JSON.stringify(usuario)
     })
         .then(res => {
-            if (!res.ok) throw new Error("Erro na requisição");
-
+            if (!res.ok) throw new Error("Erro na requisição ao atualizar informações.");
             const contentType = res.headers.get("content-type");
-
             if (contentType && contentType.includes("application/json")) {
                 return res.json();
-            } else {
-                return null; // ou res.text()
             }
-
+            return null;
         })
         .then(data => {
-            if (localStorage.getItem("username") == userDigitado) {
+            if (localStorage.getItem("username") === userDigitado) {
                 localStorage.setItem("nome", nomeDigitado);
                 localStorage.setItem("tipo", tipoDeUsuario);
             }
-            mensagem.style = 'Informações atualizadas.';
-            mensagem.textContent = 'Informações atualizadas.';
-            console.log("tipoDeUsuario:", tipoDeUsuario);
-            console.log("nome:", nomeDigitado);
+            mensagem.style.color = 'green';
+            mensagem.textContent = 'Informações atualizadas com sucesso!';
 
             localStorage.setItem("usernameTroca", "");
             localStorage.setItem("nomeTroca", "");
@@ -101,11 +90,15 @@ document.getElementById("trocarinfo").addEventListener("click", function () {
             localStorage.setItem("idTroca", "");
 
             setTimeout(() => {
-            window.location.href = 'dadosperfil.php';
-        }, 1500);
-        }
-        ) //trocar para 
-        .catch(err => console.error("Erro:", err));
+                window.location.href = 'dadosperfil.php';
+            }, 1500);
+        })
+        .catch(err => {
+            console.error("Erro:", err);
+            mensagem.style.color = 'red';
+            mensagem.textContent = err.message;
+        });
+});
 
 
 

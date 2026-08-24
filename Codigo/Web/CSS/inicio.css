@@ -5,10 +5,17 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, #F69D39, #E0C375);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    padding: 20px;
 }
 
 .panel-container {
@@ -22,7 +29,7 @@ body {
     animation: fadeIn 0.35s ease;
 }
 
-h1 {
+.panel-container h1 {
     color: #D92243;
     margin-bottom: 30px;
     font-size: 32px;
@@ -34,7 +41,7 @@ h1 {
     gap: 15px;
 }
 
-button {
+.button-group button {
     width: 100%;
     padding: 14px;
     border: none;
@@ -47,18 +54,18 @@ button {
     transition: all 0.25s ease;
 }
 
-button:hover {
+.button-group button:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(217, 34, 67, 0.3);
     background: linear-gradient(135deg, #F69D39, #D92243);
 }
 
 /* Botão Sair — mantém vermelho mais escuro */
-button:last-child {
+.button-group button:last-child {
     background: linear-gradient(135deg, #9b1b30, #D92243);
 }
 
-button:last-child:hover {
+.button-group button:last-child:hover {
     background: linear-gradient(135deg, #D92243, #9b1b30);
 }
 

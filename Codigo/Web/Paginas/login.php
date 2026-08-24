@@ -37,6 +37,7 @@
             <p id="message"></p>
         </form>
     </div>
+    <script src="../JS/config.js"></script>
     <script src="../JS/login.js"></script>
 </body>
 </html>

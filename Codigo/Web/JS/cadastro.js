@@ -2,26 +2,24 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
     e.preventDefault();
 
     // Pegando os valores dos campos
-    const userDigitado = document.getElementById('username').value;
-    const senhaDigitada = document.getElementById('password').value;
+    const userDigitado = document.getElementById('username').value.trim();
+    const senhaDigitada = document.getElementById('password').value.trim();
     const tipoDeUsuario = document.querySelector('input[name="tipoDeUsuario"]:checked').value;
-    const nomeDigitado = document.getElementById('name').value;
+    const nomeDigitado = document.getElementById('name').value.trim();
     const message = document.getElementById('message');
-
-    const url = 'http://localhost:8080/user/cadastrar';
 
     const usuario = {
         login: userDigitado,
         nome: nomeDigitado,
         senhaHash: senhaDigitada,
         funcionario: tipoDeUsuario === 'true',
-    }
+    };
     const jsonUsuario = JSON.stringify(usuario);
 
     message.style.color = '';
-    message.innerText = '';
+    message.innerText = 'Processando cadastro...';
 
-    fetch(url, {
+    fetchAPI('/user/cadastrar', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -47,6 +45,8 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
         }, 1500);
     })
     .catch(err => {
+        message.style.color = 'red';
         message.innerText = err.message;
     });
 });
+

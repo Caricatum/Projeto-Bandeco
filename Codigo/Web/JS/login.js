@@ -1,12 +1,13 @@
 document.getElementById('loginForm').addEventListener('submit', function (e) {
     e.preventDefault(); // Impede o envio real do formulário
 
-    const userDigitado = document.getElementById('username').value;
-    const senhaDigitada = document.getElementById('password').value;
-    const url = `http://localhost:8080/user/validar?login=${userDigitado}&senhaHash=${senhaDigitada}`;
+    const userDigitado = document.getElementById('username').value.trim();
+    const senhaDigitada = document.getElementById('password').value.trim();
     const message = document.getElementById('message');
 
-    fetch(url)
+    message.innerText = 'Verificando...';
+
+    fetchAPI(`/user/validar?login=${encodeURIComponent(userDigitado)}&senhaHash=${encodeURIComponent(senhaDigitada)}`)
         .then(res => {
             if (!res.ok) {
                 throw new Error("Usuário ou senha incorretos!");
@@ -16,7 +17,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
         .then(dados => {
             if (dados === true) {
                 // Login válido — agora busca os dados completos do usuário
-                return fetch(`http://localhost:8080/user/login/${userDigitado}`)
+                return fetchAPI(`/user/login/${encodeURIComponent(userDigitado)}`)
                     .then(res => {
                         if (!res.ok) throw new Error("Não foi possível carregar os dados do usuário.");
                         return res.json();
@@ -29,7 +30,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
                         localStorage.setItem('username', userDigitado);
                         localStorage.setItem('nome', user.nome);
                         localStorage.setItem('id', user.id);
-                        localStorage.setItem('tipo', user.funcionario); // 'true' ou 'false'
+                        localStorage.setItem('tipo', user.funcionario ? 'true' : 'false');
 
                         // Redireciona
                         window.location.href = 'inicio.php';
@@ -40,7 +41,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
             }
         })
         .catch(error => {
-            message.innerHTML = `Erro: ${error.message}`;
+            message.innerText = error.message;
         });
 
 });

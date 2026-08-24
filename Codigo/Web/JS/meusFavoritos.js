@@ -1,7 +1,8 @@
 // =============================================
 // CONFIGURAÇÃO
 // =============================================
-const API = 'http://localhost:8080';
+const API = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:8080';
+
 const userId = parseInt(localStorage.getItem('id')) || null;
 
 if (sessionStorage.getItem('logado') !== 'true' || !userId) {
@@ -139,17 +140,35 @@ function renderizar() {
         return `
         <div class="col-md-6 col-lg-4">
             <div class="card card-prato h-100">
+
+                <!-- Imagem do prato -->
+                ${p.imagem
+                    ? `<img src="${p.imagem}" alt="${p.nome}"
+                            style="width:100%;height:160px;object-fit:cover;border-radius:12px 12px 0 0;"
+                            onerror="this.onerror=null; this.src='../Assets/Images/logo_unicamp.jpg';">`
+                    : `<div style="width:100%;height:120px;background:linear-gradient(135deg,#F69D39,#E0C375);
+                            border-radius:12px 12px 0 0;display:flex;align-items:center;
+                            justify-content:center;font-size:3rem;">🍽️</div>`
+                }
+
                 <div class="card-body d-flex flex-column">
 
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h5 class="card-title mb-0">${p.nome}</h5>
+                        <h5 class="card-title mb-0">
+                            <a href="pratoDet.php?id=${p.id}"
+                               style="color:#7a1728;text-decoration:none;"
+                               onmouseover="this.style.textDecoration='underline'"
+                               onmouseout="this.style.textDecoration='none'">
+                                ${p.nome}
+                            </a>
+                        </h5>
                         <div class="d-flex flex-column gap-1 align-items-end">
                             ${p.vegano ? '<span class="badge badge-vegano text-white">🥦 Vegano</span>' : ''}
                             <span class="badge badge-categoria text-white">${catNome}</span>
                         </div>
                     </div>
 
-                    <p class="card-text text-muted small flex-grow-1">${p.descricao}</p>
+                    <p class="card-text text-muted small flex-grow-1">${p.descricao || ''}</p>
 
                     <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
                         ${media
