@@ -46,15 +46,6 @@
         </div>
       </section>
 
-      <div id="div-senha">
-        <div class="input-group" id="input-senha">
-          <label>Senha:</label>
-          <input type="password" id="senha" placeholder="Digite sua senha para trocar as informações" required>
-        </div>
-      </div>
-
-
-
       <button type="button" class="button" id="trocarinfo">Trocar informações</button>
 
       <button type="button" class="button" id="voltar" onclick="window.location.href='dadosperfil.php'">

@@ -27,18 +27,6 @@
                 <input type="text" id="name" required>
             </div>
             
-                <section class="section">
-                  <div class="row">Tipo de pessoa</div>
-                <div class="row">
-                    <label for="aluno">Aluno</label>
-                <input type="radio" name="tipoDeUsuario" id="aluno" value="false" required checked>
-                </div>
-                <div class="row">
-                <label for="func">Funcionário</label>
-                <input type="radio" name="tipoDeUsuario" id="func" value="true" required>
-                </div>
-                </section>
-            
             <button type="submit" class="button">Cadastrar</button>
 
             <button type="button"class="button" id="voltar" onclick="window.location.href='login.php'">

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:tcc_flutter/categoria.dart';
-import 'cardapioPratos.dart';
+import 'cardapio.dart';
+import 'package:tcc_flutter/Class/categoriaClass.dart';
+import 'package:tcc_flutter/Class/cardapioClass.dart';
 import 'menuNavegacao.dart';
 
 class Cadastroprato extends StatefulWidget {
@@ -38,7 +39,7 @@ class _CadastropratoState extends State<Cadastroprato> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => Cardapios()),
+          MaterialPageRoute(builder: (_) => CardapioPage()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

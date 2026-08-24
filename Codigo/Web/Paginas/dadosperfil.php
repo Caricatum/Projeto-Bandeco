@@ -66,46 +66,15 @@
   </div>
 
   <script>
-                // =============================================
-// LOGOUT
-// =============================================
-function logout() {
-    sessionStorage.setItem('logado', 'false');
-    localStorage.clear();
-    window.location.href = 'login.php';
-}
+    // =============================================
+    // LOGOUT
+    // =============================================
+    function logout() {
+      sessionStorage.setItem('logado', 'false');
+      localStorage.clear();
+      window.location.href = 'login.php';
+    }
   </script>
-
-
-  <!-- ===== MODAL: CONFIRMAR SENHA ===== -->
-  <div class="modal fade" id="modalSenha" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-
-        <div class="modal-header" style="background:#FFF5E5; border-bottom:1px solid #E0C375;">
-          <h5 class="modal-title" style="color:#D92243;" id="modalSenhaTitulo">Confirmar ação</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-
-        <div class="modal-body">
-          <p id="modalSenhaDescricao" class="text-muted mb-3"></p>
-          <label style="color:#7a1728; font-weight:600;">Digite sua senha para confirmar:</label>
-          <input type="password" id="inputSenhaModal" class="form-control mt-1"
-            placeholder="Sua senha atual" autocomplete="current-password">
-          <p id="msgSenhaModal" class="text-danger mt-2 mb-0" style="font-size:14px;"></p>
-        </div>
-
-        <div class="modal-footer" style="border-top:1px solid #E0C375;">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="button" id="btnConfirmarSenha" style="width:auto; padding:8px 20px; margin:0;">
-            Confirmar
-          </button>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../JS/config.js"></script>
