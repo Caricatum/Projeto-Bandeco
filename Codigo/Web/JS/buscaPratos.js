@@ -1,7 +1,8 @@
 // =============================================
 // CONFIGURAÇÃO
 // =============================================
-const API = 'http://localhost:8080';
+const API = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:8080';
+
 
 const userId = parseInt(localStorage.getItem('id')) || null;
 const username = localStorage.getItem('username') || '';
@@ -18,6 +19,7 @@ if (sessionStorage.getItem('logado') !== 'true') {
 let todosPratos = [];
 let todasAvaliacoes = [];
 let meusFavoritos = []; // lista de { id, prato: { id } }
+let pratoEmEdicao = null; // prato sendo editado (null = modo cadastro)
 
 // =============================================
 // INIT
@@ -45,7 +47,15 @@ const modalNovoPrato = new bootstrap.Modal(document.getElementById('modalNovoPra
 
 // ---- Novo Cardapio do dia ----
 if (btnNovoPrato) {
-    btnNovoPrato.addEventListener('click', () => modalNovoPrato.show());
+    btnNovoPrato.addEventListener('click', () => {
+        pratoEmEdicao = null;
+        document.getElementById('formNovoPrato').reset();
+        const previewContainer = document.getElementById('previewImagemContainer');
+        if (previewContainer) previewContainer.classList.add('d-none');
+        document.querySelector('#modalNovoPrato .modal-title').textContent = 'Cadastrar Novo Prato';
+        document.getElementById('salvarNovoPrato').textContent = 'Salvar';
+        modalNovoPrato.show();
+    });
 }
 
 // =============================================
@@ -185,7 +195,7 @@ function renderizarPratos() {
 
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <!-- Nome como link para a página de detalhes -->
+                        <!-- Nome como link para detalhes do prato -->
                         <h5 class="card-title mb-0">
                             <a href="pratoDet.php?id=${p.id}"
                                style="color:#7a1728;text-decoration:none;"
@@ -232,6 +242,16 @@ function renderizarPratos() {
                         </button>
 
                     </div>
+
+                    <!-- EDITAR (só funcionário) -->
+                    ${isFuncionario ? `
+                        <div class="mt-2">
+                            <button class="btn-editar-prato"
+                                onclick="abrirModalEditar(${p.id})">
+                                ✏️ Editar prato
+                            </button>
+                        </div>` : ''}
+
                 </div>
             </div>
         </div>`;
@@ -385,81 +405,125 @@ async function desfavoritar(pratoId, favId) {
 }
 
 // =============================================
-// CADASTRAR PRATO
+// EDITAR PRATO (FUNCIONÁRIO)
 // =============================================
-document.getElementById("salvarNovoPrato").addEventListener("click",function (e) {
+function abrirModalEditar(pratoId) {
+    const prato = todosPratos.find(p => p.id === pratoId);
+    if (!prato) return;
+
+    pratoEmEdicao = prato;
+
+    document.getElementById('nomePrato').value = prato.nome || '';
+    document.getElementById('descPrato').value = prato.descricao || '';
+    document.getElementById('categoriaPrato').value = prato.categoria ? prato.categoria.id : '';
+    document.getElementById('veganoPrato').value = prato.vegano ? 'true' : 'false';
+    document.getElementById('imagemPrato').value = '';
+
+    // Preview da imagem existente
+    const previewContainer = document.getElementById('previewImagemContainer');
+    const imgPreview = document.getElementById('imgPreviewAtual');
+    if (previewContainer && imgPreview) {
+        if (prato.imagem) {
+            imgPreview.src = prato.imagem;
+            previewContainer.classList.remove('d-none');
+        } else {
+            previewContainer.classList.add('d-none');
+        }
+    }
+
+    document.querySelector('#modalNovoPrato .modal-title').textContent = 'Editar Prato';
+    document.getElementById('salvarNovoPrato').textContent = 'Atualizar';
+
+    modalNovoPrato.show();
+}
+
+// Botão de excluir imagem cadastrada no modal de edição
+const btnExcluirImg = document.getElementById('btnExcluirImagemAtual');
+if (btnExcluirImg) {
+    btnExcluirImg.addEventListener('click', async () => {
+        if (!pratoEmEdicao || !pratoEmEdicao.id) return;
+        if (!confirm('Deseja realmente remover a imagem deste prato?')) return;
+        try {
+            const res = await fetch(`${API}/pratos/excluirImagem/${pratoEmEdicao.id}`, { method: 'DELETE' });
+            if (!res.ok) throw new Error(await res.text());
+            pratoEmEdicao.imagem = null;
+            document.getElementById('previewImagemContainer')?.classList.add('d-none');
+            await carregarPratos();
+            renderizarPratos();
+            alert('Imagem removida com sucesso!');
+        } catch (err) {
+            alert('Erro ao excluir imagem: ' + err.message);
+        }
+    });
+}
+
+// =============================================
+// CADASTRAR / ATUALIZAR PRATO (MULTIPART)
+// =============================================
+document.getElementById("salvarNovoPrato").addEventListener("click", function (e) {
     e.preventDefault();
 
     // Pegando o que foi digitado
-    const nomeDigitado = document.getElementById('nomePrato').value;
-    const descDigitado = document.getElementById('descPrato').value;
+    const nomeDigitado = document.getElementById('nomePrato').value.trim();
+    const descDigitado = document.getElementById('descPrato').value.trim();
     const categoriaDigitado = document.getElementById('categoriaPrato').value;
     const veganoDigitado = document.getElementById('veganoPrato').value;
-    const imagemDigitado = document.getElementById('imagemPrato').value;
+    const fileInput = document.getElementById('imagemPrato');
+    const arquivoImagem = fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
 
-    let vegano = null;
-
-    if (veganoDigitado === "true") {
-        vegano = true;
-    }else{
-        vegano = false;
+    if (!nomeDigitado) {
+        alert('Por favor, informe o nome do prato.');
+        return;
     }
-    console.log("Vegano digitado: " + vegano);
 
-    console.log("Variaveis feitas")
-
-    const url = `${API}/pratos/cadastrar`;
+    const vegano = veganoDigitado === "true";
 
     const prato = {
+        ...(pratoEmEdicao ? { id: pratoEmEdicao.id } : {}),
         nome: nomeDigitado,
         descricao: descDigitado,
         vegano: vegano,
-        imagem: imagemDigitado,
-        categoria: {"id": parseInt(categoriaDigitado)},
+        categoria: categoriaDigitado ? { "id": parseInt(categoriaDigitado) } : null,
     };
-    const jsonPrato = JSON.stringify(prato);
 
-    
-    
-    console.log("Passou no Fetch de categoria"),
+    // Cria o FormData multipart exigido pelo Spring Boot
+    const formData = new FormData();
+    formData.append('prato', new Blob([JSON.stringify(prato)], { type: 'application/json' }));
+    if (arquivoImagem) {
+        formData.append('imagem', arquivoImagem);
+    }
+
+    const url = pratoEmEdicao
+        ? `${API}/pratos/atualizar`
+        : `${API}/pratos/cadastrar`;
 
     fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: jsonPrato
+        method: pratoEmEdicao ? 'PUT' : 'POST',
+        body: formData
     })
         .then(res => {
-            if (!res.ok) throw new Error("Erro na requisicao");
-
+            if (!res.ok) throw new Error("Erro ao salvar prato.");
             const contentType = res.headers.get("content-type");
-
             if (contentType && contentType.includes("application/json")) {
                 return res.json();
-            } else {
-                return null; // ou res.text()
             }
+            return null;
         })
-        .then(data =>
-            console.log(data, "Prato cadastrado"),
-        )
-        .catch(err => console.error("Erro:", err));
-
-        console.log("passou do fetch")
-    document.getElementById('nomePrato').value = '';
-    document.getElementById('descPrato').value = '';
-    document.getElementById('categoriaPrato').value = '';
-    document.getElementById('veganoPrato').value = '';
-    document.getElementById('imagemPrato').value = '';
-    modalNovoPrato.hide();
-
-    window.location.reload();
-})
-
-
+        .then(data => {
+            console.log(data, pratoEmEdicao ? "Prato atualizado" : "Prato cadastrado");
+            document.getElementById('formNovoPrato').reset();
+            pratoEmEdicao = null;
+            modalNovoPrato.hide();
+            window.location.reload();
+        })
+        .catch(err => {
+            console.error("Erro:", err);
+            alert("Erro ao salvar prato: " + err.message);
+        });
+});
 
 window.abrirModalAvaliar   = abrirModalAvaliar;
 window.abrirModalFavoritar = abrirModalFavoritar;
 window.desfavoritar        = desfavoritar;
 window.limparFiltros       = limparFiltros;
+window.abrirModalEditar    = abrirModalEditar;

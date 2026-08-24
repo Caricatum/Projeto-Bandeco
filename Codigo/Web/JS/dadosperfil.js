@@ -1,4 +1,5 @@
-const API = 'http://localhost:8080';
+const API = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:8080';
+
 window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
         location.reload();

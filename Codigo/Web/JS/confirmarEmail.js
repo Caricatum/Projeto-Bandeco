@@ -1,5 +1,3 @@
-const API = 'http://localhost:8080';
-
 // Pré-preenche o e-mail se veio do cadastro
 document.addEventListener('DOMContentLoaded', () => {
     const emailSalvo = sessionStorage.getItem('emailParaConfirmar');
@@ -17,11 +15,9 @@ document.getElementById('confirmarForm').addEventListener('submit', function (e)
     const message = document.getElementById('message');
 
     message.style.color = '';
-    message.innerText = '';
+    message.innerText = 'Confirmando...';
 
-    const url = `${API}/user/confirmarEmail?email=${encodeURIComponent(email)}&codigo=${encodeURIComponent(codigo)}`;
-
-    fetch(url, { method: 'POST' })
+    fetchAPI(`/user/confirmarEmail?email=${encodeURIComponent(email)}&codigo=${encodeURIComponent(codigo)}`, { method: 'POST' })
         .then(async res => {
             if (!res.ok) {
                 const texto = await res.text();
@@ -38,7 +34,7 @@ document.getElementById('confirmarForm').addEventListener('submit', function (e)
             }, 1800);
         })
         .catch(err => {
-            message.style.color = '';
+            message.style.color = 'red';
             message.innerText = err.message;
         });
 });

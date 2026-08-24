@@ -47,6 +47,7 @@
             <p id="message"></p>
         </form>
     </div>
+    <script src="../JS/config.js"></script>
     <script src="../JS/cadastro.js"></script>
 </body>
 </html>

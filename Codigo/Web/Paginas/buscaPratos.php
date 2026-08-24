@@ -8,9 +8,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../CSS/navbar.css">
     <link rel="stylesheet" href="../CSS/buscaPratos.css">
+    <script src="../JS/config.js"></script>
     <script type="module" src="../JS/buscaPratos.js"></script>
     <script src="../JS/cardapioDia.js"></script>
     <style>
+
         body {
             background: #f8fafc;
         }
@@ -122,32 +124,9 @@ function logout() {
 
 <body>
 
-    <!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-        <img src="../Assets/Images/logo_unicamp.jpg" alt="Logo Unicamp" width="40" height="40" class="d-inline-block align-text-top">
-        <a class="navbar-brand ms-3" href="inicio.php">Bandeco</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto gap-2">
-                <li class="nav-item">
-                    <button class="btn-nav" onclick="window.location.href='inicio.php'">🏠 Início</button>
-                </li>
-                <li class="nav-item">
-                    <button class="btn-nav" onclick="window.location.href='mural.php'">📌 Mural</button>
-                </li>
-                <li class="nav-item">
-                    <button class="btn-nav" onclick="window.location.href='sobrenos.php'">ℹ️ Sobre nós</button>
-                </li>
-                <li class="nav-item">
-                    <button class="btn-nav btn-sair" onclick="logout()">Sair</button>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+    <!-- Navbar Modularizada -->
+    <?php include __DIR__ . '/components/navbar.php'; ?>
+
 
     <!-- CONTEÚDO -->
     <div class="container mt-4">
@@ -244,11 +223,24 @@ function logout() {
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label"><b>Imagem</b></label>
-                                <input type="text"
+                                <label class="form-label"><b>Imagem do Prato</b></label>
+                                <!-- Preview da imagem atual no modo edição -->
+                                <div id="previewImagemContainer" class="mb-2 d-none">
+                                    <div class="d-flex align-items-center gap-3 p-2 border rounded bg-light">
+                                        <img id="imgPreviewAtual" src="" alt="Imagem atual" style="max-height: 70px; border-radius: 8px; object-fit: cover;">
+                                        <div>
+                                            <small class="text-muted d-block mb-1">Imagem cadastrada</small>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" id="btnExcluirImagemAtual">
+                                                🗑️ Excluir imagem
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="file"
                                     id="imagemPrato"
                                     class="form-control"
-                                    placeholder="URL da imagem">
+                                    accept="image/png, image/jpeg, image/jpg, image/webp">
+                                <small class="text-muted">Formatos: JPG, PNG, WEBP. Deixe em branco se não quiser alterar a imagem.</small>
                             </div>
 
                         </form>
