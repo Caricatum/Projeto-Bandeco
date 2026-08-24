@@ -8,6 +8,7 @@ import com.example.apiBandeco.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -23,6 +24,8 @@ public class PratosFavoritosController {
     PratosRepository pratosRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    NotificacoesService notificacoesService;
 
     @GetMapping("/id/{id}")//busca prato favorito pelo id
     public PratosFavoritos buscarPorId(@PathVariable("id") int id){
@@ -71,6 +74,16 @@ public class PratosFavoritosController {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Prato favorito não encontrado"));
         pratosFavoritosRepository.deleteById(id);
+    }
+
+    @PostMapping("/notificar")
+    public ResponseEntity<String> enviarNotificacoes() {
+
+        notificacoesService.enviarNotificacoesPratosFavoritos();
+
+        return ResponseEntity.ok(
+                "Notificações enviadas com sucesso"
+        );
     }
 
 }
