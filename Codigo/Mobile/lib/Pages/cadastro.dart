@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../Class/usuarioClass.dart';
+import 'confirmarEmail.dart';
 
 class Cadastro extends StatefulWidget {
   const Cadastro({super.key});
@@ -47,12 +49,16 @@ class _CadastroState extends State<Cadastro> {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Usuário cadastrado com sucesso!')),
+          const SnackBar(
+            content: Text('Cadastro realizado! Verifique seu e-mail.'),
+          ),
         );
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => Login()),
+          MaterialPageRoute(
+            builder: (_) => ConfirmarEmail(email: loginController.text.trim()),
+          ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -85,7 +91,10 @@ class _CadastroState extends State<Cadastro> {
                   fit: BoxFit.cover,
                 ),
 
-                Container(height: 260, color: Colors.black.withValues(alpha: 0.3)),
+                Container(
+                  height: 260,
+                  color: Colors.black.withValues(alpha: 0.3),
+                ),
 
                 Positioned(
                   left: 20,
