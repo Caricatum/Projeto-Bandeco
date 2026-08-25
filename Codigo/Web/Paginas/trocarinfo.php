@@ -14,49 +14,74 @@
   <!-- Navbar Modularizada -->
   <?php include __DIR__ . '/components/navbar.php'; ?>
 
-
-  <!--dados-->
-  <div id="dadosContainer" class="dados-container">
-    <form id="dadosForm">
-      <h2>Trocar Informações</h2>
-      <div class="input-group " id="div-usuario">
-        <label>Usuário</label>
-        <input type="text" id="username" required placeholder="Digite seu Usuário">
+  <main class="main-container">
+    <div class="edit-card">
+      
+      <!-- Cabeçalho -->
+      <div class="edit-header">
+        <div class="edit-avatar">✏️</div>
+        <h2 class="edit-title" id="tituloEdicao">Editar Informações</h2>
+        <p class="edit-subtitle" id="subtituloEdicao">Atualize os dados de cadastro</p>
       </div>
 
-      <div id="div-nome">
-        <div class="input-group" id="input-nome">
-          <label>Nome</label>
-          <input type="text" id="name" placeholder="Digite seu nome">
-        </div>
-      </div>
-
-
-      <section class="section" id="sectionTipodeUsuario">
-        <div class="row content-align-center">Tipo de pessoa</div>
-
-        <div class="radio-option">
-          <input type="radio" name="tipoDeUsuario" id="aluno" value="false" required checked>
-          <label for="aluno">Aluno</label>
+      <form id="dadosForm">
+        
+        <!-- Campo Nome Completo -->
+        <div class="form-group-custom">
+          <label class="form-label-custom" for="name">👤 Nome Completo</label>
+          <input type="text" id="name" class="input-custom" placeholder="Digite seu nome completo" required>
         </div>
 
-        <div class="radio-option">
-          <input type="radio" name="tipoDeUsuario" id="func" value="true" required>
-          <label for="func">Funcionário</label>
+        <!-- Campo Usuário / E-mail -->
+        <div class="form-group-custom">
+          <label class="form-label-custom" for="username">🔑 Login / E-mail</label>
+          <input type="text" id="username" class="input-custom" placeholder="Digite seu login ou e-mail" required>
         </div>
-      </section>
 
-      <button type="button" class="button" id="trocarinfo">Trocar informações</button>
+        <!-- Seção: Tipo de Usuário (Visível e Editável apenas para Funcionários) -->
+        <div id="secaoTipoFuncionario" class="tipo-selector-box d-none">
+          <label class="form-label-custom mb-1">👔 Nível de Acesso (Tipo de Pessoa)</label>
+          <small class="text-muted d-block mb-2">Selecione o papel do usuário no sistema:</small>
 
-      <button type="button" class="button" id="voltar" onclick="window.location.href='dadosperfil.php'">
-        Voltar
-      </button>
+          <div class="tipo-options-container">
+            <div class="tipo-card-option" id="cardAluno" data-value="false">
+              🎓 Aluno
+            </div>
+            <div class="tipo-card-option" id="cardFunc" data-value="true">
+              👔 Funcionário
+            </div>
+          </div>
+          <input type="hidden" id="tipoUsuarioValor" value="false">
+        </div>
 
-      <p id="message"></p>
+        <!-- Aviso para Alunos (Não podem mudar tipo de conta) -->
+        <div id="avisoTipoAluno" class="aviso-aluno-box d-none">
+          <span style="font-size:1.8rem">🎓</span>
+          <div>
+            <strong class="d-block text-dark" style="font-size:0.95rem">Conta de Aluno</strong>
+            <small class="text-muted">Alterações no nível de acesso só podem ser efetuadas pela equipe de administração.</small>
+          </div>
+        </div>
 
+        <!-- Mensagens -->
+        <div id="message" class="text-center my-3 fw-semibold"></div>
 
-    </form>
-  </div>
+        <!-- Botões -->
+        <div class="mt-4">
+          <button type="button" class="btn-salvar-info" id="trocarinfo">
+            💾 Salvar Alterações
+          </button>
+          
+          <button type="button" class="btn-cancelar-info" onclick="window.location.href='dadosperfil.php'">
+            ← Cancelar e Voltar
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </main>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../JS/config.js"></script>
   <script type="module" src="../JS/trocarinfo.js"></script>

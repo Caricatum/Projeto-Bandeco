@@ -1,90 +1,150 @@
-/* ===== PALETA ===== */
+/* ===== PALETA DO BANDECO ===== */
 /* #D92243 vermelho | #F69D39 laranja | #E0C375 dourado | #FFF5E5 creme */
 
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #D92243, #F69D39);
+    background: linear-gradient(135deg, #F69D39, #E0C375);
     margin: 0;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Navbar */
-.navbar {
-    background-color: #D92243 !important;
-}
-.navbar-brand, .nav-link {
-    color: #FFF5E5 !important;
-}
-
-#dadosContainer {
+.main-container {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 20px;
+    padding: 30px 15px;
 }
 
-#dadosForm {
+.edit-card {
     background-color: #FFF5E5;
     padding: 35px;
     width: 100%;
-    max-width: 500px;
-    border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(217, 34, 67, 0.2);
+    max-width: 520px;
+    border-radius: 20px;
+    box-shadow: 0 12px 35px rgba(217, 34, 67, 0.18);
+    transition: all 0.3s ease;
+    animation: fadeIn 0.3s ease;
 }
 
-h2 {
+.edit-header {
     text-align: center;
     margin-bottom: 25px;
+}
+
+.edit-avatar {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #D92243, #F69D39);
+    color: white;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    box-shadow: 0 6px 15px rgba(217, 34, 67, 0.25);
+}
+
+.edit-title {
     color: #D92243;
     font-weight: bold;
+    margin-bottom: 4px;
 }
 
-.section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    background-color: #fff8ee;
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid #E0C375;
+.edit-subtitle {
+    color: #7a1728;
+    font-size: 0.9rem;
 }
 
-.input-group {
+/* Campos */
+.form-group-custom {
     margin-bottom: 18px;
 }
 
-label {
+.form-label-custom {
     display: block;
     margin-bottom: 6px;
-    font-weight: 600;
+    font-weight: bold;
     color: #7a1728;
+    font-size: 0.9rem;
 }
 
-input {
+.input-custom {
     width: 100%;
-    padding: 12px;
+    padding: 12px 14px;
     border: 1px solid #E0C375;
-    border-radius: 10px;
-    font-size: 14px;
+    border-radius: 12px;
+    font-size: 15px;
+    background-color: #fffaf3;
     transition: all 0.2s ease;
     box-sizing: border-box;
-    background-color: #fffaf3;
 }
 
-input:focus {
+.input-custom:focus {
     outline: none;
     border-color: #D92243;
+    background-color: #ffffff;
     box-shadow: 0 0 0 3px rgba(217, 34, 67, 0.15);
 }
 
-input[type="radio"] {
-    accent-color: #D92243;
+/* Seção de Tipo de Pessoa (Funcionário) */
+.tipo-selector-box {
+    background-color: #fff8ee;
+    border: 1px solid #E0C375;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 20px;
 }
 
-.button {
+.tipo-options-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.tipo-card-option {
+    border: 2px solid #E0C375;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: bold;
+    color: #555;
+    user-select: none;
+}
+
+.tipo-card-option:hover {
+    border-color: #F69D39;
+    background: #fffaf3;
+}
+
+.tipo-card-option.selected {
+    border-color: #D92243;
+    background: linear-gradient(135deg, rgba(217, 34, 67, 0.08), rgba(246, 157, 57, 0.1));
+    color: #D92243;
+    box-shadow: 0 4px 12px rgba(217, 34, 67, 0.15);
+}
+
+/* Aviso para Alunos */
+.aviso-aluno-box {
+    background-color: #fff8ee;
+    border: 1px solid #E0C375;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Botões */
+.btn-salvar-info {
     width: 100%;
     padding: 14px;
     border: none;
@@ -95,42 +155,46 @@ input[type="radio"] {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.25s ease;
-    margin-bottom: 12px;
-}
-
-.button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(217, 34, 67, 0.3);
-    background: linear-gradient(135deg, #F69D39, #D92243);
-}
-
-.button:disabled {
-    background: #d4a5a5;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-.radio-option {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 8px;
     margin-bottom: 10px;
 }
 
-#message {
-    color: #D92243;
-    text-align: center;
+.btn-salvar-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(217, 34, 67, 0.3);
+    background: linear-gradient(135deg, #F69D39, #D92243);
+    color: white;
+}
+
+.btn-cancelar-info {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #E0C375;
+    border-radius: 12px;
+    background: transparent;
+    color: #7a1728;
     font-size: 14px;
-    margin-top: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
 }
 
-.radio-option input[type="radio"] {
-    width: auto;
-    margin: 0;
+.btn-cancelar-info:hover {
+    background: #fff8ee;
+    color: #D92243;
 }
 
-.radio-option label {
-    display: inline;
-    margin: 0;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
