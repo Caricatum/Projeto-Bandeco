@@ -1,4 +1,4 @@
-/* ===== PALETA ===== */
+/* ===== PALETA DO BANDECO ===== */
 /* #D92243 vermelho | #F69D39 laranja | #E0C375 dourado | #FFF5E5 creme */
 
 body {
@@ -6,94 +6,114 @@ body {
     background: linear-gradient(135deg, #F69D39, #E0C375);
     margin: 0;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Navbar — ver navbar.css */
-
-#dadosContainer {
+.main-container {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 56px);
-    padding: 20px;
-    box-sizing: border-box;
+    padding: 30px 15px;
 }
 
-#dadosForm {
+.perfil-card {
     background-color: #FFF5E5;
     padding: 35px;
     width: 100%;
-    max-width: 450px;
-    border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(217, 34, 67, 0.18);
-    transition: 0.3s ease;
+    max-width: 520px;
+    border-radius: 20px;
+    box-shadow: 0 12px 35px rgba(217, 34, 67, 0.18);
+    transition: all 0.3s ease;
+    animation: fadeIn 0.3s ease;
 }
 
-#dadosForm:hover {
+.perfil-card:hover {
     transform: translateY(-2px);
+    box-shadow: 0 16px 40px rgba(217, 34, 67, 0.22);
 }
 
-h2 {
+.perfil-header {
     text-align: center;
     margin-bottom: 25px;
+}
+
+.perfil-avatar {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #D92243, #F69D39);
+    color: white;
+    font-size: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    box-shadow: 0 6px 15px rgba(217, 34, 67, 0.3);
+}
+
+.perfil-title {
     color: #D92243;
     font-weight: bold;
+    margin-bottom: 5px;
 }
 
-.section {
-    display: none;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
-    background-color: #fff8ee;
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid #E0C375;
-}
-
-#div-nome {
-    display: none;
-}
-
-#volta {
-    display: none;
-}
-
-.input-group {
-    margin-bottom: 18px;
-}
-
-label {
-    display: block;
-    margin-bottom: 6px;
+.badge-tipo-func {
+    background-color: #D92243;
+    color: white;
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    border-radius: 20px;
     font-weight: 600;
-    color: #7a1728;
 }
 
-input {
+.badge-tipo-aluno {
+    background-color: #F69D39;
+    color: white;
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+/* Área de Busca (Funcionário) */
+.busca-box {
+    background: #fff8ee;
+    border: 1px solid #E0C375;
+    border-radius: 14px;
+    padding: 15px;
+    margin-bottom: 25px;
+}
+
+.info-item {
+    background: #fffaf3;
+    border: 1px solid rgba(224, 195, 117, 0.5);
+    border-radius: 12px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+}
+
+.info-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #7a1728;
+    margin-bottom: 3px;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #333;
+    word-break: break-word;
+}
+
+/* Botões */
+.btn-acao-primario {
     width: 100%;
     padding: 12px;
-    border: 1px solid #E0C375;
-    border-radius: 10px;
-    font-size: 14px;
-    transition: all 0.2s ease;
-    box-sizing: border-box;
-    background-color: #fffaf3;
-}
-
-input:focus {
-    outline: none;
-    border-color: #D92243;
-    box-shadow: 0 0 0 3px rgba(217, 34, 67, 0.15);
-}
-
-input[type="radio"] {
-    accent-color: #D92243;
-}
-
-.button {
-    width: 100%;
-    padding: 14px;
     border: none;
     border-radius: 12px;
     background: linear-gradient(135deg, #D92243, #b91a35);
@@ -102,39 +122,69 @@ input[type="radio"] {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.25s ease;
-    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 10px;
 }
 
-.button:hover {
+.btn-acao-primario:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(217, 34, 67, 0.3);
     background: linear-gradient(135deg, #F69D39, #D92243);
+    color: white;
 }
 
-.button:disabled {
-    background: #d4a5a5;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-.radio-option {
+.btn-acao-deletar {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #dc3545;
+    border-radius: 12px;
+    background: #fff;
+    color: #dc3545;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 10px;
 }
 
-#trocarinfo {
-    display: none;
+.btn-acao-deletar:hover {
+    background: #dc3545;
+    color: white;
 }
 
-#deletar {
-    display: none;
-}
-
-#message {
-    color: #D92243;
-    text-align: center;
+.btn-acao-voltar {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #E0C375;
+    border-radius: 12px;
+    background: transparent;
+    color: #7a1728;
     font-size: 14px;
-    margin-top: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.btn-acao-voltar:hover {
+    background: #fff8ee;
+    color: #D92243;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

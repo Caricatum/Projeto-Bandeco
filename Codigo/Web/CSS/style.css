@@ -1,139 +1,102 @@
-/* ===== PALETA ===== */
+/* ===== PALETA DO BANDECO ===== */
 /* #D92243 vermelho | #F69D39 laranja | #E0C375 dourado | #FFF5E5 creme */
 
 /* ===== Fundo geral ===== */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #D92243, #F69D39);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-/* ===== Containers Login e Cadastro ===== */
-#loginContainer {
-    background: rgba(255, 245, 229, 0.25);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-sizing: border-box;
-    padding: 30px;
-    border-radius: 10px;
-    width: 2000px;
-    color: white;
-}
-
-#cadastroContainer {
-    background: rgba(255, 245, 229, 0.25);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
-    border-radius: 10px;
-    width: 2000px;
-    color: white;
+    padding: 20px;
     box-sizing: border-box;
 }
 
-#cadastroContainer {
-    padding-top: 80px;
+.bg-custom {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)), url('../Assets/Images/unicamp_de_cima.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
-/* ===== Card do formulário ===== */
+/* ===== Card dos Formulários de Autenticação ===== */
+.auth-card,
 .login-container,
 .cadastro-container {
     background-color: #FFF5E5;
     width: 100%;
-    max-width: 430px;
-    padding: 40px;
+    max-width: 440px;
+    padding: 38px 32px;
     border-radius: 20px;
-    box-shadow: 0 12px 35px rgba(217, 34, 67, 0.2);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
     animation: fadeIn 0.35s ease;
+    box-sizing: border-box;
 }
 
-/* ===== Título ===== */
-form h2 {
+/* ===== Cabeçalhos ===== */
+.auth-header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
+}
+
+.auth-header h2 {
     color: #D92243;
-    font-size: 30px;
+    font-size: 28px;
     font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.auth-subtitle {
+    color: #7a1728;
+    font-size: 14px;
+    margin-bottom: 0;
 }
 
 /* ===== Grupo de inputs ===== */
-.input-group {
-    margin-bottom: 18px;
+.input-group-custom {
+    margin-bottom: 16px;
 }
 
-/* ===== Labels ===== */
-label {
+.input-group-custom label {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
     color: #7a1728;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13.5px;
+    font-weight: bold;
 }
 
-/* ===== Inputs ===== */
-input[type="text"],
-input[type="password"] {
+.input-custom {
     width: 100%;
-    padding: 12px;
+    padding: 12px 14px;
     border: 1px solid #E0C375;
     border-radius: 10px;
-    font-size: 14px;
-    transition: 0.2s ease;
+    font-size: 14.5px;
+    transition: all 0.2s ease;
     background-color: #fffaf3;
     box-sizing: border-box;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus {
+.input-custom:focus {
     outline: none;
     border-color: #D92243;
-    background-color: white;
-    box-shadow: 0 0 0 4px rgba(217, 34, 67, 0.12);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(217, 34, 67, 0.15);
 }
 
-/* ===== Área dos radios ===== */
-.section {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #fff8ee;
-    border-radius: 12px;
-    border: 1px solid #E0C375;
-}
-
-/* ===== Radios ===== */
-.section .row {
-    font-family: Arial, sans-serif;
-    color: #7a1728;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin: 0;
-}
-
-input[type="radio"] {
-    width: auto;
-    margin: 0;
-    accent-color: #D92243;
+.input-codigo {
+    letter-spacing: 4px;
+    font-size: 20px !important;
+    text-align: center;
+    font-weight: bold;
+    color: #D92243;
 }
 
 /* ===== Botões ===== */
-.button {
+.btn-auth-primary {
     width: 100%;
-    padding: 14px;
+    padding: 13px;
     border: none;
     border-radius: 12px;
     background: linear-gradient(135deg, #D92243, #b91a35);
@@ -142,7 +105,83 @@ input[type="radio"] {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.25s ease;
-    margin-top: 10px;
+    margin-top: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-auth-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(217, 34, 67, 0.35);
+    background: linear-gradient(135deg, #F69D39, #D92243);
+    color: white;
+}
+
+.btn-auth-primary:disabled {
+    background: #d4a5a5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-auth-secondary {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #E0C375;
+    border-radius: 10px;
+    background: transparent;
+    color: #7a1728;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 8px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
+
+.btn-auth-secondary:hover {
+    background: #fff8ee;
+    color: #D92243;
+}
+
+.btn-auth-link {
+    background: none;
+    border: none;
+    color: #7a1728;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 6px;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.btn-auth-link:hover {
+    color: #D92243;
+}
+
+/* Compatibilidade com classes anteriores */
+.button {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #D92243, #b91a35);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .button:hover {
@@ -151,31 +190,109 @@ input[type="radio"] {
     background: linear-gradient(135deg, #F69D39, #D92243);
 }
 
-.button:disabled {
-    background: #d4a5a5;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+.input-group {
+    margin-bottom: 16px;
 }
 
-.bg-custom {
-    background-image: url('../Assets/Images/unicamp_de_cima.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #7a1728;
+    font-size: 13.5px;
+    font-weight: bold;
 }
 
-.nav-item {
-    display: none;
+.input-group input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #E0C375;
+    border-radius: 10px;
+    font-size: 14.5px;
+    background-color: #fffaf3;
+    box-sizing: border-box;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #D92243;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(217, 34, 67, 0.15);
 }
 
 /* ===== Mensagem ===== */
-#message {
+#message,
+.auth-message {
     color: #D92243;
     text-align: center;
-    font-size: 14px;
-    margin-top: 15px;
+    font-size: 13.5px;
+    margin-top: 12px;
+    font-weight: 600;
+}
+
+/* ===== Timer do Código ===== */
+.timer-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background-color: #fff8ee;
+    border: 1px solid #E0C375;
+    margin-bottom: 16px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #7a1728;
+    transition: all 0.3s ease;
+}
+
+.timer-container.timer-warning {
+    border-color: #F69D39;
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+.timer-container.timer-expired {
+    border-color: #D92243;
+    background-color: #fce4ec;
+    color: #D92243;
+}
+
+.timer-icon {
+    font-size: 16px;
+}
+
+.timer-text {
+    font-variant-numeric: tabular-nums;
+}
+
+/* ===== Botão Reenviar Código ===== */
+.btn-resend {
+    width: 100%;
+    padding: 10px;
+    border: 1px dashed #E0C375;
+    border-radius: 10px;
+    background: transparent;
+    color: #7a1728;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 8px;
+    text-align: center;
+    display: block;
+}
+
+.btn-resend:hover:not(:disabled) {
+    background: #fff8ee;
+    border-style: solid;
+    color: #D92243;
+}
+
+.btn-resend:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    border-style: dotted;
 }
 
 /* ===== Animação ===== */
