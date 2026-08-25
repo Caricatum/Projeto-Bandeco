@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:tcc_flutter/Pages/confirmarEmail.dart';
 import 'cadastro.dart';
 import 'package:http/http.dart' as http;
 import 'principal.dart';
@@ -12,72 +13,69 @@ class Login extends StatefulWidget {
   State<Login> createState() => _LoginState();
 }
 
-/*
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'login': loginController.text,
-          'senhaHash': senhaController.text,
-        }),
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Usuário cadastrado com sucesso!')),
-        );
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => Login()),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao cadastrar: ${response.body}')),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Erro de conexão: $e')));
-    }
-  };*/
-
-
-TextEditingController loginController = TextEditingController();
-TextEditingController senhaController = TextEditingController();
-
 class _LoginState extends State<Login> {
   final TextEditingController loginController = TextEditingController();
   final TextEditingController senhaController = TextEditingController();
+  bool _obscurePassword = true;
+
+  final _formKey = GlobalKey<FormState>();
 
   Future<void> fazerLogin(BuildContext context) async {
+    final login = loginController.text.trim();
+    final senha = senhaController.text;
 
-    final url = Uri.parse('http://localhost:8080/user/login' + loginController.text + "&senhaHash=" + senhaController.text);
-    try {
-      final response = await http.get(
-        url,
-        headers: {'Content-Type': 'application/json'},
+    if (login.isEmpty || senha.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Preencha o e-mail e a senha')),
       );
+      return;
+    }
+
+    final url = Uri.parse(
+      'http://localhost:8080/user/validar'
+      '?login=${Uri.encodeComponent(login)}'
+      '&senha=${Uri.encodeComponent(senha)}',
+    );
+
+    try {
+      final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        final usuario = jsonDecode(response.body);
+        if (!context.mounted) return;
 
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Bem-vindo ${usuario["nome"]}')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login realizado com sucesso!')),
+        );
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Principal()),
+          MaterialPageRoute(builder: (_) => Principal()),
+        );
+      } else if (response.statusCode == 403) {
+        if (!context.mounted) return;
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => ConfirmarEmail(email: login)),
+        );
+      } else if (response.statusCode == 401) {
+        if (!context.mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('E-mail ou senha inválidos')),
         );
       } else {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Login ou senha inválidos')));
+        if (!context.mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erro ao fazer login: ${response.statusCode}'),
+          ),
+        );
       }
     } catch (e) {
+      if (!context.mounted) return;
+
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Erro de conexão: $e')));
@@ -118,99 +116,112 @@ class _LoginState extends State<Login> {
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18),
                 ),
-                    TextFormField(
-                      controller: loginController,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.person),
-                        hintText: "Email",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Preencha o campo email";
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
 
-                    const SizedBox(height: 30),
-
-                    TextFormField(
-                      controller: senhaController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.lock),
-                        hintText: "Senha",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Preencha o campo senha";
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 50,
-                          vertical: 15,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      onPressed: () {
-                        fazerLogin(context);
-                      },
-                      child: const Text("Entrar"),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text("Não tem uma conta? "),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Cadastro(),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            "Crie a sua!",
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
-                            ),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: loginController,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.person),
+                          hintText: "Email",
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide.none,
                           ),
                         ),
-                      ],
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Preencha o campo email";
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+
+                      const SizedBox(height: 30),
+
+                      TextFormField(
+                        controller: senhaController,
+                        obscureText: _obscurePassword,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.lock),
+                          hintText: "Senha",
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 30),
+
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 50,
+                      vertical: 15,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      fazerLogin(context);
+                    }
+                  },
+                  child: const Text("Entrar"),
+                ),
+
+                const SizedBox(height: 20),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Não tem uma conta? "),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Cadastro()),
+                        );
+                      },
+                      child: const Text(
+                        "Crie a sua!",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
+          ],
         ),
-      );
+      ),
+    );
   }
 }
