@@ -13,6 +13,26 @@ class Usuario {
     this._emailConfirmado,
   );
 
+  factory Usuario.fromJson(Map<String, dynamic> json) {
+    return Usuario(
+      json['id'],
+      json['nome'],
+      json['funcionario'],
+      json['login'],
+      json['emailConfirmado'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'nome': nome,
+      'funcionario': funcionario,
+      'login': login,
+      'emailConfirmado': emailConfirmado,
+    };
+  }
+
   int get id => _id;
   set id(int value) => _id = value;
 

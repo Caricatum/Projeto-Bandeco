@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:tcc_flutter/Class/usuarioClass.dart';
 import 'package:tcc_flutter/Pages/confirmarEmail.dart';
 import 'cadastro.dart';
 import 'package:http/http.dart' as http;
@@ -49,7 +50,7 @@ class _LoginState extends State<Login> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => Principal()),
+          MaterialPageRoute(builder: (_) => Principal(usuario: Usuario.fromJson(jsonDecode(response.body)))),
         );
       } else if (response.statusCode == 403) {
         if (!context.mounted) return;
