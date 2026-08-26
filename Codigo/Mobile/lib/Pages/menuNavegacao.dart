@@ -5,9 +5,12 @@ import 'favoritos.dart';
 import 'principal.dart';
 import 'cadastroprato.dart';
 import 'cardapioPratos.dart';
+import '../Class/usuarioClass.dart';
 
 class MenuNavegacao extends StatelessWidget {
-  const MenuNavegacao({super.key});
+  final Usuario usuario;
+
+  const MenuNavegacao({super.key, required this.usuario});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,7 @@ class MenuNavegacao extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Principal(),
+                  builder: (context) => Principal(usuario: usuario),
                 ),
               );
             },
@@ -50,7 +53,7 @@ class MenuNavegacao extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const CardapioPratos(),
+                  builder: (context) => CardapioPratos(usuario: usuario),
                 ),
               );
             },
@@ -63,7 +66,7 @@ class MenuNavegacao extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Cadastroprato(),
+                  builder: (context) => Cadastroprato(),
                 ),
               );
             },
@@ -76,7 +79,7 @@ class MenuNavegacao extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Favoritos(),
+                  builder: (context) => Favoritos(usuario: usuario),
                 ),
               );
             },

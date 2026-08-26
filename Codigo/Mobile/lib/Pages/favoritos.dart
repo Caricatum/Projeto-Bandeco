@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'menuNavegacao.dart';
+import '../Class/usuarioClass.dart';
 
 class Favoritos extends StatefulWidget {
-  const Favoritos({super.key});
+  const Favoritos({super.key, required this.usuario});
+
+  final Usuario usuario;
 
   @override
   State<Favoritos> createState() => _FavoritosState();
@@ -22,7 +25,7 @@ class _FavoritosState extends State<Favoritos> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
-      drawer: const MenuNavegacao(),
+      drawer: MenuNavegacao(usuario: widget.usuario),
     );
   }
 }

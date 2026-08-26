@@ -5,9 +5,12 @@ import 'cardapio.dart';
 import 'package:tcc_flutter/Class/categoriaClass.dart';
 import 'package:tcc_flutter/Class/cardapioClass.dart';
 import 'menuNavegacao.dart';
+import '../Class/usuarioClass.dart';
 
 class Cadastroprato extends StatefulWidget {
-  const Cadastroprato({super.key});
+  const Cadastroprato({super.key, required this.usuario});
+
+  final Usuario usuario;
 
   @override
   State<Cadastroprato> createState() => _CadastropratoState();
@@ -75,7 +78,7 @@ class _CadastropratoState extends State<Cadastroprato> {
         backgroundColor: const Color.fromARGB(255, 211, 47, 47),
         elevation: 0,
       ),
-      drawer: const MenuNavegacao(),
+      drawer: MenuNavegacao(usuario: widget.usuario),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

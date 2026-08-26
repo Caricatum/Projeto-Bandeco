@@ -5,9 +5,12 @@ import 'atualizaPrato.dart';
 import 'package:tcc_flutter/Class/categoriaClass.dart';
 import 'cadastroPrato.dart';
 import 'menuNavegacao.dart';
+import '../Class/usuarioClass.dart';
 
 class CardapioPratos extends StatefulWidget {
-  const CardapioPratos({super.key});
+  const CardapioPratos({super.key, required this.usuario});
+
+  final Usuario usuario;
 
   @override
   State<CardapioPratos> createState() => _CardapioPratosState();
@@ -147,7 +150,7 @@ class _CardapioPratosState extends State<CardapioPratos> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const Cadastroprato()),
+                MaterialPageRoute(builder: (_) => Cadastroprato(usuario: widget.usuario)),
               ).then((_) {
                 setState(() {});
               });
@@ -155,7 +158,7 @@ class _CardapioPratosState extends State<CardapioPratos> {
           ),
         ],
       ),
-      drawer: const MenuNavegacao(),
+      drawer: MenuNavegacao(usuario: widget.usuario),
       body: Column(
         children: [
           Container(
@@ -524,10 +527,13 @@ class _CardapioPratosState extends State<CardapioPratos> {
                                     ),
                                     child: Row(
                                       children: [
-                                        const Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                          size: 18,
+                                        const IconButton(
+                                          icon: Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                            size: 18,
+                                          ),
+                                          onPressed: null,
                                         ),
                                         const SizedBox(width: 4),
                                         Text(
@@ -598,6 +604,7 @@ class _CardapioPratosState extends State<CardapioPratos> {
                                               prato['categoria']['descricao'],
                                               style: const TextStyle(
                                                 color: Colors.blue,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                           ],

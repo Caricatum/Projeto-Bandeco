@@ -4,9 +4,12 @@ import 'cadastroprato.dart';
 import 'perfil.dart';
 import 'login.dart';
 import 'menuNavegacao.dart';
+import '../Class/usuarioClass.dart';
 
 class Principal extends StatefulWidget {
-  const Principal({super.key});
+  final Usuario usuario;
+
+  const Principal({super.key, required this.usuario});
 
   @override
   State<Principal> createState() => _PrincipalState();
@@ -84,15 +87,18 @@ class _PrincipalState extends State<Principal> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Perfil()),
+                  MaterialPageRoute(
+                    builder: (context) => Perfil(usuario: widget.usuario),
+                  ),
                 );
+                ;
               },
             ),
           ),
         ],
       ),
 
-      drawer: const MenuNavegacao(),
+      drawer: MenuNavegacao(usuario: widget.usuario),
 
       body: Padding(
         padding: const EdgeInsets.all(16),
