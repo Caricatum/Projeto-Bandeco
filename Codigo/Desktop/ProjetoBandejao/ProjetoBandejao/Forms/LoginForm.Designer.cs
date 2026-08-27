@@ -57,7 +57,7 @@
             // 
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitulo.ForeColor = Color.DarkGreen;
+            lblTitulo.ForeColor = Color.Tomato;
             lblTitulo.Location = new Point(525, 58);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(161, 45);
