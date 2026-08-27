@@ -48,7 +48,7 @@ public class UserController {
     public void cadastroUser (@RequestBody @Valid User user){
         if(userRepo.findByLogin(user.getLogin()).isPresent()){
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
+                    HttpStatus.BAD_REQUEST/,
                     "E-mail já cadastrado");
         }
 
