@@ -23,9 +23,9 @@ class _LoginState extends State<Login> {
 
   Future<void> fazerLogin(BuildContext context) async {
     final login = loginController.text.trim();
-    final senhaHash = senhaHashController.text;
+    final senha = senhaHashController.text;
 
-    if (login.isEmpty || senhaHash.isEmpty) {
+    if (login.isEmpty || senha.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Preencha o e-mail e a senha')),
       );
@@ -35,24 +35,47 @@ class _LoginState extends State<Login> {
     final url = Uri.parse(
       'http://localhost:8080/user/validar'
       '?login=${Uri.encodeComponent(login)}'
-      '&senhaHash=${Uri.encodeComponent(senhaHash)}',
+      '&senhaHash=${Uri.encodeComponent(senha)}',
     );
 
     try {
+      // 1. Primeiro valida o login
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        if (!context.mounted) return;
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login realizado com sucesso!')),
+        // 2. Login válido.
+        // O /validar retorna apenas "true",
+        // então precisamos buscar o usuário.
+        final usuarioUrl = Uri.parse(
+          'http://localhost:8080/user/login/${Uri.encodeComponent(login)}',
         );
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => Principal(usuario: Usuario.fromJson(jsonDecode(response.body)))),
-        );
+        final usuarioResponse = await http.get(usuarioUrl);
+
+        if (usuarioResponse.statusCode == 200) {
+          if (!context.mounted) return;
+
+          // 3. Converte o JSON recebido em Usuario
+          final usuario = Usuario.fromJson(jsonDecode(usuarioResponse.body));
+
+          // 4. Vai para a Principal levando o usuário
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => Principal(usuario: usuario)),
+          );
+        } else {
+          if (!context.mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Login realizado, mas não foi possível carregar os dados do usuário.',
+              ),
+            ),
+          );
+        }
       } else if (response.statusCode == 403) {
+        // E-mail não confirmado
         if (!context.mounted) return;
 
         Navigator.push(
@@ -60,6 +83,7 @@ class _LoginState extends State<Login> {
           MaterialPageRoute(builder: (_) => ConfirmarEmail(email: login)),
         );
       } else if (response.statusCode == 401) {
+        // Login ou senha incorretos
         if (!context.mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
