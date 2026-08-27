@@ -16,16 +16,16 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final TextEditingController loginController = TextEditingController();
-  final TextEditingController senhaController = TextEditingController();
+  final TextEditingController senhaHashController = TextEditingController();
   bool _obscurePassword = true;
 
   final _formKey = GlobalKey<FormState>();
 
   Future<void> fazerLogin(BuildContext context) async {
     final login = loginController.text.trim();
-    final senha = senhaController.text;
+    final senhaHash = senhaHashController.text;
 
-    if (login.isEmpty || senha.isEmpty) {
+    if (login.isEmpty || senhaHash.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Preencha o e-mail e a senha')),
       );
@@ -35,7 +35,7 @@ class _LoginState extends State<Login> {
     final url = Uri.parse(
       'http://localhost:8080/user/validar'
       '?login=${Uri.encodeComponent(login)}'
-      '&senha=${Uri.encodeComponent(senha)}',
+      '&senhaHash=${Uri.encodeComponent(senhaHash)}',
     );
 
     try {
@@ -146,7 +146,7 @@ class _LoginState extends State<Login> {
                       const SizedBox(height: 30),
 
                       TextFormField(
-                        controller: senhaController,
+                        controller: senhaHashController,
                         obscureText: _obscurePassword,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.lock),

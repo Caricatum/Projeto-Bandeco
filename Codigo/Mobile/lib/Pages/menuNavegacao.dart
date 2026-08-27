@@ -66,7 +66,7 @@ class MenuNavegacao extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Cadastroprato(),
+                  builder: (context) => Cadastroprato(usuario: usuario),
                 ),
               );
             },
