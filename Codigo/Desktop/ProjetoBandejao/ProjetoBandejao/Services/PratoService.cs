@@ -42,5 +42,24 @@ namespace ProjetoBandejao.Services
                 return false;
             }
         }
+
+        public System.Collections.Generic.List<Prato> Listar()
+        {
+            try
+            {
+                HttpResponseMessage response = client.GetAsync($"{API_URL}").Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = response.Content.ReadAsStringAsync().Result;
+                    var pratos = JsonSerializer.Deserialize<System.Collections.Generic.List<Prato>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    return pratos ?? new System.Collections.Generic.List<Prato>();
+                }
+            }
+            catch (Exception)
+            {
+                // Em caso de erro na API, retorna lista vazia para não quebrar a tela
+            }
+            return new System.Collections.Generic.List<Prato>();
+        }
     }
 }
