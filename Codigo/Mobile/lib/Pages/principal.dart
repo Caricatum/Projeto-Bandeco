@@ -66,16 +66,16 @@ class _PrincipalState extends State<Principal> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.orange,
-        title: const Column(
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Olá 👋",
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              "Olá " + widget.usuario.nome + "!",
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
             ),
-            Text(
+            const Text(
               "Bem-vindo ao RU",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -118,7 +118,7 @@ class _PrincipalState extends State<Principal> {
                 children: [
                   Text(
                     "🍽 Restaurante Universitário",
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -127,7 +127,7 @@ class _PrincipalState extends State<Principal> {
                   SizedBox(height: 8),
                   Text(
                     "Confira avisos, cardápio e horários atualizados.",
-                    style: TextStyle(color: Colors.white70),
+                    style: const TextStyle(color: Colors.white70),
                   ),
                 ],
               ),
@@ -141,7 +141,7 @@ class _PrincipalState extends State<Principal> {
                 SizedBox(width: 8),
                 Text(
                   "Mural de Avisos",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
