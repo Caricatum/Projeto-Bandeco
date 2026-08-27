@@ -42,7 +42,7 @@ class _CadastroState extends State<Cadastro> {
         body: jsonEncode({
           'nome': nomeController.text,
           'login': loginController.text,
-          'senhaHash': senhaController.text,
+          'senhaHash': senhaHashController.text,
           'tipoUsuario': tipoUsuario,
         }),
       );
@@ -73,7 +73,7 @@ class _CadastroState extends State<Cadastro> {
   }
 
   TextEditingController nomeController = TextEditingController();
-  TextEditingController senhaController = TextEditingController();
+  TextEditingController senhaHashController = TextEditingController();
   TextEditingController loginController = TextEditingController();
 
   @override
@@ -141,9 +141,24 @@ class _CadastroState extends State<Cadastro> {
                   ),
                   const SizedBox(height: 15),
 
-                  // Senha
+                  // Email
                   TextFormField(
-                    controller: senhaController,
+                    controller: loginController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: customInput("* Email:", Icons.email),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Preencha o campo nome";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 25),
+
+                  // senhaHash
+                  TextFormField(
+                    controller: senhaHashController,
                     obscureText: _obscurePassword,
                     decoration: customInput(
                       "* Senha:",
@@ -170,21 +185,6 @@ class _CadastroState extends State<Cadastro> {
                     },
                   ),
                   const SizedBox(height: 15),
-
-                  // Email
-                  TextFormField(
-                    controller: loginController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: customInput("* Email:", Icons.email),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Preencha o campo nome";
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 25),
 
                   Row(
                     children: [
@@ -231,7 +231,7 @@ class _CadastroState extends State<Cadastro> {
                     onPressed: () async {
                       if (nomeController.text.isEmpty ||
                           loginController.text.isEmpty ||
-                          senhaController.text.isEmpty) {
+                          senhaHashController.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Preencha todos os campos'),
