@@ -51,8 +51,8 @@ public class EmailService {
 
     public void enviarNotificacaoPratosFavoritos(
             User usuario,
-            List<Pratos> pratos,
-            String horario) {
+            List<Pratos> pratosAlmoco,
+            List<Pratos> pratosJantar) {
 
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -60,29 +60,96 @@ public class EmailService {
             MimeMessageHelper helper =
                     new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setSubject("Seus pratos favoritos estão no cardápio de hoje!");
+            helper.setSubject(
+                    "Seus pratos favoritos estão no cardápio de hoje!"
+            );
+
             helper.setTo(usuario.getLogin());
 
             String template = carregaPratosFavoritos();
 
-            StringBuilder listaPratos = new StringBuilder();
+            StringBuilder almoco = new StringBuilder();
+            StringBuilder jantar = new StringBuilder();
 
-            for (Pratos prato : pratos) {
-                listaPratos
-                        .append("• ")
-                        .append(prato.getNome())
-                        .append("<br>");
+            if (!pratosAlmoco.isEmpty()) {
+
+                almoco.append("""
+        <table width="100%" cellpadding="0" cellspacing="0" border="0"
+               style="background:#f5f5f5; border-radius:10px; margin-bottom:15px;">
+            <tr>
+                <td style="
+                    padding:18px 20px;
+                    font-size:16px;
+                    line-height:1.8;
+                    color:#2d2d2d;
+                ">
+                    <strong>🍛 Almoço</strong>
+                    <br><br>
+    """);
+
+                for (Pratos prato : pratosAlmoco) {
+                    almoco.append("• ")
+                            .append(prato.getNome())
+                            .append("<br>");
+                }
+
+                almoco.append("""
+                </td>
+            </tr>
+        </table>
+    """);
             }
 
-            template = template.replace("#{nome}", usuario.getNome());
-            template = template.replace("#{horario}", horario);
-            template = template.replace("#{pratos}", listaPratos.toString());
+            if (!pratosJantar.isEmpty()) {
+
+                jantar.append("""
+        <table width="100%" cellpadding="0" cellspacing="0" border="0"
+               style="background:#f5f5f5; border-radius:10px; margin-bottom:15px;">
+            <tr>
+                <td style="
+                    padding:18px 20px;
+                    font-size:16px;
+                    line-height:1.8;
+                    color:#2d2d2d;
+                ">
+                    <strong>🌙 Jantar</strong>
+                    <br><br>
+    """);
+
+                for (Pratos prato : pratosJantar) {
+                    jantar.append("• ")
+                            .append(prato.getNome())
+                            .append("<br>");
+                }
+
+                jantar.append("""
+                </td>
+            </tr>
+        </table>
+    """);
+            }
+
+            template = template.replace(
+                    "#{nome}",
+                    usuario.getNome()
+            );
+
+            template = template.replace(
+                    "#{almoco}",
+                    almoco.toString()
+            );
+
+            template = template.replace(
+                    "#{jantar}",
+                    jantar.toString()
+            );
 
             helper.setText(template, true);
 
             mailSender.send(message);
 
         } catch (Exception exception) {
+
             System.out.println("Falha ao enviar o email");
             exception.printStackTrace();
         }

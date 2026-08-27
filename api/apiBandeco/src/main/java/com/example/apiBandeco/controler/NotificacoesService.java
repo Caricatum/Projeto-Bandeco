@@ -88,23 +88,31 @@ public class NotificacoesService {
             }
         }
 
+        // JUNTAR TODOS OS USUÁRIOS QUE POSSUEM FAVORITOS
+        Set<User> usuarios = new HashSet<>();
 
-        for (Map.Entry<User, List<Pratos>> entrada : favoritosAlmoco.entrySet()) {
+        usuarios.addAll(favoritosAlmoco.keySet());
+        usuarios.addAll(favoritosJantar.keySet());
+
+        // ENVIAR APENAS UM EMAIL POR USUÁRIO
+        for (User usuario : usuarios) {
+
+            List<Pratos> favoritosDoAlmoco =
+                    favoritosAlmoco.getOrDefault(
+                            usuario,
+                            new ArrayList<>()
+                    );
+
+            List<Pratos> favoritosDoJantar =
+                    favoritosJantar.getOrDefault(
+                            usuario,
+                            new ArrayList<>()
+                    );
 
             emailService.enviarNotificacaoPratosFavoritos(
-                    entrada.getKey(),
-                    entrada.getValue(),
-                    "almoço"
-            );
-        }
-
-
-        for (Map.Entry<User, List<Pratos>> entrada : favoritosJantar.entrySet()) {
-
-            emailService.enviarNotificacaoPratosFavoritos(
-                    entrada.getKey(),
-                    entrada.getValue(),
-                    "jantar"
+                    usuario,
+                    favoritosDoAlmoco,
+                    favoritosDoJantar
             );
         }
     }

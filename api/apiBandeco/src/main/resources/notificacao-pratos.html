@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    ```
     <title>Pratos Favoritos - Bandeco</title>
 
     <style>
@@ -28,6 +30,8 @@
             }
         }
     </style>
+    ```
+
 </head>
 
 <body style="
@@ -47,6 +51,7 @@
     <tr>
         <td align="center" style="padding:20px;">
 
+            ```
             <!-- CARD -->
             <table
                     class="container"
@@ -55,12 +60,12 @@
                     cellspacing="0"
                     border="0"
                     style="
-                    width:100%;
-                    max-width:640px;
-                    background:#ffffff;
-                    border-radius:12px;
-                    overflow:hidden;
-                "
+                width:100%;
+                max-width:640px;
+                background:#ffffff;
+                border-radius:12px;
+                overflow:hidden;
+            "
             >
 
                 <!-- CABEÇALHO -->
@@ -72,13 +77,13 @@
                         <h1
                                 class="title"
                                 style="
-                                margin:0;
-                                font-size:28px;
-                                font-weight:bold;
-                                color:#2d2d2d;
-                            "
+                            margin:0;
+                            font-size:28px;
+                            font-weight:bold;
+                            color:#2d2d2d;
+                        "
                         >
-                            Pratos no #{horario}
+                            Pratos favoritos servidos hoje
                         </h1>
                     </td>
                 </tr>
@@ -89,17 +94,17 @@
                     <td
                             class="content"
                             style="
-                            padding:25px 30px;
-                            color:#2d2d2d;
-                        "
+                        padding:25px 30px;
+                        color:#2d2d2d;
+                    "
                     >
 
                         <p
                                 style="
-                                margin:0 0 15px;
-                                font-weight:bold;
-                                font-size:16px;
-                            "
+                            margin:0 0 15px;
+                            font-weight:bold;
+                            font-size:16px;
+                        "
                         >
                             Olá, #{nome}!
                         </p>
@@ -107,41 +112,20 @@
 
                         <p
                                 style="
-                                margin:0 0 20px;
-                                font-size:15px;
-                                line-height:1.5;
-                            "
+                            margin:0 0 20px;
+                            font-size:15px;
+                            line-height:1.5;
+                        "
                         >
                             Alguns dos seus pratos favoritos serão
-                            servidos hoje no #{horario}:
+                            servidos hoje:
                         </p>
 
 
-                        <!-- LISTA DE PRATOS -->
-                        <table
-                                width="100%"
-                                cellpadding="0"
-                                cellspacing="0"
-                                border="0"
-                                class="pratos-box"
-                                style="
-                                background:#f5f5f5;
-                                border-radius:10px;
-                            "
-                        >
-                            <tr>
-                                <td
-                                        style="
-                                        padding:18px 20px;
-                                        font-size:16px;
-                                        line-height:1.8;
-                                        color:#2d2d2d;
-                                    "
-                                >
-                                    #{pratos}
-                                </td>
-                            </tr>
-                        </table>
+                        <!-- PRATOS -->
+                        #{almoco}
+
+                        #{jantar}
 
                     </td>
                 </tr>
@@ -151,10 +135,10 @@
                 <tr>
                     <td
                             style="
-                            padding:0 30px 30px;
-                            color:#666666;
-                            font-size:14px;
-                        "
+                        padding:0 30px 30px;
+                        color:#666666;
+                        font-size:14px;
+                    "
                     >
 
                         <p style="margin:0;">
@@ -175,6 +159,8 @@
 
         </td>
     </tr>
+    ```
+
 </table>
 
 </body>
