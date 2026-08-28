@@ -1,6 +1,7 @@
 class Usuario {
   int _id;
   String _nome;
+  String _senhaHash;
   bool _funcionario;
   String _login;
   bool _emailConfirmado;
@@ -8,6 +9,7 @@ class Usuario {
   Usuario(
     this._id,
     this._nome,
+    this._senhaHash,
     this._funcionario,
     this._login,
     this._emailConfirmado,
@@ -17,6 +19,7 @@ class Usuario {
     return Usuario(
       json['id'],
       json['nome'],
+      json['senhaHash'],
       json['funcionario'],
       json['login'],
       json['emailConfirmado'],
@@ -27,6 +30,7 @@ class Usuario {
     return {
       'id': id,
       'nome': nome,
+      'senhaHash': _senhaHash,
       'funcionario': funcionario,
       'login': login,
       'emailConfirmado': emailConfirmado,
@@ -38,6 +42,9 @@ class Usuario {
 
   String get nome => _nome;
   set nome(String value) => _nome = value;
+
+  String get senhaHash => _senhaHash;
+  set senhaHash(String value) => _senhaHash = value;
 
   bool get funcionario => _funcionario;
   set funcionario(bool value) => _funcionario = value;
