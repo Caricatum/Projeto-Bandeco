@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'cadastro.dart';
 import 'login.dart';
+import 'dart:async';
 
 class ConfirmarEmail extends StatefulWidget {
   final String email;
+  final int id;
 
-  const ConfirmarEmail({super.key, required this.email});
+  const ConfirmarEmail({super.key, required this.email, required this.id});
 
   @override
   State<ConfirmarEmail> createState() => _ConfirmarEmailState();
@@ -78,9 +80,95 @@ class _ConfirmarEmailState extends State<ConfirmarEmail> {
     }
   }
 
+  void iniciarContagem() {
+    timer?.cancel();
+
+    setState(() {
+      secRestantes = 30;
+    });
+
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (secRestantes <= 1) {
+        timer.cancel();
+
+        if (mounted) {
+          setState(() {
+            secRestantes = 0;
+          });
+        }
+      } else {
+        if (mounted) {
+          setState(() {
+            secRestantes--;
+          });
+        }
+      }
+    });
+  }
+
+  Future<void> reenviarCodigo() async {
+    if (secRestantes > 0 || reenviado) {
+      return;
+    }
+
+    setState(() {
+      reenviado = true;
+    });
+
+    final url = Uri.parse(
+      'http://localhost:8080/user/reenviarCodigoCadastro'
+      '?id=${widget.id}',
+    );
+
+    try {
+      final response = await http.put(url);
+
+      if (response.statusCode == 200) {
+        iniciarContagem();
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Um novo código foi enviado para seu e-mail.'),
+          ),
+        );
+      } else {
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              response.body.isNotEmpty
+                  ? response.body
+                  : 'Não foi possível reenviar o código.',
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro de conexão: $e')));
+    } finally {
+      if (mounted) {
+        setState(() {
+          reenviado = false;
+        });
+      }
+    }
+  }
+
+  int secRestantes = 0;
+  bool reenviado = false;
+  Timer? timer;
+
   @override
   void dispose() {
     codigoController.dispose();
+    timer?.cancel();
     super.dispose();
   }
 
@@ -127,6 +215,33 @@ class _ConfirmarEmailState extends State<ConfirmarEmail> {
                 labelText: 'Código de confirmação',
                 border: OutlineInputBorder(),
               ),
+            ),
+            Row(
+              children: [
+                Text(
+                  "Reenviar código em 60 segundos",
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+
+                GestureDetector(
+                  onTap: secRestantes == 0 && !reenviado
+                      ? reenviarCodigo
+                      : null,
+                  child: Text(
+                    secRestantes > 0
+                        ? 'Reenviar código em $secRestantes segundo(s)'
+                        : 'Não recebeu o código? Reenviar código',
+                    style: TextStyle(
+                      color: secRestantes > 0 ? Colors.grey : Colors.blue,
+                      decoration: secRestantes > 0
+                          ? TextDecoration.none
+                          : TextDecoration.underline,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
             ),
 
             const SizedBox(height: 20),

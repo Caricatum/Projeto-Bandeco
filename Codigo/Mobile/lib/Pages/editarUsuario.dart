@@ -1,7 +1,8 @@
 import 'dart:convert';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:tcc_flutter/Pages/cadastro.dart';
 
 import '../Class/usuarioClass.dart';
 
@@ -26,6 +27,10 @@ class _EditarUsuarioState extends State<EditarUsuario> {
 
   bool senhaVisivel = false;
   bool confirmarSenhaVisivel = false;
+
+  int secRestantes = 0;
+  Timer? timer;
+  bool reenviado = false;
 
   @override
   void initState() {
@@ -65,9 +70,6 @@ class _EditarUsuarioState extends State<EditarUsuario> {
           '?login=${Uri.encodeComponent(loginController.text)}',
         ),
       );
-
-      print('STATUS SOLICITAR CÓDIGO: ${response.statusCode}');
-      print('RESPOSTA: ${response.body}');
 
       if (response.statusCode == 200) {
         if (!mounted) return;
@@ -185,16 +187,6 @@ class _EditarUsuarioState extends State<EditarUsuario> {
           ),
         );
 
-        print(
-          'STATUS ALTERAÇÃO SENHA: '
-          '${resetResponse.statusCode}',
-        );
-
-        print(
-          'RESPOSTA ALTERAÇÃO SENHA: '
-          '${resetResponse.body}',
-        );
-
         if (resetResponse.statusCode != 200) {
           if (!mounted) return;
 
@@ -238,10 +230,248 @@ class _EditarUsuarioState extends State<EditarUsuario> {
     }
   }
 
+  // Inicia a contagem regressiva para o reenvio do código.
+  void iniciarContagem() {
+    timer?.cancel();
+
+    setState(() {
+      secRestantes = 30;
+    });
+
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (secRestantes <= 1) {
+        timer.cancel();
+
+        if (mounted) {
+          setState(() {
+            secRestantes = 0;
+          });
+        }
+      } else {
+        if (mounted) {
+          setState(() {
+            secRestantes--;
+          });
+        }
+      }
+    });
+  }
+
+  // Reenvia o código de confirmação para o e-mail do usuário.
+  Future<void> reenviarCodigo() async {
+    if (secRestantes > 0 || reenviado) {
+      return;
+    }
+
+    setState(() {
+      reenviado = true;
+    });
+
+    final url = Uri.parse(
+      'http://localhost:8080/user/reenviarCodigoCadastro'
+      '?id=${widget.usuario.id}',
+    );
+
+    try {
+      final response = await http.put(url);
+
+      if (response.statusCode == 200) {
+        iniciarContagem();
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Um novo código foi enviado para seu e-mail.'),
+          ),
+        );
+      } else {
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              response.body.isNotEmpty
+                  ? response.body
+                  : 'Não foi possível reenviar o código.',
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro de conexão: $e')));
+    } finally {
+      if (mounted) {
+        setState(() {
+          reenviado = false;
+        });
+      }
+    }
+  }
+
+  // Confirma a exclusão da conta do usuário.
+  Future<void> confirmarExclusao() async {
+    final senhaController = TextEditingController();
+    bool senhaVisivel = false;
+
+    final confirmar = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: const Text('Excluir conta'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Essa ação não pode ser desfeita.\n\n'
+                    'Digite sua senha atual para confirmar a exclusão da conta.',
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: senhaController,
+                    obscureText: !senhaVisivel,
+                    decoration: InputDecoration(
+                      labelText: 'Senha atual',
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          senhaVisivel
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          setDialogState(() {
+                            senhaVisivel = !senhaVisivel;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: const Text('Cancelar'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (senhaController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Digite sua senha.')),
+                      );
+                      return;
+                    }
+
+                    Navigator.pop(context, true);
+                  },
+                  child: const Text('Excluir'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (confirmar != true) {
+      senhaController.dispose();
+      return;
+    }
+
+    final senha = senhaController.text;
+    senhaController.dispose();
+
+    await deletarConta(senha);
+  }
+
+  // Função para deletar a conta do usuário.
+  Future<void> deletarConta(String senha) async {
+    setState(() {
+      carregando = true;
+    });
+
+    try {
+      // Primeiro verifica se a senha está correta.
+      final validarResponse = await http.get(
+        Uri.parse(
+          'http://localhost:8080/user/validar'
+          '?login=${Uri.encodeComponent(loginController.text)}'
+          '&senhaHash=${Uri.encodeComponent(senha)}',
+        ),
+      );
+
+      if (validarResponse.statusCode == 200 ||
+          validarResponse.statusCode == 204) {
+        // Senha correta: agora exclui a conta.
+        final response = await http.delete(
+          Uri.parse('http://localhost:8080/user/deletar/${widget.usuario.id}'),
+        );
+
+        if (!mounted) return;
+
+        if (response.statusCode == 200 || response.statusCode == 204) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Conta excluída com sucesso.')),
+          );
+
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const Cadastro()),
+            (route) => false,
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                response.body.isNotEmpty
+                    ? response.body
+                    : 'Não foi possível excluir a conta.',
+              ),
+            ),
+          );
+        }
+      } else {
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Senha incorreta.')));
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro de conexão: $e')));
+    } finally {
+      if (mounted) {
+        setState(() {
+          carregando = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Editar usuário')),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text('Editar usuário'),
+      ),
 
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -322,6 +552,23 @@ class _EditarUsuarioState extends State<EditarUsuario> {
                   labelText: 'Código de confirmação',
                 ),
               ),
+              TextButton(
+                onPressed: (secRestantes > 0 || enviandoCodigo)
+                    ? null
+                    : reenviarCodigo,
+                child: enviandoCodigo
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(),
+                      )
+                    : Text(
+                        secRestantes > 0
+                            ? 'Reenviar código em '
+                                  '$secRestantes s'
+                            : 'Reenviar código',
+                      ),
+              ),
 
               const SizedBox(height: 10),
 
@@ -348,6 +595,13 @@ class _EditarUsuarioState extends State<EditarUsuario> {
                 child: carregando
                     ? const CircularProgressIndicator()
                     : const Text('Salvar'),
+              ),
+
+              const SizedBox(height: 30),
+
+              TextButton(
+                onPressed: carregando ? null : confirmarExclusao,
+                child: const Text('Excluir conta'),
               ),
             ],
           ),

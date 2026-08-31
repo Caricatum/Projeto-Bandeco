@@ -33,6 +33,8 @@ class _CadastroState extends State<Cadastro> {
   }
 
   Future<void> cadastrarUsuario() async {
+    final email = loginController.text.trim();
+
     final url = Uri.parse('http://localhost:8080/user/cadastrar');
 
     try {
@@ -40,32 +42,61 @@ class _CadastroState extends State<Cadastro> {
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'nome': nomeController.text,
-          'login': loginController.text,
+          'nome': nomeController.text.trim(),
+          'login': email,
           'senhaHash': senhaHashController.text,
           'tipoUsuario': tipoUsuario,
         }),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Cadastro realizado! Verifique seu e-mail.'),
-          ),
+        // O cadastro não retorna o usuário.
+        // Por isso buscamos o usuário pelo login/e-mail.
+        final buscarUrl = Uri.parse(
+          'http://localhost:8080/user/login/'
+          '${Uri.encodeComponent(email)}',
         );
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ConfirmarEmail(email: loginController.text.trim()),
-          ),
-        );
+        final usuarioResponse = await http.get(buscarUrl);
+
+        if (usuarioResponse.statusCode == 200) {
+          final usuario = jsonDecode(usuarioResponse.body);
+
+          if (!mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Cadastro realizado! Verifique seu e-mail.'),
+            ),
+          );
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ConfirmarEmail(email: email, id: usuario['id']),
+            ),
+          );
+        } else {
+          if (!mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Cadastro realizado, mas não foi possível localizar o usuário.',
+              ),
+            ),
+          );
+        }
       } else {
+        if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erro ao cadastrar: ${response.body}')),
         );
       }
     } catch (e) {
+      if (!mounted) return;
+
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Erro de conexão: $e')));

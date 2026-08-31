@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tcc_flutter/Class/usuarioClass.dart';
 import 'package:tcc_flutter/Pages/confirmarEmail.dart';
+import 'package:tcc_flutter/Pages/esqueciSenha.dart';
 import 'cadastro.dart';
 import 'package:http/http.dart' as http;
 import 'principal.dart';
@@ -39,15 +40,12 @@ class _LoginState extends State<Login> {
     );
 
     try {
-      // 1. Primeiro valida o login
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        // 2. Login válido.
-        // O /validar retorna apenas "true",
-        // então precisamos buscar o usuário.
         final usuarioUrl = Uri.parse(
-          'http://localhost:8080/user/login/${Uri.encodeComponent(login)}',
+          'http://localhost:8080/user/login/'
+          '${Uri.encodeComponent(login)}',
         );
 
         final usuarioResponse = await http.get(usuarioUrl);
@@ -55,10 +53,8 @@ class _LoginState extends State<Login> {
         if (usuarioResponse.statusCode == 200) {
           if (!context.mounted) return;
 
-          // 3. Converte o JSON recebido em Usuario
           final usuario = Usuario.fromJson(jsonDecode(usuarioResponse.body));
 
-          // 4. Vai para a Principal levando o usuário
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (_) => Principal(usuario: usuario)),
@@ -74,21 +70,43 @@ class _LoginState extends State<Login> {
             ),
           );
         }
-      } else if (response.statusCode == 403) {
-        // E-mail não confirmado
-        if (!context.mounted) return;
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => ConfirmarEmail(email: login)),
+      } else if (response.statusCode == 403) {
+        final usuarioUrl = Uri.parse(
+          'http://localhost:8080/user/login/'
+          '${Uri.encodeComponent(login)}',
         );
+
+        final usuarioResponse = await http.get(usuarioUrl);
+
+        if (usuarioResponse.statusCode == 200) {
+          final usuario = jsonDecode(usuarioResponse.body);
+
+          if (!context.mounted) return;
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ConfirmarEmail(email: login, id: usuario['id']),
+            ),
+          );
+        } else {
+          if (!context.mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Não foi possível localizar o usuário.'),
+            ),
+          );
+        }
+
       } else if (response.statusCode == 401) {
-        // Login ou senha incorretos
         if (!context.mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('E-mail ou senha inválidos')),
         );
+
       } else {
         if (!context.mounted) return;
 
@@ -194,6 +212,18 @@ class _LoginState extends State<Login> {
                             borderSide: BorderSide.none,
                           ),
                         ),
+                      ),
+                      const SizedBox(height: 30),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Esquecisenha(email: loginController.text),
+                            ),
+                          );
+                        },
+                        child: const Text("Esqueceu a senha?"),
                       ),
                     ],
                   ),

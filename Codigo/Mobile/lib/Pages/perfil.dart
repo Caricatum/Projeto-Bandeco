@@ -41,6 +41,16 @@ class _PerfilState extends State<Perfil> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        centerTitle: true,
+        title: const Text("Perfil"),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
 
@@ -99,22 +109,8 @@ class _PerfilState extends State<Perfil> {
               child: ListView(
                 children: [
                   ListTile(
-                    leading: const Icon(Icons.restaurant),
-                    title: const Text("Histórico de refeições"),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {},
-                  ),
-
-                  ListTile(
-                    leading: const Icon(Icons.attach_money),
-                    title: const Text("Recarregar saldo"),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {},
-                  ),
-
-                  ListTile(
                     leading: const Icon(Icons.settings),
-                    title: const Text("Configurações"),
+                    title: const Text("Editar perfil"),
                     trailing: const Icon(Icons.arrow_forward_ios),
                     onTap: editarUsuario,
                   ),
