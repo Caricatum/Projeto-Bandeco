@@ -93,7 +93,7 @@ namespace ProjetoBandejao.Forms
             // 
             // btnEnviarCodigo
             // 
-            btnEnviarCodigo.BackColor = Color.ForestGreen;
+            btnEnviarCodigo.BackColor = Color.OrangeRed;
             btnEnviarCodigo.FlatAppearance.BorderSize = 0;
             btnEnviarCodigo.FlatStyle = FlatStyle.Flat;
             btnEnviarCodigo.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -108,10 +108,10 @@ namespace ProjetoBandejao.Forms
             // 
             // linkLblVoltar
             // 
-            linkLblVoltar.ActiveLinkColor = Color.Green;
+            linkLblVoltar.ActiveLinkColor = Color.DarkOrange;
             linkLblVoltar.AutoSize = true;
             linkLblVoltar.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            linkLblVoltar.LinkColor = Color.ForestGreen;
+            linkLblVoltar.LinkColor = Color.Orange;
             linkLblVoltar.Location = new Point(268, 700);
             linkLblVoltar.Name = "linkLblVoltar";
             linkLblVoltar.Size = new Size(133, 20);
@@ -133,11 +133,11 @@ namespace ProjetoBandejao.Forms
             // 
             // pctrCadeado
             // 
-            pctrCadeado.Image = Properties.Resource.Cadeado;
+            pctrCadeado.Image = Properties.Resource.cadeadin;
             pctrCadeado.Location = new Point(90, 12);
             pctrCadeado.Name = "pctrCadeado";
-            pctrCadeado.Size = new Size(420, 235);
-            pctrCadeado.SizeMode = PictureBoxSizeMode.StretchImage;
+            pctrCadeado.Size = new Size(420, 222);
+            pctrCadeado.SizeMode = PictureBoxSizeMode.Zoom;
             pctrCadeado.TabIndex = 11;
             pctrCadeado.TabStop = false;
             // 

@@ -48,11 +48,11 @@
             // 
             // pctrChave
             // 
-            pctrChave.Image = Properties.Resource.Chave;
+            pctrChave.Image = Properties.Resource.Senha;
             pctrChave.Location = new Point(130, 0);
             pctrChave.Name = "pctrChave";
             pctrChave.Size = new Size(390, 213);
-            pctrChave.SizeMode = PictureBoxSizeMode.StretchImage;
+            pctrChave.SizeMode = PictureBoxSizeMode.Zoom;
             pctrChave.TabIndex = 0;
             pctrChave.TabStop = false;
             // 
@@ -130,7 +130,7 @@
             // 
             txtCodigo.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtCodigo.Location = new Point(60, 515);
-            txtCodigo.Mask = "0 0 0 0 0 0";
+            txtCodigo.Mask = "_ _ _ _ _ _";
             txtCodigo.Name = "txtCodigo";
             txtCodigo.PromptChar = '0';
             txtCodigo.Size = new Size(540, 33);
@@ -167,7 +167,7 @@
             // 
             // btnAlterarSenha
             // 
-            btnAlterarSenha.BackColor = Color.ForestGreen;
+            btnAlterarSenha.BackColor = Color.OrangeRed;
             btnAlterarSenha.FlatAppearance.BorderSize = 0;
             btnAlterarSenha.FlatStyle = FlatStyle.Flat;
             btnAlterarSenha.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -182,10 +182,10 @@
             // 
             // linkReenviar
             // 
-            linkReenviar.ActiveLinkColor = Color.Green;
+            linkReenviar.ActiveLinkColor = Color.DarkOrange;
             linkReenviar.AutoSize = true;
             linkReenviar.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            linkReenviar.LinkColor = Color.ForestGreen;
+            linkReenviar.LinkColor = Color.Orange;
             linkReenviar.Location = new Point(315, 960);
             linkReenviar.Name = "linkReenviar";
             linkReenviar.Size = new Size(135, 21);

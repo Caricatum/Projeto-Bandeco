@@ -15,319 +15,348 @@ namespace ProjetoBandejao.Services
 
         private void InitializeComponent()
         {
-            this.pnlMain = new Guna.UI2.WinForms.Guna2Panel();
-            this.pctImage = new Guna.UI2.WinForms.Guna2PictureBox();
-            this.lblHealthyBadge = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.lblTitle = new System.Windows.Forms.Label();
-            this.lblPratoPrincipalBadge = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.lblDescription = new System.Windows.Forms.Label();
-            this.pnlNutrition = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblCalorias = new System.Windows.Forms.Label();
-            this.lblCarbo = new System.Windows.Forms.Label();
-            this.lblProtein = new System.Windows.Forms.Label();
-            this.lblGordura = new System.Windows.Forms.Label();
-            this.lblIngredientesTitle = new System.Windows.Forms.Label();
-            this.flpIngredientes = new System.Windows.Forms.FlowLayoutPanel();
-            this.lblFooterText = new System.Windows.Forms.Label();
-            this.btnEditar = new Guna.UI2.WinForms.Guna2Button();
-            this.btnVerDetalhes = new Guna.UI2.WinForms.Guna2Button();
-            this.lblCategoriaTitle = new System.Windows.Forms.Label();
-            this.lblCategoriaVal = new System.Windows.Forms.Label();
-            this.lblTipoTitle = new System.Windows.Forms.Label();
-            this.lblTipoVal = new System.Windows.Forms.Label();
-            this.lblDisponibilidadeTitle = new System.Windows.Forms.Label();
-            this.lblDisponibilidadeVal = new System.Windows.Forms.Label();
-            this.lblAvaliacaoTitle = new System.Windows.Forms.Label();
-            this.lblAvaliacaoVal = new System.Windows.Forms.Label();
-            
-            this.pnlMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pctImage)).BeginInit();
-            this.pnlNutrition.SuspendLayout();
-            this.SuspendLayout();
-            
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            pnlMain = new Guna.UI2.WinForms.Guna2Panel();
+            lblAvaliacaoVal = new Label();
+            lblAvaliacaoTitle = new Label();
+            lblDisponibilidadeVal = new Label();
+            lblDisponibilidadeTitle = new Label();
+            lblTipoVal = new Label();
+            lblTipoTitle = new Label();
+            lblCategoriaVal = new Label();
+            lblCategoriaTitle = new Label();
+            btnVerDetalhes = new Guna.UI2.WinForms.Guna2Button();
+            btnEditar = new Guna.UI2.WinForms.Guna2Button();
+            lblFooterText = new Label();
+            flpIngredientes = new FlowLayoutPanel();
+            lblIngredientesTitle = new Label();
+            pnlNutrition = new Guna.UI2.WinForms.Guna2Panel();
+            lblCalorias = new Label();
+            lblCarbo = new Label();
+            lblProtein = new Label();
+            lblGordura = new Label();
+            pctImage = new Guna.UI2.WinForms.Guna2PictureBox();
+            lblPratoPrincipalBadge = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            lblDescription = new Label();
+            lblTitle = new Label();
+            pnlMain.SuspendLayout();
+            pnlNutrition.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pctImage).BeginInit();
+            SuspendLayout();
+            // 
             // pnlMain
-            this.pnlMain.BackColor = System.Drawing.Color.Transparent;
-            this.pnlMain.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.pnlMain.BorderRadius = 16;
-            this.pnlMain.BorderThickness = 1;
-            this.pnlMain.Controls.Add(this.lblAvaliacaoVal);
-            this.pnlMain.Controls.Add(this.lblAvaliacaoTitle);
-            this.pnlMain.Controls.Add(this.lblDisponibilidadeVal);
-            this.pnlMain.Controls.Add(this.lblDisponibilidadeTitle);
-            this.pnlMain.Controls.Add(this.lblTipoVal);
-            this.pnlMain.Controls.Add(this.lblTipoTitle);
-            this.pnlMain.Controls.Add(this.lblCategoriaVal);
-            this.pnlMain.Controls.Add(this.lblCategoriaTitle);
-            this.pnlMain.Controls.Add(this.btnVerDetalhes);
-            this.pnlMain.Controls.Add(this.btnEditar);
-            this.pnlMain.Controls.Add(this.lblFooterText);
-            this.pnlMain.Controls.Add(this.flpIngredientes);
-            this.pnlMain.Controls.Add(this.lblIngredientesTitle);
-            this.pnlMain.Controls.Add(this.pnlNutrition);
-            this.pnlMain.Controls.Add(this.lblHealthyBadge);
-            this.pnlMain.Controls.Add(this.pctImage);
-            this.pnlMain.Controls.Add(this.lblPratoPrincipalBadge);
-            this.pnlMain.Controls.Add(this.lblDescription);
-            this.pnlMain.Controls.Add(this.lblTitle);
-            this.pnlMain.FillColor = System.Drawing.Color.White;
-            this.pnlMain.Location = new System.Drawing.Point(0, 0);
-            this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(950, 480);
-            this.pnlMain.TabIndex = 0;
-            
-            // pctImage
-            this.pctImage.BorderRadius = 12;
-            this.pctImage.Image = Properties.Resource.ImagemBandecco1;
-            this.pctImage.ImageRotate = 0F;
-            this.pctImage.Location = new System.Drawing.Point(20, 20);
-            this.pctImage.Name = "pctImage";
-            this.pctImage.Size = new System.Drawing.Size(280, 260);
-            this.pctImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pctImage.TabIndex = 1;
-            this.pctImage.TabStop = false;
-            
-            // lblHealthyBadge
-            this.lblHealthyBadge.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(245)))), ((int)(((byte)(235)))));
-            this.lblHealthyBadge.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(100)))), ((int)(((byte)(30)))));
-            this.lblHealthyBadge.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHealthyBadge.Location = new System.Drawing.Point(30, 30);
-            this.lblHealthyBadge.Name = "lblHealthyBadge";
-            this.lblHealthyBadge.Size = new System.Drawing.Size(100, 22);
-            this.lblHealthyBadge.TabIndex = 2;
-            this.lblHealthyBadge.Text = "🍃 Opção Saudável";
-            
-            // lblTitle
-            this.lblTitle.AutoSize = true;
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(60)))), ((int)(((byte)(20)))));
-            this.lblTitle.Location = new System.Drawing.Point(320, 20);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(275, 45);
-            this.lblTitle.TabIndex = 3;
-            this.lblTitle.Text = "Frango Grelhado";
-            
-            // lblPratoPrincipalBadge
-            this.lblPratoPrincipalBadge.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(245)))), ((int)(((byte)(235)))));
-            this.lblPratoPrincipalBadge.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(100)))), ((int)(((byte)(30)))));
-            this.lblPratoPrincipalBadge.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPratoPrincipalBadge.Location = new System.Drawing.Point(790, 30);
-            this.lblPratoPrincipalBadge.Name = "lblPratoPrincipalBadge";
-            this.lblPratoPrincipalBadge.Size = new System.Drawing.Size(100, 22);
-            this.lblPratoPrincipalBadge.TabIndex = 4;
-            this.lblPratoPrincipalBadge.Text = "🍽️ Prato Principal";
-            
-            // lblDescription
-            this.lblDescription.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDescription.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
-            this.lblDescription.Location = new System.Drawing.Point(324, 75);
-            this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(580, 50);
-            this.lblDescription.TabIndex = 5;
-            this.lblDescription.Text = "Peito de frango grelhado temperado com ervas, acompanha arroz branco, feijão carioca e salada fresca da estação.";
-            
-            // pnlNutrition
-            this.pnlNutrition.BackColor = System.Drawing.Color.Transparent;
-            this.pnlNutrition.BorderRadius = 12;
-            this.pnlNutrition.BorderThickness = 1;
-            this.pnlNutrition.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(230)))), ((int)(((byte)(220)))));
-            this.pnlNutrition.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(248)))));
-            this.pnlNutrition.Location = new System.Drawing.Point(324, 140);
-            this.pnlNutrition.Name = "pnlNutrition";
-            this.pnlNutrition.Size = new System.Drawing.Size(596, 100);
-            this.pnlNutrition.TabIndex = 6;
-            this.pnlNutrition.Controls.Add(this.lblCalorias);
-            this.pnlNutrition.Controls.Add(this.lblCarbo);
-            this.pnlNutrition.Controls.Add(this.lblProtein);
-            this.pnlNutrition.Controls.Add(this.lblGordura);
-            
-            // lblCalorias
-            this.lblCalorias.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCalorias.ForeColor = System.Drawing.Color.Black;
-            this.lblCalorias.Location = new System.Drawing.Point(20, 20);
-            this.lblCalorias.Name = "lblCalorias";
-            this.lblCalorias.Size = new System.Drawing.Size(120, 60);
-            this.lblCalorias.TabIndex = 7;
-            this.lblCalorias.Text = "🔥 412 kcal\nCalorias";
-            this.lblCalorias.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            
-            // lblCarbo
-            this.lblCarbo.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCarbo.ForeColor = System.Drawing.Color.Black;
-            this.lblCarbo.Location = new System.Drawing.Point(160, 20);
-            this.lblCarbo.Name = "lblCarbo";
-            this.lblCarbo.Size = new System.Drawing.Size(120, 60);
-            this.lblCarbo.TabIndex = 8;
-            this.lblCarbo.Text = "🌾 48 g\nCarboidratos";
-            this.lblCarbo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            
-            // lblProtein
-            this.lblProtein.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProtein.ForeColor = System.Drawing.Color.Black;
-            this.lblProtein.Location = new System.Drawing.Point(300, 20);
-            this.lblProtein.Name = "lblProtein";
-            this.lblProtein.Size = new System.Drawing.Size(120, 60);
-            this.lblProtein.TabIndex = 9;
-            this.lblProtein.Text = "🍗 32 g\nProteínas";
-            this.lblProtein.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            
-            // lblGordura
-            this.lblGordura.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGordura.ForeColor = System.Drawing.Color.Black;
-            this.lblGordura.Location = new System.Drawing.Point(440, 20);
-            this.lblGordura.Name = "lblGordura";
-            this.lblGordura.Size = new System.Drawing.Size(120, 60);
-            this.lblGordura.TabIndex = 10;
-            this.lblGordura.Text = "💧 11 g\nGorduras";
-            this.lblGordura.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            
-            // lblIngredientesTitle
-            this.lblIngredientesTitle.AutoSize = true;
-            this.lblIngredientesTitle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIngredientesTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(60)))), ((int)(((byte)(20)))));
-            this.lblIngredientesTitle.Location = new System.Drawing.Point(20, 310);
-            this.lblIngredientesTitle.Name = "lblIngredientesTitle";
-            this.lblIngredientesTitle.Size = new System.Drawing.Size(130, 21);
-            this.lblIngredientesTitle.TabIndex = 11;
-            this.lblIngredientesTitle.Text = "🍃 Ingredientes";
-            
-            // flpIngredientes
-            this.flpIngredientes.Location = new System.Drawing.Point(20, 340);
-            this.flpIngredientes.Name = "flpIngredientes";
-            this.flpIngredientes.Size = new System.Drawing.Size(460, 90);
-            this.flpIngredientes.TabIndex = 12;
-            
-            // lblFooterText
-            this.lblFooterText.AutoSize = true;
-            this.lblFooterText.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFooterText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.lblFooterText.Location = new System.Drawing.Point(20, 440);
-            this.lblFooterText.Name = "lblFooterText";
-            this.lblFooterText.Size = new System.Drawing.Size(200, 19);
-            this.lblFooterText.TabIndex = 13;
-            this.lblFooterText.Text = "🍽️ Disponível no almoço e jantar";
-            
-            // lblCategoriaTitle
-            this.lblCategoriaTitle.AutoSize = true;
-            this.lblCategoriaTitle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCategoriaTitle.ForeColor = System.Drawing.Color.Gray;
-            this.lblCategoriaTitle.Location = new System.Drawing.Point(520, 320);
-            this.lblCategoriaTitle.Name = "lblCategoriaTitle";
-            this.lblCategoriaTitle.Size = new System.Drawing.Size(58, 15);
-            this.lblCategoriaTitle.TabIndex = 14;
-            this.lblCategoriaTitle.Text = "Categoria";
-            
-            // lblCategoriaVal
-            this.lblCategoriaVal.AutoSize = true;
-            this.lblCategoriaVal.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCategoriaVal.ForeColor = System.Drawing.Color.Black;
-            this.lblCategoriaVal.Location = new System.Drawing.Point(520, 340);
-            this.lblCategoriaVal.Name = "lblCategoriaVal";
-            this.lblCategoriaVal.Size = new System.Drawing.Size(100, 19);
-            this.lblCategoriaVal.TabIndex = 15;
-            this.lblCategoriaVal.Text = "Prato Principal";
-            
-            // lblTipoTitle
-            this.lblTipoTitle.AutoSize = true;
-            this.lblTipoTitle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTipoTitle.ForeColor = System.Drawing.Color.Gray;
-            this.lblTipoTitle.Location = new System.Drawing.Point(520, 370);
-            this.lblTipoTitle.Name = "lblTipoTitle";
-            this.lblTipoTitle.Size = new System.Drawing.Size(30, 15);
-            this.lblTipoTitle.TabIndex = 16;
-            this.lblTipoTitle.Text = "Tipo";
-            
-            // lblTipoVal
-            this.lblTipoVal.AutoSize = true;
-            this.lblTipoVal.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTipoVal.ForeColor = System.Drawing.Color.Black;
-            this.lblTipoVal.Location = new System.Drawing.Point(520, 390);
-            this.lblTipoVal.Name = "lblTipoVal";
-            this.lblTipoVal.Size = new System.Drawing.Size(55, 19);
-            this.lblTipoVal.TabIndex = 17;
-            this.lblTipoVal.Text = "Comum";
-            
-            // lblDisponibilidadeTitle
-            this.lblDisponibilidadeTitle.AutoSize = true;
-            this.lblDisponibilidadeTitle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDisponibilidadeTitle.ForeColor = System.Drawing.Color.Gray;
-            this.lblDisponibilidadeTitle.Location = new System.Drawing.Point(700, 320);
-            this.lblDisponibilidadeTitle.Name = "lblDisponibilidadeTitle";
-            this.lblDisponibilidadeTitle.Size = new System.Drawing.Size(83, 15);
-            this.lblDisponibilidadeTitle.TabIndex = 18;
-            this.lblDisponibilidadeTitle.Text = "Disponível em";
-            
-            // lblDisponibilidadeVal
-            this.lblDisponibilidadeVal.AutoSize = true;
-            this.lblDisponibilidadeVal.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDisponibilidadeVal.ForeColor = System.Drawing.Color.Black;
-            this.lblDisponibilidadeVal.Location = new System.Drawing.Point(700, 340);
-            this.lblDisponibilidadeVal.Name = "lblDisponibilidadeVal";
-            this.lblDisponibilidadeVal.Size = new System.Drawing.Size(185, 19);
-            this.lblDisponibilidadeVal.TabIndex = 19;
-            this.lblDisponibilidadeVal.Text = "12/08/2025 a 19/08/2025";
-            
-            // lblAvaliacaoTitle
-            this.lblAvaliacaoTitle.AutoSize = true;
-            this.lblAvaliacaoTitle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAvaliacaoTitle.ForeColor = System.Drawing.Color.Gray;
-            this.lblAvaliacaoTitle.Location = new System.Drawing.Point(700, 370);
-            this.lblAvaliacaoTitle.Name = "lblAvaliacaoTitle";
-            this.lblAvaliacaoTitle.Size = new System.Drawing.Size(115, 15);
-            this.lblAvaliacaoTitle.TabIndex = 20;
-            this.lblAvaliacaoTitle.Text = "Avaliação dos alunos";
-            
+            // 
+            pnlMain.BackColor = Color.Transparent;
+            pnlMain.BorderColor = Color.FromArgb(230, 230, 230);
+            pnlMain.BorderRadius = 16;
+            pnlMain.BorderThickness = 1;
+            pnlMain.Controls.Add(lblAvaliacaoVal);
+            pnlMain.Controls.Add(lblAvaliacaoTitle);
+            pnlMain.Controls.Add(lblDisponibilidadeVal);
+            pnlMain.Controls.Add(lblDisponibilidadeTitle);
+            pnlMain.Controls.Add(lblTipoVal);
+            pnlMain.Controls.Add(lblTipoTitle);
+            pnlMain.Controls.Add(lblCategoriaVal);
+            pnlMain.Controls.Add(lblCategoriaTitle);
+            pnlMain.Controls.Add(btnVerDetalhes);
+            pnlMain.Controls.Add(btnEditar);
+            pnlMain.Controls.Add(lblFooterText);
+            pnlMain.Controls.Add(flpIngredientes);
+            pnlMain.Controls.Add(lblIngredientesTitle);
+            pnlMain.Controls.Add(pnlNutrition);
+            pnlMain.Controls.Add(pctImage);
+            pnlMain.Controls.Add(lblPratoPrincipalBadge);
+            pnlMain.Controls.Add(lblDescription);
+            pnlMain.Controls.Add(lblTitle);
+            pnlMain.CustomizableEdges = customizableEdges9;
+            pnlMain.FillColor = Color.White;
+            pnlMain.Location = new Point(0, 0);
+            pnlMain.Name = "pnlMain";
+            pnlMain.ShadowDecoration.CustomizableEdges = customizableEdges10;
+            pnlMain.Size = new Size(950, 480);
+            pnlMain.TabIndex = 0;
+            // 
             // lblAvaliacaoVal
-            this.lblAvaliacaoVal.AutoSize = true;
-            this.lblAvaliacaoVal.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAvaliacaoVal.ForeColor = System.Drawing.Color.Black;
-            this.lblAvaliacaoVal.Location = new System.Drawing.Point(700, 390);
-            this.lblAvaliacaoVal.Name = "lblAvaliacaoVal";
-            this.lblAvaliacaoVal.Size = new System.Drawing.Size(120, 19);
-            this.lblAvaliacaoVal.TabIndex = 21;
-            this.lblAvaliacaoVal.Text = "4.6 ★★★★☆ (128)";
-            
-            // btnEditar
-            this.btnEditar.BorderRadius = 8;
-            this.btnEditar.BorderThickness = 1;
-            this.btnEditar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(100)))), ((int)(((byte)(40)))));
-            this.btnEditar.FillColor = System.Drawing.Color.White;
-            this.btnEditar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(100)))), ((int)(((byte)(40)))));
-            this.btnEditar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEditar.Location = new System.Drawing.Point(520, 430);
-            this.btnEditar.Name = "btnEditar";
-            this.btnEditar.Size = new System.Drawing.Size(160, 40);
-            this.btnEditar.TabIndex = 22;
-            this.btnEditar.Text = "✏️ Editar";
-            
+            // 
+            lblAvaliacaoVal.AutoSize = true;
+            lblAvaliacaoVal.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblAvaliacaoVal.ForeColor = Color.Black;
+            lblAvaliacaoVal.Location = new Point(700, 390);
+            lblAvaliacaoVal.Name = "lblAvaliacaoVal";
+            lblAvaliacaoVal.Size = new Size(128, 19);
+            lblAvaliacaoVal.TabIndex = 21;
+            lblAvaliacaoVal.Text = "4.6 ★★★★☆ (128)";
+            // 
+            // lblAvaliacaoTitle
+            // 
+            lblAvaliacaoTitle.AutoSize = true;
+            lblAvaliacaoTitle.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblAvaliacaoTitle.ForeColor = Color.Gray;
+            lblAvaliacaoTitle.Location = new Point(700, 370);
+            lblAvaliacaoTitle.Name = "lblAvaliacaoTitle";
+            lblAvaliacaoTitle.Size = new Size(118, 15);
+            lblAvaliacaoTitle.TabIndex = 20;
+            lblAvaliacaoTitle.Text = "Avaliação dos alunos";
+            // 
+            // lblDisponibilidadeVal
+            // 
+            lblDisponibilidadeVal.AutoSize = true;
+            lblDisponibilidadeVal.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDisponibilidadeVal.ForeColor = Color.Black;
+            lblDisponibilidadeVal.Location = new Point(700, 340);
+            lblDisponibilidadeVal.Name = "lblDisponibilidadeVal";
+            lblDisponibilidadeVal.Size = new Size(172, 19);
+            lblDisponibilidadeVal.TabIndex = 19;
+            lblDisponibilidadeVal.Text = "12/08/2025 a 19/08/2025";
+            // 
+            // lblDisponibilidadeTitle
+            // 
+            lblDisponibilidadeTitle.AutoSize = true;
+            lblDisponibilidadeTitle.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDisponibilidadeTitle.ForeColor = Color.Gray;
+            lblDisponibilidadeTitle.Location = new Point(700, 320);
+            lblDisponibilidadeTitle.Name = "lblDisponibilidadeTitle";
+            lblDisponibilidadeTitle.Size = new Size(82, 15);
+            lblDisponibilidadeTitle.TabIndex = 18;
+            lblDisponibilidadeTitle.Text = "Disponível em";
+            // 
+            // lblTipoVal
+            // 
+            lblTipoVal.AutoSize = true;
+            lblTipoVal.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblTipoVal.ForeColor = Color.Black;
+            lblTipoVal.Location = new Point(520, 390);
+            lblTipoVal.Name = "lblTipoVal";
+            lblTipoVal.Size = new Size(58, 19);
+            lblTipoVal.TabIndex = 17;
+            lblTipoVal.Text = "Comum";
+            // 
+            // lblTipoTitle
+            // 
+            lblTipoTitle.AutoSize = true;
+            lblTipoTitle.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblTipoTitle.ForeColor = Color.Gray;
+            lblTipoTitle.Location = new Point(520, 370);
+            lblTipoTitle.Name = "lblTipoTitle";
+            lblTipoTitle.Size = new Size(31, 15);
+            lblTipoTitle.TabIndex = 16;
+            lblTipoTitle.Text = "Tipo";
+            // 
+            // lblCategoriaVal
+            // 
+            lblCategoriaVal.AutoSize = true;
+            lblCategoriaVal.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblCategoriaVal.ForeColor = Color.Black;
+            lblCategoriaVal.Location = new Point(520, 340);
+            lblCategoriaVal.Name = "lblCategoriaVal";
+            lblCategoriaVal.Size = new Size(97, 19);
+            lblCategoriaVal.TabIndex = 15;
+            lblCategoriaVal.Text = "Prato Principal";
+            // 
+            // lblCategoriaTitle
+            // 
+            lblCategoriaTitle.AutoSize = true;
+            lblCategoriaTitle.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblCategoriaTitle.ForeColor = Color.Gray;
+            lblCategoriaTitle.Location = new Point(520, 320);
+            lblCategoriaTitle.Name = "lblCategoriaTitle";
+            lblCategoriaTitle.Size = new Size(58, 15);
+            lblCategoriaTitle.TabIndex = 14;
+            lblCategoriaTitle.Text = "Categoria";
+            // 
             // btnVerDetalhes
-            this.btnVerDetalhes.BorderRadius = 8;
-            this.btnVerDetalhes.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(100)))), ((int)(((byte)(40)))));
-            this.btnVerDetalhes.ForeColor = System.Drawing.Color.White;
-            this.btnVerDetalhes.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnVerDetalhes.Location = new System.Drawing.Point(700, 430);
-            this.btnVerDetalhes.Name = "btnVerDetalhes";
-            this.btnVerDetalhes.Size = new System.Drawing.Size(220, 40);
-            this.btnVerDetalhes.TabIndex = 23;
-            this.btnVerDetalhes.Text = "👁️ Ver detalhes";
-            
+            // 
+            btnVerDetalhes.BorderRadius = 8;
+            btnVerDetalhes.CustomizableEdges = customizableEdges1;
+            btnVerDetalhes.FillColor = Color.FromArgb(40, 100, 40);
+            btnVerDetalhes.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnVerDetalhes.ForeColor = Color.White;
+            btnVerDetalhes.Location = new Point(700, 430);
+            btnVerDetalhes.Name = "btnVerDetalhes";
+            btnVerDetalhes.ShadowDecoration.CustomizableEdges = customizableEdges2;
+            btnVerDetalhes.Size = new Size(220, 40);
+            btnVerDetalhes.TabIndex = 23;
+            btnVerDetalhes.Text = "👁️ Ver detalhes";
+            // 
+            // btnEditar
+            // 
+            btnEditar.BorderColor = Color.FromArgb(40, 100, 40);
+            btnEditar.BorderRadius = 8;
+            btnEditar.BorderThickness = 1;
+            btnEditar.CustomizableEdges = customizableEdges3;
+            btnEditar.FillColor = Color.White;
+            btnEditar.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnEditar.ForeColor = Color.FromArgb(40, 100, 40);
+            btnEditar.Location = new Point(520, 430);
+            btnEditar.Name = "btnEditar";
+            btnEditar.ShadowDecoration.CustomizableEdges = customizableEdges4;
+            btnEditar.Size = new Size(160, 40);
+            btnEditar.TabIndex = 22;
+            btnEditar.Text = "✏️ Editar";
+            // 
+            // lblFooterText
+            // 
+            lblFooterText.AutoSize = true;
+            lblFooterText.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblFooterText.ForeColor = Color.FromArgb(100, 100, 100);
+            lblFooterText.Location = new Point(20, 440);
+            lblFooterText.Name = "lblFooterText";
+            lblFooterText.Size = new Size(213, 19);
+            lblFooterText.TabIndex = 13;
+            lblFooterText.Text = "🍽️ Disponível no almoço e jantar";
+            // 
+            // flpIngredientes
+            // 
+            flpIngredientes.Location = new Point(20, 340);
+            flpIngredientes.Name = "flpIngredientes";
+            flpIngredientes.Size = new Size(460, 90);
+            flpIngredientes.TabIndex = 12;
+            // 
+            // lblIngredientesTitle
+            // 
+            lblIngredientesTitle.AutoSize = true;
+            lblIngredientesTitle.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblIngredientesTitle.ForeColor = Color.FromArgb(20, 60, 20);
+            lblIngredientesTitle.Location = new Point(20, 310);
+            lblIngredientesTitle.Name = "lblIngredientesTitle";
+            lblIngredientesTitle.Size = new Size(133, 21);
+            lblIngredientesTitle.TabIndex = 11;
+            lblIngredientesTitle.Text = "🍃 Ingredientes";
+            // 
+            // pnlNutrition
+            // 
+            pnlNutrition.BackColor = Color.Transparent;
+            pnlNutrition.BorderColor = Color.FromArgb(220, 230, 220);
+            pnlNutrition.BorderRadius = 12;
+            pnlNutrition.BorderThickness = 1;
+            pnlNutrition.Controls.Add(lblCalorias);
+            pnlNutrition.Controls.Add(lblCarbo);
+            pnlNutrition.Controls.Add(lblProtein);
+            pnlNutrition.Controls.Add(lblGordura);
+            pnlNutrition.CustomizableEdges = customizableEdges5;
+            pnlNutrition.FillColor = Color.FromArgb(248, 250, 248);
+            pnlNutrition.Location = new Point(324, 140);
+            pnlNutrition.Name = "pnlNutrition";
+            pnlNutrition.ShadowDecoration.CustomizableEdges = customizableEdges6;
+            pnlNutrition.Size = new Size(596, 100);
+            pnlNutrition.TabIndex = 6;
+            // 
+            // lblCalorias
+            // 
+            lblCalorias.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblCalorias.ForeColor = Color.Black;
+            lblCalorias.Location = new Point(20, 20);
+            lblCalorias.Name = "lblCalorias";
+            lblCalorias.Size = new Size(120, 60);
+            lblCalorias.TabIndex = 7;
+            lblCalorias.Text = "🔥 412 kcal\nCalorias";
+            lblCalorias.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblCarbo
+            // 
+            lblCarbo.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblCarbo.ForeColor = Color.Black;
+            lblCarbo.Location = new Point(160, 20);
+            lblCarbo.Name = "lblCarbo";
+            lblCarbo.Size = new Size(120, 60);
+            lblCarbo.TabIndex = 8;
+            lblCarbo.Text = "🌾 48 g\nCarboidratos";
+            lblCarbo.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblProtein
+            // 
+            lblProtein.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblProtein.ForeColor = Color.Black;
+            lblProtein.Location = new Point(300, 20);
+            lblProtein.Name = "lblProtein";
+            lblProtein.Size = new Size(120, 60);
+            lblProtein.TabIndex = 9;
+            lblProtein.Text = "🍗 32 g\nProteínas";
+            lblProtein.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblGordura
+            // 
+            lblGordura.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblGordura.ForeColor = Color.Black;
+            lblGordura.Location = new Point(440, 20);
+            lblGordura.Name = "lblGordura";
+            lblGordura.Size = new Size(120, 60);
+            lblGordura.TabIndex = 10;
+            lblGordura.Text = "💧 11 g\nGorduras";
+            lblGordura.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // pctImage
+            // 
+            pctImage.BorderRadius = 12;
+            pctImage.CustomizableEdges = customizableEdges7;
+            pctImage.FillColor = Color.Transparent;
+            pctImage.ImageRotate = 0F;
+            pctImage.Location = new Point(20, 20);
+            pctImage.Name = "pctImage";
+            pctImage.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            pctImage.Size = new Size(280, 260);
+            pctImage.SizeMode = PictureBoxSizeMode.StretchImage;
+            pctImage.TabIndex = 1;
+            pctImage.TabStop = false;
+            // 
+            // lblPratoPrincipalBadge
+            // 
+            lblPratoPrincipalBadge.BackColor = Color.FromArgb(235, 245, 235);
+            lblPratoPrincipalBadge.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPratoPrincipalBadge.ForeColor = Color.FromArgb(30, 100, 30);
+            lblPratoPrincipalBadge.Location = new Point(790, 30);
+            lblPratoPrincipalBadge.Name = "lblPratoPrincipalBadge";
+            lblPratoPrincipalBadge.Size = new Size(110, 17);
+            lblPratoPrincipalBadge.TabIndex = 4;
+            lblPratoPrincipalBadge.Text = "🍽️ Prato Principal";
+            // 
+            // lblDescription
+            // 
+            lblDescription.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDescription.ForeColor = Color.FromArgb(80, 80, 80);
+            lblDescription.Location = new Point(324, 75);
+            lblDescription.Name = "lblDescription";
+            lblDescription.Size = new Size(580, 50);
+            lblDescription.TabIndex = 5;
+            lblDescription.Text = "Peito de frango grelhado temperado com ervas, acompanha arroz branco, feijão carioca e salada fresca da estação.";
+            // 
+            // lblTitle
+            // 
+            lblTitle.AutoSize = true;
+            lblTitle.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitle.ForeColor = Color.FromArgb(20, 60, 20);
+            lblTitle.Location = new Point(320, 20);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(273, 45);
+            lblTitle.TabIndex = 3;
+            lblTitle.Text = "Frango Grelhado";
+            // 
             // CardRefeicaoControl
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Transparent;
-            this.Controls.Add(this.pnlMain);
-            this.Name = "CardRefeicaoControl";
-            this.Size = new System.Drawing.Size(960, 490);
-            
-            this.pnlMain.ResumeLayout(false);
-            this.pnlMain.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pctImage)).EndInit();
-            this.pnlNutrition.ResumeLayout(false);
-            this.ResumeLayout(false);
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.Transparent;
+            Controls.Add(pnlMain);
+            Name = "CardRefeicaoControl";
+            Size = new Size(960, 490);
+            pnlMain.ResumeLayout(false);
+            pnlMain.PerformLayout();
+            pnlNutrition.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pctImage).EndInit();
+            ResumeLayout(false);
         }
-        
+
         private Guna.UI2.WinForms.Guna2Panel pnlMain;
         private Guna.UI2.WinForms.Guna2PictureBox pctImage;
-        private Guna.UI2.WinForms.Guna2HtmlLabel lblHealthyBadge;
         private System.Windows.Forms.Label lblTitle;
         private Guna.UI2.WinForms.Guna2HtmlLabel lblPratoPrincipalBadge;
         private System.Windows.Forms.Label lblDescription;
