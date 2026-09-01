@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:tcc_flutter/Class/usuarioClass.dart';
-import 'package:tcc_flutter/Pages/confirmarEmail.dart';
-import 'package:tcc_flutter/Pages/esqueciSenha.dart';
+import 'package:tcc_flutter/Pages/UserReferent/confirmarEmail.dart';
+import 'package:tcc_flutter/Pages/UserReferent/esqueciSenha.dart';
 import 'cadastro.dart';
 import 'package:http/http.dart' as http;
 import 'principal.dart';

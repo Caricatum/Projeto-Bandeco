@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:tcc_flutter/Pages/cadastro.dart';
 
-import '../Class/usuarioClass.dart';
+import '../../Class/usuarioClass.dart';
 
 class EditarUsuario extends StatefulWidget {
   final Usuario usuario;

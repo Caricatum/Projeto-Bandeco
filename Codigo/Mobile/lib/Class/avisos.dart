@@ -15,13 +15,13 @@ class Avisos {
     required DateTime dataInicial,
     required DateTime dataFinal,
     int? usuarioId,
-  })  : _id = id,
-        _titulo = titulo,
-        _descricao = descricao,
-        _model = model,
-        _dataInicial = dataInicial,
-        _dataFinal = dataFinal,
-        _usuarioId = usuarioId;
+  }) : _id = id,
+       _titulo = titulo,
+       _descricao = descricao,
+       _model = model,
+       _dataInicial = dataInicial,
+       _dataFinal = dataFinal,
+       _usuarioId = usuarioId;
 
   int get id => _id;
   String get titulo => _titulo;
@@ -69,17 +69,11 @@ class Avisos {
 
       model: json['model'] ?? '',
 
-      dataInicial: DateTime.parse(
-        json['data_inicial'],
-      ),
+      dataInicial: DateTime.parse(json['data_inicial']),
 
-      dataFinal: DateTime.parse(
-        json['data_final'],
-      ),
+      dataFinal: DateTime.parse(json['data_final']),
 
-      usuarioId: json['user'] != null
-          ? json['user']['id']
-          : null,
+      usuarioId: json['user'] != null ? json['user']['id'] : null,
     );
   }
 
@@ -89,15 +83,9 @@ class Avisos {
       'titulo': _titulo,
       'descricao': _descricao,
       'model': _model,
-      'data_inicial':
-          _dataInicial.toIso8601String().split('T')[0],
-      'data_final':
-          _dataFinal.toIso8601String().split('T')[0],
-      'user': _usuarioId != null
-          ? {
-              'id': _usuarioId,
-            }
-          : null,
+      'data_inicial': _dataInicial.toIso8601String().split('T')[0],
+      'data_final': _dataFinal.toIso8601String().split('T')[0],
+      'user': _usuarioId != null ? {'id': _usuarioId} : null,
     };
   }
 }

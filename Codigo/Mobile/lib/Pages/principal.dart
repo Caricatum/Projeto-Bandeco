@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'perfil.dart';
+import 'UserReferent/perfil.dart';
 import 'menuNavegacao.dart';
 
 import '../Class/usuarioClass.dart';
@@ -19,22 +19,19 @@ class Principal extends StatefulWidget {
 }
 
 class _PrincipalState extends State<Principal> {
+  // ==================== STATE VARIABLES ====================
   final String baseUrl = 'http://localhost:8080';
-
   List<Avisos> avisos = [];
-
   bool carregando = true;
 
+  // ==================== LIFECYCLE ====================
   @override
   void initState() {
     super.initState();
     _buscarAvisos();
   }
 
-  // ============================================================
-  // BUSCAR AVISOS
-  // ============================================================
-
+  // ==================== API METHODS ====================
   Future<void> _buscarAvisos() async {
     setState(() {
       carregando = true;
@@ -68,10 +65,6 @@ class _PrincipalState extends State<Principal> {
       _mostrarMensagem('Não foi possível conectar à API.');
     }
   }
-
-  // ============================================================
-  // CADASTRAR AVISO
-  // ============================================================
 
   Future<void> _adicionarAviso({
     required String titulo,
@@ -117,10 +110,6 @@ class _PrincipalState extends State<Principal> {
     }
   }
 
-  // ============================================================
-  // DELETAR AVISO
-  // ============================================================
-
   Future<void> _deletarAviso(Avisos aviso) async {
     try {
       final url = Uri.parse('$baseUrl/avisos/deletar/${aviso.id}');
@@ -141,10 +130,7 @@ class _PrincipalState extends State<Principal> {
     }
   }
 
-  // ============================================================
-  // CONFIRMAR EXCLUSÃO
-  // ============================================================
-
+  // ==================== DIALOGS & USER INTERACTIONS ====================
   void _confirmarExclusao(Avisos aviso) {
     showDialog(
       context: context,
@@ -178,10 +164,6 @@ class _PrincipalState extends State<Principal> {
       },
     );
   }
-
-  // ============================================================
-  // DIALOGO DE CADASTRO
-  // ============================================================
 
   void _mostrarDialogoAdicionarAviso() {
     final tituloController = TextEditingController();
@@ -343,10 +325,7 @@ class _PrincipalState extends State<Principal> {
     );
   }
 
-  // ============================================================
-  // FORMATAR DATA
-  // ============================================================
-
+  // ==================== HELPER METHODS ====================
   String _formatarData(DateTime data) {
     final dia = data.day.toString().padLeft(2, '0');
 
@@ -357,10 +336,6 @@ class _PrincipalState extends State<Principal> {
     return '$dia/$mes/$ano';
   }
 
-  // ============================================================
-  // MENSAGEM
-  // ============================================================
-
   void _mostrarMensagem(String mensagem) {
     if (!mounted) return;
 
@@ -369,10 +344,7 @@ class _PrincipalState extends State<Principal> {
     ).showSnackBar(SnackBar(content: Text(mensagem)));
   }
 
-  // ============================================================
-  // BUILD
-  // ============================================================
-
+  // ==================== UI BUILD METHODS ====================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -427,9 +399,6 @@ class _PrincipalState extends State<Principal> {
           crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-            // ==================================================
-            // CARD DE DESTAQUE
-            // ==================================================
             Container(
               width: double.infinity,
 
@@ -466,10 +435,6 @@ class _PrincipalState extends State<Principal> {
             ),
 
             const SizedBox(height: 24),
-
-            // ==================================================
-            // TITULO
-            // ==================================================
             const Row(
               children: [
                 Icon(Icons.campaign, color: Colors.orange),
@@ -485,10 +450,6 @@ class _PrincipalState extends State<Principal> {
             ),
 
             const SizedBox(height: 16),
-
-            // ==================================================
-            // LISTA
-            // ==================================================
             Expanded(child: _buildListaAvisos()),
           ],
         ),
@@ -505,10 +466,6 @@ class _PrincipalState extends State<Principal> {
       ),
     );
   }
-
-  // ============================================================
-  // LISTA DE AVISOS
-  // ============================================================
 
   Widget _buildListaAvisos() {
     if (carregando) {

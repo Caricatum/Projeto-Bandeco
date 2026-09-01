@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../Class/usuarioClass.dart';
-import 'editarusuario.dart';
+import '../../Class/usuarioClass.dart';
+import '../UserReferent/editarUsuario.dart';
 
 class Perfil extends StatefulWidget {
   final Usuario usuario;

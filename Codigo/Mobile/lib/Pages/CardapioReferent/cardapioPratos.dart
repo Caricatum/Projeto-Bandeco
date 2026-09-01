@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:tcc_flutter/Pages/CardapioReferent/pratoMostra.dart';
 import 'atualizaPrato.dart';
 import 'package:tcc_flutter/Class/categoriaClass.dart';
 import 'cadastroPrato.dart';
-import 'menuNavegacao.dart';
-import '../Class/usuarioClass.dart';
+import '../menuNavegacao.dart';
+import '../../Class/usuarioClass.dart';
 
 class CardapioPratos extends StatefulWidget {
   const CardapioPratos({super.key, required this.usuario});
@@ -150,7 +151,9 @@ class _CardapioPratosState extends State<CardapioPratos> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => Cadastroprato(usuario: widget.usuario)),
+                MaterialPageRoute(
+                  builder: (_) => Cadastroprato(usuario: widget.usuario),
+                ),
               ).then((_) {
                 setState(() {});
               });
@@ -289,124 +292,146 @@ class _CardapioPratosState extends State<CardapioPratos> {
 
                 return Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Card(
-                    color: const Color(0xFFFFE8D6),
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: ListTile(
-                      leading: const CircleAvatar(
-                        backgroundColor: Color(0xFFE76F51),
-                        child: Icon(Icons.restaurant_menu, color: Colors.white),
-                      ),
-                      title: Text(
-                        prato['nome'],
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(prato['descricao'] ?? "Sem descrição"),
-                          const SizedBox(height: 15),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                  child:
+                      //Card de busca de prato
+                      Card(
+                        color: const Color(0xFFFFE8D6),
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: ListTile(
+                          leading: const CircleAvatar(
+                            backgroundColor: Color(0xFFE76F51),
+                            child: Icon(
+                              Icons.restaurant_menu,
+                              color: Colors.white,
+                            ),
+                          ),
+                          title: Text(
+                            prato['nome'],
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // Botão Editar
-                              OutlinedButton.icon(
-                                icon: const Icon(Icons.edit),
-                                label: const Text("Editar"),
-                                onPressed: () async {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) =>
-                                          AtualizaPrato(prato: prato),
-                                    ),
-                                  );
+                              Text(prato['descricao'] ?? "Sem descrição"),
+                              const SizedBox(height: 15),
 
-                                  setState(() {});
-                                },
-                              ),
-
-                              const SizedBox(width: 10),
-
-                              // Botão Excluir
-                              ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                  foregroundColor: Colors.white,
-                                ),
-                                icon: const Icon(Icons.delete),
-                                label: const Text("Excluir"),
-                                onPressed: () async {
-                                  bool? confirmar = await showDialog(
-                                    context: context,
-                                    builder: (_) => AlertDialog(
-                                      title: const Text("Excluir prato"),
-                                      content: Text(
-                                        "Deseja realmente excluir '${prato['nome']}'?",
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, false),
-                                          child: const Text("Cancelar"),
-                                        ),
-                                        ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.red,
-                                          ),
-                                          onPressed: () =>
-                                              Navigator.pop(context, true),
-                                          child: const Text("Excluir"),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-
-                                  if (confirmar == true) {
-                                    try {
-                                      await deletarPrato(prato['id']);
-
-                                      setState(() {
-                                        pratosEncontrados.removeAt(index);
-                                      });
-
-                                      ScaffoldMessenger.of(
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  // Botão Editar
+                                  OutlinedButton.icon(
+                                    icon: const Icon(Icons.edit),
+                                    label: const Text("Editar"),
+                                    onPressed: () async {
+                                      await Navigator.push(
                                         context,
-                                      ).showSnackBar(
-                                        const SnackBar(
+                                        MaterialPageRoute(
+                                          builder: (_) =>
+                                              AtualizaPrato(prato: prato),
+                                        ),
+                                      );
+
+                                      setState(() {});
+                                    },
+                                  ),
+
+                                  const SizedBox(width: 10),
+
+                                  IconButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => PratoPage(
+                                            pratoId: prato.id,
+                                            usuario: widget.usuario,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    icon: Icon(Icons.arrow_right),
+                                  ),
+
+                                  // Botão Excluir
+                                  ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    icon: const Icon(Icons.delete),
+                                    label: const Text("Excluir"),
+                                    onPressed: () async {
+                                      bool? confirmar = await showDialog(
+                                        context: context,
+                                        builder: (_) => AlertDialog(
+                                          title: const Text("Excluir prato"),
                                           content: Text(
-                                            "Prato excluído com sucesso.",
+                                            "Deseja realmente excluir '${prato['nome']}'?",
                                           ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context, false),
+                                              child: const Text("Cancelar"),
+                                            ),
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.red,
+                                              ),
+                                              onPressed: () =>
+                                                  Navigator.pop(context, true),
+                                              child: const Text("Excluir"),
+                                            ),
+                                          ],
                                         ),
                                       );
-                                    } catch (e) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(content: Text(e.toString())),
-                                      );
-                                    }
-                                  }
-                                },
+
+                                      if (confirmar == true) {
+                                        try {
+                                          await deletarPrato(prato['id']);
+
+                                          setState(() {
+                                            pratosEncontrados.removeAt(index);
+                                          });
+
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                "Prato excluído com sucesso.",
+                                              ),
+                                            ),
+                                          );
+                                        } catch (e) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: Text(e.toString()),
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    },
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                      trailing: Chip(
-                        backgroundColor: const Color(0xFFE76F51),
-                        label: Text(
-                          "ID ${prato['id']}",
-                          style: const TextStyle(color: Colors.white),
+                          trailing: Chip(
+                            backgroundColor: const Color(0xFFE76F51),
+                            label: Text(
+                              "ID ${prato['id']}",
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
                 );
               },
             ),
@@ -461,6 +486,7 @@ class _CardapioPratosState extends State<CardapioPratos> {
                     final prato = pratos[index];
 
                     return Card(
+                      // Card de prato
                       elevation: 8,
                       color: Colors.white,
                       margin: const EdgeInsets.only(bottom: 18),
@@ -670,15 +696,22 @@ class _CardapioPratosState extends State<CardapioPratos> {
 
                                 const SizedBox(height: 16),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     IconButton(
                                       onPressed: () {
-
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => PratoPage(
+                                              pratoId: prato.id,
+                                              usuario: widget.usuario,
+                                            ),
+                                          ),
+                                        );
                                       },
-                                      icon: Icon(
-                                        Icons.star, 
-                                      ),
+                                      icon: Icon(Icons.arrow_right),
                                     ),
 
                                     OutlinedButton.icon(

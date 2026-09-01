@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'cadastraCardapio.dart';
-import 'cardapio.dart';
-import 'favoritos.dart';
+import 'package:tcc_flutter/Pages/CardapioReferent/cadastraCardapioDia.dart';
+import 'CardapioReferent/cadastraCardapio.dart';
+import 'CardapioReferent/cardapio.dart';
+import 'package:tcc_flutter/Pages/UserReferent/favoritos.dart';
 import 'principal.dart';
-import 'cadastroprato.dart';
-import 'cardapioPratos.dart';
+import '../Pages/CardapioReferent/cadastroPrato.dart';
+import 'CardapioReferent/cardapioPratos.dart';
 import '../Class/usuarioClass.dart';
 
 class MenuNavegacao extends StatelessWidget {
@@ -17,18 +18,12 @@ class MenuNavegacao extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-
           const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.green,
-            ),
+            decoration: BoxDecoration(color: Colors.green),
             child: Center(
               child: Text(
                 'Restaurante Universitário do Cotil',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                ),
+                style: TextStyle(color: Colors.white, fontSize: 22),
               ),
             ),
           ),
@@ -91,9 +86,7 @@ class MenuNavegacao extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const CardapioPage(),
-                ),
+                MaterialPageRoute(builder: (context) => const CardapioPage()),
               );
             },
           ),
@@ -106,6 +99,18 @@ class MenuNavegacao extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const CadastraCardapio(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Cardápios do Dia'),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CardapioDiaPage(usuario: usuario),
                 ),
               );
             },

@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import 'cardapio.dart';
 import 'package:tcc_flutter/Class/categoriaClass.dart';
 import 'package:tcc_flutter/Class/cardapioClass.dart';
-import 'menuNavegacao.dart';
-import '../Class/usuarioClass.dart';
+import '../menuNavegacao.dart';
+import '../../Class/usuarioClass.dart';
 
 class Cadastroprato extends StatefulWidget {
   const Cadastroprato({super.key, required this.usuario});
