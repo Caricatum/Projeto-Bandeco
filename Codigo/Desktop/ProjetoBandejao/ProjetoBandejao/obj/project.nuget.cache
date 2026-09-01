@@ -28,5 +28,15 @@
     "C:\\Users\\aluno\\.nuget\\packages\\system.windows.extensions\\8.0.0\\system.windows.extensions.8.0.0.nupkg.sha512",
     "C:\\Users\\aluno\\.nuget\\packages\\zstdsharp.port\\0.8.6\\zstdsharp.port.0.8.6.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problema ao ler o arquivo de cache C:\\Users\\aluno\\source\\repos\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\obj\\project.nuget.cache: '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "C:\\Users\\aluno\\source\\repos\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\ProjetoBandejao.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\aluno\\source\\repos\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\ProjetoBandejao.csproj",
+      "targetGraphs": []
+    }
+  ]
 }

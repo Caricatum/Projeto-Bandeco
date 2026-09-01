@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
 import 'menuNavegacao.dart';
+import '../Class/usuarioClass.dart';
 
-class Cadastracardapio extends StatefulWidget {
-  const Cadastracardapio({super.key});
+class Favoritos extends StatefulWidget {
+  const Favoritos({super.key, required this.usuario});
+
+  final Usuario usuario;
 
   @override
-  State<Cadastracardapio> createState() => _CadastracardapioState();
+  State<Favoritos> createState() => _FavoritosState();
 }
 
-class _CadastracardapioState extends State<Cadastracardapio> {
+class _FavoritosState extends State<Favoritos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 211, 47, 47),
+        backgroundColor: const Color.fromARGB(255, 242, 247, 0),
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          '🍽️ Criar Cardápio',
+          '⭐ Favoritos',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
-      
-      drawer: const MenuNavegacao(),
-
+      drawer: MenuNavegacao(usuario: widget.usuario),
     );
   }
 }

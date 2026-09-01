@@ -30,48 +30,35 @@
             transition: all 0.2s;
         }
         .btn-desfav:hover { background: #D92243; color: white; }
+
+        .btn-adicionar-fav {
+            background: linear-gradient(135deg, #D92243, #F69D39);
+            color: #ffffff !important;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 22px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(217, 34, 67, 0.25);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        .btn-adicionar-fav:hover {
+            background: linear-gradient(135deg, #b91a35, #D92243);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(217, 34, 67, 0.35);
+            color: #ffffff !important;
+        }
     </style>
 </head>
 
-<script>
-function logout() {
-    sessionStorage.setItem('logado', 'false');
-    localStorage.clear();
-    window.location.href = 'login.php';
-}
-</script>
-
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <img src="../Assets/Images/logo_unicamp.jpg" alt="Logo Unicamp" width="40" height="40" class="d-inline-block align-text-top">
-            <a class="navbar-brand ms-3" href="inicio.php">Bandeco</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto gap-2">
-                    <li class="nav-item">
-                        <button class="btn-nav" onclick="window.location.href='inicio.php'">🏠 Início</button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn-nav" onclick="window.location.href='buscaPratos.php'">🍽️ Buscar Pratos</button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn-nav" onclick="window.location.href='mural.php'">📌 Mural</button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn-nav" onclick="window.location.href='sobrenos.php'">ℹ️ Sobre nós</button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn-nav btn-sair" onclick="logout()">Sair</button>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Navbar Modularizada -->
+    <?php include __DIR__ . '/components/navbar.php'; ?>
+
 
     <!-- CONTEÚDO -->
     <div class="container mt-4 mb-5">
@@ -81,7 +68,7 @@ function logout() {
                 <h1>⭐ Meus Favoritos</h1>
                 <p class="text-muted mb-0" id="subtitulo">Carregando...</p>
             </div>
-            <button class="btn-nav" onclick="window.location.href='buscaPratos.php'" style="padding:8px 18px; font-size:0.95rem;">
+            <button class="btn-adicionar-fav" onclick="window.location.href='buscaPratos.php'">
                 + Adicionar favoritos
             </button>
         </div>
@@ -163,6 +150,7 @@ function logout() {
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../JS/config.js"></script>
     <script src="../JS/meusFavoritos.js"></script>
 </body>
 

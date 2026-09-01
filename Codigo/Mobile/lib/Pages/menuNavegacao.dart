@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:tcc_flutter/cadastraCardapio.dart';
-import 'package:tcc_flutter/cardapio.dart';
-import 'package:tcc_flutter/favoritos.dart';
+import 'cadastraCardapio.dart';
+import 'cardapio.dart';
+import 'favoritos.dart';
 import 'principal.dart';
 import 'cadastroprato.dart';
 import 'cardapioPratos.dart';
+import '../Class/usuarioClass.dart';
 
 class MenuNavegacao extends StatelessWidget {
-  const MenuNavegacao({super.key});
+  final Usuario usuario;
+
+  const MenuNavegacao({super.key, required this.usuario});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,7 @@ class MenuNavegacao extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Principal(),
+                  builder: (context) => Principal(usuario: usuario),
                 ),
               );
             },
@@ -50,7 +53,7 @@ class MenuNavegacao extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Cardapios(),
+                  builder: (context) => CardapioPratos(usuario: usuario),
                 ),
               );
             },
@@ -63,7 +66,7 @@ class MenuNavegacao extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Cadastroprato(),
+                  builder: (context) => Cadastroprato(usuario: usuario),
                 ),
               );
             },
@@ -76,7 +79,7 @@ class MenuNavegacao extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Favoritos(),
+                  builder: (context) => Favoritos(usuario: usuario),
                 ),
               );
             },
@@ -89,7 +92,7 @@ class MenuNavegacao extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Cardapio(),
+                  builder: (context) => const CardapioPage(),
                 ),
               );
             },
@@ -102,7 +105,7 @@ class MenuNavegacao extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Cadastracardapio(),
+                  builder: (context) => const CadastraCardapio(),
                 ),
               );
             },

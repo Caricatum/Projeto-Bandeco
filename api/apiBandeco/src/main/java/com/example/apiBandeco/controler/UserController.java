@@ -74,6 +74,39 @@ public class UserController {
         );
     }
 
+    @PutMapping("/reenviarCodigoCadastro")
+    public void reenviarCodigoCadastro(@RequestParam int id){
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Usuário não encontrado"
+                ));
+
+        if (user.isEmailConfirmado()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "E-mail já confirmado"
+            );
+        }
+
+        String codigo = String.valueOf(
+                (int)(Math.random() * 900000) + 100000
+        );
+
+        user.setEmailConfirmado(false);
+        user.setCodigoConfirmacao(codigo);
+        user.setExpiracaoConfirmacao(
+                LocalDateTime.now().plusMinutes(15)
+        );
+
+        userRepo.save(user);
+
+        emailService.enviarCodigo(
+                user,
+                codigo
+        );
+    }
+
     @PostMapping("/confirmarEmail")
     public void confirmarEmail(
             @RequestParam String email,

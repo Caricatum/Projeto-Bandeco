@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:tcc_flutter/categoria.dart';
+import 'package:tcc_flutter/Class/categoriaClass.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 

@@ -1,121 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trocar Informações</title>
-  <link rel="stylesheet" href="../CSS/trocarinf.css">
-
-  <link rel="stylesheet" href="../../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+  <title>Trocar Informações - Bandeco</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../CSS/navbar.css">
-  <script src="../../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="../CSS/trocarinf.css">
 </head>
 
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container">
-      <img src="../Assets/Images/logo_unicamp.jpg" alt="Logo Unicamp" width="40" height="40"
-        class="d-inline-block align-text-top">
-      <a class="navbar-brand ms-3" href="inicio.php">Bandeco</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto gap-2">
- 
-          <li class="nav-item">
-            <button class="btn-nav" onclick="window.location.href='inicio.php'">🏠 Início</button>
-          </li>
- 
-          <li class="nav-item">
-            <button class="btn-nav" onclick="window.location.href='mural.php'">📌 Mural</button>
-          </li>
- 
-          <li class="nav-item">
-            <button class="btn-nav" onclick="window.location.href='buscaPratos.php'">🍽️ Buscar Pratos</button>
-          </li>
- 
-          <li class="nav-item">
-            <button class="btn-nav" onclick="window.location.href='sobrenos.php'">ℹ️ Sobre nós</button>
-          </li>
+  <!-- Navbar Modularizada -->
+  <?php include __DIR__ . '/components/navbar.php'; ?>
 
-          <li class="nav-item">
-                    <button class="btn-nav btn-sair" onclick="logout()">Sair</button>
-                </li>
- 
-        </ul>
+  <main class="main-container">
+    <div class="edit-card">
+      
+      <!-- Cabeçalho -->
+      <div class="edit-header">
+        <div class="edit-avatar">✏️</div>
+        <h2 class="edit-title" id="tituloEdicao">Editar Informações</h2>
+        <p class="edit-subtitle" id="subtituloEdicao">Atualize os dados de cadastro</p>
       </div>
+
+      <form id="dadosForm">
+        
+        <!-- Campo Nome Completo -->
+        <div class="form-group-custom">
+          <label class="form-label-custom" for="name">👤 Nome Completo</label>
+          <input type="text" id="name" class="input-custom" placeholder="Digite seu nome completo" required>
+        </div>
+
+        <!-- Campo Usuário / E-mail -->
+        <div class="form-group-custom">
+          <label class="form-label-custom" for="username">🔑 Login / E-mail</label>
+          <input type="text" id="username" class="input-custom" placeholder="Digite seu login ou e-mail" required>
+        </div>
+
+        <!-- Seção: Tipo de Usuário (Visível e Editável apenas para Funcionários) -->
+        <div id="secaoTipoFuncionario" class="tipo-selector-box d-none">
+          <label class="form-label-custom mb-1">👔 Nível de Acesso (Tipo de Pessoa)</label>
+          <small class="text-muted d-block mb-2">Selecione o papel do usuário no sistema:</small>
+
+          <div class="tipo-options-container">
+            <div class="tipo-card-option" id="cardAluno" data-value="false">
+              🎓 Aluno
+            </div>
+            <div class="tipo-card-option" id="cardFunc" data-value="true">
+              👔 Funcionário
+            </div>
+          </div>
+          <input type="hidden" id="tipoUsuarioValor" value="false">
+        </div>
+
+        <!-- Aviso para Alunos (Não podem mudar tipo de conta) -->
+        <div id="avisoTipoAluno" class="aviso-aluno-box d-none">
+          <span style="font-size:1.8rem">🎓</span>
+          <div>
+            <strong class="d-block text-dark" style="font-size:0.95rem">Conta de Aluno</strong>
+            <small class="text-muted">Alterações no nível de acesso só podem ser efetuadas pela equipe de administração.</small>
+          </div>
+        </div>
+
+        <!-- Mensagens -->
+        <div id="message" class="text-center my-3 fw-semibold"></div>
+
+        <!-- Botões -->
+        <div class="mt-4">
+          <button type="button" class="btn-salvar-info" id="trocarinfo">
+            💾 Salvar Alterações
+          </button>
+          
+          <button type="button" class="btn-cancelar-info" onclick="window.location.href='dadosperfil.php'">
+            ← Cancelar e Voltar
+          </button>
+        </div>
+
+      </form>
+
     </div>
-  </nav>
+  </main>
 
-  <script>
-            // =============================================
-// LOGOUT
-// =============================================
-function logout() {
-    sessionStorage.setItem('logado', 'false');
-    localStorage.clear();
-    window.location.href = 'login.php';
-}
-
-    </script>
-
-
-  <!--dados-->
-  <div id="dadosContainer" class="dados-container">
-    <form id="dadosForm">
-      <h2>Trocar Informações</h2>
-      <div class="input-group " id="div-usuario">
-        <label>Usuário</label>
-        <input type="text" id="username" required placeholder="Digite seu Usuário">
-      </div>
-
-      <div id="div-nome">
-        <div class="input-group" id="input-nome">
-          <label>Nome</label>
-          <input type="text" id="name" placeholder="Digite seu nome">
-        </div>
-      </div>
-
-
-      <section class="section" id="sectionTipodeUsuario">
-        <div class="row content-align-center">Tipo de pessoa</div>
-
-        <div class="radio-option">
-          <input type="radio" name="tipoDeUsuario" id="aluno" value="false" required checked>
-          <label for="aluno">Aluno</label>
-        </div>
-
-        <div class="radio-option">
-          <input type="radio" name="tipoDeUsuario" id="func" value="true" required>
-          <label for="func">Funcionário</label>
-        </div>
-      </section>
-
-      <div id="div-senha">
-        <div class="input-group" id="input-senha">
-          <label>Senha:</label>
-          <input type="password" id="senha" placeholder="Digite sua senha para trocar as informações" required>
-        </div>
-      </div>
-
-
-
-      <button type="button" class="button" id="trocarinfo">Trocar informações</button>
-
-      <button type="button" class="button" id="voltar" onclick="window.location.href='dadosperfil.php'">
-        Voltar
-      </button>
-
-      <p id="message"></p>
-
-
-    </form>
-  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../JS/config.js"></script>
   <script type="module" src="../JS/trocarinfo.js"></script>
-
 </body>
-
 </html>

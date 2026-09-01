@@ -88,35 +88,9 @@
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-        <img src="../Assets/Images/logo_unicamp.jpg" alt="Logo Unicamp" width="40" height="40" class="d-inline-block align-text-top">
-        <a class="navbar-brand ms-3" href="inicio.php">Bandeco</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto gap-2">
-                <li class="nav-item">
-                    <button class="btn-nav" onclick="window.location.href='inicio.php'">🏠 Início</button>
-                </li>
-                <li class="nav-item">
-                    <button class="btn-nav" onclick="window.location.href='buscaPratos.php'">🍽️ Buscar Pratos</button>
-                </li>
-                <li class="nav-item">
-                    <button class="btn-nav" onclick="window.location.href='mural.php'">📌 Mural</button>
-                </li>
-                <li class="nav-item">
-                    <button class="btn-nav" onclick="window.location.href='sobrenos.php'">ℹ️ Sobre nós</button>
-                </li>
-                <li class="nav-item" id="itemLogin">
-                    <button class="btn-nav" onclick="window.location.href='login.php'">Login</button>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<!-- Navbar Modularizada -->
+<?php include __DIR__ . '/components/navbar.php'; ?>
+
 
 <!-- Conteúdo -->
 <div class="container mt-4 mb-5">
@@ -200,6 +174,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../JS/config.js"></script>
 <script src="../JS/pratoDet.js"></script>
 </body>
 </html>

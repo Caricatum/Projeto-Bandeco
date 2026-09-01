@@ -13,64 +13,15 @@
     <link rel="stylesheet" href="../CSS/mural.css">
 
     <!-- JS -->
+    <script src="../JS/config.js" defer></script>
     <script src="../JS/mural.js" defer></script>
 </head>
 
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
+    <!-- Navbar Modularizada -->
+    <?php include __DIR__ . '/components/navbar.php'; ?>
 
-            <img src="../Assets/Images/logo_unicamp.jpg" alt="Logo Unicamp" width="40" height="40"
-                class="d-inline-block align-text-top">
-
-            <a class="navbar-brand ms-3" href="inicio.php">Bandeco</a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto gap-2">
-
-                    <li class="nav-item">
-                        <button class="btn-nav" onclick="window.location.href='inicio.php'">🏠 Início</button>
-                    </li>
-
-                    <li class="nav-item">
-                        <button class="btn-nav" onclick="window.location.href='buscaPratos.php'">🍽️ Buscar Pratos</button>
-                    </li>
-
-                    <li class="nav-item">
-                        <button class="btn-nav" onclick="window.location.href='sobrenos.php'">ℹ️ Sobre nós</button>
-                    </li>
-
-                    <!-- Botão Login: visível se não logado, some se logado (via JS) -->
-                    <li class="nav-item" id="itemLogin">
-                        <button id="btnLogin" class="btn-nav" onclick="window.location.href='login.php'">Login</button>
-                    </li>
-
-                    <li class="nav-item">
-                    <button class="btn-nav btn-sair" onclick="logout()">Sair</button>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <script>
-            // =============================================
-// LOGOUT
-// =============================================
-function logout() {
-    sessionStorage.setItem('logado', 'false');
-    localStorage.clear();
-    window.location.href = 'login.php';
-}
-
-    </script>
 
 
 
