@@ -45,9 +45,6 @@
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges17 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges18 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges19 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges20 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             guna2CirclePictureBox1 = new Guna.UI2.WinForms.Guna2CirclePictureBox();
             guna2Panel2 = new Guna.UI2.WinForms.Guna2Panel();
             lblQuantidadePratos = new Guna.UI2.WinForms.Guna2Panel();
@@ -62,15 +59,10 @@
             guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             lblSubtitulo = new Label();
             lblTitulo = new Label();
-            picIcone = new Guna.UI2.WinForms.Guna2CirclePictureBox();
-            label1 = new Label();
-            guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
             ((System.ComponentModel.ISupportInitialize)guna2CirclePictureBox1).BeginInit();
             guna2Panel2.SuspendLayout();
             lblQuantidadePratos.SuspendLayout();
             PnlPesquisa.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picIcone).BeginInit();
-            guna2Panel1.SuspendLayout();
             SuspendLayout();
             // 
             // guna2CirclePictureBox1
@@ -80,7 +72,7 @@
             guna2CirclePictureBox1.Image = Properties.Resource.ImagemBandecco1;
             guna2CirclePictureBox1.ImageRotate = 0F;
             guna2CirclePictureBox1.InitialImage = Properties.Resource.ImagemBandecco1;
-            guna2CirclePictureBox1.Location = new Point(230, 43);
+            guna2CirclePictureBox1.Location = new Point(29, 27);
             guna2CirclePictureBox1.Name = "guna2CirclePictureBox1";
             guna2CirclePictureBox1.ShadowDecoration.CustomizableEdges = customizableEdges1;
             guna2CirclePictureBox1.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
@@ -99,7 +91,7 @@
             guna2Panel2.Controls.Add(label2);
             guna2Panel2.CustomizableEdges = customizableEdges4;
             guna2Panel2.FillColor = Color.White;
-            guna2Panel2.Location = new Point(230, 231);
+            guna2Panel2.Location = new Point(29, 229);
             guna2Panel2.Name = "guna2Panel2";
             guna2Panel2.ShadowDecoration.CustomizableEdges = customizableEdges5;
             guna2Panel2.Size = new Size(914, 485);
@@ -167,7 +159,7 @@
             PnlPesquisa.CustomizableEdges = customizableEdges14;
             PnlPesquisa.FillColor = Color.White;
             PnlPesquisa.ForeColor = Color.Black;
-            PnlPesquisa.Location = new Point(230, 151);
+            PnlPesquisa.Location = new Point(29, 149);
             PnlPesquisa.Name = "PnlPesquisa";
             PnlPesquisa.ShadowDecoration.CustomizableEdges = customizableEdges15;
             PnlPesquisa.Size = new Size(914, 65);
@@ -269,7 +261,7 @@
             guna2Button1.FillColor = Color.Green;
             guna2Button1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             guna2Button1.ForeColor = Color.White;
-            guna2Button1.Location = new Point(1000, 61);
+            guna2Button1.Location = new Point(815, 28);
             guna2Button1.Name = "guna2Button1";
             guna2Button1.ShadowDecoration.CustomizableEdges = customizableEdges17;
             guna2Button1.Size = new Size(128, 39);
@@ -282,7 +274,7 @@
             lblSubtitulo.BackColor = Color.WhiteSmoke;
             lblSubtitulo.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblSubtitulo.ForeColor = Color.Black;
-            lblSubtitulo.Location = new Point(334, 99);
+            lblSubtitulo.Location = new Point(152, 94);
             lblSubtitulo.Name = "lblSubtitulo";
             lblSubtitulo.Size = new Size(371, 17);
             lblSubtitulo.TabIndex = 2;
@@ -294,57 +286,18 @@
             lblTitulo.BackColor = Color.WhiteSmoke;
             lblTitulo.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTitulo.ForeColor = Color.Black;
-            lblTitulo.Location = new Point(334, 42);
+            lblTitulo.Location = new Point(152, 27);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(147, 40);
             lblTitulo.TabIndex = 1;
             lblTitulo.Text = "Refeições";
-            // 
-            // picIcone
-            // 
-            picIcone.BackColor = Color.WhiteSmoke;
-            picIcone.FillColor = Color.Honeydew;
-            picIcone.ImageRotate = 0F;
-            picIcone.Location = new Point(9, 87);
-            picIcone.Name = "picIcone";
-            picIcone.ShadowDecoration.CustomizableEdges = customizableEdges18;
-            picIcone.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
-            picIcone.Size = new Size(70, 70);
-            picIcone.SizeMode = PictureBoxSizeMode.CenterImage;
-            picIcone.TabIndex = 0;
-            picIcone.TabStop = false;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.BackColor = Color.WhiteSmoke;
-            label1.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.ForeColor = Color.Black;
-            label1.Location = new Point(9, 16);
-            label1.Name = "label1";
-            label1.Size = new Size(147, 40);
-            label1.TabIndex = 9;
-            label1.Text = "Refeições";
-            // 
-            // guna2Panel1
-            // 
-            guna2Panel1.BackColor = Color.White;
-            guna2Panel1.Controls.Add(label1);
-            guna2Panel1.Controls.Add(picIcone);
-            guna2Panel1.CustomizableEdges = customizableEdges19;
-            guna2Panel1.Location = new Point(-3, -1);
-            guna2Panel1.Name = "guna2Panel1";
-            guna2Panel1.ShadowDecoration.CustomizableEdges = customizableEdges20;
-            guna2Panel1.Size = new Size(205, 707);
-            guna2Panel1.TabIndex = 10;
             // 
             // frmRefeicoes
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.WhiteSmoke;
-            ClientSize = new Size(1167, 716);
-            Controls.Add(guna2Panel1);
+            ClientSize = new Size(975, 716);
             Controls.Add(guna2Panel2);
             Controls.Add(guna2CirclePictureBox1);
             Controls.Add(PnlPesquisa);
@@ -362,29 +315,23 @@
             lblQuantidadePratos.ResumeLayout(false);
             lblQuantidadePratos.PerformLayout();
             PnlPesquisa.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)picIcone).EndInit();
-            guna2Panel1.ResumeLayout(false);
-            guna2Panel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-        private Guna.UI2.WinForms.Guna2CirclePictureBox picIcone;
         private Label lblTitulo;
         private Guna.UI2.WinForms.Guna2Panel guna2Panel2;
         private Guna.UI2.WinForms.Guna2Panel PnlPesquisa;
         private Guna.UI2.WinForms.Guna2Button guna2Button1;
         private Label lblSubtitulo;
         private Guna.UI2.WinForms.Guna2CirclePictureBox guna2CirclePictureBox1;
-        private Label label1;
         private Label label3;
         private Label label2;
         private Guna.UI2.WinForms.Guna2TextBox guna2TextBox1;
         private Guna.UI2.WinForms.Guna2Button guna2Button2;
         private Guna.UI2.WinForms.Guna2ComboBox guna2ComboBox2;
         private Guna.UI2.WinForms.Guna2ComboBox guna2ComboBox1;
-        private Guna.UI2.WinForms.Guna2Panel guna2Panel1;
         private Guna.UI2.WinForms.Guna2Panel lblQuantidadePratos;
         private Guna.UI2.WinForms.Guna2HtmlLabel lblPratosCadastrados;
     }

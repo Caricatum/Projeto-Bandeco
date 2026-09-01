@@ -147,7 +147,7 @@ namespace ProjetoBandejao.Services
             lblTipoTitle.ForeColor = Color.Gray;
             lblTipoTitle.Location = new Point(520, 370);
             lblTipoTitle.Name = "lblTipoTitle";
-            lblTipoTitle.Size = new Size(31, 15);
+            lblTipoTitle.Size = new Size(30, 15);
             lblTipoTitle.TabIndex = 16;
             lblTipoTitle.Text = "Tipo";
             // 
@@ -300,7 +300,7 @@ namespace ProjetoBandejao.Services
             pctImage.CustomizableEdges = customizableEdges7;
             pctImage.FillColor = Color.Transparent;
             pctImage.ImageRotate = 0F;
-            pctImage.Location = new Point(20, 20);
+            pctImage.Location = new Point(20, 3);
             pctImage.Name = "pctImage";
             pctImage.ShadowDecoration.CustomizableEdges = customizableEdges8;
             pctImage.Size = new Size(280, 260);

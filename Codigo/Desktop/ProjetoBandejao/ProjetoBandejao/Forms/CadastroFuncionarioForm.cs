@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 using System.Windows.Forms;
 using ProjetoBandejao.Models;
 using ProjetoBandejao.Services;
@@ -21,16 +14,15 @@ namespace ProjetoBandejao.Forms
 
         private void btnCadastrar_Click(object sender, EventArgs e)
         {
-            if (txtNome.Text.Trim() == "" ||
-                 txtEmail.Text.Trim() == "" ||
-                 txtSenha.Text.Trim() == "")
+            if (string.IsNullOrWhiteSpace(txtNome.Text) ||
+                string.IsNullOrWhiteSpace(txtEmail.Text) ||
+                string.IsNullOrWhiteSpace(txtSenha.Text))
             {
                 MessageBox.Show(
                     "Preencha todos os campos.",
                     "Atenção",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
-
                 return;
             }
 
@@ -44,28 +36,26 @@ namespace ProjetoBandejao.Forms
 
             UsuarioService service = new UsuarioService();
 
-            bool sucesso = service.Cadastrar(usuario);
+            bool sucesso = service.Cadastrar(usuario, out string mensagemErro);
 
             if (sucesso)
             {
                 MessageBox.Show(
-                          "Funcionário cadastrado com sucesso!\nAgora confirme o e-mail.",
-                          "Sucesso",
-                           MessageBoxButtons.OK,
-                           MessageBoxIcon.Information);
+                    "Funcionário cadastrado no banco com sucesso!\nUm código de validação foi gerado para confirmação.",
+                    "Sucesso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
-                ConfirmarCodigoForm tela =
-                    new ConfirmarCodigoForm(
-                        txtEmail.Text.Trim());
-
+                ConfirmarCodigoForm tela = new ConfirmarCodigoForm(txtEmail.Text.Trim());
                 tela.ShowDialog();
 
                 this.Close();
             }
             else
             {
+                string detalhe = string.IsNullOrWhiteSpace(mensagemErro) ? "Falha ao comunicar com o servidor da API." : mensagemErro;
                 MessageBox.Show(
-                    "Erro ao cadastrar funcionário.",
+                    $"Erro ao cadastrar funcionário:\n{detalhe}",
                     "Erro",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

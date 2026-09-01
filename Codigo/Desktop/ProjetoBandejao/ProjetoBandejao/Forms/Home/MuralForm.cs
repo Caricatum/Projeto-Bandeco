@@ -1,81 +1,160 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
+using ProjetoBandejao.Models;
+using ProjetoBandejao.Services;
 
 namespace ProjetoBandejao.Forms.Home
 {
     public partial class MuralForm : Form
     {
+        private readonly AvisoService avisoService = new AvisoService();
+        private List<Aviso> listaAvisosAtual = new List<Aviso>();
+
         public MuralForm()
         {
             InitializeComponent();
-            CarregarPostItsExemplo();
+            ConfigurarEventos();
+            CarregarAvisos();
         }
 
-        private void CarregarPostItsExemplo()
+        private void ConfigurarEventos()
         {
-            // Criando exemplos de post-its
-            AdicionarPostIt("Mudança no horário", "A partir de 15/08, o almoço será servido das 10h30 às 14h30.", "ALERTA", Color.FromArgb(253, 233, 144), "12/08/2025");
-            AdicionarPostIt("Cardápio de Inverno!", "Pratos quentinhos para deixar seu dia mais gostoso.", "INFORMATIVO", Color.FromArgb(218, 232, 252), "11/08/2025");
-            AdicionarPostIt("Não esqueça!", "Traga sua garrafinha reutilizável e ajude o meio ambiente.", "LEMBRETE", Color.FromArgb(248, 206, 220), "10/08/2025");
-            AdicionarPostIt("Vamos juntos pelo Cotil!", "Desperdício de alimentos faz mal para o planeta. Sirva-se consciente!", "SUSTENTABILIDADE", Color.FromArgb(213, 232, 212), "09/08/2025");
-            AdicionarPostIt("Semana do Estudante", "Atividades especiais de 18 a 22/08. Participe!", "EVENTO", Color.FromArgb(225, 213, 231), "08/08/2025");
-            AdicionarPostIt("Fila preferencial", "Lembre-se: a fila preferencial é para idosos e gestantes.", "AVISO", Color.FromArgb(255, 242, 204), "07/08/2025");
+            btnCancelar.Click += (s, e) =>
+            {
+                txtNovoTitulo.Clear();
+                txtMensagem.Clear();
+                if (cmbTipo.Items.Count > 0) cmbTipo.SelectedIndex = 0;
+            };
+
+            txtBusca.TextChanged += (s, e) => AplicarFiltros();
+            cmbCategoriaBusca.SelectedIndexChanged += (s, e) => AplicarFiltros();
+            cmbFiltroRecentes.SelectedIndexChanged += (s, e) => AplicarFiltros();
         }
 
-        private void AdicionarPostIt(string titulo, string mensagem, string tipo, Color cor, string data)
+        private void CarregarAvisos()
+        {
+            listaAvisosAtual = avisoService.Listar();
+            AplicarFiltros();
+        }
+
+        private void AplicarFiltros()
+        {
+            flpMural.Controls.Clear();
+
+            string busca = txtBusca.Text.Trim();
+            IEnumerable<Aviso> filtrados = listaAvisosAtual;
+
+            if (!string.IsNullOrEmpty(busca))
+            {
+                filtrados = filtrados.Where(a => 
+                    (a.Titulo != null && a.Titulo.Contains(busca, StringComparison.OrdinalIgnoreCase)) ||
+                    (a.Descricao != null && a.Descricao.Contains(busca, StringComparison.OrdinalIgnoreCase))
+                );
+            }
+
+            // Ordenação por data
+            bool maisRecente = cmbFiltroRecentes.SelectedIndex <= 0;
+            if (maisRecente)
+            {
+                filtrados = filtrados.OrderByDescending(a => a.DataCriacao ?? DateTime.MinValue);
+            }
+            else
+            {
+                filtrados = filtrados.OrderBy(a => a.DataCriacao ?? DateTime.MinValue);
+            }
+
+            var listaFinal = filtrados.ToList();
+
+            if (listaFinal.Count == 0)
+            {
+                var lblVazio = new Label
+                {
+                    Text = "Nenhum aviso publicado no mural.\nUse o formulário ao lado para criar o primeiro aviso!",
+                    Font = new Font("Segoe UI", 12F, FontStyle.Regular),
+                    ForeColor = Color.DarkSlateGray,
+                    AutoSize = false,
+                    Size = new Size(680, 100),
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Margin = new Padding(20)
+                };
+                flpMural.Controls.Add(lblVazio);
+                return;
+            }
+
+            Color[] coresPostIt = new Color[]
+            {
+                Color.FromArgb(253, 233, 144), // Amarelo
+                Color.FromArgb(218, 232, 252), // Azul
+                Color.FromArgb(248, 206, 220), // Rosa
+                Color.FromArgb(213, 232, 212), // Verde
+                Color.FromArgb(225, 213, 231)  // Roxo
+            };
+
+            int i = 0;
+            foreach (var aviso in listaFinal)
+            {
+                Color cor = coresPostIt[i % coresPostIt.Length];
+                AdicionarPostIt(aviso, cor);
+                i++;
+            }
+        }
+
+        private void AdicionarPostIt(Aviso aviso, Color cor)
         {
             var pnl = new Guna2Panel
             {
-                Width = 240,
-                Height = 260,
+                Width = 220,
+                Height = 230,
                 FillColor = cor,
                 BorderRadius = 4,
-                Margin = new Padding(15)
+                Margin = new Padding(10)
             };
-
-            // Criar o "Chip" de categoria
-            var chipPanel = new Guna2Panel
-            {
-                FillColor = Color.White,
-                BorderColor = Color.Gainsboro,
-                BorderThickness = 1,
-                BorderRadius = 10,
-                Size = new Size(110, 25),
-                Location = new Point(115, 15)
-            };
-            
-            var lblTipo = new Label
-            {
-                Text = tipo,
-                Font = new Font("Segoe UI", 7F, FontStyle.Bold),
-                ForeColor = Color.DimGray,
-                AutoSize = false,
-                Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleCenter,
-                BackColor = Color.Transparent
-            };
-            chipPanel.Controls.Add(lblTipo);
-            pnl.Controls.Add(chipPanel);
 
             // Alfinete (Pushpin)
             var pin = new Guna2CirclePictureBox
             {
                 FillColor = Color.Crimson,
-                Size = new Size(16, 16),
-                Location = new Point(112, -8),
+                Size = new Size(14, 14),
+                Location = new Point(103, -7),
                 BackColor = Color.Transparent
             };
             pnl.Controls.Add(pin);
             pin.BringToFront();
 
+            // Botão Excluir pequeno
+            var btnDel = new Guna2Button
+            {
+                Text = "✕",
+                Font = new Font("Segoe UI", 8F, FontStyle.Bold),
+                FillColor = Color.Transparent,
+                ForeColor = Color.FromArgb(150, 40, 40),
+                Size = new Size(24, 24),
+                Location = new Point(190, 5),
+                Cursor = Cursors.Hand
+            };
+            btnDel.Click += (s, e) =>
+            {
+                var confirm = MessageBox.Show($"Deseja excluir o aviso '{aviso.Titulo}'?", "Excluir Aviso", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (confirm == DialogResult.Yes)
+                {
+                    if (avisoService.Deletar(aviso.Id))
+                    {
+                        CarregarAvisos();
+                    }
+                }
+            };
+            pnl.Controls.Add(btnDel);
+
             var lblTitulo = new Label
             {
-                Text = titulo,
-                Font = new Font("Segoe UI", 13, FontStyle.Bold),
-                Location = new Point(10, 55),
-                Size = new Size(220, 60),
+                Text = aviso.Titulo,
+                Font = new Font("Segoe UI", 11, FontStyle.Bold),
+                Location = new Point(10, 25),
+                Size = new Size(200, 45),
                 BackColor = Color.Transparent,
                 TextAlign = ContentAlignment.TopCenter,
                 ForeColor = Color.Black
@@ -84,21 +163,21 @@ namespace ProjetoBandejao.Forms.Home
 
             var lblMsg = new Label
             {
-                Text = mensagem,
-                Font = new Font("Segoe UI", 10, FontStyle.Regular),
-                Location = new Point(15, 120),
-                Size = new Size(210, 100),
+                Text = aviso.Descricao,
+                Font = new Font("Segoe UI", 9, FontStyle.Regular),
+                Location = new Point(10, 75),
+                Size = new Size(200, 110),
                 BackColor = Color.Transparent,
                 TextAlign = ContentAlignment.TopCenter,
-                ForeColor = Color.FromArgb(60, 60, 60)
+                ForeColor = Color.FromArgb(50, 50, 50)
             };
             pnl.Controls.Add(lblMsg);
 
             var lblData = new Label
             {
-                Text = "📅 " + data,
-                Font = new Font("Segoe UI", 9, FontStyle.Regular),
-                Location = new Point(15, 230),
+                Text = "📅 " + aviso.DataFormatada,
+                Font = new Font("Segoe UI", 8, FontStyle.Regular),
+                Location = new Point(10, 205),
                 AutoSize = true,
                 BackColor = Color.Transparent,
                 ForeColor = Color.DimGray
@@ -110,7 +189,33 @@ namespace ProjetoBandejao.Forms.Home
 
         private void btnPublicar_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Aviso publicado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (string.IsNullOrWhiteSpace(txtNovoTitulo.Text))
+            {
+                MessageBox.Show("Por favor, informe o título do aviso.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtMensagem.Text))
+            {
+                MessageBox.Show("Por favor, escreva a mensagem do aviso.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            Aviso novoAviso = new Aviso
+            {
+                Titulo = txtNovoTitulo.Text.Trim(),
+                Descricao = txtMensagem.Text.Trim(),
+                User = UsuarioSession.UsuarioLogado
+            };
+
+            bool sucesso = avisoService.Cadastrar(novoAviso);
+            if (sucesso)
+            {
+                MessageBox.Show("Aviso publicado com sucesso no mural!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtNovoTitulo.Clear();
+                txtMensagem.Clear();
+                CarregarAvisos();
+            }
         }
     }
 }
