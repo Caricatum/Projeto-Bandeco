@@ -2,10 +2,12 @@ package com.example.apiBandeco.controler;
 
 
 import com.example.apiBandeco.model.Avaliacoes;
+import com.example.apiBandeco.model.Pratos;
 import com.example.apiBandeco.repository.AvaliacoesRepository;
 import com.example.apiBandeco.repository.PratosRepository;
 import com.example.apiBandeco.repository.UserRepository;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/avaliacoes")
+@RequiredArgsConstructor
 public class AvaliacoesController {
     @Autowired
     AvaliacoesRepository avaliacoesRepository;
@@ -22,6 +25,7 @@ public class AvaliacoesController {
     PratosRepository pratosRepository;
     @Autowired
     UserRepository userRepository;
+    private final GeminiAvaliacaoService geminiAvaliacaoService;
 
     @GetMapping("/id/{id}")//busca avaliacao pelo id
     public Avaliacoes buscarPorId(@PathVariable("id") int id){
@@ -61,7 +65,23 @@ public class AvaliacoesController {
                     HttpStatus.BAD_REQUEST, "Avaliação já feita");
         }
 
-        return avaliacoesRepository.save(avaliacao);
+        Avaliacoes novaAvaliacao = avaliacoesRepository.save(avaliacao);
+
+        List<Avaliacoes> avaliacoes =
+                avaliacoesRepository.findByPratoId(pratoId);
+
+        if (avaliacoes.size() >= 3) {
+
+            Pratos prato = pratosRepository.findById(pratoId)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "Prato não encontrado"
+                    ));
+
+            geminiAvaliacaoService.atualizarDescricaoIA(prato);
+        }
+
+        return novaAvaliacao;
     }
 
     @PutMapping("/atualizar")
@@ -106,4 +126,5 @@ public class AvaliacoesController {
 
         avaliacoesRepository.delete(avaliacao);
     }
+
 }
