@@ -26,6 +26,8 @@ public class Pratos {
     private String imagem;
     @Column
     private String notaTecnica;
+    @Column(columnDefinition = "TEXT")
+    private String descricaoIA;
     @JsonIgnore
     @OneToMany(mappedBy = "prato",
             cascade = CascadeType.ALL,
@@ -121,6 +123,15 @@ public class Pratos {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getDescricaoIA() {
+        return descricaoIA;
+    }
+
+    public void setDescricaoIA(String descricaoIA) {
+        this.descricaoIA = descricaoIA;
+    }
+
 
     @ManyToOne
     @JoinColumn(name = "id_categoria", nullable = false)
