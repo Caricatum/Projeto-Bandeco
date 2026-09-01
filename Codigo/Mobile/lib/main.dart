@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'Pages/login.dart';
-import 'Pages/cardapioPratos.dart';
+import 'Pages/CardapioReferent/cardapioPratos.dart';
 import 'Pages/principal.dart';
 import 'Pages/login.dart';
 import 'Pages/cadastro.dart';
-import 'Pages/perfil.dart';
-import 'Pages/cardapioPratos.dart';
-import 'Pages/cadastroPrato.dart';
+import 'Pages/UserReferent/perfil.dart';
+import 'Pages/CardapioReferent/cardapioPratos.dart';
+import 'Pages/CardapioReferent/cadastroPrato.dart';
 
 void main() {
   runApp(const MyApp());

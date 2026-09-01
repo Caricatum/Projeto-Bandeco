@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'cadastro.dart';
-import 'login.dart';
+import '../cadastro.dart';
+import '../login.dart';
 import 'dart:async';
 
 class ConfirmarEmail extends StatefulWidget {

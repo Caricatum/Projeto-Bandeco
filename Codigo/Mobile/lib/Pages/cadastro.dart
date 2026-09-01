@@ -3,7 +3,7 @@ import 'login.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../Class/usuarioClass.dart';
-import 'confirmarEmail.dart';
+import 'UserReferent/confirmarEmail.dart';
 
 class Cadastro extends StatefulWidget {
   const Cadastro({super.key});
