@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProjetoBandejao")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ee2fb53621c08e8d39fa9fbefdf58733c2b8514b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+193a4d655894403afdabe3c2a683ebe6cb5bb818")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProjetoBandejao")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProjetoBandejao")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

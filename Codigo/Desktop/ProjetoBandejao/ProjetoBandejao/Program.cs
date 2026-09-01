@@ -1,3 +1,4 @@
+using ProjetoBandejao.Data;
 using ProjetoBandejao.Forms;
 using ProjetoBandejao.Forms.Home;
 
@@ -14,6 +15,9 @@ namespace ProjetoBandejao
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
+
+            SQLiteDatabase.Inicializar();
+
             Application.Run(new LoginForm());
         }
     }

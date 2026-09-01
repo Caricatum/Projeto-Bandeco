@@ -44,10 +44,10 @@
             // 
             // pictureBox1
             // 
-            pictureBox1.Image = Properties.Resource.ImagemCodigo;
-            pictureBox1.Location = new Point(180, 30);
+            pictureBox1.Image = Properties.Resource.escudo3;
+            pictureBox1.Location = new Point(143, 30);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(240, 180);
+            pictureBox1.Size = new Size(332, 180);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -122,7 +122,7 @@
             // 
             // btnConfirmar
             // 
-            btnConfirmar.BackColor = Color.ForestGreen;
+            btnConfirmar.BackColor = Color.OrangeRed;
             btnConfirmar.FlatAppearance.BorderSize = 0;
             btnConfirmar.FlatStyle = FlatStyle.Flat;
             btnConfirmar.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -157,10 +157,10 @@
             // 
             // linkReenviar
             // 
-            linkReenviar.ActiveLinkColor = Color.Green;
+            linkReenviar.ActiveLinkColor = Color.DarkOrange;
             linkReenviar.AutoSize = true;
             linkReenviar.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            linkReenviar.LinkColor = Color.ForestGreen;
+            linkReenviar.LinkColor = Color.Orange;
             linkReenviar.Location = new Point(314, 705);
             linkReenviar.Name = "linkReenviar";
             linkReenviar.Size = new Size(66, 20);
