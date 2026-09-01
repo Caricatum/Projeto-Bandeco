@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../Class/usuarioClass.dart';
+import 'confirmarEmail.dart';
 
 class Cadastro extends StatefulWidget {
   const Cadastro({super.key});
@@ -31,6 +33,8 @@ class _CadastroState extends State<Cadastro> {
   }
 
   Future<void> cadastrarUsuario() async {
+    final email = loginController.text.trim();
+
     final url = Uri.parse('http://localhost:8080/user/cadastrar');
 
     try {
@@ -38,28 +42,61 @@ class _CadastroState extends State<Cadastro> {
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'nome': nomeController.text,
-          'login': loginController.text,
-          'senhaHash': senhaController.text,
+          'nome': nomeController.text.trim(),
+          'login': email,
+          'senhaHash': senhaHashController.text,
           'tipoUsuario': tipoUsuario,
         }),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Usuário cadastrado com sucesso!')),
+        // O cadastro não retorna o usuário.
+        // Por isso buscamos o usuário pelo login/e-mail.
+        final buscarUrl = Uri.parse(
+          'http://localhost:8080/user/login/'
+          '${Uri.encodeComponent(email)}',
         );
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => Login()),
-        );
+        final usuarioResponse = await http.get(buscarUrl);
+
+        if (usuarioResponse.statusCode == 200) {
+          final usuario = jsonDecode(usuarioResponse.body);
+
+          if (!mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Cadastro realizado! Verifique seu e-mail.'),
+            ),
+          );
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ConfirmarEmail(email: email, id: usuario['id']),
+            ),
+          );
+        } else {
+          if (!mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Cadastro realizado, mas não foi possível localizar o usuário.',
+              ),
+            ),
+          );
+        }
       } else {
+        if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erro ao cadastrar: ${response.body}')),
         );
       }
     } catch (e) {
+      if (!mounted) return;
+
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Erro de conexão: $e')));
@@ -67,7 +104,7 @@ class _CadastroState extends State<Cadastro> {
   }
 
   TextEditingController nomeController = TextEditingController();
-  TextEditingController senhaController = TextEditingController();
+  TextEditingController senhaHashController = TextEditingController();
   TextEditingController loginController = TextEditingController();
 
   @override
@@ -85,7 +122,10 @@ class _CadastroState extends State<Cadastro> {
                   fit: BoxFit.cover,
                 ),
 
-                Container(height: 260, color: Colors.black.withValues(alpha: 0.3)),
+                Container(
+                  height: 260,
+                  color: Colors.black.withValues(alpha: 0.3),
+                ),
 
                 Positioned(
                   left: 20,
@@ -132,9 +172,24 @@ class _CadastroState extends State<Cadastro> {
                   ),
                   const SizedBox(height: 15),
 
-                  // Senha
+                  // Email
                   TextFormField(
-                    controller: senhaController,
+                    controller: loginController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: customInput("* Email:", Icons.email),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Preencha o campo nome";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 25),
+
+                  // senhaHash
+                  TextFormField(
+                    controller: senhaHashController,
                     obscureText: _obscurePassword,
                     decoration: customInput(
                       "* Senha:",
@@ -161,21 +216,6 @@ class _CadastroState extends State<Cadastro> {
                     },
                   ),
                   const SizedBox(height: 15),
-
-                  // Email
-                  TextFormField(
-                    controller: loginController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: customInput("* Email:", Icons.email),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Preencha o campo nome";
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 25),
 
                   Row(
                     children: [
@@ -222,7 +262,7 @@ class _CadastroState extends State<Cadastro> {
                     onPressed: () async {
                       if (nomeController.text.isEmpty ||
                           loginController.text.isEmpty ||
-                          senhaController.text.isEmpty) {
+                          senhaHashController.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Preencha todos os campos'),

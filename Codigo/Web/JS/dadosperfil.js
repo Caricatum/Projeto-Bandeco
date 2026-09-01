@@ -1,179 +1,159 @@
-const API = 'http://localhost:8080';
-window.addEventListener('pageshow', (event) => {
-    if (event.persisted) {
-        location.reload();
-    }
-});
-// ── Redireciona se não logado ─────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', function () {
-    if (sessionStorage.getItem('logado') !== 'true') {
-        window.location.href = 'login.php';
-    }
+const API = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:8080';
 
+// Redireciona para o login se não estiver autenticado
+if (sessionStorage.getItem('logado') !== 'true') {
+    window.location.href = 'login.php';
+}
+
+const loginLogado = (localStorage.getItem('username') || '').toLowerCase();
+const isFuncionarioLogado = localStorage.getItem('tipo') === 'true';
+
+let usuarioCarregado = null; // { id, login, nome, funcionario }
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // Limpa dados temporários de edição
     localStorage.setItem("usernameTroca", "");
     localStorage.setItem("nomeTroca", "");
     localStorage.setItem("tipoTroca", "");
     localStorage.setItem("idTroca", "");
-});
 
-// ── Estado ───────────────────────────────────────────────────────────────────
-let acaoPendente = null; // 'trocar' ou 'deletar'
-let usuarioBuscado = null; // objeto { id, login, nome, funcionario }
-
-// ── BUSCAR USUÁRIO ────────────────────────────────────────────────────────────
-document.getElementById('dadosForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const username = document.getElementById('username').value.trim();
-    const message  = document.getElementById('message');
-
-    // Resetar exibição
-    document.getElementById('aluno').checked = false;
-    document.getElementById('func').checked  = false;
-    document.getElementById('name').value    = '';
-    message.innerText = '';
-    esconderBotoes();
-
-    if (!username) return;
-
-    fetch(`${API}/user/login/${username}`)
-        .then(res => {
-            if (!res.ok) throw new Error('Usuário não encontrado.');
-            return res.json();
-        })
-        .then(data => {
-            usuarioBuscado = data;
-
-            // Preenche os campos
-            document.getElementById('name').value = data.nome;
-            if (data.funcionario) {
-                document.getElementById('func').checked = true;
-            } else {
-                document.getElementById('aluno').checked = true;
-            }
-
-            // Revela seções
-            document.getElementById('div-nome').style.display           = 'flex';
-            document.getElementById('sectionTipodeUsuario').style.display = 'flex';
-            document.getElementById('trocarinfo').style.display         = 'block';
-            document.getElementById('voltar').style.display             = 'block';
-
-            // Deletar só aparece para funcionários logados
-            if (localStorage.getItem('tipo') === 'true') {
-                document.getElementById('deletar').style.display = 'block';
-            }
-        })
-        .catch(err => {
-            message.innerText = err.message;
-        });
-});
-
-// ── ABRIR MODAL: TROCAR INFORMAÇÕES ──────────────────────────────────────────
-document.getElementById('trocarinfo').addEventListener('click', function () {
-    acaoPendente = 'trocar';
-    abrirModalSenha(
-        '✏️ Trocar Informações',
-        'Para editar os dados do usuário <strong>' + (usuarioBuscado ? usuarioBuscado.login : '') + '</strong>, confirme sua senha.'
-    );
-});
-
-// ── ABRIR MODAL: DELETAR ─────────────────────────────────────────────────────
-document.getElementById('deletar').addEventListener('click', function () {
-    acaoPendente = 'deletar';
-    abrirModalSenha(
-        '🗑️ Deletar Usuário',
-        'Você está prestes a <strong>deletar</strong> o usuário <strong>' + (usuarioBuscado ? usuarioBuscado.login : '') + '</strong>. Esta ação não pode ser desfeita. Confirme sua senha para continuar.'
-    );
-});
-
-// ── MODAL: abrir e resetar ────────────────────────────────────────────────────
-function abrirModalSenha(titulo, descricao) {
-    document.getElementById('modalSenhaTitulo').innerHTML    = titulo;
-    document.getElementById('modalSenhaDescricao').innerHTML = descricao;
-    document.getElementById('inputSenhaModal').value         = '';
-    document.getElementById('msgSenhaModal').textContent     = '';
-    new bootstrap.Modal(document.getElementById('modalSenha')).show();
-}
-
-// ── MODAL: confirmar senha e executar ação ─────────────────────────────────────
-document.getElementById('btnConfirmarSenha').addEventListener('click', async function () {
-    const senha  = document.getElementById('inputSenhaModal').value;
-    const msgEl  = document.getElementById('msgSenhaModal');
-    const btnEl  = document.getElementById('btnConfirmarSenha');
-
-    msgEl.textContent = '';
-
-    if (!senha) {
-        msgEl.textContent = 'Digite sua senha.';
-        return;
+    // Se for funcionário, exibe o painel de busca administrativa
+    const boxBusca = document.getElementById('boxBuscaFuncionario');
+    if (isFuncionarioLogado && boxBusca) {
+        boxBusca.classList.remove('d-none');
     }
 
-    // Login do usuário logado (dono da sessão, não o usuário buscado)
-    const loginLogado = localStorage.getItem('username');
+    // Carrega automaticamente o próprio perfil
+    await carregarDadosUsuario(localStorage.getItem('username'));
 
-    btnEl.disabled       = true;
-    btnEl.textContent    = 'Verificando...';
+    // Configura formulário de busca de funcionários
+    const formBusca = document.getElementById('formBuscaUsuario');
+    if (formBusca) {
+        formBusca.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const termo = document.getElementById('inputBuscaUser').value.trim();
+            if (!termo) return;
+            await carregarDadosUsuario(termo);
+        });
+    }
 
-    try {
-        // 1) Valida a senha do usuário LOGADO
-        const resValidar = await fetch(
-            `${API}/user/validar?login=${encodeURIComponent(loginLogado)}&senhaHash=${encodeURIComponent(senha)}`
-        );
+    // Botão para voltar a ver o próprio perfil (quando funcionário busca outro)
+    const linkMeuPerfil = document.getElementById('linkVoltarMeuPerfil');
+    if (linkMeuPerfil) {
+        linkMeuPerfil.addEventListener('click', async (e) => {
+            e.preventDefault();
+            document.getElementById('inputBuscaUser').value = '';
+            await carregarDadosUsuario(localStorage.getItem('username'));
+        });
+    }
 
-        if (!resValidar.ok) throw new Error('Senha incorreta.');
+    // Configura botão de Trocar Informações
+    document.getElementById('btnTrocarInfo').addEventListener('click', () => {
+        if (!usuarioCarregado) return;
 
-        const senhaCorreta = await resValidar.json();
-        if (!senhaCorreta) throw new Error('Senha incorreta.');
+        const loginAlvo = (usuarioCarregado.login || '').toLowerCase();
 
-        // 2) Senha válida — executa a ação pendente
-        if (acaoPendente === 'trocar') {
-            // Salva dados do usuário A SER EDITADO em chaves separadas,
-            // sem sobrescrever os dados do usuário logado
-            localStorage.setItem('usernameTroca', usuarioBuscado.login);
-            localStorage.setItem('nomeTroca',     usuarioBuscado.nome);
-            localStorage.setItem('tipoTroca',     usuarioBuscado.funcionario);
-            localStorage.setItem('idTroca',       usuarioBuscado.id);
+        // Aluno só pode editar o próprio perfil
+        if (!isFuncionarioLogado && loginAlvo !== loginLogado) {
+            alert('Você tem permissão para alterar apenas as suas próprias informações.');
+            return;
+        }
 
-            bootstrap.Modal.getInstance(document.getElementById('modalSenha')).hide();
-            window.location.href = 'trocarinfo.php';
+        // Salva dados do usuário selecionado para a página de edição
+        localStorage.setItem("usernameTroca", usuarioCarregado.login);
+        localStorage.setItem("nomeTroca", usuarioCarregado.nome);
+        localStorage.setItem("tipoTroca", usuarioCarregado.funcionario ? "true" : "false");
+        localStorage.setItem("idTroca", usuarioCarregado.id);
 
-        } else if (acaoPendente === 'deletar') {
-            // Deleta o usuário buscado
-            const resDel = await fetch(`${API}/user/deletar/${usuarioBuscado.id}`, {
-                method: 'DELETE'
-            });
+        window.location.href = 'trocarinfo.php';
+    });
 
-            if (!resDel.ok) throw new Error('Erro ao deletar o usuário.');
+    // Configura botão de Deletar Usuário (Apenas Funcionário)
+    document.getElementById('btnDeletarUser').addEventListener('click', async () => {
+        if (!usuarioCarregado || !isFuncionarioLogado) return;
 
-            bootstrap.Modal.getInstance(document.getElementById('modalSenha')).hide();
+        const confirma = confirm(`Tem certeza que deseja deletar o usuário "${usuarioCarregado.login}"? Esta ação é irreversível.`);
+        if (!confirma) return;
 
-            // Se deletou a si mesmo, faz logout
-            if (usuarioBuscado.login === loginLogado) {
+        const message = document.getElementById('message');
+        try {
+            const res = await fetch(`${API}/user/deletar/${usuarioCarregado.id}`, { method: 'DELETE' });
+            if (!res.ok) throw new Error(await res.text() || 'Erro ao deletar usuário.');
+
+            // Se o funcionário deletou a si próprio
+            if (usuarioCarregado.login.toLowerCase() === loginLogado) {
                 sessionStorage.setItem('logado', 'false');
                 localStorage.clear();
                 window.location.href = 'login.php';
-            } else {
-                document.getElementById('message').style.color = 'green';
-                document.getElementById('message').innerText   = 'Usuário deletado com sucesso.';
-                esconderBotoes();
-                document.getElementById('username').value = '';
-                usuarioBuscado = null;
+                return;
             }
+
+            message.style.color = 'green';
+            message.innerText = 'Usuário deletado com sucesso.';
+            // Volta para o perfil do funcionário logado
+            await carregarDadosUsuario(localStorage.getItem('username'));
+        } catch (err) {
+            message.style.color = '#D92243';
+            message.innerText = 'Erro: ' + err.message;
+        }
+    });
+});
+
+/**
+ * Busca e renderiza os dados de um usuário na interface
+ */
+async function carregarDadosUsuario(login) {
+    const message = document.getElementById('message');
+    message.innerText = '';
+
+    if (!login) return;
+
+    try {
+        const res = await fetch(`${API}/user/login/${encodeURIComponent(login)}`);
+        if (!res.ok) throw new Error('Usuário não encontrado.');
+
+        const data = await res.json();
+        usuarioCarregado = data;
+
+        // Atualiza campos
+        document.getElementById('exibeNome').textContent = data.nome || '—';
+        document.getElementById('exibeLogin').textContent = data.login || '—';
+        
+        const badge = document.getElementById('badgeTipoUsuario');
+        const exibeTipo = document.getElementById('exibeTipo');
+        const avatar = document.getElementById('avatarIcon');
+        const titulo = document.getElementById('tituloPagina');
+        const btnDeletar = document.getElementById('btnDeletarUser');
+        const btnVerMeu = document.getElementById('btnVerMeuPerfil');
+
+        if (data.funcionario) {
+            badge.className = 'badge-tipo-func';
+            badge.textContent = '👔 Funcionário';
+            exibeTipo.innerHTML = '<strong>Funcionário</strong> <span class="text-muted">(Acesso Administrativo)</span>';
+            avatar.textContent = '👔';
+        } else {
+            badge.className = 'badge-tipo-aluno';
+            badge.textContent = '🎓 Aluno';
+            exibeTipo.innerHTML = '<strong>Aluno</strong>';
+            avatar.textContent = '🎓';
+        }
+
+        const isProprioPerfil = (data.login || '').toLowerCase() === loginLogado;
+
+        if (isProprioPerfil) {
+            titulo.textContent = 'Meu Perfil';
+            if (btnVerMeu) btnVerMeu.classList.add('d-none');
+            // Oculta deletar no próprio perfil por segurança, a menos que seja intencional
+            if (btnDeletar) btnDeletar.classList.add('d-none');
+        } else {
+            titulo.textContent = `Perfil de ${data.nome.split(' ')[0] || data.login}`;
+            if (btnVerMeu) btnVerMeu.classList.remove('d-none');
+            // Mostra deletar apenas para funcionários ao visualizar terceiros
+            if (btnDeletar && isFuncionarioLogado) btnDeletar.classList.remove('d-none');
         }
 
     } catch (err) {
-        msgEl.textContent = err.message;
-    } finally {
-        btnEl.disabled    = false;
-        btnEl.textContent = 'Confirmar';
+        message.style.color = '#D92243';
+        message.innerText = err.message;
     }
-});
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
-function esconderBotoes() {
-    document.getElementById('div-nome').style.display             = 'none';
-    document.getElementById('sectionTipodeUsuario').style.display = 'none';
-    document.getElementById('trocarinfo').style.display           = 'none';
-    document.getElementById('deletar').style.display              = 'none';
-    document.getElementById('voltar').style.display               = 'none';
 }

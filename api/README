@@ -1,0 +1,601 @@
+# Documentação Técnica da API - Bandeco (apiBandeco)
+
+Esta documentação detalha a arquitetura, configurações, entidades, repositórios, serviços e endpoints REST do módulo backend **apiBandeco** do sistema Bandeco (Restaurante Universitário / COTIL).
+
+---
+
+## 1. Visão Geral da Aplicação
+
+O projeto `apiBandeco` é uma API REST desenvolvida em **Java** com o framework **Spring Boot 3.5.6**, com o propósito de gerenciar o fluxo de dados do restaurante, incluindo:
+* Cadastro e autenticação de usuários (clientes e funcionários).
+* Gestão de pratos e categorização com upload de imagens.
+* Gestão da tabela de valores nutricionais por prato.
+* Montagem de cardápios por tipo de refeição (Almoço, Jantar, Padrão e Vegano).
+* Agendamento de cardápios diários e semanais.
+* Avaliação de pratos e lista de pratos favoritos por usuário.
+* Avisos e notificações institucionais.
+* Sistema de envio de e-mails com códigos de validação, recuperação de senha e notificações automáticas de pratos favoritos servidos no dia.
+
+---
+
+## 2. Tecnologias e Dependências
+
+As principais dependências declaradas no [pom.xml](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/pom.xml) incluem:
+
+| Tecnologia / Pacote | Versão / Descrição |
+| :--- | :--- |
+| **Java** | 17 LTS |
+| **Spring Boot** | 3.5.6 (`spring-boot-starter-parent`) |
+| **Spring Web** | Criação de Controllers REST, mapeamento de rotas e manipulação de requisições HTTP |
+| **Spring Data JPA** | Abstração da camada de persistência com Hibernate |
+| **Spring Boot Validation** | Validação de beans com Bean Validation / Hibernate Validator (`@NotNull`, `@NotBlank`, `@Email`, `@Size`) |
+| **Spring Security (Crypto)** | Codificação e validação de senhas com `BCryptPasswordEncoder` |
+| **Spring Mail** | `JavaMailSender` para envio de mensagens via protocolo SMTP |
+| **MySQL Connector/J** | Driver JDBC de conexão com o banco MySQL (`com.mysql.cj.jdbc.Driver`) |
+| **Lombok** | Geração de utilitários e redução de boilerplate |
+| **Spring Boot DevTools** | Recarregamento dinâmico em tempo de desenvolvimento |
+
+---
+
+## 3. Configurações da Aplicação
+
+### 3.1. Propriedades do Sistema ([application.properties](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/resources/application.properties))
+
+* **Aplicação**: `spring.application.name=apiBandeco`
+* **Banco de Dados**:
+  * URL: `jdbc:mysql://143.106.241.4:3306/cl203271`
+  * Driver: `com.mysql.cj.jdbc.Driver`
+  * Estratégia DDL Hibernate: `update` (atualização automática de tabelas e esquemas)
+  * Visualização de SQLs no log: `spring.jpa.show-sql=true`
+* **Tratamento de Mensagens de Erro no Servidor**:
+  * Mensagens ativas: `server.error.include-message=always`
+  * Erros de binding ativos: `server.error.include-binding-errors=always`
+  * Ocultação de Stacktrace: `server.error.include-stacktrace=never`
+* **Servidor de E-mail (SMTP - Gmail)**:
+  * Host: `smtp.gmail.com`
+  * Porta: `587`
+  * Usuário: `bandeco.notificacoes@gmail.com`
+  * Autenticação e TLS: `mail.smtp.auth=true` e `mail.smtp.starttls.enable=true`
+
+### 3.2. Configuração de Recursos Estáticos ([WebConfig.java](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/config/WebConfig.java))
+A classe [`WebConfig`](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/config/WebConfig.java) estende `WebMvcConfigurer` e mapeia a rota de arquivos estáticos:
+* Padrão de URL: `/uploads/**`
+* Diretório físico: `file:uploads/` (permite servir as imagens dos pratos salvas no diretório `uploads/pratos/`).
+
+### 3.3. Configuração de Segurança ([ApiBandecoApplication.java](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/ApiBandecoApplication.java))
+* A anotação `@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})` desabilita o formulário de login padrão do Spring Security, permitindo que a autenticação e autorização sejam controladas pelos endpoints REST customizados.
+* Declaração do `@Bean` `PasswordEncoder` utilizando `BCryptPasswordEncoder` para geração e verificação de hashes de senhas.
+
+### 3.4. Tratamento Global de Exceções ([TratadorErros.java](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/exception/TratadorErros.java))
+A classe anotada com `@RestControllerAdvice` intercepta erros lançados durante as requisições:
+* **`MethodArgumentNotValidException`**: Captura falhas de validação de campos nos DTOs/Entities e retorna um JSON com o mapa `{"campo": "mensagem de erro"}`.
+* **`ResponseStatusException`**: Retorna `{"erro": "<motivo do erro>"}` padronizado com o status HTTP correspondente.
+
+---
+
+## 4. Estrutura de Diretórios e Arquitetura
+
+A estrutura do código-fonte em `src/main/java/com/example/apiBandeco` é dividida em camadas:
+
+```
+com.example.apiBandeco/
+│
+├── ApiBandecoApplication.java       # Classe principal e definição de Beans
+│
+├── config/
+│   └── WebConfig.java               # Configuração do manipulador de recursos estáticos (/uploads)
+│
+├── controler/                       # Controladores REST e Serviços de Notificação
+│   ├── AvaliacoesController.java
+│   ├── AvisosController.java
+│   ├── CardapioController.java
+│   ├── CardapioDiaController.java
+│   ├── CategoriaController.java
+│   ├── NotificacoesController.java
+│   ├── NotificacoesService.java     # Lógica de cruzamento de cardápio do dia x favoritos
+│   ├── PratosController.java
+│   ├── PratosFavoritosController.java
+│   ├── UserController.java
+│   └── ValorNutricionalController.java
+│
+├── email/                           # Serviço de e-mail e templates
+│   ├── EmailService.java            # Manipulação do JavaMailSender e MimeMessage
+│   └── template-email.html          # Template HTML base
+│
+├── exception/
+│   └── TratadorErros.java           # @RestControllerAdvice para interceptação de erros
+│
+├── model/                           # Entidades JPA (Mapeamento Objeto-Relacional)
+│   ├── Avaliacoes.java
+│   ├── Avisos.java
+│   ├── Cardapio.java
+│   ├── CardapioDia.java
+│   ├── Categoria.java
+│   ├── Notificacoes.java
+│   ├── Pratos.java
+│   ├── PratosFavoritos.java
+│   ├── User.java
+│   └── ValorNutricional.java
+│
+└── repository/                      # Interfaces Spring Data JPA
+    ├── AvaliacoesRepository.java
+    ├── AvisosRepository.java
+    ├── CardapioDiaRepository.java
+    ├── CardapioRepository.java
+    ├── CategoriaRepository.java
+    ├── NotificacoesRepository.java
+    ├── PratosFavoritosRepository.java
+    ├── PratosRepository.java
+    ├── UserRepository.java
+    └── ValorNutricionalRepository.java
+```
+
+---
+
+## 5. Modelagem de Dados e Entidades (JPA Models)
+
+### 5.1. `User` (Tabela: `user`)
+Representa os usuários do sistema (alunos, servidores, funcionários da cantina/restaurante).
+* **Campos**:
+  * `id` (`int`, PK, Auto-Increment)
+  * `login` (`String`, Unique, Not Null, Not Blank, `@Email`) - E-mail do usuário
+  * `nome` (`String`, Not Blank)
+  * `senhaHash` (`String`, Not Blank, coluna: `senha_hash`) - Senha criptografada com BCrypt
+  * `funcionario` (`boolean`) - Flag que identifica se o usuário possui privilégios de funcionário
+  * `emailConfirmado` (`boolean`) - Flag que indica se a conta foi ativada via código enviado por e-mail
+  * `codigoConfirmacao` (`String`) - Código de 6 dígitos numéricos para ativação
+  * `expiracaoConfirmacao` (`LocalDateTime`) - Validade do código de ativação (15 minutos)
+  * `codigoResetSenha` (`String`) - Código de 6 dígitos numéricos para recuperação de senha
+  * `expiracaoResetSenha` (`LocalDateTime`) - Validade do código de recuperação (15 minutos)
+* **Relacionamentos (`@JsonIgnore`)**:
+  * `@OneToMany` `avaliacoes` -> `Avaliacoes`
+  * `@OneToMany` `favoritos` -> `PratosFavoritos`
+  * `@OneToMany` `cardapiosDia` -> `CardapioDia`
+  * `@OneToMany` `notificacoes` -> `Notificacoes`
+  * `@OneToMany` `avisos` -> `Avisos`
+
+### 5.2. `Categoria` (Tabela: `categoria`)
+Classificação dos pratos servidos (ex: Prato Principal, Acompanhamento, Salada, Sobremesa, Refresco).
+* **Campos**:
+  * `id` (`int`, PK, Auto-Increment)
+  * `descricao` (`String`, Not Blank, tamanho entre 3 e 100 caracteres)
+
+### 5.3. `Pratos` (Tabela: `pratos`)
+Itens culinários individuais cadastrados no cardápio.
+* **Campos**:
+  * `id` (`int`, PK, Auto-Increment)
+  * `nome` (`String`, Not Blank)
+  * `descricao` (`String`, Not Blank)
+  * `vegano` (`boolean`, Not Null) - Identifica se a opção é vegana
+  * `imagem` (`String`) - URL completa da imagem armazenada no servidor
+  * `notaTecnica` (`String`) - Observações técnicas ou fichas de preparo
+  * `categoria` (`@ManyToOne` com `Categoria`, coluna `id_categoria`, Not Null)
+* **Relacionamentos (`@JsonIgnore`)**:
+  * `@OneToMany` `avaliacoes` -> `Avaliacoes` (Cascade ALL, orphanRemoval)
+  * `@OneToMany` `favoritos` -> `PratosFavoritos` (Cascade ALL, orphanRemoval)
+  * `@OneToOne` `valorNutricional` -> `ValorNutricional` (Cascade ALL, orphanRemoval)
+
+### 5.4. `ValorNutricional` (Tabela: `valor_nutricional`)
+Informações nutricionais associadas exclusivamente a um prato.
+* **Campos**:
+  * `id` (`int`, PK, Auto-Increment)
+  * `prato` (`@OneToOne` com `Pratos`, coluna `id_prato`, Not Null)
+  * `kcal` (`float`, Not Null) - Valor calórico
+  * `carboidratos` (`float`, Not Null) - Quantidade em gramas
+  * `proteinas` (`float`, Not Null) - Quantidade em gramas
+  * `lipidios` (`float`, Not Null) - Gorduras em gramas
+  * `medida` (`String`, Not Blank) - Porção de referência (ex: "100g", "1 concha", "1 unidade")
+
+### 5.5. `Cardapio` (Tabela: `cardapio`)
+Combinação de itens que compõem uma refeição completa.
+* **Campos**:
+  * `id` (`int`, PK, Auto-Increment)
+  * `acompanhamento` (`@ManyToOne` com `Pratos`, coluna `id_acompanhamento`)
+  * `prato_principal` (`@ManyToOne` com `Pratos`, coluna `id_prato_principal`)
+  * `guarnicao` (`@ManyToOne` com `Pratos`, coluna `id_guarnicao`)
+  * `salada` (`@ManyToOne` com `Pratos`, coluna `id_salada`)
+  * `sobremesa` (`@ManyToOne` com `Pratos`, coluna `id_sobremesa`)
+  * `refresco` (`@ManyToOne` com `Pratos`, coluna `id_refresco`)
+  * `vegano` (`boolean`, Not Null) - Flag que indica se a composição da refeição é vegana
+
+### 5.6. `CardapioDia` (Tabela: `cardapio_dia`)
+Planejamento diário contendo os cardápios de almoço e jantar nas versões padrão e vegana.
+* **Restrição de Unicidade**: `@UniqueConstraint(columnNames = "data")` (apenas um registro por data)
+* **Campos**:
+  * `id` (`int`, PK, Auto-Increment)
+  * `data` (`LocalDate`, Not Null)
+  * `padraoAlmoco` (`@ManyToOne` com `Cardapio`, coluna `id_padrao_almoco`)
+  * `veganoAlmoco` (`@ManyToOne` com `Cardapio`, coluna `id_vegano_almoco`)
+  * `padraoJantar` (`@ManyToOne` com `Cardapio`, coluna `id_padrao_jantar`)
+  * `veganoJantar` (`@ManyToOne` com `Cardapio`, coluna `id_vegano_jantar`)
+  * `user` (`@ManyToOne` com `User`, coluna `id_user`, Not Null) - Funcionário responsável pelo cadastro
+
+### 5.7. `Avaliacoes` (Tabela: `avaliacoes`)
+Feedback e notas dos usuários para cada prato.
+* **Restrição de Unicidade**: `@UniqueConstraint(columnNames = {"id_user", "id_prato"})` (uma avaliação por usuário por prato)
+* **Campos**:
+  * `id` (`int`, PK, Auto-Increment)
+  * `user` (`@ManyToOne` com `User`, coluna `id_user`, Not Null)
+  * `prato` (`@ManyToOne` com `Pratos`, coluna `id_pratos`, Not Null)
+  * `nota` (`int`, Not Null)
+  * `avaliacao` (`String`) - Comentário textual opcional
+
+### 5.8. `PratosFavoritos` (Tabela: `pratos_favoritados`)
+Vínculo entre o usuário e seus pratos preferidos.
+* **Restrição de Unicidade**: `@UniqueConstraint(columnNames = {"id_user", "id_prato"})`
+* **Campos**:
+  * `id` (`int`, PK, Auto-Increment)
+  * `user` (`@ManyToOne` com `User`, coluna `id_user`, Not Null)
+  * `prato` (`@ManyToOne` com `Pratos`, coluna `id_pratos`, Not Null)
+
+### 5.9. `Avisos` (Tabela: `avisos`)
+Informativos institucionais com período de vigência.
+* **Campos**:
+  * `id` (`int`, PK, Auto-Increment)
+  * `titulo` (`String`, Not Blank)
+  * `descricao` (`String`)
+  * `model` (`String`, Not Blank)
+  * `data_inicial` (`LocalDate`, Not Null)
+  * `data_final` (`LocalDate`, Not Null)
+  * `user` (`@ManyToOne` com `User`, coluna `id_user`, Not Null)
+
+### 5.10. `Notificacoes` (Tabela: `notificacoes`)
+Notificações geradas pelo sistema para os usuários.
+* **Campos**:
+  * `id` (`int`, PK, Auto-Increment)
+  * `titulo` (`String`, Not Blank)
+  * `descricao` (`String`)
+  * `model` (`String`, Not Blank)
+  * `data_inicial` (`LocalDate`, Not Null)
+  * `data_final` (`LocalDate`, Not Null)
+  * `user` (`@ManyToOne` com `User`, coluna `id_user`, Not Null)
+
+---
+
+## 6. Camada de Repositórios (Spring Data JPA)
+
+* [`UserRepository`](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/repository/UserRepository.java):
+  * `Optional<User> findByLogin(String login)`: Localiza o usuário por e-mail de login.
+* [`PratosRepository`](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/repository/PratosRepository.java):
+  * `List<Pratos> findByNomeContainingIgnoreCase(String nome)`: Busca pratos por substring no nome sem diferenciar maiúsculas/minúsculas.
+  * `List<Pratos> findByVeganoTrue()`: Lista todos os pratos marcados como veganos.
+* [`CardapioDiaRepository`](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/repository/CardapioDiaRepository.java):
+  * `boolean existsByData(LocalDate data)`: Verifica existência de cardápio para uma data.
+  * `boolean existsByDataAndIdNot(LocalDate data, int id)`: Validação de unicidade na edição.
+  * `Optional<CardapioDia> findByData(LocalDate data)`: Obtém o cardápio de um dia específico.
+  * `List<CardapioDia> findByDataBetween(LocalDate inicio, LocalDate fim)`: Obtém o intervalo da semana.
+* [`AvaliacoesRepository`](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/repository/AvaliacoesRepository.java):
+  * `boolean existsByUserIdAndPratoId(int userId, int pratoId)`
+  * `boolean existsByUserIdAndPratoIdAndIdNot(int userId, int pratoId, int id)`
+* [`PratosFavoritosRepository`](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/repository/PratosFavoritosRepository.java):
+  * `boolean existsByUserIdAndPratoId(int userId, int pratoId)`
+* Repositórios padrão com operações CRUD: [`CategoriaRepository`](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/repository/CategoriaRepository.java), [`CardapioRepository`](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/repository/CardapioRepository.java), [`ValorNutricionalRepository`](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/repository/ValorNutricionalRepository.java), [`AvisosRepository`](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/repository/AvisosRepository.java), [`NotificacoesRepository`](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/repository/NotificacoesRepository.java).
+
+---
+
+## 7. Serviços de Notificação e E-mail
+
+### 7.1. [`EmailService`](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/email/EmailService.java)
+Gerencia a montagem de e-mails em formato HTML e envio através do `JavaMailSender`:
+1. `enviarCodigo(User user, String codigo)`:
+   * Carrega o arquivo `template-email.html` do classpath.
+   * Substitui os placeholders `#{nome}` e `#{codigo}`.
+   * Envia o e-mail com o assunto *"Código de verificação"*.
+2. `enviarNotificacaoPratosFavoritos(User usuario, List<Pratos> pratos, String horario)`:
+   * Carrega o arquivo `notificacao-pratos.html`.
+   * Monta a lista formatada de pratos favoritados que serão servidos.
+   * Substitui os placeholders `#{nome}`, `#{horario}` (almoço/jantar) e `#{pratos}`.
+   * Envia com o assunto *"Seus pratos favoritos estão no cardápio de hoje!"*.
+
+### 7.2. [`NotificacoesService`](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/controler/NotificacoesService.java)
+Executa a lógica de negócio para disparo em massa de alertas aos usuários:
+1. Localiza o `CardapioDia` correspondente à data atual (`LocalDate.now()`).
+2. Agrupa todos os pratos únicos de cada refeição (Almoço: padrão e vegano; Jantar: padrão e vegano).
+3. Obtém todas as preferências da tabela `PratosFavoritos`.
+4. Cruza as preferências de cada usuário com o cardápio do dia.
+5. Dispara e-mails personalizados para cada usuário notificando se seus pratos favoritos estarão presentes no almoço ou no jantar.
+
+---
+
+## 8. Referência Completa de Endpoints REST (API Reference)
+
+Todos os endpoints possuem a anotação `@CrossOrigin`, permitindo integração com o frontend web e aplicativo móvel.
+
+---
+
+### 8.1. Módulo: Usuários (`/user`)
+
+#### `GET /user/all`
+* **Descrição**: Retorna a lista de todos os usuários cadastrados.
+* **Resposta (200 OK)**: `List<User>`
+
+#### `GET /user/id/{id}`
+* **Descrição**: Busca usuário pelo ID.
+* **Parâmetros**: `id` (Path, `int`)
+* **Resposta**: `Optional<User>`
+
+#### `GET /user/login/{login}`
+* **Descrição**: Busca usuário pelo endereço de e-mail/login.
+* **Parâmetros**: `login` (Path, `String`)
+* **Resposta**: `Optional<User>`
+
+#### `POST /user/cadastrar`
+* **Descrição**: Registra um novo usuário, gera o hash BCrypt da senha, cria um código de verificação de 6 dígitos válido por 15 minutos e envia o e-mail de ativação.
+* **Corpo da Requisição**: `User` JSON (`login`, `nome`, `senhaHash`, `funcionario`)
+* **Erros**: `400 Bad Request` se o e-mail já estiver cadastrado ou campos inválidos.
+
+#### `POST /user/confirmarEmail`
+* **Descrição**: Valida o código numérico de 6 dígitos enviado por e-mail e ativa a conta (`emailConfirmado = true`).
+* **Parâmetros**: `email` (Query, `String`), `codigo` (Query, `String`)
+* **Erros**:
+  * `404 Not Found`: Usuário não encontrado.
+  * `400 Bad Request`: E-mail já confirmado, código inválido ou código expirado (>15 min).
+
+#### `GET /user/validar`
+* **Descrição**: Valida as credenciais de login de um usuário comum (senha em texto claro comparada contra o hash BCrypt).
+* **Parâmetros**: `login` (Query, `String`), `senhaHash` (Query, `String`)
+* **Resposta**:
+  * `200 OK (true)`: Credenciais válidas e e-mail confirmado.
+  * `401 Unauthorized (false)`: Senha incorreta ou usuário inexistente.
+  * `403 Forbidden (false)`: E-mail ainda não confirmado.
+
+#### `GET /user/validarFunc`
+* **Descrição**: Valida login exclusivamente para funcionários (`funcionario == true`).
+* **Parâmetros**: `login` (Query, `String`), `senhaHash` (Query, `String`)
+* **Resposta**:
+  * `200 OK (true)`: Credenciais válidas e usuário é funcionário.
+  * `401 Unauthorized (false)`: Senha incorreta ou usuário não encontrado.
+  * `403 Forbidden`: E-mail não confirmado ou usuário não possui perfil de funcionário.
+
+#### `PUT /user/atualizar`
+* **Descrição**: Atualiza dados cadastrais (`login`, `nome`, `funcionario`) sem alterar o hash de senha.
+* **Corpo**: `User` JSON
+* **Erros**: `404 Not Found` se o usuário não existir.
+
+#### `DELETE /user/deletar/{id}`
+* **Descrição**: Exclui o usuário do banco de dados.
+* **Parâmetros**: `id` (Path, `int`)
+
+#### `POST /user/solicitarResetSenha`
+* **Descrição**: Gera um token de recuperação de 6 dígitos (validade de 15 minutos) e envia para o e-mail do usuário.
+* **Parâmetros**: `login` (Query, `String`)
+* **Erros**: `404 Not Found` se o login não for encontrado.
+
+#### `PUT /user/resetSenha`
+* **Descrição**: Redefine a senha do usuário caso o código seja válido e esteja dentro do prazo.
+* **Parâmetros**: `login` (Query, `String`), `codigo` (Query, `String`), `novaSenha` (Query, `String`)
+* **Erros**: `400 Bad Request` se o código estiver inválido ou expirado.
+
+---
+
+### 8.2. Módulo: Pratos (`/pratos`)
+
+#### `GET /pratos/all`
+* **Descrição**: Lista todos os pratos cadastrados.
+* **Resposta (200 OK)**: `List<Pratos>`
+
+#### `GET /pratos/id/{id}`
+* **Descrição**: Busca detalhes de um prato por ID.
+* **Resposta**: `Pratos` ou `404 Not Found`
+
+#### `GET /pratos/nome?nome={nome}`
+* **Descrição**: Busca pratos que contenham a substring informada no nome.
+* **Parâmetros**: `nome` (Query, `String`)
+
+#### `GET /pratos/veganos`
+* **Descrição**: Lista apenas pratos sinalizados com `vegano = true`.
+
+#### `POST /pratos/cadastrar`
+* **Consome**: `multipart/form-data`
+* **Partes**:
+  * `prato` (JSON `@Valid Pratos`): Dados do prato e objeto `categoria`.
+  * `imagem` (Opcional, `MultipartFile`): Arquivo de imagem (`jpg`, `jpeg`, `png`, `webp`).
+* **Comportamento**: Salva a imagem em `uploads/pratos/<UUID>.<ext>`, vincula a URL pública e salva a entidade.
+
+#### `PUT /pratos/atualizar`
+* **Consome**: `multipart/form-data`
+* **Partes**: `prato` (JSON), `imagem` (Opcional, `MultipartFile`)
+* **Comportamento**: Se um novo arquivo for enviado, deleta a imagem anterior do disco e substitui pelo novo arquivo salvo.
+
+#### `DELETE /pratos/excluirImagem/{id}`
+* **Descrição**: Remove o arquivo de imagem associado ao prato do disco e atualiza o campo `imagem` para `null`.
+
+#### `DELETE /pratos/deletar/{id}`
+* **Descrição**: Remove o prato, desvincula referências do prato nos cardápios existentes (setando os campos para `null`), exclui a imagem física do disco e apaga o registro do banco.
+
+---
+
+### 8.3. Módulo: Cardápio (`/cardapio`)
+
+Refere-se à combinação de pratos para uma refeição (acompanhamento, prato principal, guarnição, salada, sobremesa, refresco).
+
+#### `GET /cardapio/all`
+* **Descrição**: Retorna todos os cardápios cadastrados.
+
+#### `GET /cardapio/id/{id}`
+* **Descrição**: Busca cardápio por ID.
+
+#### `POST /cardapio/cadastrar`
+* **Descrição**: Cadastra uma combinação de cardápio. Valida no banco a existência de cada prato associado (`acompanhamento`, `prato_principal`, `guarnicao`, `salada`, `sobremesa`, `refresco`).
+* **Corpo**: `Cardapio` JSON
+
+#### `PUT /cardapio/atualizar`
+* **Descrição**: Atualiza os pratos e opções de um cardápio existente.
+
+#### `DELETE /cardapio/deletar/{id}`
+* **Descrição**: Exclui o cardápio. Antes de deletar, localiza todos os registros em `CardapioDia` que referenciam este ID (almoço/jantar padrão ou vegano) e desvincula os campos (`null`).
+
+---
+
+### 8.4. Módulo: Cardápio do Dia (`/cardapioDia`)
+
+#### `GET /cardapioDia/all`
+* **Descrição**: Lista todos os cardápios diários cadastrados.
+
+#### `GET /cardapioDia/id/{id}`
+* **Descrição**: Busca o cardápio do dia por ID.
+
+#### `GET /cardapioDia/data/{data}`
+* **Descrição**: Busca o cardápio configurado para uma data específica no formato ISO (`YYYY-MM-DD`).
+
+#### `GET /cardapioDia/semana`
+* **Descrição**: Calcula a semana corrente (de domingo a sábado) e retorna a lista de cardápios cadastrados no intervalo.
+
+#### `POST /cardapioDia/cadastrar`
+* **Descrição**: Registra o cardápio de uma data com os vínculos para os cardápios de almoço (padrão/vegano), jantar (padrão/vegano) e o usuário funcionário responsável.
+* **Erros**: `400 Bad Request` se já existir cardápio cadastrado para a data informada.
+
+#### `PUT /cardapioDia/atualizar`
+* **Descrição**: Atualiza o cardápio do dia garantindo unicidade da data.
+
+#### `DELETE /cardapioDia/deletar/{id}`
+* **Descrição**: Remove o cardápio do dia por ID.
+
+---
+
+### 8.5. Módulo: Avaliações (`/avaliacoes`)
+
+#### `GET /avaliacoes/all`
+* **Descrição**: Lista todas as avaliações de pratos.
+
+#### `GET /avaliacoes/id/{id}`
+* **Descrição**: Busca avaliação por ID.
+
+#### `POST /avaliacoes/cadastrar`
+* **Descrição**: Cria uma nova avaliação para um prato vinculada a um usuário.
+* **Corpo**: `Avaliacoes` JSON (`user`, `prato`, `nota`, `avaliacao`)
+* **Erros**: `400 Bad Request` caso o usuário já tenha avaliado aquele mesmo prato anteriormente (`existsByUserIdAndPratoId`).
+
+#### `PUT /avaliacoes/atualizar`
+* **Descrição**: Atualiza a nota ou comentário de uma avaliação existente.
+
+#### `DELETE /avaliacoes/deletar/{id}`
+* **Descrição**: Exclui a avaliação por ID.
+
+---
+
+### 8.6. Módulo: Pratos Favoritos (`/pratosFavoritos`)
+
+#### `GET /pratosFavoritos/all`
+* **Descrição**: Lista todos os pratos favoritados por todos os usuários.
+
+#### `GET /pratosFavoritos/id/{id}`
+* **Descrição**: Busca favorito por ID.
+
+#### `POST /pratosFavoritos/cadastrar`
+* **Descrição**: Adiciona um prato à lista de favoritos do usuário.
+* **Erros**: `400 Bad Request` caso o prato já esteja favoritado pelo usuário.
+
+#### `DELETE /pratosFavoritos/deletar/{id}`
+* **Descrição**: Remove o prato da lista de favoritos do usuário.
+
+#### `POST /pratosFavoritos/notificar`
+* **Descrição**: Dispara manualmente a rotina de envio de e-mails do [`NotificacoesService`](file:///C:/Users/aluno/Downloads/Projeto-Bandeco/api/apiBandeco/src/main/java/com/example/apiBandeco/controler/NotificacoesService.java) para todos os usuários que possuem pratos favoritos escalados no cardápio de hoje.
+* **Resposta (200 OK)**: `"Notificações enviadas com sucesso"`
+
+---
+
+### 8.7. Módulo: Categorias (`/categoria`)
+
+#### `GET /categoria/all`
+* **Descrição**: Lista todas as categorias de pratos.
+
+#### `GET /categoria/id/{id}`
+* **Descrição**: Busca categoria por ID.
+
+#### `POST /categoria/cadastrar`
+* **Descrição**: Cria uma nova categoria (`descricao`).
+
+#### `PUT /categoria/atualizar`
+* **Descrição**: Atualiza a descrição de uma categoria.
+
+#### `DELETE /categoria/deletar/{id}`
+* **Descrição**: Remove a categoria por ID.
+
+---
+
+### 8.8. Módulo: Valor Nutricional (`/valorNutricional`)
+
+#### `GET /valorNutricional/all`
+* **Descrição**: Lista todos os registros de tabela nutricional.
+
+#### `GET /valorNutricional/id/{id}`
+* **Descrição**: Busca valor nutricional por ID.
+
+#### `POST /valorNutricional/cadastrar`
+* **Descrição**: Cadastra os índices nutricionais (`kcal`, `carboidratos`, `proteinas`, `lipidios`, `medida`) associados a um prato (`prato.id`).
+
+#### `PUT /valorNutricional/atualizar`
+* **Descrição**: Atualiza os dados nutricionais de um prato.
+
+#### `DELETE /valorNutricional/deletar/{id}`
+* **Descrição**: Exclui o registro nutricional por ID.
+
+---
+
+### 8.9. Módulo: Avisos (`/avisos`)
+
+#### `GET /avisos/all`
+* **Descrição**: Retorna todos os avisos cadastrados.
+
+#### `GET /avisos/id/{id}`
+* **Descrição**: Busca aviso por ID.
+
+#### `POST /avisos/cadastrar`
+* **Descrição**: Cadastra novo aviso com título, descrição, modelo e intervalo de datas (`data_inicial`, `data_final`) vinculado ao usuário criador.
+
+#### `PUT /avisos/atualizar`
+* **Descrição**: Atualiza informações de um aviso existente.
+
+#### `DELETE /avisos/deletar/{id}`
+* **Descrição**: Exclui aviso por ID.
+
+---
+
+### 8.10. Módulo: Notificações (`/notificacoes`)
+
+#### `GET /notificacoes/all`
+* **Descrição**: Lista todas as notificações cadastradas.
+
+#### `GET /notificacoes/id/{id}`
+* **Descrição**: Busca notificação por ID.
+
+#### `POST /notificacoes/cadastrar`
+* **Descrição**: Cria uma nova notificação para o usuário.
+
+#### `PUT /notificacoes/atualizar`
+* **Descrição**: Atualiza os dados de uma notificação existente.
+
+#### `DELETE /notificacoes/deletar/{id}`
+* **Descrição**: Remove a notificação por ID.
+
+---
+
+## 9. Como Executar e Compilar o Projeto
+
+### Pré-requisitos
+* **Java JDK 17** instalado e configurado nas variáveis de ambiente (`JAVA_HOME`).
+* **Maven 3.x** ou utilização do wrapper `mvnw` / `mvnw.cmd` incluído no repositório.
+* Conexão acessível com a instância MySQL configurada no `application.properties`.
+
+### Executando em Ambiente Local
+
+1. Navegar até a pasta raiz da API:
+   ```bash
+   cd api/apiBandeco
+   ```
+
+2. Executar via Maven Wrapper:
+   * **Windows**:
+     ```powershell
+     .\mvnw.cmd spring-boot:run
+     ```
+   * **Linux/macOS**:
+     ```bash
+     ./mvnw spring-boot:run
+     ```
+
+3. A aplicação será inicializada por padrão na porta `8080`:
+   ```
+   http://localhost:8080
+   ```

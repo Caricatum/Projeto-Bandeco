@@ -1,7 +1,8 @@
 // =============================================
 // CONFIGURAÇÃO
 // =============================================
-const API = 'http://localhost:8080';
+const API = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:8080';
+
 
 const usuarioLogado = {
     nome: localStorage.getItem('nome') || '',

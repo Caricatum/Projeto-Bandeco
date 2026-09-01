@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:tcc_flutter/atualizaPrato.dart';
-import 'package:tcc_flutter/categoria.dart';
+import 'atualizaPrato.dart';
+import 'package:tcc_flutter/Class/categoriaClass.dart';
 import 'cadastroPrato.dart';
 import 'menuNavegacao.dart';
+import '../Class/usuarioClass.dart';
 
-class Cardapios extends StatefulWidget {
-  const Cardapios({super.key});
+class CardapioPratos extends StatefulWidget {
+  const CardapioPratos({super.key, required this.usuario});
+
+  final Usuario usuario;
 
   @override
-  State<Cardapios> createState() => _CardapiosState();
+  State<CardapioPratos> createState() => _CardapioPratosState();
 }
 
-class _CardapiosState extends State<Cardapios> {
+class _CardapioPratosState extends State<CardapioPratos> {
   //Mostra tudo
   Future<List<dynamic>> listarPratos() async {
     final url = Uri.parse('http://localhost:8080/pratos/all');
@@ -147,7 +150,7 @@ class _CardapiosState extends State<Cardapios> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const Cadastroprato()),
+                MaterialPageRoute(builder: (_) => Cadastroprato(usuario: widget.usuario)),
               ).then((_) {
                 setState(() {});
               });
@@ -155,7 +158,7 @@ class _CardapiosState extends State<Cardapios> {
           ),
         ],
       ),
-      drawer: const MenuNavegacao(),
+      drawer: MenuNavegacao(usuario: widget.usuario),
       body: Column(
         children: [
           Container(
@@ -524,10 +527,13 @@ class _CardapiosState extends State<Cardapios> {
                                     ),
                                     child: Row(
                                       children: [
-                                        const Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                          size: 18,
+                                        const IconButton(
+                                          icon: Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                            size: 18,
+                                          ),
+                                          onPressed: null,
                                         ),
                                         const SizedBox(width: 4),
                                         Text(
@@ -598,6 +604,7 @@ class _CardapiosState extends State<Cardapios> {
                                               prato['categoria']['descricao'],
                                               style: const TextStyle(
                                                 color: Colors.blue,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                           ],

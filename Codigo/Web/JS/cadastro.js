@@ -1,32 +1,52 @@
 document.getElementById('cadastroForm').addEventListener("submit", function(e){
     e.preventDefault();
 
-    // Pegando os valores dos campos
-    const userDigitado = document.getElementById('username').value;
+    const nomeDigitado = document.getElementById('name').value.trim();
+    const userDigitado = document.getElementById('username').value.trim();
     const senhaDigitada = document.getElementById('password').value;
-    const tipoDeUsuario = document.querySelector('input[name="tipoDeUsuario"]:checked').value;
-    const nomeDigitado = document.getElementById('name').value;
+    const confirmSenhaDigitada = document.getElementById('confirmPassword').value;
     const message = document.getElementById('message');
+    const btnCadastrar = document.getElementById('btnCadastrar');
 
-    const url = 'http://localhost:8080/user/cadastrar';
+    message.style.color = '';
+    message.innerText = '';
+
+    // Validações no cliente
+    if (!nomeDigitado || !userDigitado || !senhaDigitada) {
+        message.style.color = '#D92243';
+        message.innerText = 'Por favor, preencha todos os campos.';
+        return;
+    }
+
+    if (senhaDigitada.length < 6) {
+        message.style.color = '#D92243';
+        message.innerText = 'A senha precisa ter no mínimo 6 caracteres.';
+        return;
+    }
+
+    if (senhaDigitada !== confirmSenhaDigitada) {
+        message.style.color = '#D92243';
+        message.innerText = 'As senhas digitadas não coincidem.';
+        return;
+    }
 
     const usuario = {
         login: userDigitado,
         nome: nomeDigitado,
         senhaHash: senhaDigitada,
-        funcionario: tipoDeUsuario === 'true',
-    }
-    const jsonUsuario = JSON.stringify(usuario);
+        funcionario: false,
+    };
 
-    message.style.color = '';
-    message.innerText = '';
+    message.style.color = '#7a1728';
+    message.innerText = 'Processando cadastro e enviando código...';
+    btnCadastrar.disabled = true;
 
-    fetch(url, {
+    fetchAPI('/user/cadastrar', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: jsonUsuario
+        body: JSON.stringify(usuario)
     })
     .then(async res => {
         if (!res.ok) {
@@ -44,9 +64,11 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
 
         setTimeout(() => {
             window.location.href = 'confirmarEmail.php';
-        }, 1500);
+        }, 1200);
     })
     .catch(err => {
+        message.style.color = '#D92243';
         message.innerText = err.message;
+        btnCadastrar.disabled = false;
     });
 });

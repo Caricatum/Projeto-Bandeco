@@ -267,3 +267,21 @@ h1 { color: #D92243; }
         transform: translateY(0);
     }
 }
+/* ===== Botão editar prato (só funcionário) ===== */
+.btn-editar-prato {
+    border: 2px solid #F69D39;
+    background: #fff8ee;
+    color: #b96800;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+}
+.btn-editar-prato:hover {
+    background: #F69D39;
+    color: white;
+    border-color: #F69D39;
+}

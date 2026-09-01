@@ -1,4 +1,5 @@
-const API = 'http://localhost:8080';
+const API = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:8080';
+
 const userId      = parseInt(localStorage.getItem('id'))   || null;
 const logado      = sessionStorage.getItem('logado') === 'true';
 const isFunc      = localStorage.getItem('tipo') === 'true';

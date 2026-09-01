@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    ```
+    <title>Pratos Favoritos - Bandeco</title>
+
+    <style>
+        @media only screen and (max-width: 600px) {
+
+            .container {
+                width: 100% !important;
+            }
+
+            .content {
+                padding: 20px !important;
+            }
+
+            .title {
+                font-size: 24px !important;
+            }
+
+            .pratos-box {
+                padding: 15px !important;
+                font-size: 15px !important;
+            }
+        }
+    </style>
+    ```
+
+</head>
+
+<body style="
+    margin:0;
+    padding:0;
+    background:#E0C375;
+    font-family:Arial, sans-serif;
+">
+
+<table
+        width="100%"
+        cellpadding="0"
+        cellspacing="0"
+        border="0"
+        style="background:#E0C375;"
+>
+    <tr>
+        <td align="center" style="padding:20px;">
+
+            ```
+            <!-- CARD -->
+            <table
+                    class="container"
+                    width="640"
+                    cellpadding="0"
+                    cellspacing="0"
+                    border="0"
+                    style="
+                width:100%;
+                max-width:640px;
+                background:#ffffff;
+                border-radius:12px;
+                overflow:hidden;
+            "
+            >
+
+                <!-- CABEÇALHO -->
+                <tr>
+                    <td
+                            align="center"
+                            style="padding:40px 20px 20px;"
+                    >
+                        <h1
+                                class="title"
+                                style="
+                            margin:0;
+                            font-size:28px;
+                            font-weight:bold;
+                            color:#2d2d2d;
+                        "
+                        >
+                            Pratos favoritos servidos hoje
+                        </h1>
+                    </td>
+                </tr>
+
+
+                <!-- CONTEÚDO -->
+                <tr>
+                    <td
+                            class="content"
+                            style="
+                        padding:25px 30px;
+                        color:#2d2d2d;
+                    "
+                    >
+
+                        <p
+                                style="
+                            margin:0 0 15px;
+                            font-weight:bold;
+                            font-size:16px;
+                        "
+                        >
+                            Olá, #{nome}!
+                        </p>
+
+
+                        <p
+                                style="
+                            margin:0 0 20px;
+                            font-size:15px;
+                            line-height:1.5;
+                        "
+                        >
+                            Alguns dos seus pratos favoritos serão
+                            servidos hoje:
+                        </p>
+
+
+                        <!-- PRATOS -->
+                        #{almoco}
+
+                        #{jantar}
+
+                    </td>
+                </tr>
+
+
+                <!-- RODAPÉ -->
+                <tr>
+                    <td
+                            style="
+                        padding:0 30px 30px;
+                        color:#666666;
+                        font-size:14px;
+                    "
+                    >
+
+                        <p style="margin:0;">
+                            Atenciosamente,
+                        </p>
+
+                        <p style="margin:6px 0 0;">
+                            <strong style="color:#FF5770;">
+                                Equipe bandeco
+                            </strong>
+                            — Cotil
+                        </p>
+
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+    </tr>
+    ```
+
+</table>
+
+</body>
+</html>
