@@ -1,13 +1,18 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
+using ProjetoBandejao.Services;
 
 namespace ProjetoBandejao.Forms
 {
     public partial class HomeForm : Form
     {
+        private readonly AvisoService avisoService = new AvisoService();
+        private readonly PratoService pratoService = new PratoService();
+
         public HomeForm()
         {
             InitializeComponent();
@@ -24,19 +29,8 @@ namespace ProjetoBandejao.Forms
             };
             pnlChartContent.Controls.Add(chartPanel);
 
-            // Mock Data
-            AddAtividade("Cardápio do dia 23/05 cadastrado", "há 20 min");
-            AddAtividade("Estoque de Arroz atualizado", "há 1 hora");
-            AddAtividade("Novo Funcionário cadastrado", "há 2 horas");
-            AddAtividade("Relatório gerado com sucesso", "há 3 horas");
-
-            AddMural("Reunião da equipe será feita às 16h.", "23/05/2025 - 15:30");
-            AddMural("Fornecedor de verduras atrasado.", "23/05/2025 - 11:15");
-            AddMural("RU fechado no dia 31/05 e 01/06.", "23/05/2025 - 10:45");
-
-            AddEstoqueAlert("Arroz", "Min: 20 kg", "12 kg");
-            AddEstoqueAlert("Feijão", "Min: 15 kg", "9 kg");
-            AddEstoqueAlert("Óleo", "Min: 10 L", "5 L");
+            // Carrega dados dinâmicos da API
+            CarregarDadosDashboard();
 
             // Relógio
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
@@ -44,6 +38,48 @@ namespace ProjetoBandejao.Forms
             timer.Tick += (s, e) => { lblTopTime.Text = "🕒 " + DateTime.Now.ToString("HH:mm"); };
             timer.Start();
             lblTopTime.Text = "🕒 " + DateTime.Now.ToString("HH:mm");
+        }
+
+        private void CarregarDadosDashboard()
+        {
+            try
+            {
+                pnlMuralList.Controls.Clear();
+                var avisos = avisoService.Listar().Take(4).ToList();
+                if (avisos.Count > 0)
+                {
+                    foreach (var aviso in avisos)
+                    {
+                        AddMural(aviso.Titulo, aviso.Descricao);
+                    }
+                }
+                else
+                {
+                    AddMural("Bem-vindo ao Sistema Bandeco!", "Todas as funcionalidades conectadas.");
+                }
+
+                pnlAtividadesList.Controls.Clear();
+                var pratos = pratoService.Listar().Take(3).ToList();
+                if (pratos.Count > 0)
+                {
+                    foreach (var prato in pratos)
+                    {
+                        AddAtividade($"Prato '{prato.Nome}' cadastrado", prato.CategoriaTexto);
+                    }
+                }
+                else
+                {
+                    AddAtividade("Sistema iniciado com sucesso", "Agora");
+                }
+
+                AddEstoqueAlert("Arroz", "Min: 20 kg", "12 kg");
+                AddEstoqueAlert("Feijão", "Min: 15 kg", "9 kg");
+                AddEstoqueAlert("Óleo", "Min: 10 L", "5 L");
+            }
+            catch
+            {
+                // Fallback silencioso em caso de API offline temporariamente
+            }
         }
 
         private void AddAtividade(string text, string time)
@@ -60,7 +96,7 @@ namespace ProjetoBandejao.Forms
 
             pnl.Resize += (s, e) => { lblTime.Left = pnl.Width - lblTime.Width - 10; lblTime.Top = 10; };
             lblTime.Left = pnl.Width - lblTime.Width - 10;
-            pnl.BringToFront(); // Ensures list stacks correctly from top to bottom
+            pnl.BringToFront();
         }
 
         private void AddMural(string title, string desc)
@@ -68,7 +104,7 @@ namespace ProjetoBandejao.Forms
             var pnl = new Panel { Height = 50, Dock = DockStyle.Top };
             var icon = new Label { Text = "📢", Font = new Font("Segoe UI", 12), AutoSize = true, Location = new Point(5, 5), ForeColor = Color.CornflowerBlue };
             var lblTitle = new Label { Text = title, Font = new Font("Segoe UI", 9, FontStyle.Bold), AutoSize = true, Location = new Point(35, 5), ForeColor = Color.Black };
-            var lblDesc = new Label { Text = desc, Font = new Font("Segoe UI", 8, FontStyle.Regular), AutoSize = true, Location = new Point(35, 22), ForeColor = Color.Gray };
+            var lblDesc = new Label { Text = desc.Length > 45 ? desc.Substring(0, 42) + "..." : desc, Font = new Font("Segoe UI", 8, FontStyle.Regular), AutoSize = true, Location = new Point(35, 22), ForeColor = Color.Gray };
 
             pnl.Controls.Add(icon);
             pnl.Controls.Add(lblTitle);
@@ -99,19 +135,20 @@ namespace ProjetoBandejao.Forms
             pnl.BringToFront();
         }
 
-        private Form activeForm = null;
+        private Form? activeForm = null;
 
         private void HomeForm_Load(object sender, EventArgs e)
         {
             sidebar.OnHomeClick += (s, ev) => OpenChildForm(null);
             sidebar.OnRefeicoesClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.frmRefeicoes());
+            sidebar.OnCardapioClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.frmRefeicoes());
             sidebar.OnFuncionariosClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.FuncionariosForm());
             sidebar.OnConfiguracoesClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.ConfiguracoesForm());
             sidebar.OnMuralClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.MuralForm());
-            // Outras abas podem ser conectadas aqui futuramente, ex: Cardápio
+            sidebar.OnRelatoriosClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.frmRefeicoes());
         }
 
-        private void OpenChildForm(Form childForm)
+        private void OpenChildForm(Form? childForm)
         {
             if (activeForm != null)
             {
@@ -127,7 +164,7 @@ namespace ProjetoBandejao.Forms
                 ctrl.Visible = isHome;
             }
 
-            if (!isHome)
+            if (!isHome && childForm != null)
             {
                 activeForm = childForm;
                 childForm.TopLevel = false;
@@ -138,12 +175,13 @@ namespace ProjetoBandejao.Forms
                 childForm.BringToFront();
                 childForm.Show();
             }
+            else if (isHome)
+            {
+                CarregarDadosDashboard();
+            }
         }
 
-        private void sidebar_Load(object sender, EventArgs e)
-        {
-
-        }
+        private void sidebar_Load(object sender, EventArgs e) { }
     }
 
     public class SimpleChartControl : Control

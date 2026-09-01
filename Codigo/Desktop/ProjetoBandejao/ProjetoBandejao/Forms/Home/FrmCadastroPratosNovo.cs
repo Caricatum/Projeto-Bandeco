@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
 
@@ -11,35 +12,57 @@ namespace ProjetoBandejao.Forms.Home
 {
     public partial class FrmCadastroPratosNovo : Form
     {
-        private List<string> listaIngredientes = new List<string>();
+        private readonly List<string> listaIngredientes = new List<string>();
+        private string? caminhoArquivoImagem = null;
         private string imagemBase64 = string.Empty;
-        private PratoService pratoService = new PratoService();
+        private readonly PratoService pratoService = new PratoService();
+        private List<Categoria> categoriasDisponiveis = new List<Categoria>();
 
         public FrmCadastroPratosNovo()
         {
             InitializeComponent();
+            CarregarCategorias();
 
-            // Populating ComboBoxes
-            cbCategoria.Items.AddRange(new string[] { "Tradicional", "Vegetariano", "Fitness" });
-            cbCategoria.SelectedIndex = 0;
-
+            cbTipo.Items.Clear();
             cbTipo.Items.AddRange(new string[] { "Prato Principal", "Guarnição", "Salada", "Sobremesa", "Suco" });
             cbTipo.SelectedIndex = 0;
 
-            // Events
+            // Eventos
             btnAdicionarIngrediente.Click += BtnAdicionarIngrediente_Click;
             btnSelecionarImagem.Click += BtnSelecionarImagem_Click;
             btnLimpar.Click += BtnLimpar_Click;
             
-            // Responsiveness
+            // Responsividade
             this.Resize += FrmCadastroPratosNovo_Resize;
+        }
+
+        private void CarregarCategorias()
+        {
+            try
+            {
+                categoriasDisponiveis = pratoService.ListarCategorias();
+                cbCategoria.Items.Clear();
+
+                foreach (var cat in categoriasDisponiveis)
+                {
+                    cbCategoria.Items.Add(cat.Descricao);
+                }
+
+                if (cbCategoria.Items.Count > 0)
+                    cbCategoria.SelectedIndex = 0;
+            }
+            catch
+            {
+                cbCategoria.Items.AddRange(new string[] { "Carnes", "Vegetariano", "Guarnição", "Salada", "Sobremesa" });
+                cbCategoria.SelectedIndex = 0;
+            }
         }
 
         private void FrmCadastroPratosNovo_Resize(object? sender, EventArgs e)
         {
             if (cardMain != null)
             {
-                int x = Math.Max(20, (this.ClientSize.Width - 200 - cardMain.Width) / 2 + 200);
+                int x = Math.Max(20, (this.ClientSize.Width - cardMain.Width) / 2);
                 int y = Math.Max(20, (this.ClientSize.Height - cardMain.Height) / 2);
                 cardMain.Location = new Point(x, y);
             }
@@ -49,20 +72,23 @@ namespace ProjetoBandejao.Forms.Home
         {
             using (OpenFileDialog ofd = new OpenFileDialog())
             {
-                ofd.Filter = "Imagens (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg";
+                ofd.Filter = "Imagens (*.png;*.jpg;*.jpeg;*.webp)|*.png;*.jpg;*.jpeg;*.webp";
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     try
                     {
-                        byte[] imageBytes = File.ReadAllBytes(ofd.FileName);
-                        if (imageBytes.Length > 5 * 1024 * 1024)
+                        FileInfo fileInfo = new FileInfo(ofd.FileName);
+                        if (fileInfo.Length > 10 * 1024 * 1024)
                         {
-                            MessageBox.Show("A imagem excede o tamanho máximo de 5MB.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show("A imagem excede o tamanho máximo de 10MB.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
 
+                        caminhoArquivoImagem = ofd.FileName;
+                        byte[] imageBytes = File.ReadAllBytes(caminhoArquivoImagem);
                         imagemBase64 = Convert.ToBase64String(imageBytes);
-                        lblUpload1.Text = Path.GetFileName(ofd.FileName);
+
+                        lblUpload1.Text = "✓ " + Path.GetFileName(caminhoArquivoImagem);
                         lblUpload1.ForeColor = Color.ForestGreen;
                     }
                     catch (Exception ex)
@@ -112,8 +138,8 @@ namespace ProjetoBandejao.Forms.Home
         private void BtnLimpar_Click(object? sender, EventArgs e)
         {
             txtNome.Clear();
-            cbCategoria.SelectedIndex = 0;
-            cbTipo.SelectedIndex = 0;
+            if (cbCategoria.Items.Count > 0) cbCategoria.SelectedIndex = 0;
+            if (cbTipo.Items.Count > 0) cbTipo.SelectedIndex = 0;
             txtDescricao.Clear();
 
             txtCalorias.Clear();
@@ -127,6 +153,7 @@ namespace ProjetoBandejao.Forms.Home
             listaIngredientes.Clear();
             AtualizarPainelIngredientes();
 
+            caminhoArquivoImagem = null;
             imagemBase64 = string.Empty;
             lblUpload1.Text = "Arraste uma imagem ou clique abaixo";
             lblUpload1.ForeColor = Color.DimGray;
@@ -140,7 +167,18 @@ namespace ProjetoBandejao.Forms.Home
                 return;
             }
 
-            // Parsing Nutricional Info safely
+            // Identifica categoria selecionada
+            string catNome = cbCategoria.SelectedItem?.ToString() ?? "Carnes";
+            var categoriaObj = categoriasDisponiveis.FirstOrDefault(c => c.Descricao.Equals(catNome, StringComparison.OrdinalIgnoreCase));
+            if (categoriaObj == null)
+            {
+                categoriaObj = new Categoria { Id = 1, Descricao = catNome };
+            }
+
+            bool isVegano = catNome.Contains("Vegano", StringComparison.OrdinalIgnoreCase) || 
+                            catNome.Contains("Vegetariano", StringComparison.OrdinalIgnoreCase);
+
+            // Parsing Nutricional
             double.TryParse(txtCalorias.Text, out double calorias);
             double.TryParse(txtProteinas.Text, out double proteinas);
             double.TryParse(txtCarbs.Text, out double carbs);
@@ -151,11 +189,12 @@ namespace ProjetoBandejao.Forms.Home
 
             Prato prato = new Prato
             {
-                Nome = txtNome.Text,
-                Categoria = cbCategoria.SelectedItem?.ToString() ?? "",
-                Tipo = cbTipo.SelectedItem?.ToString() ?? "",
-                Descricao = txtDescricao.Text,
-                Ingredientes = string.Join(",", listaIngredientes),
+                Nome = txtNome.Text.Trim(),
+                Descricao = string.IsNullOrWhiteSpace(txtDescricao.Text) ? txtNome.Text.Trim() : txtDescricao.Text.Trim(),
+                Categoria = categoriaObj,
+                Vegano = isVegano,
+                Tipo = cbTipo.SelectedItem?.ToString() ?? "Prato Principal",
+                Ingredientes = string.Join(", ", listaIngredientes),
                 Calorias = calorias,
                 Proteinas = proteinas,
                 Carboidratos = carbs,
@@ -166,15 +205,15 @@ namespace ProjetoBandejao.Forms.Home
                 ImagemBase64 = imagemBase64
             };
 
-            // Call API
-            bool sucesso = pratoService.Cadastrar(prato);
+            // Chama o serviço com upload de imagem e valores nutricionais
+            bool sucesso = pratoService.Cadastrar(prato, caminhoArquivoImagem);
 
             if (sucesso)
             {
-                MessageBox.Show("Prato salvo com sucesso no banco de dados!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                BtnLimpar_Click(this, EventArgs.Empty);
+                MessageBox.Show("Prato cadastrado com sucesso na API e banco de dados!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
-            // The service already handles the error message if it fails
         }
 
         private void btnVoltar_Click(object sender, EventArgs e)
@@ -182,9 +221,6 @@ namespace ProjetoBandejao.Forms.Home
             this.Close();
         }
 
-        private void sidebar_Load(object sender, EventArgs e)
-        {
-
-        }
+        private void sidebar_Load(object sender, EventArgs e) { }
     }
 }

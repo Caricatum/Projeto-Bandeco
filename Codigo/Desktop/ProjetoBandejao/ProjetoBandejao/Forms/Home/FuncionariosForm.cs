@@ -1,67 +1,146 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
 using ProjetoBandejao.Models;
+using ProjetoBandejao.Services;
 
 namespace ProjetoBandejao.Forms.Home
 {
     public partial class FuncionariosForm : Form
     {
+        private readonly UsuarioService usuarioService = new UsuarioService();
+        private List<Usuario> listaUsuariosAtual = new List<Usuario>();
+
         public FuncionariosForm()
         {
             InitializeComponent();
             ConfigurarCoresUnicamp();
-            CarregarDadosFalsos();
+            ConfigurarEventos();
+            CarregarFuncionarios();
         }
 
         private void ConfigurarCoresUnicamp()
         {
-            Color unicampRed = Color.FromArgb(179, 0, 0); // Vermelho escuro Unicamp
+            Color unicampRed = Color.FromArgb(179, 0, 0);
 
-            // Estilizando botões principais
             btnCadastrar.FillColor = unicampRed;
             btnCadastrar.ForeColor = Color.White;
             
-            // Paginação ativa
             btnPage1.FillColor = unicampRed;
             btnPage1.ForeColor = Color.White;
 
-            // Cores do DataGrid (Cabeçalho)
             dgvFuncionarios.ColumnHeadersDefaultCellStyle.ForeColor = unicampRed;
             dgvFuncionarios.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White;
         }
 
-        private void CarregarDadosFalsos()
+        private void ConfigurarEventos()
+        {
+            btnCadastrar.Click += (s, e) =>
+            {
+                using var frmCad = new CadastroFuncionarioForm();
+                frmCad.ShowDialog();
+                CarregarFuncionarios();
+            };
+
+            btnRefresh.Click += (s, e) => CarregarFuncionarios();
+
+            txtSearch.TextChanged += (s, e) => AplicarFiltros();
+            cbFilter.SelectedIndexChanged += (s, e) => AplicarFiltros();
+
+            dgvFuncionarios.CellClick += (s, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex == colDelete.Index)
+                {
+                    var row = dgvFuncionarios.Rows[e.RowIndex];
+                    string? login = row.Cells[colLogin.Index].Value?.ToString();
+                    var user = listaUsuariosAtual.FirstOrDefault(u => u.Login == login);
+                    if (user != null)
+                    {
+                        var confirm = MessageBox.Show($"Deseja realmente excluir o funcionário '{user.Nome}' ({user.Login})?", "Confirmar Exclusão", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (confirm == DialogResult.Yes)
+                        {
+                            if (usuarioService.Deletar(user.Id))
+                            {
+                                MessageBox.Show("Funcionário excluído com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                CarregarFuncionarios();
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        private void CarregarFuncionarios()
+        {
+            listaUsuariosAtual = usuarioService.ListarTodos();
+            AplicarFiltros();
+        }
+
+        private void AplicarFiltros()
         {
             dgvFuncionarios.Rows.Clear();
-            dgvFuncionarios.Rows.Add(null, "Guilherme Rodrigues", "guilherme", "Administrador", "Administração", "(19) 99999-9999", "Ativo", null, null);
-            dgvFuncionarios.Rows.Add(null, "Mariana Silva", "mariana.s", "Nutricionista", "Nutrição", "(19) 98888-8888", "Ativo", null, null);
-            dgvFuncionarios.Rows.Add(null, "Lucas Pereira", "lucas.p", "Cozinheiro", "Cozinha", "(19) 97777-7777", "Ativo", null, null);
-            dgvFuncionarios.Rows.Add(null, "Juliana Costa", "juliana.c", "Auxiliar de Cozinha", "Cozinha", "(19) 96666-6666", "Ativo", null, null);
-            dgvFuncionarios.Rows.Add(null, "Rafael Almeida", "rafael.a", "Atendente", "Atendimento", "(19) 95555-5555", "Ativo", null, null);
+
+            string busca = txtSearch.Text.Trim();
+            IEnumerable<Usuario> filtrados = listaUsuariosAtual;
+
+            if (!string.IsNullOrEmpty(busca))
+            {
+                filtrados = filtrados.Where(u => 
+                    (u.Nome != null && u.Nome.Contains(busca, StringComparison.OrdinalIgnoreCase)) ||
+                    (u.Login != null && u.Login.Contains(busca, StringComparison.OrdinalIgnoreCase))
+                );
+            }
+
+            string filtroCargo = cbFilter.SelectedItem?.ToString() ?? "Todos os Cargos";
+            if (filtroCargo != "Todos os Cargos" && !string.IsNullOrWhiteSpace(filtroCargo))
+            {
+                if (filtroCargo.Contains("Funcionário", StringComparison.OrdinalIgnoreCase) || filtroCargo.Contains("Administrador", StringComparison.OrdinalIgnoreCase))
+                {
+                    filtrados = filtrados.Where(u => u.Funcionario);
+                }
+            }
+
+            var listaFinal = filtrados.ToList();
+            lblTotal.Text = $"Total de {listaFinal.Count} funcionário{(listaFinal.Count == 1 ? "" : "s")}";
+
+            foreach (var user in listaFinal)
+            {
+                string cargo = user.Funcionario ? "Funcionário" : "Cliente / Aluno";
+                string setor = user.Funcionario ? "Administração" : "Acadêmico";
+                string status = "Ativo";
+
+                dgvFuncionarios.Rows.Add(
+                    null,
+                    user.Nome,
+                    user.Login,
+                    cargo,
+                    setor,
+                    "-",
+                    status,
+                    null,
+                    null
+                );
+            }
         }
 
         private void dgvFuncionarios_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
-            // Customizar a célula de status (badge)
             if (e.ColumnIndex == colStatus.Index && e.RowIndex >= 0 && e.Value != null)
             {
                 e.PaintBackground(e.CellBounds, true);
                 
-                string text = e.Value.ToString();
-                Color bgColor = Color.FromArgb(235, 255, 240); // Fundo verde claro (pode trocar se quiser algo da Unicamp)
-                Color textColor = Color.FromArgb(40, 167, 69); // Texto verde
-
-                // Se quiser alterar o status ativo pra algo da Unicamp
-                // bgColor = Color.FromArgb(255, 230, 230);
-                // textColor = Color.FromArgb(179, 0, 0);
+                string text = e.Value.ToString() ?? "Ativo";
+                Color bgColor = Color.FromArgb(235, 255, 240);
+                Color textColor = Color.FromArgb(40, 167, 69);
 
                 Rectangle badgeRect = new Rectangle(e.CellBounds.X + 10, e.CellBounds.Y + 10, e.CellBounds.Width - 20, e.CellBounds.Height - 20);
                 
                 using (var brush = new SolidBrush(bgColor))
                 {
-                    e.Graphics.FillRoundedRectangle(brush, badgeRect, 10);
+                    e.Graphics?.FillRoundedRectangle(brush, badgeRect, 10);
                 }
 
                 TextRenderer.DrawText(e.Graphics, text, dgvFuncionarios.Font, badgeRect, textColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
@@ -71,7 +150,6 @@ namespace ProjetoBandejao.Forms.Home
         }
     }
 
-    // Extensão para desenhar cantos arredondados (simplificada para o exemplo)
     public static class GraphicsExtension
     {
         public static void FillRoundedRectangle(this Graphics graphics, Brush brush, Rectangle bounds, int cornerRadius)
