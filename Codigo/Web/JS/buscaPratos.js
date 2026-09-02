@@ -109,6 +109,21 @@ async function carregarCategorias() {
 // =============================================
 // HELPERS
 // =============================================
+function formatarUrlImagem(url) {
+    if (!url) return null;
+    // Extrai apenas o nome do arquivo, qualquer que seja o formato armazenado
+    // Ex: "http://localhost:8080/uploads/pratos/abc.webp" → "abc.webp"
+    //     "uploads/pratos/abc.webp"                       → "abc.webp"
+    //     "abc.webp"                                      → "abc.webp"
+    let nomeArquivo = url;
+    if (url.includes('/')) {
+        nomeArquivo = url.split('/').pop();
+    }
+    if (!nomeArquivo) return null;
+    // Serve via proxy PHP (evita depender do servidor de estáticos do Spring Boot)
+    return `imagem.php?arquivo=${encodeURIComponent(nomeArquivo)}`;
+}
+
 function mediaNotas(pratoId) {
     const avs = todasAvaliacoes.filter(a => a.prato && a.prato.id === pratoId);
     if (!avs.length) return null;
@@ -179,15 +194,17 @@ function renderizarPratos() {
         const jaAvaliou = euJaAvalieiEsre(p.id);
         const jaFavoritou = euJaFavoriteeiEsse(p.id);
         const catNome = p.categoria ? (p.categoria.descricao || `Cat. ${p.categoria.id}`) : '—';
+        const urlImg = formatarUrlImagem(p.imagem);
 
         return `
         <div class="col-md-6 col-lg-4">
             <div class="card card-prato h-100">
 
                 <!-- Imagem do prato -->
-                ${p.imagem
-                    ? `<img src="${p.imagem}" alt="${p.nome}"
-                            style="width:100%;height:160px;object-fit:cover;border-radius:12px 12px 0 0;">`
+                ${urlImg
+                    ? `<img src="${urlImg}" alt="${p.nome}"
+                            style="width:100%;height:160px;object-fit:cover;border-radius:12px 12px 0 0;"
+                            onerror="this.outerHTML='<div style=\\'width:100%;height:120px;background:linear-gradient(135deg,#F69D39,#E0C375);border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:center;font-size:3rem;\\'>🍽️</div>';">`
                     : `<div style="width:100%;height:120px;background:linear-gradient(135deg,#F69D39,#E0C375);
                             border-radius:12px 12px 0 0;display:flex;align-items:center;
                             justify-content:center;font-size:3rem;">🍽️</div>`
@@ -198,9 +215,9 @@ function renderizarPratos() {
                         <!-- Nome como link para detalhes do prato -->
                         <h5 class="card-title mb-0">
                             <a href="pratoDet.php?id=${p.id}"
-                               style="color:#7a1728;text-decoration:none;"
-                               onmouseover="this.style.textDecoration='underline'"
-                               onmouseout="this.style.textDecoration='none'">
+                                style="color:#7a1728;text-decoration:none;"
+                                onmouseover="this.style.textDecoration='underline'"
+                                onmouseout="this.style.textDecoration='none'">
                                 ${p.nome}
                             </a>
                         </h5>
@@ -220,42 +237,71 @@ function renderizarPratos() {
                     </div>
 
                     <!-- AÇÕES -->
-                    <div class="d-flex gap-2 flex-wrap">
+                    <div class="area-acoes">
+                        <div class="d-flex gap-2 flex-wrap mb-2">
 
-                        <!-- LIKE / AVALIAR -->
-                        <button
-                            class="btn-like ${jaAvaliou ? 'ativo' : ''}"
-                            ${jaAvaliou ? 'disabled title="Você já avaliou"' : ''}
-                            onclick="abrirModalAvaliar(${p.id}, '${p.nome.replace(/'/g, "\\'")}')">
-                            👍 ${jaAvaliou ? 'Avaliado' : 'Curtir/Avaliar'}
-                        </button>
+                            <!-- LIKE / AVALIAR -->
+                            <button
+                                class="btn-like ${jaAvaliou ? 'ativo' : ''}"
+                                ${jaAvaliou ? 'disabled title="Você já avaliou"' : ''}
+                                onclick="abrirModalAvaliar(${p.id}, '${p.nome.replace(/'/g, "\\'")}')">
+                                👍 ${jaAvaliou ? 'Avaliado' : 'Curtir/Avaliar'}
+                            </button>
 
-                        <!-- FAVORITAR -->
-                        <button
-                            class="btn-fav ${jaFavoritou ? 'ativo' : ''}"
-                            id="btnFav-${p.id}"
-                            onclick="${jaFavoritou
+                            <!-- FAVORITAR -->
+                            <button
+                                class="btn-fav ${jaFavoritou ? 'ativo' : ''}"
+                                id="btnFav-${p.id}"
+                                onclick="${jaFavoritou
                 ? `desfavoritar(${p.id}, ${idFavoritoDoPrato(p.id)})`
                 : `abrirModalFavoritar(${p.id}, '${p.nome.replace(/'/g, "\\'")}')`
             }">
-                            ${jaFavoritou ? '⭐ Favoritado' : '☆ Favoritar'}
-                        </button>
-
-                    </div>
-
-                    <!-- EDITAR (só funcionário) -->
-                    ${isFuncionario ? `
-                        <div class="mt-2">
-                            <button class="btn-editar-prato"
-                                onclick="abrirModalEditar(${p.id})">
-                                ✏️ Editar prato
+                                ${jaFavoritou ? '⭐ Favoritado' : '☆ Favoritar'}
                             </button>
-                        </div>` : ''}
+
+                        </div>
+
+                        <!-- EDITAR E EXCLUIR (só funcionário) -->
+                        ${isFuncionario ? `
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-outline-primary flex-fill fw-semibold"
+                                    onclick="abrirModalEditar(${p.id})">
+                                    ✏️ Editar
+                                </button>
+                                <button class="btn btn-sm flex-fill fw-semibold"
+                                    style="border: 2px solid #D92243 !important; color: #D92243; background: #fff; transition: all 0.2s;"
+                                    onmouseover="this.style.background='#D92243';this.style.color='#fff';"
+                                    onmouseout="this.style.background='#fff';this.style.color='#D92243';"
+                                    onclick="deletarPrato(${p.id}, '${p.nome.replace(/'/g, "\\'")}')">
+                                    🗑️ Excluir
+                                </button>
+                            </div>` : ''}
+                    </div>
 
                 </div>
             </div>
         </div>`;
     }).join('');
+}
+
+// =============================================
+// EXCLUIR PRATO (FUNCIONÁRIO)
+// =============================================
+async function deletarPrato(pratoId, nome) {
+    if (!confirm(`Tem certeza que deseja excluir o prato "${nome}"?\n\nEsta ação removerá o prato do banco e desvinculará de possíveis cardápios.`)) {
+        return;
+    }
+
+    try {
+        const res = await fetch(`${API}/pratos/deletar/${pratoId}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error(await res.text() || 'Erro ao deletar prato.');
+
+        alert('✅ Prato excluído com sucesso!');
+        await carregarPratos();
+        renderizarPratos();
+    } catch (err) {
+        alert('❌ Erro ao excluir prato: ' + err.message);
+    }
 }
 
 // =============================================
@@ -527,3 +573,4 @@ window.abrirModalFavoritar = abrirModalFavoritar;
 window.desfavoritar        = desfavoritar;
 window.limparFiltros       = limparFiltros;
 window.abrirModalEditar    = abrirModalEditar;
+window.deletarPrato        = deletarPrato;

@@ -77,13 +77,90 @@ body {
     font-weight: 600;
 }
 
-/* Área de Busca (Funcionário) */
+/* Área de Busca e Lista (Funcionário) */
 .busca-box {
     background: #fff8ee;
     border: 1px solid #E0C375;
     border-radius: 14px;
     padding: 15px;
     margin-bottom: 25px;
+}
+
+.btn-filtro-user {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 15px;
+    border: 1px solid #E0C375;
+    background: white;
+    color: #7a1728;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-filtro-user:hover {
+    background: #fde9c0;
+    color: #7a1728;
+}
+
+.btn-filtro-user.active {
+    background: #D92243;
+    border-color: #D92243;
+    color: white;
+}
+
+.lista-usuarios-scroll {
+    max-height: 180px;
+    overflow-y: auto;
+    border: 1px solid rgba(224, 195, 117, 0.4);
+    border-radius: 10px;
+    background: #fffdfa;
+    scrollbar-width: thin;
+    scrollbar-color: #E0C375 transparent;
+}
+
+.lista-usuarios-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.lista-usuarios-scroll::-webkit-scrollbar-thumb {
+    background-color: #E0C375;
+    border-radius: 4px;
+}
+
+.usuario-item-lista {
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(224, 195, 117, 0.2);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.15s ease;
+}
+
+.usuario-item-lista:last-child {
+    border-bottom: none;
+}
+
+.usuario-item-lista:hover {
+    background-color: #fff3dc;
+}
+
+.usuario-item-lista.selecionado {
+    background-color: #ffe4e9;
+    border-left: 4px solid #D92243;
+}
+
+.usuario-item-nome {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0;
+}
+
+.usuario-item-email {
+    font-size: 0.76rem;
+    color: #777;
+    margin-bottom: 0;
 }
 
 .info-item {
