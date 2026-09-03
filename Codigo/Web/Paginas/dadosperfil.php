@@ -25,17 +25,39 @@
         <span id="badgeTipoUsuario" class="badge-tipo-aluno">Carregando...</span>
       </div>
 
-      <!-- Barra de Busca (Visível apenas para Funcionários) -->
+      <!-- Barra de Busca e Lista de Usuários (Visível apenas para Funcionários) -->
       <div id="boxBuscaFuncionario" class="busca-box d-none">
-        <label class="info-label mb-2">🔍 Gerenciar outro usuário (Apenas Funcionário)</label>
-        <form id="formBuscaUsuario" class="d-flex gap-2">
-          <input type="text" id="inputBuscaUser" class="form-control form-control-sm" placeholder="Digite o login do usuário...">
-          <button type="submit" class="btn btn-sm btn-primary px-3 fw-bold" style="background:#D92243; border-color:#D92243;">
-            Buscar
-          </button>
-        </form>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <label class="info-label mb-0">👥 Gerenciamento de Usuários</label>
+          <span class="badge bg-secondary text-white small" id="contadorUsuarios">0 cadastrados</span>
+        </div>
+
+        <!-- Campo de Busca em Tempo Real -->
+        <div class="input-group input-group-sm mb-2">
+          <span class="input-group-text bg-white">🔍</span>
+          <input type="text" id="inputBuscaUser" class="form-control" placeholder="Buscar por nome ou e-mail...">
+          <button class="btn btn-outline-secondary" type="button" id="btnLimparBusca">✕</button>
+        </div>
+
+        <!-- Filtros Rápidos -->
+        <div class="d-flex gap-1 mb-2">
+          <button type="button" class="btn btn-sm btn-filtro-user active" data-filtro="todos">Todos</button>
+          <button type="button" class="btn btn-sm btn-filtro-user" data-filtro="alunos">🎓 Alunos</button>
+          <button type="button" class="btn btn-sm btn-filtro-user" data-filtro="funcionarios">👔 Funcionários</button>
+        </div>
+
+        <!-- Lista Rolável de Usuários -->
+        <div id="listaUsuariosScroll" class="lista-usuarios-scroll">
+          <div class="text-center py-3 text-muted small">
+            <div class="spinner-border spinner-border-sm text-danger" role="status"></div>
+            Carregando usuários...
+          </div>
+        </div>
+
         <div id="btnVerMeuPerfil" class="text-end mt-2 d-none">
-          <a href="#" id="linkVoltarMeuPerfil" class="small text-decoration-none" style="color:#7a1728;">← Ver meu próprio perfil</a>
+          <a href="#" id="linkVoltarMeuPerfil" class="small text-decoration-none fw-bold" style="color:#D92243;">
+            👤 Voltar ao meu perfil
+          </a>
         </div>
       </div>
 

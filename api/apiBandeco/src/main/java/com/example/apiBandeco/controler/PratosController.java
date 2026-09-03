@@ -78,7 +78,6 @@ public class PratosController {
             prato.setImagem(null);
         }
 
-
         return pratosRepository.save(prato);
     }
 

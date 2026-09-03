@@ -10,6 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+//AO COMMITAR, REMOVA A CHAVE!!!
+//FICA EM GEMINI CONFIG
+
 @EnableAsync
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class ApiBandecoApplication {
