@@ -6,6 +6,7 @@ import com.example.apiBandeco.repository.CardapioRepository;
 import com.example.apiBandeco.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -82,7 +83,7 @@ public class CardapioDiaController {
     }
 
     @GetMapping("/data/{data}")//busca cardapio do dia pela data
-    public CardapioDia buscarPorData(@PathVariable("data") LocalDate data){
+    public CardapioDia buscarPorData(@PathVariable("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
         return cardapioDiaRepository.findByData(data)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Cardápio do dia não encontrado"

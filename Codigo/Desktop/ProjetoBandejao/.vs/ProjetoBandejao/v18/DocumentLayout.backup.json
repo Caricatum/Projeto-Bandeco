@@ -3,44 +3,88 @@
   "WorkspaceRootPath": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\forms\\home\\frmcadastropratosnovo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\home\\frmcadastropratosnovo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\services\\usuarioservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\services\\usuarioservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\forms\\home\\configuracoesform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\home\\configuracoesform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\forms\\cadastrofuncionarioform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\cadastrofuncionarioform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\projetobandejao\\forms\\cadastrofuncionarioform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\forms\\cadastrofuncionarioform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\cadastrofuncionarioform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\forms\\loginform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\loginform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\forms\\confirmarcodigoform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\confirmarcodigoform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\forms\\recuperarsenhaform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\recuperarsenhaform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\projetobandejao\\forms\\home\\frmcadastropratosnovo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\home\\frmcadastropratosnovo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\projetobandejao\\forms\\resetarsenhaform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\resetarsenhaform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\forms\\home\\funcionariosform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\home\\funcionariosform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\services\\usercontrols\\sidebarcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\services\\usercontrols\\sidebarcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\forms\\home\\frmcadastropratosnovo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\home\\frmcadastropratosnovo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\projetobandejao\\forms\\confirmarcodigoform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\confirmarcodigoform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\forms\\home\\frmcadastropratosnovo.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\home\\frmcadastropratosnovo.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\forms\\home\\refeicoesform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\home\\refeicoesform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\projetobandejao\\forms\\home\\refeicoesform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\home\\refeicoesform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\projetobandejao\\forms\\home\\homeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\home\\homeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\services\\usercontrols\\cadastropratoscontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\services\\usercontrols\\cadastropratoscontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\services\\usercontrols\\cadastropratoscontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\services\\usercontrols\\cadastropratoscontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\projetobandejao\\forms\\recuperarsenhaform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\recuperarsenhaform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\projetobandejao\\forms\\loginform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\loginform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\projetobandejao\\forms\\resetarsenhaform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\resetarsenhaform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\projetobandejao\\services\\usercontrols\\sidebarcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\services\\usercontrols\\sidebarcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|c:\\users\\maste\\documents\\projetobandeco\\codigo\\desktop\\projetobandejao\\projetobandejao\\services\\avisoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\services\\avisoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\projetobandejao\\forms\\home\\configuracoesform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\home\\configuracoesform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\projetobandejao\\forms\\home\\funcionariosform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{CBCFA2C9-B53C-4C11-A7FE-8CEFEE70B6EA}|ProjetoBandejao\\ProjetoBandejao.csproj|solutionrelative:projetobandejao\\forms\\home\\funcionariosform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -50,123 +94,126 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
-            },
-            {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ConfiguracoesForm.cs [Projeto]",
-              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\ConfiguracoesForm.cs",
-              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\Home\\ConfiguracoesForm.cs",
-              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\ConfiguracoesForm.cs [Projeto]",
-              "RelativeToolTip": "ProjetoBandejao\\Forms\\Home\\ConfiguracoesForm.cs [Projeto]",
+              "Title": "CadastroFuncionarioForm.cs",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\CadastroFuncionarioForm.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\CadastroFuncionarioForm.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\CadastroFuncionarioForm.cs",
+              "RelativeToolTip": "ProjetoBandejao\\Forms\\CadastroFuncionarioForm.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAcwE4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-01T05:55:59.26Z",
-              "EditorCaption": " [Projeto]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "FrmCadastroPratosNovo.cs [Projeto]",
-              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.cs",
-              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.cs",
-              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.cs [Projeto]",
-              "RelativeToolTip": "ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.cs [Projeto]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-01T05:55:49.732Z",
-              "EditorCaption": " [Projeto]"
+              "WhenOpened": "2026-09-02T16:22:36.164Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "LoginForm.cs [Projeto]",
-              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\LoginForm.cs",
-              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\LoginForm.cs",
-              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\LoginForm.cs [Projeto]",
-              "RelativeToolTip": "ProjetoBandejao\\Forms\\LoginForm.cs [Projeto]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-01T05:54:34.78Z",
-              "EditorCaption": " [Projeto]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "RecuperarSenhaForm.cs [Projeto]",
-              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\RecuperarSenhaForm.cs",
-              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\RecuperarSenhaForm.cs",
-              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\RecuperarSenhaForm.cs [Projeto]",
-              "RelativeToolTip": "ProjetoBandejao\\Forms\\RecuperarSenhaForm.cs [Projeto]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-01T05:54:29.963Z",
-              "EditorCaption": " [Projeto]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "FuncionariosForm.cs [Projeto]",
-              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\FuncionariosForm.cs",
-              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\Home\\FuncionariosForm.cs",
-              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\FuncionariosForm.cs [Projeto]",
-              "RelativeToolTip": "ProjetoBandejao\\Forms\\Home\\FuncionariosForm.cs [Projeto]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-01T05:53:55.538Z",
-              "EditorCaption": " [Projeto]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "SideBarControl.cs [Projeto]",
-              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Services\\UserControls\\SideBarControl.cs",
-              "RelativeDocumentMoniker": "ProjetoBandejao\\Services\\UserControls\\SideBarControl.cs",
-              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Services\\UserControls\\SideBarControl.cs [Projeto]",
-              "RelativeToolTip": "ProjetoBandejao\\Services\\UserControls\\SideBarControl.cs [Projeto]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-01T05:52:44.575Z",
-              "EditorCaption": " [Projeto]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "RefeicoesForm.cs [Projeto]",
-              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\RefeicoesForm.cs",
-              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\Home\\RefeicoesForm.cs",
-              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\RefeicoesForm.cs [Projeto]*",
-              "RelativeToolTip": "ProjetoBandejao\\Forms\\Home\\RefeicoesForm.cs [Projeto]*",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-18T20:53:02.304Z",
-              "EditorCaption": " [Projeto]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "ConfirmarCodigoForm.cs [Projeto]",
+              "Title": "ConfirmarCodigoForm.cs",
               "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\ConfirmarCodigoForm.cs",
               "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\ConfirmarCodigoForm.cs",
-              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\ConfirmarCodigoForm.cs [Projeto]",
-              "RelativeToolTip": "ProjetoBandejao\\Forms\\ConfirmarCodigoForm.cs [Projeto]",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\ConfirmarCodigoForm.cs",
+              "RelativeToolTip": "ProjetoBandejao\\Forms\\ConfirmarCodigoForm.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAApwE4AAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-17T19:57:15.985Z",
-              "EditorCaption": " [Projeto]"
+              "WhenOpened": "2026-09-02T16:07:39.449Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "ResetarSenhaForm.cs [Projeto]",
-              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\ResetarSenhaForm.cs",
-              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\ResetarSenhaForm.cs",
-              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\ResetarSenhaForm.cs [Projeto]",
-              "RelativeToolTip": "ProjetoBandejao\\Forms\\ResetarSenhaForm.cs [Projeto]",
+              "Title": "FrmCadastroPratosNovo.cs",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.cs",
+              "RelativeToolTip": "ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAwAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-16T20:35:37.442Z",
+              "WhenOpened": "2026-09-02T15:06:44.711Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "RefeicoesForm.cs",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\RefeicoesForm.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\Home\\RefeicoesForm.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\RefeicoesForm.cs",
+              "RelativeToolTip": "ProjetoBandejao\\Forms\\Home\\RefeicoesForm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-02T14:59:41.572Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "CadastroPratosControl.cs",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Services\\UserControls\\CadastroPratosControl.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Services\\UserControls\\CadastroPratosControl.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Services\\UserControls\\CadastroPratosControl.cs",
+              "RelativeToolTip": "ProjetoBandejao\\Services\\UserControls\\CadastroPratosControl.cs",
+              "ViewState": "AgIAAOQDAAAAAAAAAAAUwEoEAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-02T14:57:04.282Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "CadastroPratosControl.cs [Projeto]",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Services\\UserControls\\CadastroPratosControl.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Services\\UserControls\\CadastroPratosControl.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Services\\UserControls\\CadastroPratosControl.cs [Projeto]",
+              "RelativeToolTip": "ProjetoBandejao\\Services\\UserControls\\CadastroPratosControl.cs [Projeto]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-02T14:56:11.479Z",
               "EditorCaption": " [Projeto]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "AvisoService.cs",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Services\\AvisoService.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Services\\AvisoService.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Services\\AvisoService.cs",
+              "RelativeToolTip": "ProjetoBandejao\\Services\\AvisoService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-01T06:26:16.979Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UsuarioService.cs",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Services\\UsuarioService.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Services\\UsuarioService.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Services\\UsuarioService.cs",
+              "RelativeToolTip": "ProjetoBandejao\\Services\\UsuarioService.cs",
+              "ViewState": "AgIAALUAAAAAAAAAAAAmwL0AAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-01T06:00:24.108Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Program.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Program.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Program.cs",
+              "RelativeToolTip": "ProjetoBandejao\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-02T15:06:54.09Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -179,6 +226,133 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-16T20:33:14.447Z",
               "EditorCaption": " [Projeto]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "FrmCadastroPratosNovo.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.Designer.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.Designer.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.Designer.cs",
+              "RelativeToolTip": "ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.Designer.cs",
+              "ViewState": "AgIAAMECAAAAAAAAAAAwwP0CAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-02T15:26:35.127Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "HomeForm.cs [Projeto]",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\HomeForm.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\Home\\HomeForm.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\HomeForm.cs [Projeto]*",
+              "RelativeToolTip": "ProjetoBandejao\\Forms\\Home\\HomeForm.cs [Projeto]*",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-16T20:33:14.443Z",
+              "EditorCaption": " [Projeto]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "ConfiguracoesForm.cs [Projeto]",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\ConfiguracoesForm.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\Home\\ConfiguracoesForm.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\ConfiguracoesForm.cs [Projeto]",
+              "RelativeToolTip": "ProjetoBandejao\\Forms\\Home\\ConfiguracoesForm.cs [Projeto]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-01T05:55:59.26Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FrmCadastroPratosNovo.cs [Projeto]",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.cs [Projeto]",
+              "RelativeToolTip": "ProjetoBandejao\\Forms\\Home\\FrmCadastroPratosNovo.cs [Projeto]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-01T05:55:49.732Z",
+              "EditorCaption": " [Projeto]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "LoginForm.cs [Projeto]",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\LoginForm.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\LoginForm.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\LoginForm.cs [Projeto]",
+              "RelativeToolTip": "ProjetoBandejao\\Forms\\LoginForm.cs [Projeto]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-01T05:54:34.78Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "RecuperarSenhaForm.cs [Projeto]",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\RecuperarSenhaForm.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\RecuperarSenhaForm.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\RecuperarSenhaForm.cs [Projeto]",
+              "RelativeToolTip": "ProjetoBandejao\\Forms\\RecuperarSenhaForm.cs [Projeto]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-01T05:54:29.963Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "FuncionariosForm.cs [Projeto]",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\FuncionariosForm.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\Home\\FuncionariosForm.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\FuncionariosForm.cs [Projeto]",
+              "RelativeToolTip": "ProjetoBandejao\\Forms\\Home\\FuncionariosForm.cs [Projeto]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-01T05:53:55.538Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "SideBarControl.cs [Projeto]",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Services\\UserControls\\SideBarControl.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Services\\UserControls\\SideBarControl.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Services\\UserControls\\SideBarControl.cs [Projeto]",
+              "RelativeToolTip": "ProjetoBandejao\\Services\\UserControls\\SideBarControl.cs [Projeto]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-01T05:52:44.575Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "RefeicoesForm.cs [Projeto]",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\RefeicoesForm.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\Home\\RefeicoesForm.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\Home\\RefeicoesForm.cs [Projeto]",
+              "RelativeToolTip": "ProjetoBandejao\\Forms\\Home\\RefeicoesForm.cs [Projeto]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-18T20:53:02.304Z",
+              "EditorCaption": " [Projeto]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ConfirmarCodigoForm.cs [Projeto]",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\ConfirmarCodigoForm.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\ConfirmarCodigoForm.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\ConfirmarCodigoForm.cs [Projeto]",
+              "RelativeToolTip": "ProjetoBandejao\\Forms\\ConfirmarCodigoForm.cs [Projeto]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-17T19:57:15.985Z",
+              "EditorCaption": " [Projeto]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ResetarSenhaForm.cs [Projeto]",
+              "DocumentMoniker": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\ResetarSenhaForm.cs",
+              "RelativeDocumentMoniker": "ProjetoBandejao\\Forms\\ResetarSenhaForm.cs",
+              "ToolTip": "C:\\Users\\maste\\Documents\\ProjetoBandeco\\Codigo\\Desktop\\ProjetoBandejao\\ProjetoBandejao\\Forms\\ResetarSenhaForm.cs [Projeto]",
+              "RelativeToolTip": "ProjetoBandejao\\Forms\\ResetarSenhaForm.cs [Projeto]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-16T20:35:37.442Z"
             }
           ]
         }

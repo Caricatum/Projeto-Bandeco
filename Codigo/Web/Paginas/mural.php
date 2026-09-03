@@ -311,20 +311,76 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
-    <!-- CARDÁPIO DO DIA -->
+    <!-- CARDÁPIO DO DIA E DA SEMANA -->
     <div class="container mt-4 mb-5">
 
-        <h1 class="text-center mb-4">🍽️ Cardápio do Dia</h1>
+        <h1 class="text-center mb-4">🍽️ Cardápio do Restaurante</h1>
 
-        <div class="d-flex justify-content-center align-items-center mb-4">
-            <button id="btnCardapioDia" class="btn btn-primary d-none">Cadastrar Cardápio do dia</button>
+        <!-- Botões de Ação para Funcionários -->
+        <div class="d-flex justify-content-center align-items-center gap-2 mb-4 flex-wrap">
+            <button id="btnCardapioDia" class="btn btn-primary d-none">
+                ➕ Cadastrar Cardápio
+            </button>
+        <!-- <button id="btnNotificarFavoritos" class="btn btn-warning d-none text-dark fw-bold" onclick="notificarFavoritosHoje()">
+                🔔 Notificar Pratos Favoritos por E-mail
+            </button>-->
         </div>
 
-        <!-- Preenchido via JS (mural.js → carregarCardapioDia) -->
-        <div id="areaCardapio" class="row g-3">
-            <div class="col-12 text-center py-5">
-                <div class="spinner-border text-primary"></div>
-                <p class="mt-2 text-muted">Carregando cardápio...</p>
+        <!-- Abas de Navegação (Dia vs Semana) -->
+        <ul class="nav nav-pills justify-content-center mb-4" id="cardapioTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active fw-bold px-4" id="tab-dia-btn" data-bs-toggle="pill" data-bs-target="#tab-dia" type="button" role="tab">
+                    📅 Cardápio por Dia
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-bold px-4" id="tab-semana-btn" data-bs-toggle="pill" data-bs-target="#tab-semana" type="button" role="tab" onclick="carregarCardapioSemana()">
+                    🗓️ Cardápio da Semana
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="cardapioTabContent">
+            <!-- ABA 1: CARDÁPIO POR DIA -->
+            <div class="tab-pane fade show active" id="tab-dia" role="tabpanel">
+                <!-- Barra de Navegação de Datas -->
+                <div class="card p-3 mb-4 shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-danger" id="btnDiaAnterior" onclick="mudarDataRelativa(-1)">
+                                ⬅️ Dia Anterior
+                            </button>
+                            <button type="button" class="btn btn-outline-danger" id="btnDiaHoje" onclick="irParaHoje()">
+                                📍 Hoje
+                            </button>
+                            <button type="button" class="btn btn-outline-danger" id="btnDiaProximo" onclick="mudarDataRelativa(1)">
+                                Próximo Dia ➡️
+                            </button>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <label for="seletorDataCardapio" class="fw-bold text-muted mb-0">Data:</label>
+                            <input type="date" id="seletorDataCardapio" class="form-control" style="max-width: 190px;" onchange="aoMudarSeletorData(this.value)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preenchido via JS (mural.js → carregarCardapioDia) -->
+                <div id="areaCardapio" class="row g-3">
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary"></div>
+                        <p class="mt-2 text-muted">Carregando cardápio...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA 2: CARDÁPIO DA SEMANA -->
+            <div class="tab-pane fade" id="tab-semana" role="tabpanel">
+                <div id="areaCardapioSemana" class="row g-4">
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary"></div>
+                        <p class="mt-2 text-muted">Carregando cardápios da semana...</p>
+                    </div>
+                </div>
             </div>
         </div>
 

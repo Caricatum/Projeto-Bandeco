@@ -17,6 +17,7 @@ public class GeminiController {
 
     private final GeminiService geminiService;
 
+
     @GetMapping("/test")
     public ResponseEntity<Map<String, Object>> testarGemini(
             @RequestParam(defaultValue = "Olá Gemini, responda confirmando que você está ativo e funcionando!") String prompt) {

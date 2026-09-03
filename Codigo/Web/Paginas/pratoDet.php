@@ -128,6 +128,29 @@
                     <div id="areaAcoes" class="d-flex gap-2 flex-wrap" style="display:none!important"></div>
                 </div>
 
+                <!-- Resumo por IA (Gemini) -->
+                <div id="areaIA" class="card-det p-3 mt-3" style="display:none; background: #fffcf5; border-color: #F69D39;">
+                    <h5 style="color: #D92243;">✨ Resumo das Avaliações (IA)</h5>
+                    <p id="descricaoIA" class="mb-0 text-muted small" style="line-height: 1.6;"></p>
+                </div>
+
+                <!-- Tabela de Valores Nutricionais -->
+                <div class="card-det p-3 mt-3" id="areaNutricionalCard">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="mb-0">🥗 Valores Nutricionais</h5>
+                        <button type="button" class="btn btn-sm btn-outline-danger d-none" id="btnEditarNutricao" onclick="abrirModalNutricional()">
+                            ✏️ Editar
+                        </button>
+                    </div>
+
+                    <div id="conteudoNutricional">
+                        <div class="text-center py-2 text-muted small">
+                            <div class="spinner-border spinner-border-sm text-danger" role="status"></div>
+                            Carregando tabela nutricional...
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Nota técnica (só funcionário) -->
                 <div id="areaNota" class="card-det p-3 mt-3" style="display:none">
                     <h5>📋 Nota Técnica</h5>
@@ -161,6 +184,58 @@
                     <p class="text-muted">Nenhuma avaliação ainda.</p>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Gerenciar Valores Nutricionais (Funcionário) -->
+    <div class="modal fade" id="modalNutricional" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">🥗 Tabela Nutricional do Prato</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formNutricional">
+                        <input type="hidden" id="nutricaoId">
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small">Porção / Medida de Referência</label>
+                            <input type="text" class="form-control" id="nutricaoMedida" placeholder="Ex: 100g, 1 concha, 1 unidade..." required>
+                        </div>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-bold small">Calorias (kcal)</label>
+                                <input type="number" step="0.1" class="form-control" id="nutricaoKcal" placeholder="Ex: 180" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-bold small">Carboidratos (g)</label>
+                                <input type="number" step="0.1" class="form-control" id="nutricaoCarboidratos" placeholder="Ex: 25.5" required>
+                            </div>
+                        </div>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-bold small">Proteínas (g)</label>
+                                <input type="number" step="0.1" class="form-control" id="nutricaoProteinas" placeholder="Ex: 14.2" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-bold small">Lipídios / Gorduras (g)</label>
+                                <input type="number" step="0.1" class="form-control" id="nutricaoLipidios" placeholder="Ex: 4.8" required>
+                            </div>
+                        </div>
+
+                        <p id="msgNutricional" class="text-danger small mb-0"></p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger fw-bold" id="btnSalvarNutricao" onclick="salvarValoresNutricionais()">
+                        💾 Salvar Tabela Nutricional
+                    </button>
+                </div>
             </div>
         </div>
     </div>

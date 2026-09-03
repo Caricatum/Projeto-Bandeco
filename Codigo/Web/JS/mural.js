@@ -24,8 +24,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Só funcionário vê botão de novo aviso e cardápio do dia
     if (usuarioLogado.tipo === 'true') {
-        document.getElementById('btnNovoAviso').classList.remove('d-none');
-        document.getElementById('btnCardapioDia').classList.remove('d-none');
+        const btnNovoAviso = document.getElementById('btnNovoAviso');
+        const btnCardapioDia = document.getElementById('btnCardapioDia');
+        const btnNotificar = document.getElementById('btnNotificarFavoritos');
+
+        if (btnNovoAviso) btnNovoAviso.classList.remove('d-none');
+        if (btnCardapioDia) btnCardapioDia.classList.remove('d-none');
+        if (btnNotificar) btnNotificar.classList.remove('d-none');
     }
 
     // Carrega avisos do localStorage (ainda não há endpoint de notificações para isso)
@@ -109,33 +114,104 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderizarAvisos();
 
     // =============================================
-    // CARDÁPIO DO DIA — via API real
+    // CARDÁPIO DO DIA E DA SEMANA
     // =============================================
+    inicializarSeletorData();
     await carregarCardapioDia();
 });
 
 
 // =============================================
-// CARDÁPIO DO DIA
+// GERENCIAMENTO DE DATAS
 // =============================================
-async function carregarCardapioDia() {
+let dataSelecionada = obterDataHojeLocal();
+
+function obterDataHojeLocal() {
+    const agora = new Date();
+    const ano = agora.getFullYear();
+    const mes = String(agora.getMonth() + 1).padStart(2, '0');
+    const dia = String(agora.getDate()).padStart(2, '0');
+    return `${ano}-${mes}-${dia}`;
+}
+
+function inicializarSeletorData() {
+    const seletor = document.getElementById('seletorDataCardapio');
+    if (seletor) {
+        seletor.value = dataSelecionada;
+    }
+}
+
+window.aoMudarSeletorData = function(novaData) {
+    if (!novaData) return;
+    dataSelecionada = novaData;
+    carregarCardapioDia(dataSelecionada);
+};
+
+window.mudarDataRelativa = function(offsetDias) {
+    const partes = dataSelecionada.split('-').map(Number);
+    const d = new Date(partes[0], partes[1] - 1, partes[2]);
+    d.setDate(d.getDate() + offsetDias);
+
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, '0');
+    const dia = String(d.getDate()).padStart(2, '0');
+
+    dataSelecionada = `${ano}-${mes}-${dia}`;
+    const seletor = document.getElementById('seletorDataCardapio');
+    if (seletor) seletor.value = dataSelecionada;
+
+    carregarCardapioDia(dataSelecionada);
+};
+
+window.irParaHoje = function() {
+    dataSelecionada = obterDataHojeLocal();
+    const seletor = document.getElementById('seletorDataCardapio');
+    if (seletor) seletor.value = dataSelecionada;
+    carregarCardapioDia(dataSelecionada);
+};
+
+// =============================================
+// CARDÁPIO DO DIA (POR DATA)
+// =============================================
+async function carregarCardapioDia(dataFiltro = null) {
     const area = document.getElementById('areaCardapio');
     if (!area) return;
 
-    try {
-        const res = await fetch(`${API}/cardapioDia/all`);
-        if (!res.ok) throw new Error('Erro na API');
-        const todos = await res.json();
+    const dataAlvo = dataFiltro || dataSelecionada || obterDataHojeLocal();
 
-        // Pega o cardápio de hoje (data = hoje)
-        const hoje = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-        const cardapio = todos.find(c => c.data === hoje);
+    area.innerHTML = `
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary"></div>
+            <p class="mt-2 text-muted">Carregando cardápio...</p>
+        </div>`;
+
+    try {
+        // Tenta buscar diretamente pela rota de data
+        let cardapio = null;
+        const resData = await fetch(`${API}/cardapioDia/data/${dataAlvo}`);
+        if (resData.ok) {
+            cardapio = await resData.json();
+        } else {
+            // Fallback de busca em /cardapioDia/all
+            const resAll = await fetch(`${API}/cardapioDia/all`);
+            if (resAll.ok) {
+                const todos = await resAll.json();
+                cardapio = todos.find(c => {
+                    if (!c || !c.data) return false;
+                    const dataStr = typeof c.data === 'string' ? c.data.split('T')[0] : String(c.data);
+                    return dataStr === dataAlvo;
+                });
+            }
+        }
 
         if (!cardapio) {
+            const dataFormatada = dataAlvo.split('-').reverse().join('/');
+            const ehHoje = (dataAlvo === obterDataHojeLocal());
             area.innerHTML = `
                 <div class="col-12">
-                    <div class="alert alert-info text-center">
-                        📋 Cardápio de hoje ainda não foi cadastrado.
+                    <div class="alert alert-info text-center py-4">
+                        <h5 class="mb-1">📋 Nenhum cardápio cadastrado para ${ehHoje ? 'hoje' : 'este dia'} (${dataFormatada}).</h5>
+                        <p class="text-muted mb-0">Selecione outra data nos controles acima ou consulte a aba <strong>Cardápio da Semana</strong>.</p>
                     </div>
                 </div>`;
             return;
@@ -152,6 +228,131 @@ async function carregarCardapioDia() {
             </div>`;
     }
 }
+
+// =============================================
+// CARDÁPIO DA SEMANA
+// =============================================
+window.carregarCardapioSemana = async function() {
+    const area = document.getElementById('areaCardapioSemana');
+    if (!area) return;
+
+    area.innerHTML = `
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary"></div>
+            <p class="mt-2 text-muted">Carregando cardápios da semana...</p>
+        </div>`;
+
+    try {
+        let cardapios = [];
+        const res = await fetch(`${API}/cardapioDia/semana`);
+        if (res.ok) {
+            cardapios = await res.json();
+        } else {
+            const resAll = await fetch(`${API}/cardapioDia/all`);
+            if (resAll.ok) cardapios = await resAll.json();
+        }
+
+        if (!cardapios || cardapios.length === 0) {
+            area.innerHTML = `
+                <div class="col-12">
+                    <div class="alert alert-info text-center py-5">
+                        <h4>🗓️ Nenhum cardápio cadastrado para esta semana</h4>
+                        <p class="text-muted mb-0">Os cardápios da semana serão publicados em breve.</p>
+                    </div>
+                </div>`;
+            return;
+        }
+
+        cardapios.sort((a, b) => {
+            const dataA = typeof a.data === 'string' ? a.data : '';
+            const dataB = typeof b.data === 'string' ? b.data : '';
+            return dataA.localeCompare(dataB);
+        });
+
+        const nomesDias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+
+        area.innerHTML = cardapios.map(c => {
+            const dataStr = typeof c.data === 'string' ? c.data.split('T')[0] : String(c.data);
+            const [ano, mes, dia] = dataStr.split('-').map(Number);
+            const dataObj = new Date(ano, mes - 1, dia);
+            const diaSemana = nomesDias[dataObj.getDay()] || '';
+            const dataFormatada = dataStr.split('-').reverse().join('/');
+            const ehHoje = (dataStr === obterDataHojeLocal());
+
+            return `
+                <div class="col-12 mb-3">
+                    <div class="card shadow-sm ${ehHoje ? 'border-danger border-2' : ''}">
+                        <div class="card-header d-flex justify-content-between align-items-center ${ehHoje ? 'bg-danger text-white' : ''}">
+                            <h4 class="mb-0 fs-5">📅 ${diaSemana} - ${dataFormatada}</h4>
+                            ${ehHoje ? '<span class="badge bg-warning text-dark fw-bold">HOJE</span>' : ''}
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-lg-6">
+                                    <h5 class="text-primary border-bottom pb-2">🌞 Almoço</h5>
+                                    <div class="row g-2">
+                                        ${cardapioCard('Padrão', c.padraoAlmoco, false)}
+                                        ${cardapioCard('Vegano', c.veganoAlmoco, true)}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <h5 class="text-dark border-bottom pb-2">🌙 Jantar</h5>
+                                    <div class="row g-2">
+                                        ${cardapioCard('Padrão', c.padraoJantar, false)}
+                                        ${cardapioCard('Vegano', c.veganoJantar, true)}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+    } catch (e) {
+        area.innerHTML = `
+            <div class="col-12">
+                <div class="alert alert-warning text-center">
+                    ⚠️ Não foi possível carregar os cardápios da semana. Verifique se a API está online.
+                </div>
+            </div>`;
+    }
+};
+
+// =============================================
+// DISPARO DE NOTIFICAÇÃO DE PRATOS FAVORITOS
+// =============================================
+window.notificarFavoritosHoje = async function() {
+    const btn = document.getElementById('btnNotificarFavoritos');
+    if (!confirm('Deseja disparar as notificações por e-mail para todos os usuários com pratos favoritos no cardápio de hoje?')) {
+        return;
+    }
+
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Enviando notificações...';
+    }
+
+    try {
+        const res = await fetch(`${API}/pratosFavoritos/notificar`, {
+            method: 'POST'
+        });
+
+        if (res.ok) {
+            alert('✅ Notificações enviadas com sucesso para os usuários!');
+        } else {
+            const erro = await res.text();
+            alert('⚠️ ' + (erro || 'Não foi possível enviar as notificações.'));
+        }
+    } catch (e) {
+        alert('❌ Erro de conexão com a API: ' + e.message);
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = '🔔 Notificar Pratos Favoritos por E-mail';
+        }
+    }
+};
 
 function renderizarCardapio(c, area) {
     const secoes = [
@@ -177,12 +378,11 @@ function cardapioCard(titulo, cardapio, vegano) {
 
     const campos = [
         ['Acompanhamento', cardapio.acompanhamento],
-        ['Prato Principal', cardapio.prato_principal],
+        ['Prato Principal', cardapio.prato_principal || cardapio.pratoPrincipal],
         ['Guarnição', cardapio.guarnicao],
         ['Salada', cardapio.salada],
         ['Sobremesa', cardapio.sobremesa],
-        ['Refresco', cardapio.refresco],
-        ['Nota Tecnica', cardapio.nota_tecnica]
+        ['Refresco', cardapio.refresco]
     ];
 
     return `

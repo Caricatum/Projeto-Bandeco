@@ -111,11 +111,11 @@ namespace ProjetoBandejao.Services
                 }
 
                 // Imagem padrão caso não tenha imagem cadastrada
-                pctImage.Image = Properties.Resource.ImagemBandecco1;
+                pctImage.Image = Properties.Resource.error;
             }
             catch
             {
-                pctImage.Image = Properties.Resource.ImagemBandecco1;
+                pctImage.Image = Properties.Resource.error;
             }
         }
 

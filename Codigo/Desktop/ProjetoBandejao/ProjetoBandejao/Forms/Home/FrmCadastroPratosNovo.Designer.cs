@@ -115,23 +115,24 @@ namespace ProjetoBandejao.Forms.Home
             sidebar.Dock = DockStyle.Left;
             sidebar.Location = new Point(0, 0);
             sidebar.Name = "sidebar";
-            sidebar.Size = new Size(250, 748);
+            sidebar.Size = new Size(250, 750);
             sidebar.TabIndex = 0;
             sidebar.Load += sidebar_Load;
             // 
             // pnlMain
             // 
+            pnlMain.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pnlMain.BackColor = Color.Salmon;
             pnlMain.Controls.Add(cardMain);
             pnlMain.Controls.Add(pnlTop);
-            pnlMain.Dock = DockStyle.Fill;
             pnlMain.Location = new Point(250, 0);
             pnlMain.Name = "pnlMain";
-            pnlMain.Size = new Size(699, 748);
+            pnlMain.Size = new Size(1100, 748);
             pnlMain.TabIndex = 1;
             // 
             // cardMain
             // 
+            cardMain.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             cardMain.BackColor = Color.Transparent;
             cardMain.BorderRadius = 12;
             cardMain.Controls.Add(btnSalvar);
@@ -413,7 +414,7 @@ namespace ProjetoBandejao.Forms.Home
             flpIngredientes.AutoScroll = true;
             flpIngredientes.Location = new Point(350, 255);
             flpIngredientes.Name = "flpIngredientes";
-            flpIngredientes.Size = new Size(280, 50);
+            flpIngredientes.Size = new Size(280, 69);
             flpIngredientes.TabIndex = 19;
             // 
             // btnAdicionarIngrediente
@@ -493,7 +494,7 @@ namespace ProjetoBandejao.Forms.Home
             lblUpload2.ForeColor = Color.DarkGray;
             lblUpload2.Location = new Point(85, 40);
             lblUpload2.Name = "lblUpload2";
-            lblUpload2.Size = new Size(112, 13);
+            lblUpload2.Size = new Size(111, 13);
             lblUpload2.TabIndex = 1;
             lblUpload2.Text = "PNG • JPG • até 5 MB";
             // 
@@ -640,7 +641,7 @@ namespace ProjetoBandejao.Forms.Home
             pnlTop.Dock = DockStyle.Top;
             pnlTop.Location = new Point(0, 0);
             pnlTop.Name = "pnlTop";
-            pnlTop.Size = new Size(699, 80);
+            pnlTop.Size = new Size(1100, 80);
             pnlTop.TabIndex = 0;
             // 
             // btnVoltar
@@ -698,7 +699,7 @@ namespace ProjetoBandejao.Forms.Home
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(949, 748);
+            ClientSize = new Size(1000, 750);
             Controls.Add(pnlMain);
             Controls.Add(sidebar);
             FormBorderStyle = FormBorderStyle.None;

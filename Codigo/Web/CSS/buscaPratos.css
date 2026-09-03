@@ -51,6 +51,15 @@ h1 { color: #D92243; }
     transform: translateY(-3px);
     box-shadow: 0 6px 24px rgba(217, 34, 67, 0.18);
 }
+/* Mantém botões sempre no fundo do card */
+.card-prato .card-body {
+    display: flex;
+    flex-direction: column;
+}
+.card-prato .card-body .area-acoes {
+    margin-top: auto;
+    padding-top: 8px;
+}
 .card-title { color: #7a1728; }
 
 /* ===== Badges ===== */

@@ -28,7 +28,7 @@ namespace ProjetoBandejao.Forms.Home
 
             btnCadastrar.FillColor = unicampRed;
             btnCadastrar.ForeColor = Color.White;
-            
+
             btnPage1.FillColor = unicampRed;
             btnPage1.ForeColor = Color.White;
 
@@ -88,7 +88,7 @@ namespace ProjetoBandejao.Forms.Home
 
             if (!string.IsNullOrEmpty(busca))
             {
-                filtrados = filtrados.Where(u => 
+                filtrados = filtrados.Where(u =>
                     (u.Nome != null && u.Nome.Contains(busca, StringComparison.OrdinalIgnoreCase)) ||
                     (u.Login != null && u.Login.Contains(busca, StringComparison.OrdinalIgnoreCase))
                 );
@@ -131,22 +131,29 @@ namespace ProjetoBandejao.Forms.Home
             if (e.ColumnIndex == colStatus.Index && e.RowIndex >= 0 && e.Value != null)
             {
                 e.PaintBackground(e.CellBounds, true);
-                
+
                 string text = e.Value.ToString() ?? "Ativo";
                 Color bgColor = Color.FromArgb(235, 255, 240);
                 Color textColor = Color.FromArgb(40, 167, 69);
 
                 Rectangle badgeRect = new Rectangle(e.CellBounds.X + 10, e.CellBounds.Y + 10, e.CellBounds.Width - 20, e.CellBounds.Height - 20);
-                
+
                 using (var brush = new SolidBrush(bgColor))
                 {
                     e.Graphics?.FillRoundedRectangle(brush, badgeRect, 10);
                 }
 
                 TextRenderer.DrawText(e.Graphics, text, dgvFuncionarios.Font, badgeRect, textColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-                
+
                 e.Handled = true;
             }
+        }
+
+        private void btnCadastrar_Click(object sender, EventArgs e)
+        {
+            CadastroFuncionarioForm cadastro = new CadastroFuncionarioForm();
+
+            cadastro.ShowDialog();
         }
     }
 
