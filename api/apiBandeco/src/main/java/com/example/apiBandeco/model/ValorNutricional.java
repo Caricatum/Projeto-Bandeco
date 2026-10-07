@@ -26,6 +26,7 @@ public class ValorNutricional {
     @Column
     private String medida;
 
+
     public Pratos getPrato() {
         return prato;
     }

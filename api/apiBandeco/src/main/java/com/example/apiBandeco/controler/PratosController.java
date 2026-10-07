@@ -176,6 +176,20 @@ public class PratosController {
         pratoAtual.setVegano(prato.isVegano());
         pratoAtual.setCategoria(prato.getCategoria());
 
+        pratoAtual.setLeite(prato.isLeite());
+        pratoAtual.setOvo(prato.isOvo());
+        pratoAtual.setAmendoim(prato.isAmendoim());
+        pratoAtual.setCastanhas(prato.isCastanhas());
+        pratoAtual.setFrutosDoMar(prato.isFrutosDoMar());
+        pratoAtual.setPeixes(prato.isPeixes());
+        pratoAtual.setTrigo(prato.isTrigo());
+        pratoAtual.setSoja(prato.isSoja());
+        pratoAtual.setGergilim(prato.isGergilim());
+
+        pratoAtual.setAltoAcucarAdicionado(prato.isAltoAcucarAdicionado());
+        pratoAtual.setAltoGorduraSaturada(prato.isAltoGorduraSaturada());
+        pratoAtual.setAltoSodio(prato.isAltoSodio());
+
         return pratosRepository.save(pratoAtual);
     }
 

@@ -23,6 +23,30 @@ public class Pratos {
     @Column
     private boolean vegano;
     @Column
+    private boolean leite;
+    @Column
+    private boolean ovo;
+    @Column
+    private boolean amendoim;
+    @Column
+    private boolean castanhas;
+    @Column
+    private boolean frutosDoMar;
+    @Column
+    private boolean peixes;
+    @Column
+    private boolean trigo;
+    @Column
+    private boolean soja;
+    @Column
+    private boolean gergilim;
+    @Column
+    private boolean altoAcucarAdicionado;
+    @Column
+    private boolean altoGorduraSaturada;
+    @Column
+    private boolean altoSodio;
+    @Column
     private String imagem;
     @Column
     private String notaTecnica;
@@ -43,6 +67,103 @@ public class Pratos {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private ValorNutricional valorNutricional;
+
+    public boolean isLeite() {
+        return leite;
+    }
+
+    public void setLeite(boolean leite) {
+        this.leite = leite;
+    }
+
+    public boolean isOvo() {
+        return ovo;
+    }
+
+    public void setOvo(boolean ovo) {
+        this.ovo = ovo;
+    }
+
+    public boolean isAmendoim() {
+        return amendoim;
+    }
+
+    public void setAmendoim(boolean amendoim) {
+        this.amendoim = amendoim;
+    }
+
+    public boolean isCastanhas() {
+        return castanhas;
+    }
+
+    public void setCastanhas(boolean castanhas) {
+        this.castanhas = castanhas;
+    }
+
+    public boolean isFrutosDoMar() {
+        return frutosDoMar;
+    }
+
+    public void setFrutosDoMar(boolean frutosDoMar) {
+        this.frutosDoMar = frutosDoMar;
+    }
+
+    public boolean isPeixes() {
+        return peixes;
+    }
+
+    public void setPeixes(boolean peixes) {
+        this.peixes = peixes;
+    }
+
+    public boolean isTrigo() {
+        return trigo;
+    }
+
+    public void setTrigo(boolean trigo) {
+        this.trigo = trigo;
+    }
+
+    public boolean isSoja() {
+        return soja;
+    }
+
+    public void setSoja(boolean soja) {
+        this.soja = soja;
+    }
+
+    public boolean isGergilim() {
+        return gergilim;
+    }
+
+    public void setGergilim(boolean gergilim) {
+        this.gergilim = gergilim;
+    }
+
+    public boolean isAltoAcucarAdicionado() {
+        return altoAcucarAdicionado;
+    }
+
+    public void setAltoAcucarAdicionado(boolean altoAcucarAdicionado) {
+        this.altoAcucarAdicionado = altoAcucarAdicionado;
+    }
+
+    public boolean isAltoGorduraSaturada() {
+        return altoGorduraSaturada;
+    }
+
+    public void setAltoGorduraSaturada(boolean altoGorduraSaturada) {
+        this.altoGorduraSaturada = altoGorduraSaturada;
+    }
+
+    public boolean isAltoSodio() {
+        return altoSodio;
+    }
+
+    public void setAltoSodio(boolean altoSodio) {
+        this.altoSodio = altoSodio;
+    }
+
 
     public ValorNutricional getValorNutricional() {
         return valorNutricional;

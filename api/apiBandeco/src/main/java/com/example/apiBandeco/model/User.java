@@ -38,6 +38,26 @@ public class User {
     private String codigoResetSenha;
     @Column
     private LocalDateTime expiracaoResetSenha;
+    @Column
+    private boolean alergiaLeite;
+    @Column
+    private boolean alergiaOvo;
+    @Column
+    private boolean alergiaAmendoim;
+    @Column
+    private boolean alergiaCastanhas;
+    @Column
+    private boolean alergiaFrutosDoMar;
+
+    @Column
+    private boolean alergiaPeixes;
+    @Column
+    private boolean alergiaTrigo;
+    @Column
+    private boolean alergiaSoja;
+    @Column
+    private boolean alergiaGergilim;
+
     @JsonIgnore
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
@@ -183,4 +203,77 @@ public class User {
     public void setFuncionario(boolean funcionario) {
         this.funcionario = funcionario;
     }
+
+    public boolean isAlergiaLeite() {
+        return alergiaLeite;
+    }
+
+    public void setAlergiaLeite(boolean alergiaLeite) {
+        this.alergiaLeite = alergiaLeite;
+    }
+
+    public boolean isAlergiaOvo() {
+        return alergiaOvo;
+    }
+
+    public void setAlergiaOvo(boolean alergiaOvo) {
+        this.alergiaOvo = alergiaOvo;
+    }
+
+    public boolean isAlergiaAmendoim() {
+        return alergiaAmendoim;
+    }
+
+    public void setAlergiaAmendoim(boolean alergiaAmendoim) {
+        this.alergiaAmendoim = alergiaAmendoim;
+    }
+
+    public boolean isAlergiaCastanhas() {
+        return alergiaCastanhas;
+    }
+
+    public void setAlergiaCastanhas(boolean alergiaCastanhas) {
+        this.alergiaCastanhas = alergiaCastanhas;
+    }
+
+    public boolean isAlergiaFrutosDoMar() {
+        return alergiaFrutosDoMar;
+    }
+
+    public void setAlergiaFrutosDoMar(boolean alergiaFrutosDoMar) {
+        this.alergiaFrutosDoMar = alergiaFrutosDoMar;
+    }
+
+    public boolean isAlergiaPeixes() {
+        return alergiaPeixes;
+    }
+
+    public void setAlergiaPeixes(boolean alergiaPeixes) {
+        this.alergiaPeixes = alergiaPeixes;
+    }
+
+    public boolean isAlergiaTrigo() {
+        return alergiaTrigo;
+    }
+
+    public void setAlergiaTrigo(boolean alergiaTrigo) {
+        this.alergiaTrigo = alergiaTrigo;
+    }
+
+    public boolean isAlergiaSoja() {
+        return alergiaSoja;
+    }
+
+    public void setAlergiaSoja(boolean alergiaSoja) {
+        this.alergiaSoja = alergiaSoja;
+    }
+
+    public boolean isAlergiaGergilim() {
+        return alergiaGergilim;
+    }
+
+    public void setAlergiaGergilim(boolean alergiaGergilim) {
+        this.alergiaGergilim = alergiaGergilim;
+    }
+
 }

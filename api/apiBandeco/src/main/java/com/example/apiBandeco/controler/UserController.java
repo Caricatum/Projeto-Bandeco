@@ -230,6 +230,16 @@ public class UserController {
         userAtualizado.setNome(user.getNome());
         userAtualizado.setFuncionario(user.isFuncionario());
 
+        userAtualizado.setAlergiaLeite(user.isAlergiaLeite());
+        userAtualizado.setAlergiaOvo(user.isAlergiaOvo());
+        userAtualizado.setAlergiaAmendoim(user.isAlergiaAmendoim());
+        userAtualizado.setAlergiaCastanhas(user.isAlergiaCastanhas());
+        userAtualizado.setAlergiaFrutosDoMar(user.isAlergiaFrutosDoMar());
+        userAtualizado.setAlergiaPeixes(user.isAlergiaPeixes());
+        userAtualizado.setAlergiaTrigo(user.isAlergiaTrigo());
+        userAtualizado.setAlergiaSoja(user.isAlergiaSoja());
+        userAtualizado.setAlergiaGergilim(user.isAlergiaGergilim());
+
         return userRepo.save(userAtualizado);
     }
 
