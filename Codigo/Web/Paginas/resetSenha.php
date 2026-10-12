@@ -58,12 +58,28 @@
 
                 <div class="input-group-custom">
                     <label for="novaSenha">🔒 Nova Senha</label>
-                    <input type="password" id="novaSenha" class="input-custom" placeholder="Mínimo 6 caracteres" required>
+                    <div class="password-wrapper">
+                        <input type="password" id="novaSenha" class="input-custom" placeholder="Crie uma nova senha forte" required>
+                        <button type="button" class="btn-toggle-pass" id="btnToggleNovaSenha" title="Mostrar/ocultar senha">👁️</button>
+                    </div>
+                    <div class="password-strength-container">
+                        <div class="password-strength-bar" id="forcaBarraReset"></div>
+                        <span class="password-strength-label" id="forcaTextoReset"></span>
+                    </div>
+                    <ul class="password-requirements" id="listaRequisitosReset">
+                        <li class="req-item" id="reqTamReset"><span class="req-icon"></span> Mínimo de 8 caracteres</li>
+                        <li class="req-item" id="reqMaiusReset"><span class="req-icon"></span> Pelo menos uma letra maiúscula (A-Z)</li>
+                        <li class="req-item" id="reqMinusReset"><span class="req-icon"></span> Pelo menos uma letra minúscula (a-z)</li>
+                        <li class="req-item" id="reqNumReset"><span class="req-icon"></span> Pelo menos um número (0-9)</li>
+                    </ul>
                 </div>
 
                 <div class="input-group-custom">
                     <label for="confirmarSenha">🔒 Confirmar Nova Senha</label>
-                    <input type="password" id="confirmarSenha" class="input-custom" placeholder="Repita a nova senha" required>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmarSenha" class="input-custom" placeholder="Repita a nova senha" required>
+                        <button type="button" class="btn-toggle-pass" id="btnToggleConfirmarReset" title="Mostrar/ocultar senha">👁️</button>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn-auth-primary" id="btnSalvarNovaSenha">

@@ -236,3 +236,26 @@ h4:has(+ .form-vegano) {
 #modalCardapioDia h3 {
     border-left: 5px solid #198754;
 }
+
+/* ===== Badges de Alérgenos e Rótulos no Cardápio ===== */
+.badge-cardapio-alergia {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    background-color: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    white-space: nowrap;
+}
+.badge-cardapio-rotulo {
+    font-size: 0.66rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: #18181b;
+    color: #facc15;
+    border: 1px solid #3f3f46;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+}

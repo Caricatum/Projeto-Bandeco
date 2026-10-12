@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/components/auth_session.php';
+verificarAutenticacao();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -220,6 +224,94 @@ function logout() {
                                     <option value="true">Sim</option>
                                     <option value="false">Não</option>
                                 </select>
+                            </div>
+
+                            <!-- Alérgenos e Restrições -->
+                            <div class="mb-3 p-3 border rounded bg-white shadow-sm">
+                                <label class="form-label fw-bold text-danger mb-2">⚠️ Alérgenos e Restrições Alimentares</label>
+                                <p class="text-muted small mb-3">Marque se o prato contiver os ingredientes abaixo:</p>
+                                <div class="row g-2">
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="tagLeite">
+                                            <label class="form-check-label" for="tagLeite">🥛 Leite / Lactose</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="tagOvo">
+                                            <label class="form-check-label" for="tagOvo">🥚 Ovo</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="tagAmendoim">
+                                            <label class="form-check-label" for="tagAmendoim">🥜 Amendoim</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="tagCastanhas">
+                                            <label class="form-check-label" for="tagCastanhas">🌰 Castanhas / Nozes</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="tagFrutosDoMar">
+                                            <label class="form-check-label" for="tagFrutosDoMar">🦐 Frutos do Mar</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="tagPeixes">
+                                            <label class="form-check-label" for="tagPeixes">🐟 Peixes</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="tagTrigo">
+                                            <label class="form-check-label" for="tagTrigo">🌾 Trigo / Glúten</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="tagSoja">
+                                            <label class="form-check-label" for="tagSoja">🌱 Soja</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="tagGergilim">
+                                            <label class="form-check-label" for="tagGergilim">⚪ Gergelim</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Rótulos Nutricionais (Alto Teor) -->
+                            <div class="mb-3 p-3 border rounded bg-white shadow-sm">
+                                <label class="form-label fw-bold text-dark mb-2">🏷️ Rótulos Nutricionais (Alertas de Alto Teor)</label>
+                                <p class="text-muted small mb-3">Conforme diretrizes de rotulagem nutricional frontal:</p>
+                                <div class="row g-2">
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="tagAltoAcucar">
+                                            <label class="form-check-label" for="tagAltoAcucar">⚠️ Alto em Açúcar</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="tagAltoGordura">
+                                            <label class="form-check-label" for="tagAltoGordura">⚠️ Alto em Gordura Sat.</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="tagAltoSodio">
+                                            <label class="form-check-label" for="tagAltoSodio">⚠️ Alto em Sódio</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="mb-3">

@@ -4,9 +4,16 @@
 const API = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:8080';
 
 
-const userId = parseInt(localStorage.getItem('id')) || null;
-const username = localStorage.getItem('username') || '';
-const isFuncionario = localStorage.getItem('tipo') === 'true';
+const usuarioSessao = (typeof window.USUARIO_ATUAL !== 'undefined' && window.USUARIO_ATUAL) ? window.USUARIO_ATUAL : {
+    id: parseInt(localStorage.getItem('id')) || null,
+    username: localStorage.getItem('username') || '',
+    tipo: localStorage.getItem('tipo'),
+    funcionario: localStorage.getItem('tipo') === 'true'
+};
+
+const userId = usuarioSessao.id;
+const username = usuarioSessao.username;
+const isFuncionario = Boolean(usuarioSessao.funcionario);
 
 // Redireciona se não logado
 if (sessionStorage.getItem('logado') !== 'true') {
@@ -50,6 +57,11 @@ if (btnNovoPrato) {
     btnNovoPrato.addEventListener('click', () => {
         pratoEmEdicao = null;
         document.getElementById('formNovoPrato').reset();
+        const camposTags = ['tagLeite', 'tagOvo', 'tagAmendoim', 'tagCastanhas', 'tagFrutosDoMar', 'tagPeixes', 'tagTrigo', 'tagSoja', 'tagGergilim', 'tagAltoAcucar', 'tagAltoGordura', 'tagAltoSodio'];
+        camposTags.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.checked = false;
+        });
         const previewContainer = document.getElementById('previewImagemContainer');
         if (previewContainer) previewContainer.classList.add('d-none');
         document.querySelector('#modalNovoPrato .modal-title').textContent = 'Cadastrar Novo Prato';
@@ -157,6 +169,40 @@ function estrelasPorNota(nota) {
     return '★'.repeat(n) + '☆'.repeat(5 - n);
 }
 
+// Helper para gerar as badges visuais de Alérgenos e Rótulos Nutricionais
+function gerarBadgesTagsPrato(p) {
+    if (!p) return '';
+    const tags = [];
+
+    // Alérgenos
+    if (p.leite)       tags.push({ tipo: 'alergia', texto: '🥛 Leite' });
+    if (p.ovo)         tags.push({ tipo: 'alergia', texto: '🥚 Ovo' });
+    if (p.amendoim)    tags.push({ tipo: 'alergia', texto: '🥜 Amendoim' });
+    if (p.castanhas)   tags.push({ tipo: 'alergia', texto: '🌰 Castanhas' });
+    if (p.frutosDoMar) tags.push({ tipo: 'alergia', texto: '🦐 Frutos do Mar' });
+    if (p.peixes)      tags.push({ tipo: 'alergia', texto: '🐟 Peixes' });
+    if (p.trigo)       tags.push({ tipo: 'alergia', texto: '🌾 Trigo/Glúten' });
+    if (p.soja)        tags.push({ tipo: 'alergia', texto: '🌱 Soja' });
+    if (p.gergilim)    tags.push({ tipo: 'alergia', texto: '⚪ Gergelim' });
+
+    // Rótulos Nutricionais de Alto Teor (Anvisa)
+    if (p.altoAcucarAdicionado) tags.push({ tipo: 'rotulo', texto: '⚠️ Alto em Açúcar' });
+    if (p.altoGorduraSaturada)  tags.push({ tipo: 'rotulo', texto: '⚠️ Alto em Gord. Sat.' });
+    if (p.altoSodio)            tags.push({ tipo: 'rotulo', texto: '⚠️ Alto em Sódio' });
+
+    if (!tags.length) return '';
+
+    return `
+        <div class="tags-prato">
+            ${tags.map(t => `
+                <span class="${t.tipo === 'rotulo' ? 'badge-tag-rotulo' : 'badge-tag-alergia'}">
+                    ${t.texto}
+                </span>
+            `).join('')}
+        </div>
+    `;
+}
+
 // =============================================
 // RENDERIZAR CARDS
 // =============================================
@@ -204,7 +250,7 @@ function renderizarPratos() {
                 ${urlImg
                     ? `<img src="${urlImg}" alt="${p.nome}"
                             style="width:100%;height:160px;object-fit:cover;border-radius:12px 12px 0 0;"
-                            onerror="this.outerHTML='<div style=\\'width:100%;height:120px;background:linear-gradient(135deg,#F69D39,#E0C375);border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:center;font-size:3rem;\\'>🍽️</div>';">`
+                            onerror="if(!this.dataset.fallback && '${p.imagem}'){this.dataset.fallback='1';this.src='${p.imagem}';}else{this.outerHTML='<div style=\\'width:100%;height:120px;background:linear-gradient(135deg,#F69D39,#E0C375);border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:center;font-size:3rem;\\'>🍽️</div>';}">`
                     : `<div style="width:100%;height:120px;background:linear-gradient(135deg,#F69D39,#E0C375);
                             border-radius:12px 12px 0 0;display:flex;align-items:center;
                             justify-content:center;font-size:3rem;">🍽️</div>`
@@ -227,7 +273,10 @@ function renderizarPratos() {
                         </div>
                     </div>
 
-                    <p class="card-text text-muted small">${p.descricao}</p>
+                    <p class="card-text text-muted small mb-2">${p.descricao}</p>
+
+                    <!-- Tags de Alérgenos e Rótulos Nutricionais -->
+                    ${gerarBadgesTagsPrato(p)}
 
                     <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
                         <span class="text-warning fw-bold" title="Média das avaliações">
@@ -465,6 +514,20 @@ function abrirModalEditar(pratoId) {
     document.getElementById('veganoPrato').value = prato.vegano ? 'true' : 'false';
     document.getElementById('imagemPrato').value = '';
 
+    // Preenche checkboxes de tags
+    document.getElementById('tagLeite').checked = Boolean(prato.leite);
+    document.getElementById('tagOvo').checked = Boolean(prato.ovo);
+    document.getElementById('tagAmendoim').checked = Boolean(prato.amendoim);
+    document.getElementById('tagCastanhas').checked = Boolean(prato.castanhas);
+    document.getElementById('tagFrutosDoMar').checked = Boolean(prato.frutosDoMar);
+    document.getElementById('tagPeixes').checked = Boolean(prato.peixes);
+    document.getElementById('tagTrigo').checked = Boolean(prato.trigo);
+    document.getElementById('tagSoja').checked = Boolean(prato.soja);
+    document.getElementById('tagGergilim').checked = Boolean(prato.gergilim);
+    document.getElementById('tagAltoAcucar').checked = Boolean(prato.altoAcucarAdicionado);
+    document.getElementById('tagAltoGordura').checked = Boolean(prato.altoGorduraSaturada);
+    document.getElementById('tagAltoSodio').checked = Boolean(prato.altoSodio);
+
     // Preview da imagem existente
     const previewContainer = document.getElementById('previewImagemContainer');
     const imgPreview = document.getElementById('imgPreviewAtual');
@@ -530,6 +593,18 @@ document.getElementById("salvarNovoPrato").addEventListener("click", function (e
         descricao: descDigitado,
         vegano: vegano,
         categoria: categoriaDigitado ? { "id": parseInt(categoriaDigitado) } : null,
+        leite: document.getElementById('tagLeite')?.checked || false,
+        ovo: document.getElementById('tagOvo')?.checked || false,
+        amendoim: document.getElementById('tagAmendoim')?.checked || false,
+        castanhas: document.getElementById('tagCastanhas')?.checked || false,
+        frutosDoMar: document.getElementById('tagFrutosDoMar')?.checked || false,
+        peixes: document.getElementById('tagPeixes')?.checked || false,
+        trigo: document.getElementById('tagTrigo')?.checked || false,
+        soja: document.getElementById('tagSoja')?.checked || false,
+        gergilim: document.getElementById('tagGergilim')?.checked || false,
+        altoAcucarAdicionado: document.getElementById('tagAltoAcucar')?.checked || false,
+        altoGorduraSaturada: document.getElementById('tagAltoGordura')?.checked || false,
+        altoSodio: document.getElementById('tagAltoSodio')?.checked || false,
     };
 
     // Cria o FormData multipart exigido pelo Spring Boot

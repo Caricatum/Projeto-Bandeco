@@ -4,11 +4,18 @@
 const API = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:8080';
 
 
-const usuarioLogado = {
+const usuarioLogado = (typeof window.USUARIO_ATUAL !== 'undefined' && window.USUARIO_ATUAL) ? {
+    nome: window.USUARIO_ATUAL.nome,
+    username: window.USUARIO_ATUAL.username,
+    tipo: window.USUARIO_ATUAL.tipo,
+    id: window.USUARIO_ATUAL.id,
+    funcionario: window.USUARIO_ATUAL.funcionario
+} : {
     nome: localStorage.getItem('nome') || '',
     username: localStorage.getItem('username') || '',
-    tipo: localStorage.getItem('tipo'),    // string 'true' / 'false'
+    tipo: localStorage.getItem('tipo'),
     id: parseInt(localStorage.getItem('id')) || null,
+    funcionario: localStorage.getItem('tipo') === 'true'
 };
 
 // =============================================
@@ -371,6 +378,40 @@ function renderizarCardapio(c, area) {
     `).join('');
 }
 
+// Helper para gerar badges discretas no cardápio
+function gerarBadgesPratoCardapio(prato) {
+    if (!prato) return '';
+    const tags = [];
+
+    // Alérgenos
+    if (prato.leite)       tags.push({ tipo: 'alergia', texto: '🥛 Leite' });
+    if (prato.ovo)         tags.push({ tipo: 'alergia', texto: '🥚 Ovo' });
+    if (prato.amendoim)    tags.push({ tipo: 'alergia', texto: '🥜 Amendoim' });
+    if (prato.castanhas)   tags.push({ tipo: 'alergia', texto: '🌰 Castanhas' });
+    if (prato.frutosDoMar) tags.push({ tipo: 'alergia', texto: '🦐 Frutos do Mar' });
+    if (prato.peixes)      tags.push({ tipo: 'alergia', texto: '🐟 Peixes' });
+    if (prato.trigo)       tags.push({ tipo: 'alergia', texto: '🌾 Trigo/Glúten' });
+    if (prato.soja)        tags.push({ tipo: 'alergia', texto: '🌱 Soja' });
+    if (prato.gergilim)    tags.push({ tipo: 'alergia', texto: '⚪ Gergelim' });
+
+    // Rótulos Nutricionais
+    if (prato.altoAcucarAdicionado) tags.push({ tipo: 'rotulo', texto: '⚠️ Alto Açúcar' });
+    if (prato.altoGorduraSaturada)  tags.push({ tipo: 'rotulo', texto: '⚠️ Alto Gord. Sat.' });
+    if (prato.altoSodio)            tags.push({ tipo: 'rotulo', texto: '⚠️ Alto Sódio' });
+
+    if (!tags.length) return '';
+
+    return `
+        <span class="d-inline-flex flex-wrap gap-1 align-items-center ms-1">
+            ${tags.map(t => `
+                <span class="${t.tipo === 'rotulo' ? 'badge-cardapio-rotulo' : 'badge-cardapio-alergia'}">
+                    ${t.texto}
+                </span>
+            `).join('')}
+        </span>
+    `;
+}
+
 function cardapioCard(titulo, cardapio, vegano) {
     if (!cardapio) {
         return `<div class="col-md-6"><div class="card h-100"><div class="card-body text-muted">Não cadastrado</div></div></div>`;
@@ -393,7 +434,11 @@ function cardapioCard(titulo, cardapio, vegano) {
                 </div>
                 <div class="card-body">
                     ${campos.map(([label, prato]) => prato
-        ? `<p><strong>${label}:</strong> <a href="pratoDet.php?id=${prato.id}" style="color:#D92243;font-weight:600;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${prato.nome}</a></p>`
+        ? `<div class="mb-2">
+               <strong>${label}:</strong> 
+               <a href="pratoDet.php?id=${prato.id}" style="color:#D92243;font-weight:600;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${prato.nome}</a>
+               ${gerarBadgesPratoCardapio(prato)}
+           </div>`
         : ''
     ).join('')}
                 </div>

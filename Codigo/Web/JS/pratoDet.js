@@ -73,7 +73,7 @@ function renderizarPrato(p, avs, jaAvaliou, nutri) {
     const areaImg = document.getElementById('areaImagem');
     const urlImg = formatarUrlImagem(p.imagem);
     if (urlImg) {
-        areaImg.innerHTML = `<img src="${urlImg}" alt="${p.nome}" class="prato-img" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\\'prato-img-placeholder\\'>🍽️</div>';">`;
+        areaImg.innerHTML = `<img src="${urlImg}" alt="${p.nome}" class="prato-img" onerror="if(!this.dataset.fallback && '${p.imagem}'){this.dataset.fallback='1';this.src='${p.imagem}';}else{this.onerror=null;this.parentElement.innerHTML='<div class=\\'prato-img-placeholder\\'>🍽️</div>';}">`;
     } else {
         areaImg.innerHTML = `<div class="prato-img-placeholder">🍽️</div>`;
     }
@@ -83,10 +83,26 @@ function renderizarPrato(p, avs, jaAvaliou, nutri) {
 
     // Badges
     const catNome = p.categoria ? (p.categoria.descricao || `Cat. ${p.categoria.id}`) : '—';
-    document.getElementById('badges').innerHTML = `
-        ${p.vegano ? '<span class="badge badge-vegano text-white">🥦 Vegano</span>' : ''}
-        <span class="badge badge-categoria text-white">${catNome}</span>
-    `;
+    const badgesHtml = [
+        p.vegano ? '<span class="badge badge-vegano text-white">🥦 Vegano</span>' : '',
+        `<span class="badge badge-categoria text-white">${catNome}</span>`,
+        // Alérgenos
+        p.leite ? '<span class="badge badge-tag badge-lactose">🥛 Leite / Lactose</span>' : '',
+        p.ovo ? '<span class="badge badge-tag badge-ovo">🥚 Ovo</span>' : '',
+        p.amendoim ? '<span class="badge badge-tag badge-amendoim">🥜 Amendoim</span>' : '',
+        p.castanhas ? '<span class="badge badge-tag" style="background:#ea580c;color:white;">🌰 Castanhas</span>' : '',
+        p.frutosDoMar ? '<span class="badge badge-tag" style="background:#0891b2;color:white;">🦐 Frutos do Mar</span>' : '',
+        p.peixes ? '<span class="badge badge-tag" style="background:#0284c7;color:white;">🐟 Peixes</span>' : '',
+        p.trigo ? '<span class="badge badge-tag badge-gluten">🌾 Trigo / Glúten</span>' : '',
+        p.soja ? '<span class="badge badge-tag" style="background:#16a34a;color:white;">🌱 Soja</span>' : '',
+        p.gergilim ? '<span class="badge badge-tag" style="background:#4b5563;color:white;">⚪ Gergelim</span>' : '',
+        // Rótulos Nutricionais
+        p.altoAcucarAdicionado ? '<span class="badge badge-tag" style="background:#18181b;color:#facc15;border:1px solid #3f3f46;">⚠️ Alto em Açúcar</span>' : '',
+        p.altoGorduraSaturada ? '<span class="badge badge-tag" style="background:#18181b;color:#facc15;border:1px solid #3f3f46;">⚠️ Alto em Gord. Sat.</span>' : '',
+        p.altoSodio ? '<span class="badge badge-tag" style="background:#18181b;color:#facc15;border:1px solid #3f3f46;">⚠️ Alto em Sódio</span>' : '',
+    ].filter(Boolean).join(' ');
+
+    document.getElementById('badges').innerHTML = badgesHtml;
 
     // Descrição
     document.getElementById('descricaoPrato').textContent = p.descricao;

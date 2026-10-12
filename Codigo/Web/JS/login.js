@@ -23,17 +23,35 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
                         return res.json();
                     })
                     .then(user => {
-                        // Define a sessão
-                        sessionStorage.setItem('logado', 'true');
+                        // Sincroniza e registra a sessão segura no PHP do servidor
+                        return fetch('auth.php?action=login', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                id: user.id,
+                                nome: user.nome,
+                                login: userDigitado,
+                                funcionario: user.funcionario
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(authRes => {
+                            if (!authRes.sucesso) {
+                                throw new Error(authRes.erro || "Falha ao registrar sessão segura no servidor.");
+                            }
 
-                        // Armazena os dados do usuário na local storage
-                        localStorage.setItem('username', userDigitado);
-                        localStorage.setItem('nome', user.nome);
-                        localStorage.setItem('id', user.id);
-                        localStorage.setItem('tipo', user.funcionario ? 'true' : 'false');
+                            // Define o estado no cliente
+                            sessionStorage.setItem('logado', 'true');
 
-                        // Redireciona
-                        window.location.href = 'inicio.php';
+                            // Armazena os dados do usuário na local storage para o frontend
+                            localStorage.setItem('username', userDigitado);
+                            localStorage.setItem('nome', user.nome);
+                            localStorage.setItem('id', user.id);
+                            localStorage.setItem('tipo', user.funcionario ? 'true' : 'false');
+
+                            // Redireciona para o início
+                            window.location.href = 'inicio.php';
+                        });
                     });
             } else {
                 message.innerText = 'Usuário ou senha incorretos!';

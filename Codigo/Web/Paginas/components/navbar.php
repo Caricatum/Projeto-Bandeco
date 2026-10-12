@@ -41,9 +41,56 @@
 </nav>
 
 <script>
+// ============================================================================
+// BLINDAGEM DE SESSÃO DO SERVIDOR (ANTIFRAUDE DEVTOOLS)
+// Injeta a verdade absoluta da sessão PHP e impede adulterações no console
+// ============================================================================
+(function() {
+    const sessaoServidor = <?php 
+        require_once __DIR__ . '/auth_session.php';
+        iniciarSessaoSegura();
+        $u = obterUsuarioSessao();
+        echo json_encode($u, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+    ?>;
+
+    if (sessaoServidor && sessaoServidor.id) {
+        // Cria objeto congelado (imutável) acessível na janela
+        try {
+            Object.defineProperty(window, 'USUARIO_ATUAL', {
+                value: Object.freeze({
+                    id: Number(sessaoServidor.id),
+                    nome: String(sessaoServidor.nome || ''),
+                    username: String(sessaoServidor.login || ''),
+                    tipo: sessaoServidor.funcionario ? 'true' : 'false',
+                    funcionario: Boolean(sessaoServidor.funcionario)
+                }),
+                writable: false,
+                configurable: false
+            });
+        } catch (e) {
+            window.USUARIO_ATUAL = Object.freeze(sessaoServidor);
+        }
+
+        // Restaura e sincroniza os armazenamentos locais com a verdade do servidor
+        // (descartando qualquer adulteração feita via DevTools no console)
+        sessionStorage.setItem('logado', 'true');
+        localStorage.setItem('id', String(sessaoServidor.id));
+        localStorage.setItem('nome', String(sessaoServidor.nome || ''));
+        localStorage.setItem('username', String(sessaoServidor.login || ''));
+        localStorage.setItem('tipo', sessaoServidor.funcionario ? 'true' : 'false');
+    } else {
+        window.USUARIO_ATUAL = null;
+        sessionStorage.setItem('logado', 'false');
+        localStorage.removeItem('id');
+        localStorage.removeItem('nome');
+        localStorage.removeItem('username');
+        localStorage.removeItem('tipo');
+    }
+})();
+
 // Lógica global para gerenciamento do estado da Navbar
 document.addEventListener('DOMContentLoaded', () => {
-    const isLogado = sessionStorage.getItem('logado') === 'true';
+    const isLogado = !!(window.USUARIO_ATUAL && window.USUARIO_ATUAL.id);
     const itemLogin = document.getElementById('itemLogin');
     const itemSair = document.getElementById('itemSair');
 
@@ -52,8 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function logout() {
-    sessionStorage.setItem('logado', 'false');
-    localStorage.clear();
-    window.location.href = 'login.php';
+    fetch('auth.php?action=logout', { method: 'POST' })
+        .finally(() => {
+            sessionStorage.setItem('logado', 'false');
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = 'login.php';
+        });
 }
 </script>

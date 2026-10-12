@@ -28,12 +28,28 @@
 
             <div class="input-group-custom">
                 <label for="password">🔒 Senha</label>
-                <input type="password" id="password" class="input-custom" placeholder="Mínimo 6 caracteres" required>
+                <div class="password-wrapper">
+                    <input type="password" id="password" class="input-custom" placeholder="Crie uma senha forte" required>
+                    <button type="button" class="btn-toggle-pass" id="btnToggleSenha" title="Mostrar/ocultar senha">👁️</button>
+                </div>
+                <div class="password-strength-container">
+                    <div class="password-strength-bar" id="forcaBarra"></div>
+                    <span class="password-strength-label" id="forcaTexto"></span>
+                </div>
+                <ul class="password-requirements" id="listaRequisitos">
+                    <li class="req-item" id="reqTam"><span class="req-icon"></span> Mínimo de 8 caracteres</li>
+                    <li class="req-item" id="reqMaius"><span class="req-icon"></span> Pelo menos uma letra maiúscula (A-Z)</li>
+                    <li class="req-item" id="reqMinus"><span class="req-icon"></span> Pelo menos uma letra minúscula (a-z)</li>
+                    <li class="req-item" id="reqNum"><span class="req-icon"></span> Pelo menos um número (0-9)</li>
+                </ul>
             </div>
 
             <div class="input-group-custom">
                 <label for="confirmPassword">🔒 Confirmar Senha</label>
-                <input type="password" id="confirmPassword" class="input-custom" placeholder="Repita sua senha" required>
+                <div class="password-wrapper">
+                    <input type="password" id="confirmPassword" class="input-custom" placeholder="Repita sua senha" required>
+                    <button type="button" class="btn-toggle-pass" id="btnToggleConfirmar" title="Mostrar/ocultar senha">👁️</button>
+                </div>
             </div>
             
             <button type="submit" class="btn-auth-primary" id="btnCadastrar">

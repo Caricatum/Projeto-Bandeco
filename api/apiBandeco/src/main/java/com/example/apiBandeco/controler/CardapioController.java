@@ -7,12 +7,20 @@ import com.example.apiBandeco.repository.CardapioDiaRepository;
 import com.example.apiBandeco.repository.CardapioRepository;
 import com.example.apiBandeco.repository.CategoriaRepository;
 import com.example.apiBandeco.repository.PratosRepository;
+import com.example.apiBandeco.service.PdfGeneratorService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -25,6 +33,8 @@ public class CardapioController {
     CardapioRepository cardapioRepository;
     @Autowired
     CardapioDiaRepository cardapioDiaRepository;
+    @Autowired
+    PdfGeneratorService pdfGeneratorService;
 
     private void validaPratos(Cardapio cardapio){
         Integer acompanhamentoId = cardapio.getAcompanhamento() != null
@@ -141,4 +151,42 @@ public class CardapioController {
 
         cardapioRepository.delete(cardapio);
     }
+
+    @GetMapping("/pdf/{data}/{idNormal}/{idVegano}")
+    public void gerarPdf (
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
+            @PathVariable int idNormal,
+            @PathVariable int idVegano,
+            HttpServletResponse response) throws IOException {
+
+        Cardapio cardapioNormal = cardapioRepository.findById(idNormal)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Cardápio normal não encontrado"
+                ));
+
+        Cardapio cardapioVegano = cardapioRepository.findById(idVegano)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Cardápio vegano não encontrado"
+                ));
+
+
+        response.setContentType("application/pdf");
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=cardapio_" + data + ".pdf";
+
+        response.setHeader(headerKey, headerValue);
+
+        pdfGeneratorService.export(
+                response,
+                cardapioNormal,
+                cardapioVegano,
+                data
+        );
+
+    }
+
+
 }

@@ -5,8 +5,15 @@ if (sessionStorage.getItem('logado') !== 'true') {
     window.location.href = 'login.php';
 }
 
-const loginLogado = (localStorage.getItem('username') || '').toLowerCase();
-const isFuncionarioLogado = localStorage.getItem('tipo') === 'true';
+const usuarioSessao = (typeof window.USUARIO_ATUAL !== 'undefined' && window.USUARIO_ATUAL) ? window.USUARIO_ATUAL : {
+    id: parseInt(localStorage.getItem('id')) || null,
+    username: localStorage.getItem('username') || '',
+    nome: localStorage.getItem('nome') || '',
+    funcionario: localStorage.getItem('tipo') === 'true'
+};
+
+const loginLogado = (usuarioSessao.username || '').toLowerCase();
+const isFuncionarioLogado = Boolean(usuarioSessao.funcionario);
 
 let usuarioCarregado = null; // { id, login, nome, funcionario }
 let todosUsuarios = []; // Lista completa de usuarios para funcionarios
@@ -219,6 +226,11 @@ async function carregarDadosUsuario(login) {
     message.innerText = '';
 
     if (!login) return;
+
+    // Se não for funcionário na sessão, restringe obrigatoriamente ao próprio login
+    if (!isFuncionarioLogado && login.toLowerCase() !== loginLogado) {
+        login = loginLogado;
+    }
 
     try {
         const res = await fetch(`${API}/user/login/${encodeURIComponent(login)}`);

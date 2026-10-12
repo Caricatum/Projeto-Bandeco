@@ -294,3 +294,37 @@ h1 { color: #D92243; }
     color: white;
     border-color: #F69D39;
 }
+
+/* ===== Tags e Badges de Alérgenos e Rótulos ===== */
+.tags-prato {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+    margin-bottom: 8px;
+}
+.badge-tag-alergia {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background-color: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+.badge-tag-rotulo {
+    font-size: 0.70rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background-color: #18181b;
+    color: #facc15;
+    border: 1px solid #3f3f46;
+    letter-spacing: 0.2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}

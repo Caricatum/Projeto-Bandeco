@@ -42,6 +42,15 @@
         .badge-vegano    { background: #7a5c00; }
         .badge-categoria { background: #D92243; }
 
+        /* Tags de restrições alimentares */
+        .badge-tag      { font-size: 0.72rem; font-weight: 600; padding: 3px 9px; border-radius: 12px; }
+        .badge-lactose  { background: #3b82f6; color: white; }
+        .badge-gluten   { background: #d97706; color: white; }
+        .badge-picante  { background: #ef4444; color: white; }
+        .badge-amendoim { background: #7c3aed; color: white; }
+        .badge-ovo      { background: #f59e0b; color: white; }
+        .badge-tag-default { background: #6b7280; color: white; }
+
         /* Estrelas */
         .estrela-media { color: #F69D39; font-size: 1.3rem; font-weight: bold; }
         .estrela-form  { font-size: 2rem; cursor: pointer; color: #E0C375; transition: color 0.15s; }

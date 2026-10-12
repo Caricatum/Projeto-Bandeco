@@ -166,9 +166,11 @@ document.getElementById('formRedefinir').addEventListener('submit', async functi
         return;
     }
 
-    if (novaSenha.length < 6) {
+    // Validação de requisitos de senha forte
+    const validacao = validarForcaSenha(novaSenha);
+    if (!validacao.valido) {
         msg.style.color = '#D92243';
-        msg.textContent = 'A nova senha precisa ter no mínimo 6 caracteres.';
+        msg.textContent = validacao.erro;
         return;
     }
 
@@ -214,4 +216,108 @@ function voltarEtapa1() {
     document.getElementById('codigoReset').value     = '';
     document.getElementById('novaSenha').value       = '';
     document.getElementById('confirmarSenha').value  = '';
+    atualizarIndicadoresSenhaReset('');
 }
+
+// ========================================================
+// REGRAS DE SEGURANÇA E VALIDAÇÃO DE SENHA FORTE (RESET)
+// ========================================================
+function validarForcaSenha(senha) {
+    if (senha.length < 8) {
+        return { valido: false, erro: 'A nova senha deve conter no mínimo 8 caracteres.' };
+    }
+    if (!/[A-Z]/.test(senha)) {
+        return { valido: false, erro: 'A nova senha deve conter pelo menos uma letra maiúscula (A-Z).' };
+    }
+    if (!/[a-z]/.test(senha)) {
+        return { valido: false, erro: 'A nova senha deve conter pelo menos uma letra minúscula (a-z).' };
+    }
+    if (!/[0-9]/.test(senha)) {
+        return { valido: false, erro: 'A nova senha deve conter pelo menos um número (0-9).' };
+    }
+    return { valido: true, erro: '' };
+}
+
+function atualizarIndicadoresSenhaReset(senha) {
+    const temTam = senha.length >= 8;
+    const temMaius = /[A-Z]/.test(senha);
+    const temMinus = /[a-z]/.test(senha);
+    const temNum = /[0-9]/.test(senha);
+
+    const elTam = document.getElementById('reqTamReset');
+    const elMaius = document.getElementById('reqMaiusReset');
+    const elMinus = document.getElementById('reqMinusReset');
+    const elNum = document.getElementById('reqNumReset');
+
+    if (elTam) elTam.classList.toggle('req-met', temTam);
+    if (elMaius) elMaius.classList.toggle('req-met', temMaius);
+    if (elMinus) elMinus.classList.toggle('req-met', temMinus);
+    if (elNum) elNum.classList.toggle('req-met', temNum);
+
+    // Cálculo da barra de força
+    let pontuacao = 0;
+    if (senha.length > 0) {
+        if (senha.length >= 8) pontuacao++;
+        if (senha.length >= 12) pontuacao++;
+        if (temMaius) pontuacao++;
+        if (temMinus) pontuacao++;
+        if (temNum) pontuacao++;
+        if (/[^A-Za-z0-9]/.test(senha)) pontuacao++;
+    }
+
+    const barra = document.getElementById('forcaBarraReset');
+    const texto = document.getElementById('forcaTextoReset');
+
+    if (barra && texto) {
+        if (senha.length === 0) {
+            barra.style.width = '0%';
+            barra.style.backgroundColor = '#e5e7eb';
+            texto.innerText = '';
+        } else if (pontuacao <= 2) {
+            barra.style.width = '25%';
+            barra.style.backgroundColor = '#ef4444'; // vermelho
+            texto.style.color = '#ef4444';
+            texto.innerText = 'Força: Fraca';
+        } else if (pontuacao <= 4) {
+            barra.style.width = '65%';
+            barra.style.backgroundColor = '#f59e0b'; // laranja/âmbar
+            texto.style.color = '#b45309';
+            texto.innerText = 'Força: Média';
+        } else {
+            barra.style.width = '100%';
+            barra.style.backgroundColor = '#16a34a'; // verde
+            texto.style.color = '#15803d';
+            texto.innerText = 'Força: Forte';
+        }
+    }
+}
+
+// Ouvinte em tempo real no campo de nova senha
+const inputNovaSenha = document.getElementById('novaSenha');
+if (inputNovaSenha) {
+    inputNovaSenha.addEventListener('input', function() {
+        atualizarIndicadoresSenhaReset(this.value);
+    });
+}
+
+// Botões para alternar exibição de senha
+function configurarToggleSenhaReset(btnId, inputId) {
+    const btn = document.getElementById(btnId);
+    const input = document.getElementById(inputId);
+    if (btn && input) {
+        btn.addEventListener('click', function() {
+            const tipoAtual = input.getAttribute('type');
+            if (tipoAtual === 'password') {
+                input.setAttribute('type', 'text');
+                btn.textContent = '🙈';
+            } else {
+                input.setAttribute('type', 'password');
+                btn.textContent = '👁️';
+            }
+        });
+    }
+}
+
+configurarToggleSenhaReset('btnToggleNovaSenha', 'novaSenha');
+configurarToggleSenhaReset('btnToggleConfirmarReset', 'confirmarSenha');
+

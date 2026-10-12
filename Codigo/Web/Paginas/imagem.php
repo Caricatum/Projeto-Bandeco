@@ -17,18 +17,26 @@ if (!$arquivo) {
     exit("Arquivo nao informado.");
 }
 
-// Caminho absoluto ate a pasta de uploads
-$pastaUploads = __DIR__ . "/../../../api/apiBandeco/uploads/pratos/";
-$caminho = realpath($pastaUploads . $arquivo);
+// Caminhos possíveis até a pasta de uploads
+$pastasPossiveis = [
+    __DIR__ . "/../../../api/apiBandeco/uploads/pratos/",
+    __DIR__ . "/../../../uploads/pratos/",
+    __DIR__ . "/../../uploads/pratos/",
+];
 
-// Garante que o arquivo esta dentro da pasta esperada (seguranca)
-$pastaNormalizada = realpath($pastaUploads);
-if (!$caminho || !$pastaNormalizada || strpos($caminho, $pastaNormalizada) !== 0) {
-    http_response_code(404);
-    exit("Imagem nao encontrada.");
+$caminho = null;
+foreach ($pastasPossiveis as $pasta) {
+    $pastaNormalizada = realpath($pasta);
+    if ($pastaNormalizada) {
+        $candidato = realpath($pastaNormalizada . DIRECTORY_SEPARATOR . $arquivo);
+        if ($candidato && strpos($candidato, $pastaNormalizada) === 0 && file_exists($candidato)) {
+            $caminho = $candidato;
+            break;
+        }
+    }
 }
 
-if (!file_exists($caminho)) {
+if (!$caminho) {
     http_response_code(404);
     exit("Imagem nao encontrada.");
 }

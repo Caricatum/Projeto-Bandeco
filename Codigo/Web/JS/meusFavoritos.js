@@ -3,9 +3,16 @@
 // =============================================
 const API = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:8080';
 
-const userId = parseInt(localStorage.getItem('id')) || null;
+const usuarioSessao = (typeof window.USUARIO_ATUAL !== 'undefined' && window.USUARIO_ATUAL) ? window.USUARIO_ATUAL : {
+    id: parseInt(localStorage.getItem('id')) || null,
+    username: localStorage.getItem('username') || '',
+    tipo: localStorage.getItem('tipo'),
+    funcionario: localStorage.getItem('tipo') === 'true'
+};
 
-if (sessionStorage.getItem('logado') !== 'true' || !userId) {
+const userId = usuarioSessao.id;
+
+if (!userId) {
     window.location.href = 'login.php';
 }
 
@@ -85,6 +92,49 @@ function estrelasPorNota(nota) {
     return '★'.repeat(n) + '☆'.repeat(5 - n);
 }
 
+function formatarUrlImagem(url) {
+    if (!url) return null;
+    let nomeArquivo = url;
+    if (url.includes('/')) {
+        nomeArquivo = url.split('/').pop();
+    }
+    if (!nomeArquivo) return null;
+    return `imagem.php?arquivo=${encodeURIComponent(nomeArquivo)}`;
+}
+
+function gerarBadgesTagsPrato(p) {
+    if (!p) return '';
+    const tags = [];
+
+    // Alérgenos
+    if (p.leite)       tags.push({ tipo: 'alergia', texto: '🥛 Leite' });
+    if (p.ovo)         tags.push({ tipo: 'alergia', texto: '🥚 Ovo' });
+    if (p.amendoim)    tags.push({ tipo: 'alergia', texto: '🥜 Amendoim' });
+    if (p.castanhas)   tags.push({ tipo: 'alergia', texto: '🌰 Castanhas' });
+    if (p.frutosDoMar) tags.push({ tipo: 'alergia', texto: '🦐 Frutos do Mar' });
+    if (p.peixes)      tags.push({ tipo: 'alergia', texto: '🐟 Peixes' });
+    if (p.trigo)       tags.push({ tipo: 'alergia', texto: '🌾 Trigo/Glúten' });
+    if (p.soja)        tags.push({ tipo: 'alergia', texto: '🌱 Soja' });
+    if (p.gergilim)    tags.push({ tipo: 'alergia', texto: '⚪ Gergelim' });
+
+    // Rótulos Nutricionais
+    if (p.altoAcucarAdicionado) tags.push({ tipo: 'rotulo', texto: '⚠️ Alto em Açúcar' });
+    if (p.altoGorduraSaturada)  tags.push({ tipo: 'rotulo', texto: '⚠️ Alto em Gord. Sat.' });
+    if (p.altoSodio)            tags.push({ tipo: 'rotulo', texto: '⚠️ Alto em Sódio' });
+
+    if (!tags.length) return '';
+
+    return `
+        <div class="tags-prato d-flex flex-wrap gap-1 mb-2">
+            ${tags.map(t => `
+                <span class="${t.tipo === 'rotulo' ? 'badge-tag-rotulo' : 'badge-tag-alergia'}">
+                    ${t.texto}
+                </span>
+            `).join('')}
+        </div>
+    `;
+}
+
 function favoritosFiltrados() {
     const busca  = document.getElementById('campoBusca').value.toLowerCase().trim();
     const vegano = document.getElementById('filtroVegano').checked;
@@ -136,16 +186,17 @@ function renderizar() {
         const likes     = totalLikes(p.id);
         const jaAvaliou = euJaAvalieiEsse(p.id);
         const catNome   = p.categoria ? (p.categoria.descricao || `Cat. ${p.categoria.id}`) : '—';
+        const urlImg    = formatarUrlImagem(p.imagem);
 
         return `
         <div class="col-md-6 col-lg-4">
             <div class="card card-prato h-100">
 
                 <!-- Imagem do prato -->
-                ${p.imagem
-                    ? `<img src="${p.imagem}" alt="${p.nome}"
+                ${urlImg
+                    ? `<img src="${urlImg}" alt="${p.nome}"
                             style="width:100%;height:160px;object-fit:cover;border-radius:12px 12px 0 0;"
-                            onerror="this.onerror=null; this.src='../Assets/Images/logo_unicamp.jpg';">`
+                            onerror="if(!this.dataset.fallback && '${p.imagem}'){this.dataset.fallback='1';this.src='${p.imagem}';}else{this.onerror=null;this.src='../Assets/Images/logo_unicamp.jpg';}">`
                     : `<div style="width:100%;height:120px;background:linear-gradient(135deg,#F69D39,#E0C375);
                             border-radius:12px 12px 0 0;display:flex;align-items:center;
                             justify-content:center;font-size:3rem;">🍽️</div>`
@@ -168,7 +219,10 @@ function renderizar() {
                         </div>
                     </div>
 
-                    <p class="card-text text-muted small flex-grow-1">${p.descricao || ''}</p>
+                    <p class="card-text text-muted small flex-grow-1 mb-2">${p.descricao || ''}</p>
+
+                    <!-- Tags de Alérgenos e Rótulos -->
+                    ${gerarBadgesTagsPrato(p)}
 
                     <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
                         ${media

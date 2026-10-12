@@ -6,22 +6,29 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    const user = localStorage.getItem("usernameTroca");
-    const nome = localStorage.getItem("nomeTroca");
-    const tipo = localStorage.getItem("tipoTroca");
-    const id = localStorage.getItem("idTroca");
-    const isFuncionarioLogado = localStorage.getItem('tipo') === 'true';
-    const loginLogado = (localStorage.getItem('username') || '').toLowerCase();
+    const usuarioSessao = (typeof window.USUARIO_ATUAL !== 'undefined' && window.USUARIO_ATUAL) ? window.USUARIO_ATUAL : {
+        id: parseInt(localStorage.getItem('id')) || null,
+        username: localStorage.getItem('username') || '',
+        nome: localStorage.getItem('nome') || '',
+        funcionario: localStorage.getItem('tipo') === 'true'
+    };
+    const isFuncionarioLogado = Boolean(usuarioSessao.funcionario);
+    const loginLogado = (usuarioSessao.username || '').toLowerCase();
+
+    let user = localStorage.getItem("usernameTroca");
+    let nome = localStorage.getItem("nomeTroca");
+    let tipo = localStorage.getItem("tipoTroca");
+    let id = localStorage.getItem("idTroca");
+
+    // Aluno não pode trocar dados de terceiros, mesmo se alterar storage no DevTools
+    if (!isFuncionarioLogado) {
+        user = usuarioSessao.username;
+        id = usuarioSessao.id;
+        if (!nome) nome = usuarioSessao.nome;
+    }
 
     // Se não há dados para editar, volta para dadosperfil.php
     if (!id || !user) {
-        window.location.href = "dadosperfil.php";
-        return;
-    }
-
-    // Regra de permissão: Apenas funcionários podem alterar dados de outros usuários
-    if (!isFuncionarioLogado && user.toLowerCase() !== loginLogado) {
-        alert("Apenas funcionários têm permissão para alterar informações de outros alunos e funcionários.");
         window.location.href = "dadosperfil.php";
         return;
     }

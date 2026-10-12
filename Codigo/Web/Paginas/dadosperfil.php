@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/components/auth_session.php';
+verificarAutenticacao();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
