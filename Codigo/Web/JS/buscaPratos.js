@@ -250,7 +250,11 @@ function renderizarPratos() {
                 ${urlImg
                     ? `<img src="${urlImg}" alt="${p.nome}"
                             style="width:100%;height:160px;object-fit:cover;border-radius:12px 12px 0 0;"
+<<<<<<< HEAD
                             onerror="if(!this.dataset.fallback && '${p.imagem}'){this.dataset.fallback='1';this.src='${p.imagem}';}else{this.outerHTML='<div style=\\'width:100%;height:120px;background:linear-gradient(135deg,#F69D39,#E0C375);border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:center;font-size:3rem;\\'>🍽️</div>';}">`
+=======
+                            onerror="this.outerHTML='<div style=\\'width:100%;height:120px;background:linear-gradient(135deg,#F69D39,#E0C375);border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:center;font-size:3rem;\\'>🍽️</div>';">`
+>>>>>>> origin/main
                     : `<div style="width:100%;height:120px;background:linear-gradient(135deg,#F69D39,#E0C375);
                             border-radius:12px 12px 0 0;display:flex;align-items:center;
                             justify-content:center;font-size:3rem;">🍽️</div>`

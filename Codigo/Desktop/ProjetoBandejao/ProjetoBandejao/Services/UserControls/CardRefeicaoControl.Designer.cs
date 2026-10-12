@@ -55,6 +55,7 @@ namespace ProjetoBandejao.Services
             // 
             // pnlMain
             // 
+            pnlMain.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             pnlMain.BackColor = Color.Transparent;
             pnlMain.BorderColor = Color.FromArgb(230, 230, 230);
             pnlMain.BorderRadius = 16;
@@ -147,7 +148,7 @@ namespace ProjetoBandejao.Services
             lblTipoTitle.ForeColor = Color.Gray;
             lblTipoTitle.Location = new Point(520, 370);
             lblTipoTitle.Name = "lblTipoTitle";
-            lblTipoTitle.Size = new Size(30, 15);
+            lblTipoTitle.Size = new Size(31, 15);
             lblTipoTitle.TabIndex = 16;
             lblTipoTitle.Text = "Tipo";
             // 
@@ -177,7 +178,7 @@ namespace ProjetoBandejao.Services
             // 
             btnVerDetalhes.BorderRadius = 8;
             btnVerDetalhes.CustomizableEdges = customizableEdges1;
-            btnVerDetalhes.FillColor = Color.FromArgb(40, 100, 40);
+            btnVerDetalhes.FillColor = Color.Tomato;
             btnVerDetalhes.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnVerDetalhes.ForeColor = Color.White;
             btnVerDetalhes.Location = new Point(700, 430);
@@ -234,6 +235,7 @@ namespace ProjetoBandejao.Services
             // 
             // pnlNutrition
             // 
+            pnlNutrition.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             pnlNutrition.BackColor = Color.Transparent;
             pnlNutrition.BorderColor = Color.FromArgb(220, 230, 220);
             pnlNutrition.BorderRadius = 12;
@@ -312,7 +314,7 @@ namespace ProjetoBandejao.Services
             // 
             lblPratoPrincipalBadge.BackColor = Color.FromArgb(235, 245, 235);
             lblPratoPrincipalBadge.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblPratoPrincipalBadge.ForeColor = Color.FromArgb(30, 100, 30);
+            lblPratoPrincipalBadge.ForeColor = Color.LightCoral;
             lblPratoPrincipalBadge.Location = new Point(790, 30);
             lblPratoPrincipalBadge.Name = "lblPratoPrincipalBadge";
             lblPratoPrincipalBadge.Size = new Size(110, 17);
@@ -331,6 +333,7 @@ namespace ProjetoBandejao.Services
             // 
             // lblTitle
             // 
+            lblTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTitle.ForeColor = Color.FromArgb(20, 60, 20);

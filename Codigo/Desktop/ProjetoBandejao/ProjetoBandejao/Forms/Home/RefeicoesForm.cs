@@ -72,7 +72,7 @@ namespace ProjetoBandejao.Forms.Home
         private void ConfigurarEventos()
         {
             // Botão "➕ Novo Prato" abre o formulário de cadastro e recarrega a lista
-            guna2Button1.Click += (s, e) =>
+            btnNovoPrato.Click += (s, e) =>
             {
                 using var frmCadastro = new FrmCadastroPratosNovo();
                 frmCadastro.ShowDialog();
@@ -137,7 +137,7 @@ namespace ProjetoBandejao.Forms.Home
             string categoriaSelecionada = guna2ComboBox1.SelectedItem?.ToString() ?? "Todas as categorias";
             if (categoriaSelecionada != "Todas as categorias" && !string.IsNullOrWhiteSpace(categoriaSelecionada))
             {
-                pratosFiltrados = pratosFiltrados.Where(p => 
+                pratosFiltrados = pratosFiltrados.Where(p =>
                     string.Equals(p.CategoriaTexto, categoriaSelecionada, StringComparison.OrdinalIgnoreCase) ||
                     string.Equals(p.Categoria?.Descricao, categoriaSelecionada, StringComparison.OrdinalIgnoreCase) ||
                     (categoriaSelecionada.Equals("Vegetariano", StringComparison.OrdinalIgnoreCase) && p.Vegano) ||
@@ -204,5 +204,10 @@ namespace ProjetoBandejao.Forms.Home
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) { }
         private void label3_Click(object sender, EventArgs e) { }
         private void guna2ComboBox2_SelectedIndexChanged(object sender, EventArgs e) { }
+
+        private void guna2Button1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -56,7 +56,7 @@
             guna2ComboBox2 = new Guna.UI2.WinForms.Guna2ComboBox();
             guna2ComboBox1 = new Guna.UI2.WinForms.Guna2ComboBox();
             guna2TextBox1 = new Guna.UI2.WinForms.Guna2TextBox();
-            guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
+            btnNovoPrato = new Guna.UI2.WinForms.Guna2Button();
             lblSubtitulo = new Label();
             lblTitulo = new Label();
             ((System.ComponentModel.ISupportInitialize)guna2CirclePictureBox1).BeginInit();
@@ -69,20 +69,21 @@
             // 
             guna2CirclePictureBox1.BackColor = Color.WhiteSmoke;
             guna2CirclePictureBox1.FillColor = Color.Honeydew;
-            guna2CirclePictureBox1.Image = Properties.Resource.ImagemBandecco1;
+            guna2CirclePictureBox1.Image = Properties.Resource.LogoCotil;
             guna2CirclePictureBox1.ImageRotate = 0F;
-            guna2CirclePictureBox1.InitialImage = Properties.Resource.ImagemBandecco1;
+            guna2CirclePictureBox1.InitialImage = null;
             guna2CirclePictureBox1.Location = new Point(29, 27);
             guna2CirclePictureBox1.Name = "guna2CirclePictureBox1";
             guna2CirclePictureBox1.ShadowDecoration.CustomizableEdges = customizableEdges1;
             guna2CirclePictureBox1.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
-            guna2CirclePictureBox1.Size = new Size(84, 73);
+            guna2CirclePictureBox1.Size = new Size(101, 84);
             guna2CirclePictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             guna2CirclePictureBox1.TabIndex = 6;
             guna2CirclePictureBox1.TabStop = false;
             // 
             // guna2Panel2
             // 
+            guna2Panel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             guna2Panel2.BackColor = Color.White;
             guna2Panel2.BorderColor = Color.Gainsboro;
             guna2Panel2.BorderRadius = 12;
@@ -113,6 +114,7 @@
             // 
             // lblPratosCadastrados
             // 
+            lblPratosCadastrados.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblPratosCadastrados.BackColor = Color.Honeydew;
             lblPratosCadastrados.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblPratosCadastrados.ForeColor = Color.ForestGreen;
@@ -124,6 +126,7 @@
             // 
             // label2
             // 
+            label2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             label2.BackColor = Color.White;
             label2.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label2.ForeColor = Color.Black;
@@ -135,6 +138,7 @@
             // 
             // label3
             // 
+            label3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label3.BackColor = Color.White;
             label3.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label3.ForeColor = Color.Black;
@@ -147,6 +151,7 @@
             // 
             // PnlPesquisa
             // 
+            PnlPesquisa.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             PnlPesquisa.BackColor = Color.White;
             PnlPesquisa.BorderColor = Color.Gainsboro;
             PnlPesquisa.BorderRadius = 8;
@@ -167,6 +172,7 @@
             // 
             // guna2Button2
             // 
+            guna2Button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             guna2Button2.BorderRadius = 8;
             guna2Button2.BorderThickness = 1;
             guna2Button2.CustomizableEdges = customizableEdges6;
@@ -186,6 +192,7 @@
             // 
             // guna2ComboBox2
             // 
+            guna2ComboBox2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             guna2ComboBox2.BackColor = Color.Transparent;
             guna2ComboBox2.BorderRadius = 8;
             guna2ComboBox2.CustomizableEdges = customizableEdges8;
@@ -249,27 +256,30 @@
             guna2TextBox1.Size = new Size(318, 36);
             guna2TextBox1.TabIndex = 0;
             // 
-            // guna2Button1
+            // btnNovoPrato
             // 
-            guna2Button1.BorderRadius = 8;
-            guna2Button1.BorderThickness = 1;
-            guna2Button1.CustomizableEdges = customizableEdges16;
-            guna2Button1.DisabledState.BorderColor = Color.DarkGray;
-            guna2Button1.DisabledState.CustomBorderColor = Color.DarkGray;
-            guna2Button1.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            guna2Button1.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            guna2Button1.FillColor = Color.Green;
-            guna2Button1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            guna2Button1.ForeColor = Color.White;
-            guna2Button1.Location = new Point(815, 28);
-            guna2Button1.Name = "guna2Button1";
-            guna2Button1.ShadowDecoration.CustomizableEdges = customizableEdges17;
-            guna2Button1.Size = new Size(128, 39);
-            guna2Button1.TabIndex = 3;
-            guna2Button1.Text = "➕  Novo Prato";
+            btnNovoPrato.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnNovoPrato.BorderRadius = 8;
+            btnNovoPrato.BorderThickness = 1;
+            btnNovoPrato.CustomizableEdges = customizableEdges16;
+            btnNovoPrato.DisabledState.BorderColor = Color.DarkGray;
+            btnNovoPrato.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnNovoPrato.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnNovoPrato.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnNovoPrato.FillColor = Color.Green;
+            btnNovoPrato.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnNovoPrato.ForeColor = Color.White;
+            btnNovoPrato.Location = new Point(815, 28);
+            btnNovoPrato.Name = "btnNovoPrato";
+            btnNovoPrato.ShadowDecoration.CustomizableEdges = customizableEdges17;
+            btnNovoPrato.Size = new Size(128, 39);
+            btnNovoPrato.TabIndex = 3;
+            btnNovoPrato.Text = "➕  Novo Prato";
+            btnNovoPrato.Click += guna2Button1_Click;
             // 
             // lblSubtitulo
             // 
+            lblSubtitulo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblSubtitulo.AutoSize = true;
             lblSubtitulo.BackColor = Color.WhiteSmoke;
             lblSubtitulo.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -282,6 +292,7 @@
             // 
             // lblTitulo
             // 
+            lblTitulo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblTitulo.AutoSize = true;
             lblTitulo.BackColor = Color.WhiteSmoke;
             lblTitulo.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -301,7 +312,7 @@
             Controls.Add(guna2Panel2);
             Controls.Add(guna2CirclePictureBox1);
             Controls.Add(PnlPesquisa);
-            Controls.Add(guna2Button1);
+            Controls.Add(btnNovoPrato);
             Controls.Add(lblSubtitulo);
             Controls.Add(lblTitulo);
             DoubleBuffered = true;
@@ -323,7 +334,7 @@
         private Label lblTitulo;
         private Guna.UI2.WinForms.Guna2Panel guna2Panel2;
         private Guna.UI2.WinForms.Guna2Panel PnlPesquisa;
-        private Guna.UI2.WinForms.Guna2Button guna2Button1;
+        private Guna.UI2.WinForms.Guna2Button btnNovoPrato;
         private Label lblSubtitulo;
         private Guna.UI2.WinForms.Guna2CirclePictureBox guna2CirclePictureBox1;
         private Label label3;

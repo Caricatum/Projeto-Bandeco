@@ -32,12 +32,6 @@ namespace ProjetoBandejao.Forms
             // Carrega dados dinâmicos da API
             CarregarDadosDashboard();
 
-            // Relógio
-            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-            timer.Interval = 1000;
-            timer.Tick += (s, e) => { lblTopTime.Text = "🕒 " + DateTime.Now.ToString("HH:mm"); };
-            timer.Start();
-            lblTopTime.Text = "🕒 " + DateTime.Now.ToString("HH:mm");
         }
 
         private void CarregarDadosDashboard()

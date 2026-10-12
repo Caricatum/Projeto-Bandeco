@@ -4,7 +4,10 @@
     <Compile Update="Forms\CadastroFuncionarioForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\ConfirmarCodigoForm.cs">
+    <Compile Update="Forms\Login\CadastroFuncionarioFormNovo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Login\ConfirmarCodigoForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Home\ConfiguracoesForm.cs">
@@ -25,19 +28,22 @@
     <Compile Update="Forms\Home\RefeicoesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\LoginForm.cs">
+    <Compile Update="Forms\Login\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\ResetarSenhaForm.cs">
+    <Compile Update="Forms\Login\ResetarSenhaForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\RecuperarSenhaForm.cs">
+    <Compile Update="Forms\Login\RecuperarSenhaForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Services\UserControls\CardRefeicaoControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Services\UserControls\SideBarControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Services\UserControls\CadastroPratosControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>

@@ -97,18 +97,33 @@ namespace ProjetoBandejao.Services
         }
 
         // Validar Login
-        public bool ValidarLogin(Usuario usuario)
+        public bool ValidarLogin(Usuario usuario, out string mensagemErro)
         {
+            mensagemErro = string.Empty;
+
             try
             {
-                string url = $"{API_URL}/validarFunc?login={Uri.EscapeDataString(usuario.Login)}&senhaHash={Uri.EscapeDataString(usuario.Senha)}";
+                string url =
+                    $"{API_URL}/validarFunc" +
+                    $"?login={Uri.EscapeDataString(usuario.Login)}" +
+                    $"&senhaHash={Uri.EscapeDataString(usuario.Senha)}";
 
-                HttpResponseMessage response = client.GetAsync(url).Result;
+                HttpResponseMessage response =
+                    client.GetAsync(url).Result;
 
-                return response.IsSuccessStatusCode;
+                if (!response.IsSuccessStatusCode)
+                {
+                    mensagemErro =
+                        response.Content.ReadAsStringAsync().Result;
+
+                    return false;
+                }
+
+                return true;
             }
-            catch
+            catch (Exception ex)
             {
+                mensagemErro = ex.Message;
                 return false;
             }
         }

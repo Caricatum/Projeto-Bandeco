@@ -325,9 +325,15 @@ verificarAutenticacao();
             <button id="btnCardapioDia" class="btn btn-primary d-none">
                 ➕ Cadastrar Cardápio
             </button>
+<<<<<<< HEAD
             <button id="btnNotificarFavoritos" class="btn btn-warning d-none text-dark fw-bold" onclick="notificarFavoritosHoje()">
                 🔔 Notificar Pratos Favoritos por E-mail
             </button>
+=======
+        <!-- <button id="btnNotificarFavoritos" class="btn btn-warning d-none text-dark fw-bold" onclick="notificarFavoritosHoje()">
+                🔔 Notificar Pratos Favoritos por E-mail
+            </button>-->
+>>>>>>> origin/main
         </div>
 
         <!-- Abas de Navegação (Dia vs Semana) -->

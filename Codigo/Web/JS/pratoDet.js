@@ -73,7 +73,11 @@ function renderizarPrato(p, avs, jaAvaliou, nutri) {
     const areaImg = document.getElementById('areaImagem');
     const urlImg = formatarUrlImagem(p.imagem);
     if (urlImg) {
+<<<<<<< HEAD
         areaImg.innerHTML = `<img src="${urlImg}" alt="${p.nome}" class="prato-img" onerror="if(!this.dataset.fallback && '${p.imagem}'){this.dataset.fallback='1';this.src='${p.imagem}';}else{this.onerror=null;this.parentElement.innerHTML='<div class=\\'prato-img-placeholder\\'>🍽️</div>';}">`;
+=======
+        areaImg.innerHTML = `<img src="${urlImg}" alt="${p.nome}" class="prato-img" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\\'prato-img-placeholder\\'>🍽️</div>';">`;
+>>>>>>> origin/main
     } else {
         areaImg.innerHTML = `<div class="prato-img-placeholder">🍽️</div>`;
     }
