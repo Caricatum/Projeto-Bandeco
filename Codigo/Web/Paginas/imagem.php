@@ -17,7 +17,7 @@ if (!$arquivo) {
     exit("Arquivo nao informado.");
 }
 
-<<<<<<< HEAD
+
 // Caminhos possíveis até a pasta de uploads
 $pastasPossiveis = [
     __DIR__ . "/../../../api/apiBandeco/uploads/pratos/",
@@ -38,7 +38,7 @@ foreach ($pastasPossiveis as $pasta) {
 }
 
 if (!$caminho) {
-=======
+
 // Caminho absoluto ate a pasta de uploads
 $pastaUploads = __DIR__ . "/../../../api/apiBandeco/uploads/pratos/";
 $caminho = realpath($pastaUploads . $arquivo);
@@ -51,7 +51,7 @@ if (!$caminho || !$pastaNormalizada || strpos($caminho, $pastaNormalizada) !== 0
 }
 
 if (!file_exists($caminho)) {
->>>>>>> origin/main
+
     http_response_code(404);
     exit("Imagem nao encontrada.");
 }
@@ -76,3 +76,4 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s", filemtime($caminho)) . " GMT
 
 readfile($caminho);
 exit;
+}
