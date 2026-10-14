@@ -48,7 +48,6 @@ public class User {
     private boolean alergiaCastanhas;
     @Column
     private boolean alergiaFrutosDoMar;
-
     @Column
     private boolean alergiaPeixes;
     @Column
@@ -57,6 +56,8 @@ public class User {
     private boolean alergiaSoja;
     @Column
     private boolean alergiaGergilim;
+    @Column
+    private String imagem;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user",
@@ -274,6 +275,14 @@ public class User {
 
     public void setAlergiaGergilim(boolean alergiaGergilim) {
         this.alergiaGergilim = alergiaGergilim;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 
 }
