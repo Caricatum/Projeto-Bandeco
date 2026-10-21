@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Configuration;
 public class GeminiConfig {
     //AO COMMITAR, REMOVA A CHAVE!!!
     // Substitua pelo valor da sua chave da API do Gemini
-<<<<<<< HEAD
-    private static final String GEMINI_API_KEY = "***REMOVIDO***";
-=======
+
     private static final String GEMINI_API_KEY = "";
->>>>>>> origin/main
+
+    private static final String GEMINI_API_KEY = "";
+
 
     @Bean
     public Client geminiClient() {
