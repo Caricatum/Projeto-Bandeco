@@ -1,19 +1,29 @@
 package com.example.apiBandeco.controler;
 
 import com.example.apiBandeco.email.EmailService;
+import com.example.apiBandeco.model.Pratos;
 import com.example.apiBandeco.model.User;
 import com.example.apiBandeco.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @CrossOrigin
 @RestController
@@ -44,8 +54,10 @@ public class UserController {
     @GetMapping("/all")//busca todos os usuários
     public List<User> buscarTodosUsers(){return userRepo.findAll();}
 
-    @PostMapping("/cadastrar")//cadastra um usuário
-    public void cadastroUser (@RequestBody @Valid User user){
+    @PostMapping(value = "/cadastrar",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)//cadastra um usuário
+    public void cadastroUser(@RequestPart("user") @Valid User user,
+    @RequestPart(value = "imagem", required = false) MultipartFile arquivo)
+            throws IOException{
         if(userRepo.findByLogin(user.getLogin()).isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
@@ -60,6 +72,12 @@ public class UserController {
                 encoder.encode(user.getSenhaHash())
         );
 
+        if (arquivo != null && !arquivo.isEmpty()) {
+            String urlImagem = uploadImagem(arquivo);
+            user.setImagem(urlImagem);
+        } else {
+            user.setImagem(null);
+        }
         user.setEmailConfirmado(false);
         user.setCodigoConfirmacao(codigo);
         user.setExpiracaoConfirmacao(
@@ -214,17 +232,46 @@ public class UserController {
 
 
     @DeleteMapping("/deletar/{id}") //deleta user pelo id
-    public void deletarUser (@PathVariable(value = "id") int user){
-        userRepo.deleteById(user);
+    public void deletarUser (@PathVariable(value = "id") int id) throws IOException{
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User não encontrado"));
+        deletarImagem(user.getId());
+        userRepo.deleteById(id);
     }
 
-    @PutMapping("/atualizar") //Atualiza User menos a senha
-    public User atualizaUser (@RequestBody @Valid User user){
+    @DeleteMapping(value = "/excluirImagem/{id}")
+    public void excluirImagem(@PathVariable int id) throws IOException{
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User não encontrado"));
+
+        deletarImagem(user.getId());
+        user.setImagem(null);
+        userRepo.save(user);
+    }
+
+    @PutMapping(value = "/atualizar",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)//Atualiza User menos a senha
+    public User atualizaUser (@RequestPart("user") @Valid User user,
+                              @RequestPart(value = "imagem", required = false) MultipartFile arquivo)
+    throws IOException{
 
         User userAtualizado = userRepo.findById(user.getId())
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "User não encontrado"));
+
+        if (arquivo != null && !arquivo.isEmpty()) {
+            String urlImagem = uploadImagem(arquivo);
+            deletarImagem(user.getId());
+            userAtualizado.setImagem(urlImagem);
+        } else {
+            user.setImagem(
+                    userAtualizado.getImagem()
+            );
+        }
 
         userAtualizado.setLogin(user.getLogin());
         userAtualizado.setNome(user.getNome());
@@ -294,5 +341,87 @@ public class UserController {
         user.setExpiracaoResetSenha(null);
 
         userRepo.save(user);
+    }
+
+    //envia a imagem e retorna seu link
+    private String uploadImagem(MultipartFile arquivo)
+            throws IOException {
+        if (arquivo.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Nenhum arquivo enviado");
+        }
+
+        if (arquivo.getContentType() == null ||
+                !arquivo.getContentType().startsWith("image/")) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "O arquivo deve ser uma imagem");
+        }
+
+
+        String nomeOriginal = arquivo.getOriginalFilename();
+
+        String extensao = "";
+
+        if (nomeOriginal != null && nomeOriginal.contains(".")) {
+            extensao = nomeOriginal.substring(nomeOriginal.lastIndexOf(".") + 1);
+        }
+
+        extensao = extensao.toLowerCase();
+
+
+        List<String> permitidas = List.of("jpg", "jpeg", "png", "webp");
+
+        if (extensao.isBlank()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Arquivo sem extensão");
+        }
+
+        if (!permitidas.contains(extensao)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Formato inválido");
+        }
+
+        String nomeArquivo = UUID.randomUUID() + "." + extensao;
+
+        Path destino = Paths.get("uploads/user", nomeArquivo);
+
+        Files.createDirectories(destino.getParent());
+
+        Files.copy(
+                arquivo.getInputStream(),
+                destino,
+                StandardCopyOption.REPLACE_EXISTING
+        );
+
+        return ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/uploads/user/")
+                .path(nomeArquivo)
+                .toUriString();
+    }
+
+    // Deleta a imagem do prato
+    private void deletarImagem(Integer id) throws IOException {
+
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Prato não encontrado"));
+
+        if (user.getImagem() == null || user.getImagem().isBlank()) {
+            return;
+        }
+
+        String nomeArquivo = user.getImagem()
+                .substring(user.getImagem().lastIndexOf("/") + 1);
+
+        Path caminho = Paths.get("uploads/user", nomeArquivo);
+
+        Files.deleteIfExists(caminho);
     }
 }
