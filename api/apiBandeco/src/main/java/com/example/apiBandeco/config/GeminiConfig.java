@@ -11,7 +11,7 @@ public class GeminiConfig {
 
     private static final String GEMINI_API_KEY = "";
 
-    private static final String GEMINI_API_KEY = "";
+    //private static final String GEMINI_API_KEY = "";
 
 
     @Bean
