@@ -24,7 +24,10 @@ verificarAutenticacao();
       
       <!-- Cabeçalho do Perfil -->
       <div class="perfil-header">
-        <div class="perfil-avatar" id="avatarIcon">👤</div>
+        <div class="perfil-avatar-wrapper">
+          <div class="perfil-avatar" id="avatarIcon">👤</div>
+          <img id="avatarFoto" class="perfil-foto d-none" alt="Foto do Usuário" onerror="mostrarIconePadraoAvatar()">
+        </div>
         <h2 class="perfil-title" id="tituloPagina">Meu Perfil</h2>
         <span id="badgeTipoUsuario" class="badge-tipo-aluno">Carregando...</span>
       </div>
@@ -80,6 +83,13 @@ verificarAutenticacao();
         <div class="info-item">
           <div class="info-label">Tipo de Acesso</div>
           <div class="info-value" id="exibeTipo">—</div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-label">Restrições Alimentares / Alergias</div>
+          <div class="info-value" id="exibeAlergias">
+            <span class="text-muted small">Carregando...</span>
+          </div>
         </div>
       </div>
 

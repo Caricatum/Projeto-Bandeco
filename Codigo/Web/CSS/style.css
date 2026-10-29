@@ -399,3 +399,81 @@ body {
         transform: translateY(0);
     }
 }
+
+
+/* ===== Foto de Perfil e Alérgenos no Cadastro ===== */
+.auth-card.auth-card-cadastro {
+    max-width: 480px;
+}
+
+.avatar-upload-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.avatar-preview-box {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #D92243, #F69D39);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.3rem;
+    box-shadow: 0 4px 14px rgba(217, 34, 67, 0.28);
+    border: 3px solid #FFF5E5;
+    outline: 2px solid #E0C375;
+    overflow: hidden;
+    margin-bottom: 6px;
+    position: relative;
+}
+
+.avatar-preview-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.alergias-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.alergia-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: #fffaf3;
+    border: 1px solid #E0C375;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    color: #7a1728;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.alergia-chip:hover {
+    background: #ffffff;
+    border-color: #D92243;
+}
+
+.alergia-chip.selected,
+.alergia-chip:has(input:checked) {
+    background: #fef2f2;
+    border-color: #f87171;
+    color: #991b1b;
+}
+
+.alergia-chip input[type="checkbox"] {
+    accent-color: #D92243;
+    cursor: pointer;
+}

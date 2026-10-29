@@ -265,3 +265,51 @@ body {
         transform: translateY(0);
     }
 }
+
+
+/* ===== Foto de Perfil e Alérgenos ===== */
+.perfil-avatar-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.perfil-foto {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 15px;
+    display: block;
+    border: 3px solid #FFF5E5;
+    outline: 2px solid #E0C375;
+    box-shadow: 0 6px 15px rgba(217, 34, 67, 0.3);
+}
+
+.usuario-item-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #E0C375;
+}
+
+.alergias-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.badge-tag-alergia {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 12px;
+    background-color: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
