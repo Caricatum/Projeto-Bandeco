@@ -253,11 +253,23 @@ document.getElementById("trocarinfo").addEventListener("click", async function (
             throw new Error(erroTexto || "Erro ao atualizar informações no servidor.");
         }
 
+        let userSalvo = null;
+        try {
+            userSalvo = await res.json();
+        } catch (e) {}
+
+        const novaFoto = (userSalvo && userSalvo.imagem) ? userSalvo.imagem : (fotoFoiRemovida ? '' : (fotoOriginalUrl || ''));
+
         // Se o usuário editado for o usuário logado, atualiza também a sessão local
         if (loginLogado === userOriginal.toLowerCase()) {
             localStorage.setItem("username", userDigitado);
             localStorage.setItem("nome", nomeDigitado);
             localStorage.setItem("tipo", tipoFinal ? 'true' : 'false');
+            if (novaFoto) {
+                localStorage.setItem("imagem", novaFoto);
+            } else {
+                localStorage.removeItem("imagem");
+            }
 
             // Atualiza também a sessão segura do servidor PHP
             try {
@@ -268,7 +280,8 @@ document.getElementById("trocarinfo").addEventListener("click", async function (
                         id: parseInt(id),
                         nome: nomeDigitado,
                         login: userDigitado,
-                        funcionario: tipoFinal
+                        funcionario: tipoFinal,
+                        imagem: novaFoto || null
                     })
                 });
             } catch (authErr) {

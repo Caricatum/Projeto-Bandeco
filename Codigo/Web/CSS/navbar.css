@@ -36,3 +36,37 @@
     background-color: #9b1b30;
     border-color: #9b1b30;
 }
+
+/* ===== Botão de Perfil na Navbar ===== */
+.btn-nav.btn-perfil {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 12px 3px 5px;
+    border-radius: 20px;
+    background-color: rgba(255, 245, 229, 0.2);
+    border: 1px solid rgba(255, 245, 229, 0.5);
+}
+
+.btn-nav.btn-perfil:hover {
+    background-color: #F69D39;
+    border-color: #F69D39;
+}
+
+.nav-avatar-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid #FFF5E5;
+    background-color: #FFF5E5;
+    display: inline-block;
+}
+
+.nav-avatar-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+    display: inline-block;
+    padding: 0 4px;
+}
+

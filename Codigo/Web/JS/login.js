@@ -31,7 +31,8 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
                                 id: user.id,
                                 nome: user.nome,
                                 login: userDigitado,
-                                funcionario: user.funcionario
+                                funcionario: user.funcionario,
+                                imagem: user.imagem || null
                             })
                         })
                         .then(res => res.json())
@@ -48,6 +49,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
                             localStorage.setItem('nome', user.nome);
                             localStorage.setItem('id', user.id);
                             localStorage.setItem('tipo', user.funcionario ? 'true' : 'false');
+                            localStorage.setItem('imagem', user.imagem || '');
 
                             // Redireciona para o início
                             window.location.href = 'inicio.php';

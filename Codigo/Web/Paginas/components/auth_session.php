@@ -69,6 +69,7 @@ function obterUsuarioSessao() {
         'nome'        => $_SESSION['usuario_nome'] ?? '',
         'login'       => $_SESSION['usuario_login'] ?? '',
         'funcionario' => !empty($_SESSION['usuario_funcionario']),
+        'imagem'      => $_SESSION['usuario_imagem'] ?? null,
     ];
 }
 

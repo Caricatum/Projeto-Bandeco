@@ -50,6 +50,7 @@ if ($action === 'login') {
     $id = isset($dados['id']) ? (int)$dados['id'] : null;
     $nome = trim($dados['nome'] ?? '');
     $funcionario = !empty($dados['funcionario']);
+    $imagem = isset($dados['imagem']) ? trim($dados['imagem']) : null;
 
     if (empty($login)) {
         http_response_code(400);
@@ -61,18 +62,21 @@ if ($action === 'login') {
     }
 
     // Se o ID ou nome não tiverem sido enviados, consulta via PDO com Prepared Statement
-    if (empty($id) || empty($nome)) {
+    if (empty($id) || empty($nome) || $imagem === null) {
         $pdo = obterConexaoPDO();
         if ($pdo) {
             try {
-                $stmt = $pdo->prepare('SELECT id, nome, login, funcionario FROM user WHERE login = :login LIMIT 1');
+                $stmt = $pdo->prepare('SELECT id, nome, login, funcionario, imagem FROM user WHERE login = :login LIMIT 1');
                 $stmt->execute([':login' => $login]);
                 $usuarioBanco = $stmt->fetch();
 
                 if ($usuarioBanco) {
-                    $id = (int)$usuarioBanco['id'];
-                    $nome = $usuarioBanco['nome'];
+                    if (empty($id)) $id = (int)$usuarioBanco['id'];
+                    if (empty($nome)) $nome = $usuarioBanco['nome'];
                     $funcionario = (bool)$usuarioBanco['funcionario'];
+                    if ($imagem === null && !empty($usuarioBanco['imagem'])) {
+                        $imagem = $usuarioBanco['imagem'];
+                    }
                 }
             } catch (PDOException $e) {
                 error_log("[Auth PDO] Erro na consulta do usuário: " . $e->getMessage());
@@ -97,6 +101,7 @@ if ($action === 'login') {
     $_SESSION['usuario_nome'] = $nome;
     $_SESSION['usuario_login'] = $login;
     $_SESSION['usuario_funcionario'] = $funcionario;
+    $_SESSION['usuario_imagem'] = $imagem;
     $_SESSION['ultimo_acesso'] = time();
 
     echo json_encode([
@@ -105,7 +110,8 @@ if ($action === 'login') {
             'id' => $id,
             'nome' => $nome,
             'login' => $login,
-            'funcionario' => $funcionario
+            'funcionario' => $funcionario,
+            'imagem' => $imagem
         ]
     ]);
     exit;
