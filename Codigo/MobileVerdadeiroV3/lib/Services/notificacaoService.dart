@@ -7,8 +7,9 @@ import '../Class/avisos.dart';
 import '../Class/cardapioClass.dart';
 import '../Class/cardapioDiaClass.dart';
 import '../Class/pratosClass.dart';
+import '../Class/usuarioClass.dart';
 
-enum TipoNotificacao { aviso, pratoFavorito, geral }
+enum TipoNotificacao { aviso, pratoFavorito, alergia, geral }
 
 class ItemNotificacao {
   final int id;
@@ -50,6 +51,7 @@ class NotificacaoService {
 
   final Set<int> _avisosNotificados = {};
   final Set<String> _pratosFavoritosNotificados = {};
+  final Set<String> _alergiasNotificadas = {};
   String _ultimaDataCardapioVerificada = '';
 
   List<Pratos> pratosFavoritosHoje = [];
@@ -211,6 +213,7 @@ class NotificacaoService {
 
     if (_ultimaDataCardapioVerificada != dataHoje) {
       _pratosFavoritosNotificados.clear();
+      _alergiasNotificadas.clear();
       pratosFavoritosHoje.clear();
       _ultimaDataCardapioVerificada = dataHoje;
     }
@@ -250,46 +253,8 @@ class NotificacaoService {
 
       final cardapioHoje = CardapioDia.fromJson(jsonDecode(menuResponse.body));
 
-      final List<_PratoRefeicao> pratosHoje = [];
-
-      void extrair(Cardapio? c, String refeicao) {
-        if (c == null) return;
-        if (c.pratoPrincipal != null) {
-          pratosHoje.add(
-            _PratoRefeicao(c.pratoPrincipal!, refeicao, 'Prato Principal'),
-          );
-        }
-        if (c.acompanhamento != null) {
-          pratosHoje.add(
-            _PratoRefeicao(c.acompanhamento!, refeicao, 'Acompanhamento'),
-          );
-        }
-        if (c.guarnicao != null) {
-          pratosHoje.add(
-            _PratoRefeicao(c.guarnicao!, refeicao, 'Guarnição'),
-          );
-        }
-        if (c.salada != null) {
-          pratosHoje.add(
-            _PratoRefeicao(c.salada!, refeicao, 'Salada'),
-          );
-        }
-        if (c.sobremesa != null) {
-          pratosHoje.add(
-            _PratoRefeicao(c.sobremesa!, refeicao, 'Sobremesa'),
-          );
-        }
-        if (c.refresco != null) {
-          pratosHoje.add(
-            _PratoRefeicao(c.refresco!, refeicao, 'Refresco'),
-          );
-        }
-      }
-
-      extrair(cardapioHoje.padraoAlmoco, 'Almoço Padrão');
-      extrair(cardapioHoje.veganoAlmoco, 'Almoço Vegano');
-      extrair(cardapioHoje.padraoJantar, 'Jantar Padrão');
-      extrair(cardapioHoje.veganoJantar, 'Jantar Vegano');
+      final List<_PratoRefeicao> pratosHoje =
+          _extrairPratos(cardapioHoje);
 
       final List<Pratos> favoritosEncontrados = [];
 
@@ -337,6 +302,85 @@ class NotificacaoService {
     }
 
     return correspondencias;
+  }
+
+  Future<void> verificarAlergiasNoCardapio({
+    required Usuario usuario,
+    String baseUrl = 'http://localhost:8080',
+  }) async {
+    if (!usuario.temAlergias) return;
+
+    final String dataHoje = DateTime.now().toIso8601String().split('T').first;
+
+    if (_ultimaDataCardapioVerificada != dataHoje) {
+      _pratosFavoritosNotificados.clear();
+      _alergiasNotificadas.clear();
+      pratosFavoritosHoje.clear();
+      _ultimaDataCardapioVerificada = dataHoje;
+    }
+
+    try {
+      final menuUrl = Uri.parse('$baseUrl/cardapioDia/data/$dataHoje');
+      final menuResponse = await http.get(menuUrl);
+      if (menuResponse.statusCode != 200) return;
+
+      final cardapioHoje =
+          CardapioDia.fromJson(jsonDecode(menuResponse.body));
+
+      for (final item in _extrairPratos(cardapioHoje)) {
+        final alergias = usuario.verificarConflitoAlergias(item.prato);
+        if (alergias.isEmpty) continue;
+
+        final chaveNotificacao =
+            '${dataHoje}_${item.prato.id}_${item.refeicao}_${alergias.join(',')}';
+        if (!_alergiasNotificadas.add(chaveNotificacao)) continue;
+
+        final notifId =
+            (item.prato.id * 1000 + item.refeicao.hashCode + 100000).abs() %
+                100000;
+
+        await mostrarNotificacao(
+          id: notifId,
+          titulo: '⚠️ Atenção: alergia no cardápio',
+          corpo:
+              '${item.prato.nome} (${item.refeicao}) contém: ${alergias.join(', ')}.',
+          payload: 'alergia_${item.prato.id}',
+          tipo: TipoNotificacao.alergia,
+          dadosExtras: item.prato,
+        );
+      }
+    } catch (e) {
+      debugPrint('Erro ao verificar alergias no cardápio de hoje: $e');
+    }
+  }
+
+  List<_PratoRefeicao> _extrairPratos(CardapioDia cardapioDia) {
+    final List<_PratoRefeicao> pratos = [];
+
+    void extrair(Cardapio? cardapio, String refeicao) {
+      if (cardapio == null) return;
+
+      final componentes = <(Pratos?, String)>[
+        (cardapio.pratoPrincipal, 'Prato Principal'),
+        (cardapio.acompanhamento, 'Acompanhamento'),
+        (cardapio.guarnicao, 'Guarnição'),
+        (cardapio.salada, 'Salada'),
+        (cardapio.sobremesa, 'Sobremesa'),
+        (cardapio.refresco, 'Refresco'),
+      ];
+
+      for (final (prato, categoria) in componentes) {
+        if (prato != null) {
+          pratos.add(_PratoRefeicao(prato, refeicao, categoria));
+        }
+      }
+    }
+
+    extrair(cardapioDia.padraoAlmoco, 'Almoço Padrão');
+    extrair(cardapioDia.veganoAlmoco, 'Almoço Vegano');
+    extrair(cardapioDia.padraoJantar, 'Jantar Padrão');
+    extrair(cardapioDia.veganoJantar, 'Jantar Vegano');
+    return pratos;
   }
 
   void limparNaoLidas() {

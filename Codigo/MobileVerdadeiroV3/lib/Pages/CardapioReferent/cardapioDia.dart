@@ -84,10 +84,15 @@ class _CardapioAlunoPageState extends State<CardapioMostra> {
           carregandoHoje = false;
         });
 
-        // Verifica e alerta sobre pratos favoritos no cardápio de hoje
-        NotificacaoService.instance.verificarCardapioHojeEFavoritos(
-          usuarioId: widget.usuario.id,
-        );
+        // Verifica favoritos e alergias no cardápio de hoje.
+        await Future.wait([
+          NotificacaoService.instance.verificarCardapioHojeEFavoritos(
+            usuarioId: widget.usuario.id,
+          ),
+          NotificacaoService.instance.verificarAlergiasNoCardapio(
+            usuario: widget.usuario,
+          ),
+        ]);
       } else if (response.statusCode == 404) {
         setState(() {
           cardapioHoje = null;
@@ -161,10 +166,8 @@ class _CardapioAlunoPageState extends State<CardapioMostra> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PratoPage(
-          pratoId: prato.id,
-          usuario: widget.usuario,
-        ),
+        builder: (context) =>
+            PratoPage(pratoId: prato.id, usuario: widget.usuario),
       ),
     );
   }
@@ -304,9 +307,7 @@ class _CardapioAlunoPageState extends State<CardapioMostra> {
     return Card(
       elevation: 4,
       color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       margin: const EdgeInsets.only(bottom: 20),
       child: Padding(
         padding: const EdgeInsets.all(18),
@@ -325,7 +326,10 @@ class _CardapioAlunoPageState extends State<CardapioMostra> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFE8D6),
                     borderRadius: BorderRadius.circular(12),
@@ -368,7 +372,11 @@ class _CardapioAlunoPageState extends State<CardapioMostra> {
 
             Row(
               children: const [
-                Icon(Icons.nightlight_round, color: Color(0xFFF4A261), size: 22),
+                Icon(
+                  Icons.nightlight_round,
+                  color: Color(0xFFF4A261),
+                  size: 22,
+                ),
                 SizedBox(width: 8),
                 Text(
                   'Jantar',

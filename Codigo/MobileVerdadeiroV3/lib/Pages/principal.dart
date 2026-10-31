@@ -36,12 +36,14 @@ class _PrincipalState extends State<Principal> {
     super.initState();
     _buscarAvisos();
     _verificarFavoritosNoCardapio();
+    _verificarAlergiasNoCardapio();
 
     // Verificação periódica automática de novos avisos e cardápio
     _timerVerificacao = Timer.periodic(const Duration(seconds: 40), (_) {
       if (mounted) {
         _buscarAvisosSilencioso();
         _verificarFavoritosNoCardapio();
+        _verificarAlergiasNoCardapio();
       }
     });
   }
@@ -133,6 +135,13 @@ class _PrincipalState extends State<Principal> {
     }
   }
 
+  Future<void> _verificarAlergiasNoCardapio() {
+    return NotificacaoService.instance.verificarAlergiasNoCardapio(
+      usuario: widget.usuario,
+      baseUrl: baseUrl,
+    );
+  }
+
   Future<void> _adicionarAviso({
     required String titulo,
     required String descricao,
@@ -140,6 +149,11 @@ class _PrincipalState extends State<Principal> {
     required DateTime dataInicial,
     required DateTime dataFinal,
   }) async {
+    if (!widget.usuario.funcionario) {
+      _mostrarMensagem('Apenas funcionários podem criar avisos.');
+      return;
+    }
+
     try {
       final url = Uri.parse('$baseUrl/avisos/cadastrar');
 
@@ -239,6 +253,11 @@ class _PrincipalState extends State<Principal> {
   }
 
   void _mostrarDialogoAdicionarAviso() {
+    if (!widget.usuario.funcionario) {
+      _mostrarMensagem('Apenas funcionários podem criar avisos.');
+      return;
+    }
+
     final tituloController = TextEditingController();
 
     final descricaoController = TextEditingController();
@@ -489,12 +508,13 @@ class _PrincipalState extends State<Principal> {
                           onPressed: () async {
                             await _buscarAvisosSilencioso();
                             await _verificarFavoritosNoCardapio();
+                            await _verificarAlergiasNoCardapio();
                             setModalState(() {});
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
-                                    'Verificação de avisos e cardápio concluída.',
+                                    'Verificação de avisos, favoritos e alergias concluída.',
                                   ),
                                   duration: Duration(seconds: 2),
                                 ),
@@ -544,6 +564,8 @@ class _PrincipalState extends State<Principal> {
                               final item = lista[index];
                               final isAviso =
                                   item.tipo == TipoNotificacao.aviso;
+                              final isAlergia =
+                                  item.tipo == TipoNotificacao.alergia;
                               final hora =
                                   '${item.dataHora.hour.toString().padLeft(2, '0')}:${item.dataHora.minute.toString().padLeft(2, '0')}';
 
@@ -555,10 +577,20 @@ class _PrincipalState extends State<Principal> {
                                 leading: CircleAvatar(
                                   backgroundColor: isAviso
                                       ? Colors.orange.shade100
-                                      : Colors.red.shade100,
+                                      : isAlergia
+                                      ? Colors.red.shade100
+                                      : Colors.pink.shade100,
                                   child: Icon(
-                                    isAviso ? Icons.campaign : Icons.favorite,
-                                    color: isAviso ? Colors.orange : Colors.red,
+                                    isAviso
+                                        ? Icons.campaign
+                                        : isAlergia
+                                        ? Icons.warning_amber
+                                        : Icons.favorite,
+                                    color: isAviso
+                                        ? Colors.orange
+                                        : isAlergia
+                                        ? Colors.red
+                                        : Colors.pink,
                                   ),
                                 ),
                                 title: Text(
@@ -825,15 +857,14 @@ class _PrincipalState extends State<Principal> {
         ),
       ),
 
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.orange,
-
-        onPressed: _mostrarDialogoAdicionarAviso,
-
-        icon: const Icon(Icons.add),
-
-        label: const Text('Novo Aviso'),
-      ),
+      floatingActionButton: widget.usuario.funcionario
+          ? FloatingActionButton.extended(
+              backgroundColor: Colors.orange,
+              onPressed: _mostrarDialogoAdicionarAviso,
+              icon: const Icon(Icons.add),
+              label: const Text('Novo Aviso'),
+            )
+          : null,
     );
   }
 
