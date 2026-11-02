@@ -7,7 +7,7 @@
     color: #FFF5E5 !important;
     font-weight: bold;
 }
-.nav-link { color: #FFF5E5 !important; }
+.navbar .nav-link { color: #FFF5E5 !important; }
 .navbar-toggler { border-color: rgba(255,245,229,0.5); }
 .navbar-toggler-icon { filter: brightness(10); }
 

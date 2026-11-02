@@ -1,4 +1,4 @@
-const API = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:8080';
+﻿const API = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:8080';
 
 let arquivoFotoSelecionado = null;
 let fotoFoiRemovida = false;
@@ -270,6 +270,10 @@ document.getElementById("trocarinfo").addEventListener("click", async function (
             } else {
                 localStorage.removeItem("imagem");
             }
+
+            // Limpa o cache de restrições do mural para refletir imediatamente as novas preferências
+            sessionStorage.removeItem('restricoesUsuario_' + userOriginal.toLowerCase());
+            sessionStorage.removeItem('restricoesUsuario_' + userDigitado.toLowerCase());
 
             // Atualiza também a sessão segura do servidor PHP
             try {
