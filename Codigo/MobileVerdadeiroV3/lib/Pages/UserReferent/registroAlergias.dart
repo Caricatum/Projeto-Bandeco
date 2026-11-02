@@ -117,7 +117,18 @@ class _RegistroAlergiasState extends State<RegistroAlergias> {
           ),
         );
 
-        Navigator.pop(context, usuarioAtualizado);
+        widget.usuario
+          ..alergiaLeite = usuarioAtualizado.alergiaLeite
+          ..alergiaOvo = usuarioAtualizado.alergiaOvo
+          ..alergiaAmendoim = usuarioAtualizado.alergiaAmendoim
+          ..alergiaCastanhas = usuarioAtualizado.alergiaCastanhas
+          ..alergiaFrutosDoMar = usuarioAtualizado.alergiaFrutosDoMar
+          ..alergiaPeixes = usuarioAtualizado.alergiaPeixes
+          ..alergiaTrigo = usuarioAtualizado.alergiaTrigo
+          ..alergiaSoja = usuarioAtualizado.alergiaSoja
+          ..alergiaGergilim = usuarioAtualizado.alergiaGergilim;
+
+        Navigator.pop(context, widget.usuario);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -458,4 +469,3 @@ class _RegistroAlergiasState extends State<RegistroAlergias> {
     );
   }
 }
-

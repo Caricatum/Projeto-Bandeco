@@ -18,6 +18,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final TextEditingController loginController = TextEditingController();
   final TextEditingController senhaHashController = TextEditingController();
+  final http.Client _httpClient = http.Client();
   bool _obscurePassword = true;
 
   final _formKey = GlobalKey<FormState>();
@@ -40,7 +41,7 @@ class _LoginState extends State<Login> {
     );
 
     try {
-      final response = await http.get(url);
+      final response = await _httpClient.get(url);
 
       if (response.statusCode == 200) {
         final usuarioUrl = Uri.parse(
@@ -48,7 +49,7 @@ class _LoginState extends State<Login> {
           '${Uri.encodeComponent(login)}',
         );
 
-        final usuarioResponse = await http.get(usuarioUrl);
+        final usuarioResponse = await _httpClient.get(usuarioUrl);
 
         if (usuarioResponse.statusCode == 200) {
           if (!context.mounted) return;
@@ -77,7 +78,7 @@ class _LoginState extends State<Login> {
           '${Uri.encodeComponent(login)}',
         );
 
-        final usuarioResponse = await http.get(usuarioUrl);
+        final usuarioResponse = await _httpClient.get(usuarioUrl);
 
         if (usuarioResponse.statusCode == 200) {
           final usuario = jsonDecode(usuarioResponse.body);
@@ -123,6 +124,14 @@ class _LoginState extends State<Login> {
         context,
       ).showSnackBar(SnackBar(content: Text('Erro de conexão: $e')));
     }
+  }
+
+  @override
+  void dispose() {
+    loginController.dispose();
+    senhaHashController.dispose();
+    _httpClient.close();
+    super.dispose();
   }
 
   @override

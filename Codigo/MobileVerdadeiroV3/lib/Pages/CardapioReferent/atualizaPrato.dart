@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:tcc_flutter/Class/categoriaClass.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import '../../Class/usuarioClass.dart';
 import '../../Widgets/imagemPrato.dart';
 
@@ -92,10 +93,14 @@ class _AtualizaPratoState extends State<AtualizaPrato> {
     });
 
     try {
-      final response = await http.put(
+      final request = http.MultipartRequest(
+        'PUT',
         Uri.parse("http://localhost:8080/pratos/atualizar"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
+      );
+      request.files.add(
+        http.MultipartFile.fromString(
+          'prato',
+          jsonEncode({
           "id": widget.prato["id"],
           "nome": nomeController.text.trim(),
           "descricao": descricaoController.text.trim(),
@@ -119,8 +124,12 @@ class _AtualizaPratoState extends State<AtualizaPrato> {
           "altoAcucarAdicionado": altoAcucarAdicionado,
           "altoGorduraSaturada": altoGorduraSaturada,
           "altoSodio": altoSodio,
-        }),
+          }),
+          contentType: MediaType('application', 'json'),
+        ),
       );
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
         if (!mounted) return;
