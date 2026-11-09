@@ -1,5 +1,7 @@
 package com.example.apiBandeco.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -11,6 +13,7 @@ import java.util.Map;
 public class TratadorErros {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> tratarErros(MethodArgumentNotValidException ex) {
         Map<String, String> erros = new HashMap<>();
 
@@ -22,11 +25,11 @@ public class TratadorErros {
     }
 
     @ExceptionHandler(ResponseStatusException.class)
-    public Map<String, String> tratarResponseStatus(ResponseStatusException ex) {
+    public ResponseEntity<Map<String, String>> tratarResponseStatus(ResponseStatusException ex) {
         Map<String, String> erro = new HashMap<>();
 
         erro.put("erro", ex.getReason());
 
-        return erro;
+        return ResponseEntity.status(ex.getStatusCode()).body(erro);
     }
 }

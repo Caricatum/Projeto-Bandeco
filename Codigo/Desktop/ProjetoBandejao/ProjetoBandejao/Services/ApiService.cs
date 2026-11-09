@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -21,7 +21,7 @@ namespace ProjetoBandejao.Services
 
         public async Task<List<Usuario>> ObterUsuarios()
         {
-            var usuarios = await _httpClient.GetFromJsonAsync<List<Usuario>>("/user/all");
+            var usuarios = await _httpClient.GetFromJsonAsync<List<Usuario>>("/user");
 
             return usuarios ?? new List<Usuario>();
         }

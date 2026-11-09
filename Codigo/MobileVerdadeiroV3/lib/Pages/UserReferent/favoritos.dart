@@ -66,7 +66,7 @@ class _FavoritosPageState extends State<Favoritos> {
   Future<void> buscarFavoritos() async {
 
     final url = Uri.parse(
-      'http://localhost:8080/pratosFavoritos/all',
+      'http://localhost:8080/pratosFavoritos',
     );
 
     try {
@@ -135,7 +135,7 @@ class _FavoritosPageState extends State<Favoritos> {
 
     final url =
         Uri.parse(
-      'http://localhost:8080/pratosFavoritos/all',
+      'http://localhost:8080/pratosFavoritos',
     );
 
     try {
@@ -172,7 +172,7 @@ class _FavoritosPageState extends State<Favoritos> {
 
       final deleteUrl =
           Uri.parse(
-        'http://localhost:8080/pratosFavoritos/deletar/$idFavorito',
+        'http://localhost:8080/pratosFavoritos/$idFavorito',
       );
 
       final deleteResponse =

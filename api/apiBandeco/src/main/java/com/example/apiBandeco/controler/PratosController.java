@@ -20,12 +20,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/pratos")
+@RequestMapping({"/pratos", "/api/v1/pratos"})
 public class PratosController {
 
     @Autowired
@@ -35,7 +34,8 @@ public class PratosController {
     @Autowired
     CardapioRepository cardapioRepository;
 
-    @GetMapping("/id/{id}")//busca pratos pelo id
+    // Busca prato por ID (REST: GET /pratos/{id})
+    @GetMapping({"/{id}", "/id/{id}"})
     public Pratos buscarPorId(@PathVariable("id") int id){
         return pratosRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -43,21 +43,36 @@ public class PratosController {
                 ));
     }
 
-    @GetMapping("/nome")//Busca o prato através do nome
+    // Listagem com suporte a filtros por query params (REST: GET /pratos?nome=...&vegano=...)
+    @GetMapping
+    public List<Pratos> listarPratos(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) Boolean vegano) {
+
+        if (nome != null && !nome.isBlank()) {
+            return pratosRepository.findByNomeContainingIgnoreCase(nome);
+        }
+        if (vegano != null && vegano) {
+            return pratosRepository.findByVeganoTrue();
+        }
+        return pratosRepository.findAll();
+    }
+
+    // Rota legada de busca por nome
+    @GetMapping("/nome")
     public List<Pratos> buscarPorNome(@RequestParam String nome) {
         return pratosRepository.findByNomeContainingIgnoreCase(nome);
     }
 
-    @GetMapping("/all")//busca todos os pratos
-    public List<Pratos> buscarTodosPratos(){return pratosRepository.findAll();}
-
-    @GetMapping("/veganos")//busca todos os pratos veganos
+    // Rota legada de busca por veganos
+    @GetMapping("/veganos")
     public List<Pratos> buscarTodosPratosVeganos(){
         return pratosRepository.findByVeganoTrue();
     }
 
-
-    @PostMapping(value = "/cadastrar",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)//cadastra um prato
+    // Cadastro de prato (REST: POST /pratos)
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @ResponseStatus(HttpStatus.CREATED)
     public Pratos cadastroPratos (@RequestPart("prato") @Valid Pratos prato,
                                   @RequestPart(value = "imagem", required = false) MultipartFile arquivo)
             throws IOException{
@@ -81,73 +96,15 @@ public class PratosController {
         return pratosRepository.save(prato);
     }
 
-    @DeleteMapping("/deletar/{id}")
-    public void deletarPrato(@PathVariable int id) throws IOException {
-
-        Pratos prato = pratosRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Prato não encontrado"));
-
-        List<Cardapio> cardapios = cardapioRepository.findAll();
-
-        for (Cardapio c : cardapios) {
-
-            if (c.getAcompanhamento() != null &&
-                    c.getAcompanhamento().getId() == id) {
-                c.setAcompanhamento(null);
-            }
-
-            if (c.getPrato_principal() != null &&
-                    c.getPrato_principal().getId() == id) {
-                c.setPrato_principal(null);
-            }
-
-            if (c.getGuarnicao() != null &&
-                    c.getGuarnicao().getId() == id) {
-                c.setGuarnicao(null);
-            }
-
-            if (c.getSalada() != null &&
-                    c.getSalada().getId() == id) {
-                c.setSalada(null);
-            }
-
-            if (c.getSobremesa() != null &&
-                    c.getSobremesa().getId() == id) {
-                c.setSobremesa(null);
-            }
-
-            if (c.getRefresco() != null &&
-                    c.getRefresco().getId() == id) {
-                c.setRefresco(null);
-            }
-        }
-
-        cardapioRepository.saveAll(cardapios);
-
-        deletarImagem(prato.getId());
-
-        pratosRepository.delete(prato);
-    }
-
-    @DeleteMapping(value = "/excluirImagem/{id}")
-    public void excluirImagem(@PathVariable int id) throws IOException{
-        Pratos prato = pratosRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Prato não encontrado"));
-
-        deletarImagem(prato.getId());
-        prato.setImagem(null);
-        pratosRepository.save(prato);
-    }
-
-    @PutMapping(value = "/atualizar",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Pratos atualizaPratos (@RequestPart("prato") @Valid Pratos prato,
+    // Atualização de prato (REST: PUT /pratos/{id})
+    @PutMapping(value = {"/{id}", "/atualizar", ""}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public Pratos atualizaPratos (@PathVariable(value = "id", required = false) Integer pathId,
+                                  @RequestPart("prato") @Valid Pratos prato,
                                   @RequestPart(value = "imagem", required = false) MultipartFile arquivo)
             throws IOException{
-        Pratos pratoAtual = pratosRepository.findById(prato.getId())
+
+        int id = pathId != null ? pathId : prato.getId();
+        Pratos pratoAtual = pratosRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Prato não encontrado"));
 
@@ -163,18 +120,18 @@ public class PratosController {
 
         if (arquivo != null && !arquivo.isEmpty()) {
             String urlImagem = uploadImagem(arquivo);
-            deletarImagem(prato.getId());
+            deletarImagem(pratoAtual.getId());
             pratoAtual.setImagem(urlImagem);
-        } else {
-            prato.setImagem(
-                    pratoAtual.getImagem()
-            );
+        } else if (prato.getImagem() != null && !prato.getImagem().isBlank()) {
+            pratoAtual.setImagem(prato.getImagem());
         }
 
         pratoAtual.setNome(prato.getNome());
         pratoAtual.setDescricao(prato.getDescricao());
         pratoAtual.setVegano(prato.isVegano());
-        pratoAtual.setCategoria(prato.getCategoria());
+        if (prato.getCategoria() != null) {
+            pratoAtual.setCategoria(prato.getCategoria());
+        }
 
         pratoAtual.setLeite(prato.isLeite());
         pratoAtual.setOvo(prato.isOvo());
@@ -193,8 +150,59 @@ public class PratosController {
         return pratosRepository.save(pratoAtual);
     }
 
+    // Exclusão de prato (REST: DELETE /pratos/{id})
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletarPrato(@PathVariable int id) throws IOException {
 
-     //envia a imagem e retorna seu link
+        Pratos prato = pratosRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Prato não encontrado"));
+
+        List<Cardapio> cardapios = cardapioRepository.findAll();
+
+        for (Cardapio c : cardapios) {
+            if (c.getAcompanhamento() != null && c.getAcompanhamento().getId() == id) {
+                c.setAcompanhamento(null);
+            }
+            if (c.getPrato_principal() != null && c.getPrato_principal().getId() == id) {
+                c.setPrato_principal(null);
+            }
+            if (c.getGuarnicao() != null && c.getGuarnicao().getId() == id) {
+                c.setGuarnicao(null);
+            }
+            if (c.getSalada() != null && c.getSalada().getId() == id) {
+                c.setSalada(null);
+            }
+            if (c.getSobremesa() != null && c.getSobremesa().getId() == id) {
+                c.setSobremesa(null);
+            }
+            if (c.getRefresco() != null && c.getRefresco().getId() == id) {
+                c.setRefresco(null);
+            }
+        }
+
+        cardapioRepository.saveAll(cardapios);
+        deletarImagem(prato.getId());
+        pratosRepository.delete(prato);
+    }
+
+    // Exclusão de imagem do prato (REST: DELETE /pratos/{id}/imagem)
+    @DeleteMapping(value = {"/{id}/imagem", "/excluirImagem/{id}"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void excluirImagem(@PathVariable int id) throws IOException{
+        Pratos prato = pratosRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Prato não encontrado"));
+
+        deletarImagem(prato.getId());
+        prato.setImagem(null);
+        pratosRepository.save(prato);
+    }
+
+    // Envia a imagem e retorna seu link
     private String uploadImagem(MultipartFile arquivo)
             throws IOException {
         if (arquivo.isEmpty()) {
@@ -211,9 +219,7 @@ public class PratosController {
                     "O arquivo deve ser uma imagem");
         }
 
-
         String nomeOriginal = arquivo.getOriginalFilename();
-
         String extensao = "";
 
         if (nomeOriginal != null && nomeOriginal.contains(".")) {
@@ -221,7 +227,6 @@ public class PratosController {
         }
 
         extensao = extensao.toLowerCase();
-
 
         List<String> permitidas = List.of("jpg", "jpeg", "png", "webp");
 
@@ -254,12 +259,10 @@ public class PratosController {
                 .path("/uploads/pratos/")
                 .path(nomeArquivo)
                 .toUriString();
-
     }
 
-     // Deleta a imagem do prato
+    // Deleta a imagem do prato
     private void deletarImagem(Integer id) throws IOException {
-
         Pratos prato = pratosRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
@@ -276,5 +279,4 @@ public class PratosController {
 
         Files.deleteIfExists(caminho);
     }
-
 }

@@ -1,6 +1,7 @@
 package com.example.apiBandeco.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -25,16 +26,19 @@ public class User {
     private String nome;
     @NotBlank(message = "A senha não pode estar vazia")
     @Column (name = "senha_hash")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senhaHash;
     @Column
     private boolean funcionario;
     @Column
     boolean emailConfirmado;
     @Column
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String codigoConfirmacao;
     @Column
     private LocalDateTime expiracaoConfirmacao;
     @Column
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String codigoResetSenha;
     @Column
     private LocalDateTime expiracaoResetSenha;

@@ -8,4 +8,5 @@ import java.util.List;
 public interface PratosRepository extends JpaRepository <Pratos, Integer> {
     List<Pratos> findByNomeContainingIgnoreCase(String nome);
     List<Pratos> findByVeganoTrue();
+
 }

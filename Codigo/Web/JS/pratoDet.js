@@ -22,9 +22,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         const [resPrato, resAvs, resNutri] = await Promise.all([
-            fetch(`${API}/pratos/id/${pratoId}`),
-            fetch(`${API}/avaliacoes/all`),
-            fetch(`${API}/valorNutricional/all`)
+            fetch(`${API}/pratos/${pratoId}`),
+            fetch(`${API}/avaliacoes`),
+            fetch(`${API}/valorNutricional`)
         ]);
 
         if (!resPrato.ok) { mostrarErro(); return; }
@@ -273,7 +273,7 @@ window.salvarValoresNutricionais = async function() {
         prato: { id: pratoId }
     };
 
-    const url = id ? `${API}/valorNutricional/atualizar` : `${API}/valorNutricional/cadastrar`;
+    const url = id ? `${API}/valorNutricional/${id}` : `${API}/valorNutricional`;
     const method = id ? 'PUT' : 'POST';
 
     try {
@@ -324,7 +324,7 @@ function configurarEstrelas(pratoId) {
         btn.disabled = true; btn.textContent = 'Salvando...';
 
         try {
-            const res = await fetch(`${API}/avaliacoes/cadastrar`, {
+            const res = await fetch(`${API}/avaliacoes`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

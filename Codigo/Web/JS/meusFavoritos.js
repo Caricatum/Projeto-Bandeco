@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // =============================================
 async function carregarFavoritos() {
     try {
-        const res  = await fetch(`${API}/pratosFavoritos/all`);
+        const res  = await fetch(`${API}/pratosFavoritos`);
         const todos = await res.json();
         meusFavoritos = todos.filter(f => f.user && f.user.id === userId);
     } catch {
@@ -52,7 +52,7 @@ async function carregarFavoritos() {
 
 async function carregarAvaliacoes() {
     try {
-        const res = await fetch(`${API}/avaliacoes/all`);
+        const res = await fetch(`${API}/avaliacoes`);
         todasAvaliacoes = await res.json();
     } catch {
         todasAvaliacoes = [];
@@ -288,7 +288,7 @@ function configurarModalAvaliar() {
         if (!nota) { msg.textContent = 'Selecione uma nota!'; return; }
 
         try {
-            const res = await fetch(`${API}/avaliacoes/cadastrar`, {
+            const res = await fetch(`${API}/avaliacoes`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -324,7 +324,7 @@ function configurarModalRemover() {
     document.getElementById('btnConfirmarRemover').addEventListener('click', async () => {
         if (!favParaRemover) return;
         try {
-            const res = await fetch(`${API}/pratosFavoritos/deletar/${favParaRemover.favId}`, {
+            const res = await fetch(`${API}/pratosFavoritos/${favParaRemover.favId}`, {
                 method: 'DELETE'
             });
             if (!res.ok) throw new Error(await res.text());

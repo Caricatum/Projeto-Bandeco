@@ -45,7 +45,7 @@ class _CardapioPageState extends State<CardapioPage> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/cardapio/all'),
+        Uri.parse('http://localhost:8080/cardapio'),
       );
 
       if (response.statusCode != 200) {
@@ -107,7 +107,7 @@ class _CardapioPageState extends State<CardapioPage> {
 
     try {
       final response = await http.delete(
-        Uri.parse('http://localhost:8080/cardapio/deletar/${cardapio.id}'),
+        Uri.parse('http://localhost:8080/cardapio/${cardapio.id}'),
       );
 
       if (response.statusCode == 200 || response.statusCode == 204) {
@@ -328,7 +328,7 @@ class _CardapioPageState extends State<CardapioPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080/cardapioDia/cadastrar'),
+        Uri.parse('http://localhost:8080/cardapioDia'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(cardapioDia.toJson()),
       );

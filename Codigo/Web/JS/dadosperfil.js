@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const message = document.getElementById('message');
         try {
-            const res = await fetch(`${API}/user/deletar/${usuarioCarregado.id}`, { method: 'DELETE' });
+            const res = await fetch(`${API}/user/${usuarioCarregado.id}`, { method: 'DELETE' });
             if (!res.ok) throw new Error(await res.text() || 'Erro ao deletar usuário.');
 
             // Se o funcionário deletou a si próprio
@@ -141,7 +141,7 @@ async function carregarListaTodosUsuarios() {
     const contador = document.getElementById('contadorUsuarios');
 
     try {
-        const res = await fetch(`${API}/user/all`);
+        const res = await fetch(`${API}/user`);
         if (!res.ok) throw new Error('Falha ao carregar lista de usuários');
 
         todosUsuarios = await res.json();

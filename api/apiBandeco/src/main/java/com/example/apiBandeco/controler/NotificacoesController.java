@@ -13,14 +13,15 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/notificacoes")
+@RequestMapping({"/notificacoes", "/api/v1/notificacoes"})
 public class NotificacoesController {
     @Autowired
     UserRepository userRepository;
     @Autowired
     NotificacoesRepository notificacoesRepository;
 
-    @GetMapping("/id/{id}")//busca notificacao pelo id
+    // Busca notificação por ID (REST: GET /notificacoes/{id})
+    @GetMapping({"/{id}", "/id/{id}"})
     public Notificacoes buscarPorId(@PathVariable("id") int id){
         return notificacoesRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -28,10 +29,15 @@ public class NotificacoesController {
                 ));
     }
 
-    @GetMapping("/all")//busca todas as notificações
-    public List<Notificacoes> buscarTodasNotificacoes(){return notificacoesRepository.findAll();}
+    // Listagem de notificações (REST: GET /notificacoes)
+    @GetMapping
+    public List<Notificacoes> buscarTodasNotificacoes(){
+        return notificacoesRepository.findAll();
+    }
 
-    @PostMapping("/cadastrar")//cadastra uma notificação
+    // Cadastro de notificação (REST: POST /notificacoes)
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Notificacoes cadastroNotificacao (@RequestBody @Valid Notificacoes notificacao){
         Integer userId = notificacao.getUser() != null
                 ? notificacao.getUser().getId() : null;
@@ -45,10 +51,12 @@ public class NotificacoesController {
         return notificacoesRepository.save(notificacao);
     }
 
-    @PutMapping("/atualizar") //Atualiza Notificação
-    public Notificacoes atualizaNotificacao (@RequestBody @Valid Notificacoes notificacao){
-
-        notificacoesRepository.findById(notificacao.getId())
+    // Atualização de notificação (REST: PUT /notificacoes/{id})
+    @PutMapping({"/{id}", "/atualizar", ""})
+    public Notificacoes atualizaNotificacao (@PathVariable(value = "id", required = false) Integer pathId,
+                                             @RequestBody @Valid Notificacoes notificacao){
+        int id = pathId != null ? pathId : notificacao.getId();
+        notificacoesRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Notificação não encontrada"));
 
@@ -60,11 +68,13 @@ public class NotificacoesController {
                             HttpStatus.NOT_FOUND, "User não encontrado"));
             notificacao.setUser(user);
         }
-
+        notificacao.setId(id);
         return notificacoesRepository.save(notificacao);
     }
 
-    @DeleteMapping("/deletar/{id}") //deleta Notificacao pelo id
+    // Exclusão de notificação (REST: DELETE /notificacoes/{id})
+    @DeleteMapping({"/{id}", "/deletar/{id}"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarNotificacao(@PathVariable(value = "id") int id){
         var notificacao = notificacoesRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(

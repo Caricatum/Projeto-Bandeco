@@ -11,13 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/cardapioDia")
+@RequestMapping({"/cardapioDia", "/cardapios-dia", "/api/v1/cardapios-dia"})
 public class CardapioDiaController {
     @Autowired
     CardapioDiaRepository cardapioDiaRepository;
@@ -40,7 +39,6 @@ public class CardapioDiaController {
                     HttpStatus.BAD_REQUEST, "Usuário deve ser informado");
         }
         int userId = cardapioDia.getUser().getId();
-
 
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -73,8 +71,8 @@ public class CardapioDiaController {
         }
     }
 
-
-    @GetMapping("/id/{id}")//busca cardapio do dia pelo id
+    // Busca cardápio do dia por ID (REST: GET /cardapios-dia/{id})
+    @GetMapping({"/{id}", "/id/{id}"})
     public CardapioDia buscarPorId(@PathVariable("id") int id){
         return cardapioDiaRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -82,16 +80,23 @@ public class CardapioDiaController {
                 ));
     }
 
-    @GetMapping("/data/{data}")//busca cardapio do dia pela data
-    public CardapioDia buscarPorData(@PathVariable("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
-        return cardapioDiaRepository.findByData(data)
+    // Busca cardápio do dia por data (REST: GET /cardapios-dia/data/{data})
+    @GetMapping({"/data/{data}", "/data"})
+    public CardapioDia buscarPorData(
+            @PathVariable(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataParam){
+        LocalDate target = data != null ? data : dataParam;
+        if (target == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data não informada");
+        }
+        return cardapioDiaRepository.findByData(target)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Cardápio do dia não encontrado"
                 ));
     }
 
-
-    @GetMapping("/semana") //Busca os cardápios da semana atual
+    // Busca os cardápios da semana atual (REST: GET /cardapios-dia/semana)
+    @GetMapping("/semana")
     public List<CardapioDia> buscarCardapiosSemana() {
         LocalDate hoje = LocalDate.now();
 
@@ -106,12 +111,15 @@ public class CardapioDiaController {
         );
     }
 
+    // Listagem geral (REST: GET /cardapios-dia)
+    @GetMapping
+    public List<CardapioDia> buscarTodosCardapiosDias(){
+        return cardapioDiaRepository.findAll();
+    }
 
-
-    @GetMapping("/all")//busca todos os cardápios de todos os dias
-    public List<CardapioDia> buscarTodosCardapiosDias(){return cardapioDiaRepository.findAll();}
-
-    @PostMapping("/cadastrar")//cadastra um cardápio de um dia
+    // Cadastro de cardápio do dia (REST: POST /cardapios-dia)
+    @PostMapping({"", "/cadastrar"})
+    @ResponseStatus(HttpStatus.CREATED)
     public CardapioDia cadastroCardapioDia (@RequestBody @Valid CardapioDia cardapioDia){
         if(cardapioDiaRepository.existsByData(cardapioDia.getData())){
             throw new ResponseStatusException(
@@ -123,12 +131,16 @@ public class CardapioDiaController {
         return cardapioDiaRepository.save(cardapioDia);
     }
 
-    @PutMapping("/atualizar")
-    public CardapioDia atualizaCardapioDia (@RequestBody @Valid CardapioDia cardapioDia){
-        cardapioDiaRepository.findById(cardapioDia.getId())
+    // Atualização de cardápio do dia (REST: PUT /cardapios-dia/{id})
+    @PutMapping({"/{id}", "/atualizar", ""})
+    public CardapioDia atualizaCardapioDia (@PathVariable(value = "id", required = false) Integer pathId,
+                                            @RequestBody @Valid CardapioDia cardapioDia){
+        int id = pathId != null ? pathId : cardapioDia.getId();
+        cardapioDiaRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Cardápio não encontrado"));
-        if(cardapioDiaRepository.existsByDataAndIdNot(cardapioDia.getData(), cardapioDia.getId())){
+
+        if(cardapioDiaRepository.existsByDataAndIdNot(cardapioDia.getData(), id)){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "Já existe cardápio cadastrado para esta data"
@@ -138,7 +150,9 @@ public class CardapioDiaController {
         return cardapioDiaRepository.save(cardapioDia);
     }
 
-    @DeleteMapping("/deletar/{id}") //deleta Cardápio de um dia pelo id
+    // Exclusão de cardápio do dia (REST: DELETE /cardapios-dia/{id})
+    @DeleteMapping({"/{id}", "/deletar/{id}"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarCardapioDia(@PathVariable(value = "id") int id){
         var cardapioDia = cardapioDiaRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -146,6 +160,4 @@ public class CardapioDiaController {
 
         cardapioDiaRepository.delete(cardapioDia);
     }
-
-
 }

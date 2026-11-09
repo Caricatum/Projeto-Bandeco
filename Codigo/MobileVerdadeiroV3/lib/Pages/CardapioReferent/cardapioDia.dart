@@ -44,7 +44,7 @@ class _CardapioAlunoPageState extends State<CardapioMostra> {
   Future<void> carregarFavoritos() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/pratosFavoritos/all'),
+        Uri.parse('http://localhost:8080/pratosFavoritos'),
       );
       if (response.statusCode == 200) {
         final List<dynamic> dados = jsonDecode(response.body);

@@ -34,43 +34,27 @@ class _LoginState extends State<Login> {
       return;
     }
 
-    final url = Uri.parse(
-      'http://localhost:8080/user/validar'
-      '?login=${Uri.encodeComponent(login)}'
-      '&senhaHash=${Uri.encodeComponent(senha)}',
-    );
+    final url = Uri.parse('http://localhost:8080/user/login');
 
     try {
-      final response = await _httpClient.get(url);
+      final response = await _httpClient.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'login': login,
+          'senha': senha,
+        }),
+      );
 
       if (response.statusCode == 200) {
-        final usuarioUrl = Uri.parse(
-          'http://localhost:8080/user/login/'
-          '${Uri.encodeComponent(login)}',
+        if (!context.mounted) return;
+
+        final usuario = Usuario.fromJson(jsonDecode(response.body));
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => Principal(usuario: usuario)),
         );
-
-        final usuarioResponse = await _httpClient.get(usuarioUrl);
-
-        if (usuarioResponse.statusCode == 200) {
-          if (!context.mounted) return;
-
-          final usuario = Usuario.fromJson(jsonDecode(usuarioResponse.body));
-
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => Principal(usuario: usuario)),
-          );
-        } else {
-          if (!context.mounted) return;
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Login realizado, mas não foi possível carregar os dados do usuário.',
-              ),
-            ),
-          );
-        }
 
       } else if (response.statusCode == 403) {
         final usuarioUrl = Uri.parse(

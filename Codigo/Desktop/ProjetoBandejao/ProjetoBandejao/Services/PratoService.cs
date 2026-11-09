@@ -27,7 +27,7 @@ namespace ProjetoBandejao.Services
         {
             try
             {
-                HttpResponseMessage response = client.GetAsync($"{API_URL}/all").Result;
+                HttpResponseMessage response = client.GetAsync(API_URL).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     string json = response.Content.ReadAsStringAsync().Result;
@@ -49,7 +49,7 @@ namespace ProjetoBandejao.Services
                 if (string.IsNullOrWhiteSpace(nome))
                     return Listar();
 
-                string url = $"{API_URL}/nome?nome={Uri.EscapeDataString(nome)}";
+                string url = $"{API_URL}?nome={Uri.EscapeDataString(nome)}";
                 HttpResponseMessage response = client.GetAsync(url).Result;
                 if (response.IsSuccessStatusCode)
                 {
@@ -69,7 +69,7 @@ namespace ProjetoBandejao.Services
         {
             try
             {
-                HttpResponseMessage response = client.GetAsync($"{CATEGORIA_URL}/all").Result;
+                HttpResponseMessage response = client.GetAsync(CATEGORIA_URL).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     string json = response.Content.ReadAsStringAsync().Result;
@@ -136,7 +136,7 @@ namespace ProjetoBandejao.Services
                     multipartContent.Add(fileContent, "imagem", Path.GetFileName(imageFilePath));
                 }
 
-                HttpResponseMessage response = client.PostAsync($"{API_URL}/cadastrar", multipartContent).Result;
+                HttpResponseMessage response = client.PostAsync(API_URL, multipartContent).Result;
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -188,7 +188,7 @@ namespace ProjetoBandejao.Services
 
                 string json = JsonSerializer.Serialize(nutriPayload);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                client.PostAsync($"{NUTRI_URL}/cadastrar", content).Wait();
+                client.PostAsync(NUTRI_URL, content).Wait();
             }
             catch (Exception ex)
             {
@@ -200,7 +200,7 @@ namespace ProjetoBandejao.Services
         {
             try
             {
-                HttpResponseMessage response = client.DeleteAsync($"{API_URL}/deletar/{id}").Result;
+                HttpResponseMessage response = client.DeleteAsync($"{API_URL}/{id}").Result;
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)

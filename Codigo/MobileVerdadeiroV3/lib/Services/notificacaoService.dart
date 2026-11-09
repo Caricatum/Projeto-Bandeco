@@ -221,7 +221,7 @@ class NotificacaoService {
     final List<Map<String, dynamic>> correspondencias = [];
 
     try {
-      final favUrl = Uri.parse('$baseUrl/pratosFavoritos/all');
+      final favUrl = Uri.parse('$baseUrl/pratosFavoritos');
       final favResponse = await http.get(favUrl);
 
       if (favResponse.statusCode != 200) {

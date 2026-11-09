@@ -101,7 +101,7 @@ async function salvarCardapioDia() {
         const idsCardapios = {};
 
         for (const chave of Object.keys(cardapios)) {
-            const res = await fetch(`${API}/cardapio/cadastrar`, {
+            const res = await fetch(`${API}/cardapio`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(cardapios[chave])
@@ -125,7 +125,7 @@ async function salvarCardapioDia() {
             user: { id: userId }
         };
 
-        const resDia = await fetch(`${API}/cardapioDia/cadastrar`, {
+        const resDia = await fetch(`${API}/cardapioDia`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(cardapioDiaPayload)

@@ -95,7 +95,7 @@ class _AtualizaPratoState extends State<AtualizaPrato> {
     try {
       final request = http.MultipartRequest(
         'PUT',
-        Uri.parse("http://localhost:8080/pratos/atualizar"),
+        Uri.parse("http://localhost:8080/pratos/${widget.prato["id"]}"),
       );
       request.files.add(
         http.MultipartFile.fromString(

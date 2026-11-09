@@ -35,7 +35,7 @@ class _CadastroState extends State<Cadastro> {
   Future<void> cadastrarUsuario() async {
     final email = loginController.text.trim();
 
-    final url = Uri.parse('http://localhost:8080/user/cadastrar');
+    final url = Uri.parse('http://localhost:8080/user');
 
     try {
       final response = await http.post(

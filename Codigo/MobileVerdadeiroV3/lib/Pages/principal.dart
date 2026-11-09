@@ -61,7 +61,7 @@ class _PrincipalState extends State<Principal> {
     });
 
     try {
-      final url = Uri.parse('$baseUrl/avisos/all');
+      final url = Uri.parse('$baseUrl/avisos');
 
       final response = await http.get(url);
 
@@ -97,7 +97,7 @@ class _PrincipalState extends State<Principal> {
 
   Future<void> _buscarAvisosSilencioso() async {
     try {
-      final url = Uri.parse('$baseUrl/avisos/all');
+      final url = Uri.parse('$baseUrl/avisos');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -155,7 +155,7 @@ class _PrincipalState extends State<Principal> {
     }
 
     try {
-      final url = Uri.parse('$baseUrl/avisos/cadastrar');
+      final url = Uri.parse('$baseUrl/avisos');
 
       final response = await http.post(
         url,
@@ -199,7 +199,7 @@ class _PrincipalState extends State<Principal> {
 
   Future<void> _deletarAviso(Avisos aviso) async {
     try {
-      final url = Uri.parse('$baseUrl/avisos/deletar/${aviso.id}');
+      final url = Uri.parse('$baseUrl/avisos/${aviso.id}');
 
       final response = await http.delete(url);
 

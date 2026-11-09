@@ -2,10 +2,8 @@ package com.example.apiBandeco.controler;
 
 import com.example.apiBandeco.model.Cardapio;
 import com.example.apiBandeco.model.CardapioDia;
-import com.example.apiBandeco.model.Pratos;
 import com.example.apiBandeco.repository.CardapioDiaRepository;
 import com.example.apiBandeco.repository.CardapioRepository;
-import com.example.apiBandeco.repository.CategoriaRepository;
 import com.example.apiBandeco.repository.PratosRepository;
 import com.example.apiBandeco.service.PdfGeneratorService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,15 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/cardapio")
+@RequestMapping({"/cardapio", "/cardapios", "/api/v1/cardapios"})
 public class CardapioController {
     @Autowired
     PratosRepository pratosRepository;
@@ -88,7 +83,8 @@ public class CardapioController {
         }
     }
 
-    @GetMapping("/id/{id}")//busca cardapio pelo id
+    // Busca cardápio por ID (REST: GET /cardapios/{id})
+    @GetMapping({"/{id}", "/id/{id}"})
     public Cardapio buscarPorId(@PathVariable("id") int id){
         return cardapioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -96,25 +92,35 @@ public class CardapioController {
                 ));
     }
 
-    @GetMapping("/all")//busca todos os cardápios
-    public List<Cardapio> buscarTodosCardapios(){return cardapioRepository.findAll();}
+    // Listagem de cardápios (REST: GET /cardapios)
+    @GetMapping
+    public List<Cardapio> buscarTodosCardapios(){
+        return cardapioRepository.findAll();
+    }
 
-    @PostMapping("/cadastrar")//cadastra um cardápio
+    // Cadastro de cardápio (REST: POST /cardapios)
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Cardapio cadastroCardapio (@RequestBody @Valid Cardapio cardapio){
         validaPratos(cardapio);
         return cardapioRepository.save(cardapio);
     }
 
-    @PutMapping("/atualizar")
-    public Cardapio atualizaCardapio (@RequestBody @Valid Cardapio cardapio){
-        cardapioRepository.findById(cardapio.getId())
+    // Atualização de cardápio (REST: PUT /cardapios/{id})
+    @PutMapping({"/{id}", "/atualizar", ""})
+    public Cardapio atualizaCardapio (@PathVariable(value = "id", required = false) Integer pathId,
+                                      @RequestBody @Valid Cardapio cardapio){
+        int id = pathId != null ? pathId : cardapio.getId();
+        cardapioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Cardápio não encontrado"));
         validaPratos(cardapio);
         return cardapioRepository.save(cardapio);
     }
 
-    @DeleteMapping("/deletar/{id}")
+    // Exclusão de cardápio (REST: DELETE /cardapios/{id})
+    @DeleteMapping({"/{id}", "/deletar/{id}"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarCardapio(@PathVariable int id) {
 
         Cardapio cardapio = cardapioRepository.findById(id)
@@ -125,57 +131,59 @@ public class CardapioController {
         List<CardapioDia> cardapioDias = cardapioDiaRepository.findAll();
 
         for (CardapioDia c : cardapioDias) {
-
-            if (c.getPadraoAlmoco() != null &&
-                    c.getPadraoAlmoco().getId() == id) {
+            if (c.getPadraoAlmoco() != null && c.getPadraoAlmoco().getId() == id) {
                 c.setPadraoAlmoco(null);
             }
-
-            if (c.getPadraoJantar() != null &&
-                    c.getPadraoJantar().getId() == id) {
+            if (c.getPadraoJantar() != null && c.getPadraoJantar().getId() == id) {
                 c.setPadraoJantar(null);
             }
-
-            if (c.getVeganoAlmoco() != null &&
-                    c.getVeganoAlmoco().getId() == id) {
+            if (c.getVeganoAlmoco() != null && c.getVeganoAlmoco().getId() == id) {
                 c.setVeganoAlmoco(null);
             }
-
-            if (c.getVeganoJantar() != null &&
-                    c.getVeganoJantar().getId() == id) {
+            if (c.getVeganoJantar() != null && c.getVeganoJantar().getId() == id) {
                 c.setVeganoJantar(null);
             }
         }
 
         cardapioDiaRepository.saveAll(cardapioDias);
-
         cardapioRepository.delete(cardapio);
     }
 
-    @GetMapping("/pdf/{data}/{idNormal}/{idVegano}")
+    // Geração de PDF (REST: GET /cardapios/export/pdf?data=... ou legado)
+    @GetMapping({"/export/pdf", "/pdf", "/pdf/{data}/{idNormal}/{idVegano}"})
     public void gerarPdf (
-            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
-            @PathVariable int idNormal,
-            @PathVariable int idVegano,
+            @PathVariable(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
+            @PathVariable(required = false) Integer idNormal,
+            @PathVariable(required = false) Integer idVegano,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataQuery,
+            @RequestParam(required = false) Integer padraoId,
+            @RequestParam(required = false) Integer veganoId,
             HttpServletResponse response) throws IOException {
 
-        Cardapio cardapioNormal = cardapioRepository.findById(idNormal)
+        LocalDate targetData = data != null ? data : dataQuery;
+        Integer targetNormal = idNormal != null ? idNormal : padraoId;
+        Integer targetVegano = idVegano != null ? idVegano : veganoId;
+
+        if (targetData == null || targetNormal == null || targetVegano == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parâmetros data, normal e vegano são obrigatórios");
+        }
+
+        Cardapio cardapioNormal = cardapioRepository.findById(targetNormal)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Cardápio normal não encontrado"
                 ));
 
-        Cardapio cardapioVegano = cardapioRepository.findById(idVegano)
+        Cardapio cardapioVegano = cardapioRepository.findById(targetVegano)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Cardápio vegano não encontrado"
                 ));
 
-
         response.setContentType("application/pdf");
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=cardapio_" + data + ".pdf";
+        String headerValue = "attachment; filename=cardapio_" + targetData + ".pdf";
 
         response.setHeader(headerKey, headerValue);
 
@@ -183,10 +191,7 @@ public class CardapioController {
                 response,
                 cardapioNormal,
                 cardapioVegano,
-                data
+                targetData
         );
-
     }
-
-
 }

@@ -1,6 +1,5 @@
 package com.example.apiBandeco.controler;
 
-
 import com.example.apiBandeco.model.PratosFavoritos;
 import com.example.apiBandeco.repository.PratosFavoritosRepository;
 import com.example.apiBandeco.repository.PratosRepository;
@@ -13,10 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/pratosFavoritos")
+@RequestMapping({"/pratosFavoritos", "/pratos-favoritos", "/api/v1/pratos-favoritos"})
 public class PratosFavoritosController {
     @Autowired
     PratosFavoritosRepository pratosFavoritosRepository;
@@ -27,7 +27,8 @@ public class PratosFavoritosController {
     @Autowired
     NotificacoesService notificacoesService;
 
-    @GetMapping("/id/{id}")//busca prato favorito pelo id
+    // Busca prato favorito por ID (REST: GET /pratos-favoritos/{id})
+    @GetMapping({"/{id}", "/id/{id}"})
     public PratosFavoritos buscarPorId(@PathVariable("id") int id){
         return pratosFavoritosRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -35,10 +36,18 @@ public class PratosFavoritosController {
                 ));
     }
 
-    @GetMapping("/all")//busca todos os pratos favoritos
-    public List<PratosFavoritos> buscarTodosPratosFavoritos(){return pratosFavoritosRepository.findAll();}
+    // Listagem com suporte a filtro por usuário (REST: GET /pratos-favoritos?userId=...)
+    @GetMapping
+    public List<PratosFavoritos> buscarTodosPratosFavoritos(@RequestParam(required = false) Integer userId){
+        if (userId != null) {
+            return pratosFavoritosRepository.findByUserId(userId);
+        }
+        return pratosFavoritosRepository.findAll();
+    }
 
-    @PostMapping("/cadastrar")//cadastra um prato favorito
+    // Cadastro de favorito (REST: POST /pratos-favoritos)
+    @PostMapping({"", "/cadastrar"})
+    @ResponseStatus(HttpStatus.CREATED)
     public PratosFavoritos cadastroPratosFavoritos (@RequestBody @Valid PratosFavoritos pratoFavoritos){
         Integer pratoId = pratoFavoritos.getPrato() != null
                 ? pratoFavoritos.getPrato().getId() : null;
@@ -50,7 +59,8 @@ public class PratosFavoritosController {
                     .orElseThrow(() -> new ResponseStatusException(
                             HttpStatus.NOT_FOUND, "Prato não encontrado"));
             pratoFavoritos.setPrato(prato);
-        }if (userId != null){
+        }
+        if (userId != null){
             var user = userRepository.findById(userId)
                     .orElseThrow(() -> new ResponseStatusException(
                             HttpStatus.NOT_FOUND, "User não encontrado"));
@@ -68,7 +78,9 @@ public class PratosFavoritosController {
         return pratosFavoritosRepository.save(pratoFavoritos);
     }
 
-    @DeleteMapping("/deletar/{id}") //deleta prato favorito pelo id
+    // Exclusão de favorito (REST: DELETE /pratos-favoritos/{id})
+    @DeleteMapping({"/{id}", "/deletar/{id}"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarPratoFavorito(@PathVariable(value = "id") int id){
         pratosFavoritosRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -76,14 +88,10 @@ public class PratosFavoritosController {
         pratosFavoritosRepository.deleteById(id);
     }
 
-    @PostMapping("/notificar")
-    public ResponseEntity<String> enviarNotificacoes() {
-
+    // Disparo de notificações de favoritos (REST: POST /pratos-favoritos/notificacoes)
+    @PostMapping({"/notificar", "/notificacoes"})
+    public ResponseEntity<Map<String, String>> enviarNotificacoes() {
         notificacoesService.enviarNotificacoesPratosFavoritos();
-
-        return ResponseEntity.ok(
-                "Notificações enviadas com sucesso"
-        );
+        return ResponseEntity.ok(Map.of("mensagem", "Notificações enviadas com sucesso"));
     }
-
 }

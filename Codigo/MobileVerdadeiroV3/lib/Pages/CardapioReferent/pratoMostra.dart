@@ -64,7 +64,7 @@ class _PratoPageState extends State<PratoPage> {
   // ============================================================
 
   Future<void> buscarPrato() async {
-    final url = Uri.parse('http://localhost:8080/pratos/id/${widget.pratoId}');
+    final url = Uri.parse('http://localhost:8080/pratos/${widget.pratoId}');
 
     try {
       final response = await http.get(url);
@@ -88,7 +88,7 @@ class _PratoPageState extends State<PratoPage> {
   // ============================================================
 
   Future<void> buscarValorNutricional() async {
-    final url = Uri.parse('http://localhost:8080/valorNutricional/all');
+    final url = Uri.parse('http://localhost:8080/valorNutricional');
 
     try {
       final response = await http.get(url);
@@ -117,7 +117,7 @@ class _PratoPageState extends State<PratoPage> {
   // ============================================================
 
   Future<void> buscarAvaliacoes() async {
-    final url = Uri.parse('http://localhost:8080/avaliacoes/all');
+    final url = Uri.parse('http://localhost:8080/avaliacoes');
 
     try {
       final response = await http.get(url);
@@ -158,7 +158,7 @@ class _PratoPageState extends State<PratoPage> {
   // ============================================================
 
   Future<void> verificarFavorito() async {
-    final url = Uri.parse('http://localhost:8080/pratosFavoritos/all');
+    final url = Uri.parse('http://localhost:8080/pratosFavoritos');
 
     try {
       final response = await http.get(url);
@@ -192,7 +192,7 @@ class _PratoPageState extends State<PratoPage> {
   // ============================================================
 
   Future<void> adicionarFavorito() async {
-    final url = Uri.parse('http://localhost:8080/pratosFavoritos/cadastrar');
+    final url = Uri.parse('http://localhost:8080/pratosFavoritos');
 
     try {
       final response = await http.post(
@@ -241,7 +241,7 @@ class _PratoPageState extends State<PratoPage> {
     }
 
     final url = Uri.parse(
-      'http://localhost:8080/pratosFavoritos/deletar/$idFavorito',
+      'http://localhost:8080/pratosFavoritos/$idFavorito',
     );
 
     try {
@@ -281,7 +281,7 @@ class _PratoPageState extends State<PratoPage> {
   // ============================================================
 
   Future<void> cadastrarAvaliacao(int nota, String comentario) async {
-    final url = Uri.parse('http://localhost:8080/avaliacoes/cadastrar');
+    final url = Uri.parse('http://localhost:8080/avaliacoes');
 
     try {
       setState(() {
@@ -346,7 +346,7 @@ class _PratoPageState extends State<PratoPage> {
     int nota,
     String comentario,
   ) async {
-    final url = Uri.parse('http://localhost:8080/avaliacoes/atualizar');
+    final url = Uri.parse('http://localhost:8080/avaliacoes/${avaliacao.id}');
 
     try {
       setState(() {
@@ -403,7 +403,7 @@ class _PratoPageState extends State<PratoPage> {
 
   Future<void> excluirAvaliacao(Avaliacao avaliacao) async {
     final url = Uri.parse(
-      'http://localhost:8080/avaliacoes/deletar/${avaliacao.id}',
+      'http://localhost:8080/avaliacoes/${avaliacao.id}',
     );
 
     try {

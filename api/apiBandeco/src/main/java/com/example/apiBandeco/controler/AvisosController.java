@@ -1,7 +1,6 @@
 package com.example.apiBandeco.controler;
 
 import com.example.apiBandeco.model.Avisos;
-import com.example.apiBandeco.model.Notificacoes;
 import com.example.apiBandeco.repository.AvisosRepository;
 import com.example.apiBandeco.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -14,14 +13,15 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/avisos")
+@RequestMapping({"/avisos", "/api/v1/avisos"})
 public class AvisosController {
     @Autowired
     UserRepository userRepository;
     @Autowired
     AvisosRepository avisosRepository;
 
-    @GetMapping("/id/{id}")//busca avisos pelo id
+    // Busca aviso por ID (REST: GET /avisos/{id})
+    @GetMapping({"/{id}", "/id/{id}"})
     public Avisos buscarPorId(@PathVariable("id") int id){
         return avisosRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -29,10 +29,15 @@ public class AvisosController {
                 ));
     }
 
-    @GetMapping("/all")//busca todos os avisos
-    public List<Avisos> buscarTodosAvisos(){return avisosRepository.findAll();}
+    // Listagem de avisos (REST: GET /avisos)
+    @GetMapping
+    public List<Avisos> buscarTodosAvisos(){
+        return avisosRepository.findAll();
+    }
 
-    @PostMapping("/cadastrar")//cadastra um aviso
+    // Cadastro de aviso (REST: POST /avisos)
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Avisos cadastroAvisos (@RequestBody @Valid Avisos aviso){
         Integer userId = aviso.getUser() != null
                 ? aviso.getUser().getId() : null;
@@ -46,10 +51,12 @@ public class AvisosController {
         return avisosRepository.save(aviso);
     }
 
-    @PutMapping("/atualizar") //Atualiza Avisos
-    public Avisos atualizaAvisos (@RequestBody @Valid Avisos aviso){
-
-        avisosRepository.findById(aviso.getId())
+    // Atualização de aviso (REST: PUT /avisos/{id})
+    @PutMapping({"/{id}", "/atualizar", ""})
+    public Avisos atualizaAvisos (@PathVariable(value = "id", required = false) Integer pathId,
+                                  @RequestBody @Valid Avisos aviso){
+        int id = pathId != null ? pathId : aviso.getId();
+        avisosRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Aviso não encontrado"));
 
@@ -61,11 +68,13 @@ public class AvisosController {
                             HttpStatus.NOT_FOUND, "User não encontrado"));
             aviso.setUser(user);
         }
-
+        aviso.setId(id);
         return avisosRepository.save(aviso);
     }
 
-    @DeleteMapping("/deletar/{id}") //deleta avisos pelo id
+    // Exclusão de aviso (REST: DELETE /avisos/{id})
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarAvisos(@PathVariable(value = "id") int id){
         var aviso = avisosRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(

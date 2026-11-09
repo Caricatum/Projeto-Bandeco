@@ -64,7 +64,7 @@ class _RegistroAlergiasState extends State<RegistroAlergias> {
     try {
       // Busca dados completos do usuário para recuperar o senhaHash
       final usuarioResponse = await http.get(
-        Uri.parse('http://localhost:8080/user/id/${widget.usuario.id}'),
+        Uri.parse('http://localhost:8080/user/${widget.usuario.id}'),
       );
 
       if (usuarioResponse.statusCode != 200) {
@@ -90,7 +90,7 @@ class _RegistroAlergiasState extends State<RegistroAlergias> {
         'alergiaGergilim': alergiaGergilim,
       };
 
-      final uri = Uri.parse('http://localhost:8080/user/atualizar');
+      final uri = Uri.parse('http://localhost:8080/user/${widget.usuario.id}');
       final request = http.MultipartRequest('PUT', uri);
 
       request.files.add(
