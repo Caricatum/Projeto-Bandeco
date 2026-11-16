@@ -1,4 +1,4 @@
-﻿using ProjetoBandejao.Models;
+using ProjetoBandejao.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +9,12 @@ namespace ProjetoBandejao.Services
 {
     public static class UsuarioSession
     {
-        public static Usuario UsuarioLogado
+        public static Usuario? UsuarioLogado
         {
             get;
             set;
         }
+
+        public static bool IsModoOffline { get; set; } = false;
     }
 }

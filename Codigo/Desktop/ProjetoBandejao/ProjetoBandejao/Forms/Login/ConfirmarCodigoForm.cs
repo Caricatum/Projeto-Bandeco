@@ -80,6 +80,35 @@ namespace ProjetoBandejao.Forms
             }
         }
 
+        private void linkReenviar_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtEmail.Text))
+            {
+                MessageBox.Show("Informe o e-mail para reenviar o código.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            UsuarioService service = new UsuarioService();
+            bool sucesso = service.ReenviarCodigoCadastro(txtEmail.Text.Trim(), out string mensagemRetorno);
+
+            if (sucesso)
+            {
+                MessageBox.Show(
+                    mensagemRetorno + "\n\nVerifique sua caixa de entrada e também a pasta de Spam/Lixo Eletrônico.",
+                    "Sucesso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show(
+                    string.IsNullOrWhiteSpace(mensagemRetorno) ? "Erro ao reenviar código." : mensagemRetorno,
+                    "Erro",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
         private void ConfirmarCodigoForm_Load(object sender, EventArgs e)
         {
             this.Shown += (s, e) =>

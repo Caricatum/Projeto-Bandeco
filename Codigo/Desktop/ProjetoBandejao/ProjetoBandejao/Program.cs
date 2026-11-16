@@ -1,5 +1,6 @@
-using ProjetoBandejao.Data;
+﻿using ProjetoBandejao.Data;
 using ProjetoBandejao.Forms;
+using ProjetoBandejao.Forms.Home;
 using ProjetoBandejao.Services;
 
 namespace ProjetoBandejao
@@ -7,32 +8,31 @@ namespace ProjetoBandejao
     internal static class Program
     {
         [STAThread]
-        static async Task Main()
+        static void Main()
         {
             ApplicationConfiguration.Initialize();
 
             // Cria/inicializa o banco local
             SQLiteDatabase.Inicializar();
 
-            try
+            // Sincroniza em segundo plano com a API para abrir o login instantaneamente
+            _ = Task.Run(async () =>
             {
-                // Busca os usuários da API
-                var api = new ApiService();
-                var usuarios = await api.ObterUsuarios();
-
-                // Salva/atualiza no SQLite local
-                SQLiteDatabase.SalvarFuncionarios(usuarios);
-
-                Console.WriteLine(
-                    $"Sincronização concluída: {usuarios.Count} usuários."
-                );
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(
-                    $"Erro ao sincronizar com a API: {ex.Message}"
-                );
-            }
+                try
+                {
+                    var api = new ApiService();
+                    var usuarios = await api.ObterUsuarios();
+                    if (usuarios != null && usuarios.Count > 0)
+                    {
+                        SQLiteDatabase.SalvarFuncionarios(usuarios);
+                        Console.WriteLine($"Sincronização concluída: {usuarios.Count} usuários.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erro ao sincronizar com a API: {ex.Message}");
+                }
+            });
 
             Application.Run(new LoginForm());
         }

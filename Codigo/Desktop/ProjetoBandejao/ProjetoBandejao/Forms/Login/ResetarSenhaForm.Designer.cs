@@ -130,9 +130,9 @@
             // 
             txtCodigo.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtCodigo.Location = new Point(60, 515);
-            txtCodigo.Mask = "_ _ _ _ _ _";
+            txtCodigo.Mask = "0 0 0 0 0 0";
             txtCodigo.Name = "txtCodigo";
-            txtCodigo.PromptChar = '0';
+            txtCodigo.PromptChar = ' ';
             txtCodigo.Size = new Size(540, 33);
             txtCodigo.TabIndex = 8;
             txtCodigo.TextAlign = HorizontalAlignment.Center;

@@ -1,4 +1,4 @@
-﻿namespace ProjetoBandejao.Forms
+namespace ProjetoBandejao.Forms
 {
     partial class ConfirmarCodigoForm
     {
@@ -103,7 +103,7 @@
             mskCodigo.Location = new Point(50, 510);
             mskCodigo.Mask = "0 0 0 0 0 0";
             mskCodigo.Name = "mskCodigo";
-            mskCodigo.PromptChar = '0';
+            mskCodigo.PromptChar = ' ';
             mskCodigo.Size = new Size(500, 43);
             mskCodigo.TabIndex = 5;
             mskCodigo.TextAlign = HorizontalAlignment.Center;
@@ -167,6 +167,7 @@
             linkReenviar.TabIndex = 10;
             linkReenviar.TabStop = true;
             linkReenviar.Text = "Reenviar";
+            linkReenviar.LinkClicked += linkReenviar_LinkClicked;
             // 
             // ConfirmarCodigoForm
             // 

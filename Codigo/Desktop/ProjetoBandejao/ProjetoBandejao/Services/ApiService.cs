@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -15,7 +15,8 @@ namespace ProjetoBandejao.Services
         {
             _httpClient = new HttpClient
             {
-                BaseAddress = new Uri("http://localhost:8080")
+                BaseAddress = new Uri("http://localhost:8080"),
+                Timeout = TimeSpan.FromSeconds(5)
             };
         }
 

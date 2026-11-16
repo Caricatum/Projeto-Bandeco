@@ -29,6 +29,35 @@ namespace ProjetoBandejao.Forms
             };
             pnlChartContent.Controls.Add(chartPanel);
 
+            // Se estiver em modo offline, exibe aviso visual no topo
+            if (UsuarioSession.IsModoOffline)
+            {
+                var badgeOffline = new Guna2Panel
+                {
+                    Size = new Size(160, 28),
+                    BorderRadius = 6,
+                    FillColor = Color.FromArgb(255, 243, 205),
+                    BorderColor = Color.FromArgb(255, 193, 7),
+                    BorderThickness = 1,
+                    Location = new Point(pnlTop.Width - 180, 16),
+                    Anchor = AnchorStyles.Top | AnchorStyles.Right
+                };
+
+                var lblStatusOffline = new Label
+                {
+                    Text = "⚡ Modo Offline (SQLite)",
+                    Font = new Font("Segoe UI", 8.5F, FontStyle.Bold),
+                    ForeColor = Color.FromArgb(133, 100, 4),
+                    Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    BackColor = Color.Transparent
+                };
+
+                badgeOffline.Controls.Add(lblStatusOffline);
+                pnlTop.Controls.Add(badgeOffline);
+                badgeOffline.BringToFront();
+            }
+
             // Carrega dados dinâmicos da API
             CarregarDadosDashboard();
 
@@ -133,13 +162,14 @@ namespace ProjetoBandejao.Forms
 
         private void HomeForm_Load(object sender, EventArgs e)
         {
+            this.FormClosed += (s, ev) => Application.Exit();
             sidebar.OnHomeClick += (s, ev) => OpenChildForm(null);
             sidebar.OnRefeicoesClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.frmRefeicoes());
-            sidebar.OnCardapioClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.frmRefeicoes());
+            sidebar.OnCardapioClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.CardapioForm());
             sidebar.OnFuncionariosClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.FuncionariosForm());
             sidebar.OnConfiguracoesClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.ConfiguracoesForm());
             sidebar.OnMuralClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.MuralForm());
-            sidebar.OnRelatoriosClick += (s, ev) => OpenChildForm(new ProjetoBandejao.Forms.Home.frmRefeicoes());
+            sidebar.OnRelatoriosClick += (s, ev) => MessageBox.Show("O módulo de relatórios e estatísticas estará disponível na próxima versão.", "Relatórios", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void OpenChildForm(Form? childForm)

@@ -47,13 +47,42 @@ namespace ProjetoBandejao.Data
 
                 using var command = new SqliteCommand(sql, connection);
                 command.ExecuteNonQuery();
+
+                // Garante compatibilidade caso o banco tenha sido criado em versão anterior sem a coluna EmailConfirmado
+                try
+                {
+                    using var checkCmd = new SqliteCommand("ALTER TABLE Funcionarios ADD COLUMN EmailConfirmado INTEGER NOT NULL DEFAULT 1;", connection);
+                    checkCmd.ExecuteNonQuery();
+                }
+                catch
+                {
+                    // A coluna já existe, ignorar
+                }
+
+                // Garante ao menos um usuário de contingência para acesso offline caso o banco esteja vazio
+                try
+                {
+                    using var countCmd = new SqliteCommand("SELECT COUNT(*) FROM Funcionarios;", connection);
+                    long total = (long)(countCmd.ExecuteScalar() ?? 0);
+                    if (total == 0)
+                    {
+                        using var seedCmd = new SqliteCommand(
+                            "INSERT OR IGNORE INTO Funcionarios (Id, Login, Nome, Funcionario, EmailConfirmado) VALUES (1, 'admin@cotil.unicamp.br', 'Administrador (Offline)', 1, 1);",
+                            connection);
+                        seedCmd.ExecuteNonQuery();
+                    }
+                }
+                catch
+                {
+                    // Ignora falha de seed
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"[SQLiteDatabase.Inicializar] Erro: {ex.Message}");
             }
         }
-
+        
         public static void SalvarFuncionarios(List<Usuario> usuarios)
         {
             if (usuarios == null || usuarios.Count == 0) return;
@@ -66,13 +95,8 @@ namespace ProjetoBandejao.Data
                 using var transaction = connection.BeginTransaction();
 
                 string sql = @"
-                    INSERT INTO Funcionarios (Id, Login, Nome, Funcionario, EmailConfirmado)
-                    VALUES ($id, $login, $nome, $funcionario, $emailConfirmado)
-                    ON CONFLICT(Id) DO UPDATE SET
-                        Login = excluded.Login,
-                        Nome = excluded.Nome,
-                        Funcionario = excluded.Funcionario,
-                        EmailConfirmado = excluded.EmailConfirmado;
+                    INSERT OR REPLACE INTO Funcionarios (Id, Login, Nome, Funcionario, EmailConfirmado)
+                    VALUES ($id, $login, $nome, $funcionario, $emailConfirmado);
                 ";
 
                 foreach (var u in usuarios)

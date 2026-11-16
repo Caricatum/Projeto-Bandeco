@@ -3,6 +3,7 @@ using ProjetoBandejao.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Windows.Forms;
@@ -11,7 +12,7 @@ namespace ProjetoBandejao.Services
 {
     public class UsuarioService
     {
-        private readonly HttpClient client = new HttpClient();
+        private readonly HttpClient client = new HttpClient { Timeout = TimeSpan.FromSeconds(15) };
 
         private const string API_URL = "http://localhost:8080/user";
 
@@ -84,9 +85,12 @@ namespace ProjetoBandejao.Services
                 };
 
                 string json = JsonSerializer.Serialize(dados);
+                using var multipartContent = new MultipartFormDataContent();
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                multipartContent.Add(content, "user");
 
-                HttpResponseMessage response = client.PutAsync($"{API_URL}/atualizar", content).Result;
+                HttpResponseMessage response = client.PutAsync($"{API_URL}/atualizar", multipartContent).Result;
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
@@ -96,10 +100,11 @@ namespace ProjetoBandejao.Services
             }
         }
 
-        // Validar Login
-        public bool ValidarLogin(Usuario usuario, out string mensagemErro)
+        // Validar Login (com contingência para Modo Offline caso o servidor esteja inacessível)
+        public bool ValidarLogin(Usuario usuario, out string mensagemErro, out bool isOffline)
         {
             mensagemErro = string.Empty;
+            isOffline = false;
 
             try
             {
@@ -119,42 +124,81 @@ namespace ProjetoBandejao.Services
                     return false;
                 }
 
+                isOffline = false;
+                return true;
+            }
+            catch (Exception)
+            {
+                // API inacessível - Tenta autenticar pelo banco local SQLite em contingência
+                var userLocal = SQLiteDatabase.ObterFuncionarios()
+                    .Find(u => string.Equals(u.Login, usuario.Login.Trim(), StringComparison.OrdinalIgnoreCase));
+
+                if (userLocal != null)
+                {
+                    isOffline = true;
+                    mensagemErro = "Servidor offline. Acesso liberado pelo banco local (Modo Offline).";
+                    return true;
+                }
+
+                mensagemErro = "Servidor da API inacessível e o usuário não foi localizado no banco local SQLite.";
+                return false;
+            }
+        }
+
+        public bool ValidarLogin(Usuario usuario, out string mensagemErro)
+        {
+            return ValidarLogin(usuario, out mensagemErro, out _);
+        }
+
+        // Solicitar Reset Senha
+        public bool SolicitarResetSenha(string email, out string mensagemErro)
+        {
+            mensagemErro = string.Empty;
+            try
+            {
+                string url = $"{API_URL}/solicitarResetSenha?login={Uri.EscapeDataString(email.Trim())}";
+
+                HttpResponseMessage response = client.PostAsync(url, null).Result;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        mensagemErro = "Nenhum usuário cadastrado com este e-mail.";
+                    }
+                    else
+                    {
+                        string body = response.Content.ReadAsStringAsync().Result;
+                        mensagemErro = string.IsNullOrWhiteSpace(body) ? $"Erro na solicitação ({response.StatusCode})." : body;
+                    }
+                    return false;
+                }
+
                 return true;
             }
             catch (Exception ex)
             {
-                mensagemErro = ex.Message;
+                mensagemErro = $"Não foi possível conectar à API: {ex.Message}";
                 return false;
             }
         }
 
-        // Solicitar Reset Senha
         public bool SolicitarResetSenha(string email)
         {
-            try
-            {
-                string url = $"{API_URL}/solicitarResetSenha?login={Uri.EscapeDataString(email)}";
-
-                HttpResponseMessage response = client.PostAsync(url, null).Result;
-
-                return response.IsSuccessStatusCode;
-            }
-            catch
-            {
-                return false;
-            }
+            return SolicitarResetSenha(email, out _);
         }
 
         // Resetar Senha
-        public bool ResetarSenha(string email, string codigo, string novaSenha)
+        public bool ResetarSenha(string email, string codigo, string novaSenha, out string mensagemErro)
         {
+            mensagemErro = string.Empty;
             try
             {
                 // Limpa espaços ou traços do código
                 string codigoLimpo = codigo.Replace(" ", "").Replace("_", "").Trim();
 
                 string url = $"{API_URL}/resetSenha" +
-                    $"?login={Uri.EscapeDataString(email)}" +
+                    $"?login={Uri.EscapeDataString(email.Trim())}" +
                     $"&codigo={Uri.EscapeDataString(codigoLimpo)}" +
                     $"&novaSenha={Uri.EscapeDataString(novaSenha)}";
 
@@ -162,13 +206,28 @@ namespace ProjetoBandejao.Services
 
                 HttpResponseMessage response = client.SendAsync(request).Result;
 
-                return response.IsSuccessStatusCode;
+                if (!response.IsSuccessStatusCode)
+                {
+                    string body = response.Content.ReadAsStringAsync().Result;
+                    mensagemErro = string.IsNullOrWhiteSpace(body) ? "Código inválido ou expirado." : body;
+                    return false;
+                }
+
+                return true;
             }
-            catch
+            catch (Exception ex)
             {
+                mensagemErro = $"Erro de conexão com o servidor: {ex.Message}";
                 return false;
             }
         }
+
+        public bool ResetarSenha(string email, string codigo, string novaSenha)
+        {
+            return ResetarSenha(email, codigo, novaSenha, out _);
+        }
+
+
 
         // Confirmar Email
         public bool ConfirmarEmail(string email, string codigo, out string respostaErro)
@@ -198,6 +257,69 @@ namespace ProjetoBandejao.Services
             }
         }
 
+        // Obter Usuário por Login
+        public Usuario? ObterPorLogin(string login)
+        {
+            try
+            {
+                string url = $"{API_URL}/login/{Uri.EscapeDataString(login)}";
+                HttpResponseMessage res = client.GetAsync(url).Result;
+                if (res.IsSuccessStatusCode)
+                {
+                    string json = res.Content.ReadAsStringAsync().Result;
+                    return JsonSerializer.Deserialize<Usuario>(json, jsonOptions);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[UsuarioService.ObterPorLogin] Erro: {ex.Message}");
+            }
+
+            return SQLiteDatabase.ObterFuncionarios().Find(u => string.Equals(u.Login, login, StringComparison.OrdinalIgnoreCase));
+        }
+
+        // Reenviar Código de Cadastro
+        public bool ReenviarCodigoCadastro(string email, out string mensagemRetorno)
+        {
+            mensagemRetorno = string.Empty;
+            try
+            {
+                string urlUser = $"{API_URL}/login/{Uri.EscapeDataString(email.Trim())}";
+                HttpResponseMessage resUser = client.GetAsync(urlUser).Result;
+                if (!resUser.IsSuccessStatusCode)
+                {
+                    mensagemRetorno = "Usuário não localizado na base de dados.";
+                    return false;
+                }
+
+                string jsonUser = resUser.Content.ReadAsStringAsync().Result;
+                var usuario = JsonSerializer.Deserialize<Usuario>(jsonUser, jsonOptions);
+                if (usuario == null || usuario.Id <= 0)
+                {
+                    mensagemRetorno = "Não foi possível recuperar o identificador do usuário.";
+                    return false;
+                }
+
+                string urlReenvio = $"{API_URL}/reenviarCodigoCadastro?id={usuario.Id}";
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, urlReenvio);
+                HttpResponseMessage resReenvio = client.SendAsync(request).Result;
+
+                if (resReenvio.IsSuccessStatusCode)
+                {
+                    mensagemRetorno = "Novo código enviado para o seu e-mail.";
+                    return true;
+                }
+
+                mensagemRetorno = resReenvio.Content.ReadAsStringAsync().Result;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                mensagemRetorno = ex.Message;
+                return false;
+            }
+        }
+
         // Cadastrar com retorno de mensagem de erro detalhada
         public bool Cadastrar(Usuario usuario, out string mensagemErro)
         {
@@ -214,9 +336,12 @@ namespace ProjetoBandejao.Services
 
                 string json = JsonSerializer.Serialize(dados);
 
-                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                using var multipartContent = new MultipartFormDataContent();
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                multipartContent.Add(content, "user");
 
-                HttpResponseMessage response = client.PostAsync($"{API_URL}/cadastrar", content).Result;
+                HttpResponseMessage response = client.PostAsync($"{API_URL}/cadastrar", multipartContent).Result;
 
                 if (!response.IsSuccessStatusCode)
                 {

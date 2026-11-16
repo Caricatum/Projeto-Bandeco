@@ -55,7 +55,7 @@ namespace ProjetoBandejao.Services
             // 
             // pnlMain
             // 
-            pnlMain.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            pnlMain.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pnlMain.BackColor = Color.Transparent;
             pnlMain.BorderColor = Color.FromArgb(230, 230, 230);
             pnlMain.BorderRadius = 16;
@@ -83,7 +83,7 @@ namespace ProjetoBandejao.Services
             pnlMain.Location = new Point(0, 0);
             pnlMain.Name = "pnlMain";
             pnlMain.ShadowDecoration.CustomizableEdges = customizableEdges10;
-            pnlMain.Size = new Size(950, 480);
+            pnlMain.Dock = DockStyle.Fill;
             pnlMain.TabIndex = 0;
             // 
             // lblAvaliacaoVal
@@ -176,6 +176,7 @@ namespace ProjetoBandejao.Services
             // 
             // btnVerDetalhes
             // 
+            btnVerDetalhes.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnVerDetalhes.BorderRadius = 8;
             btnVerDetalhes.CustomizableEdges = customizableEdges1;
             btnVerDetalhes.FillColor = Color.Tomato;
@@ -190,6 +191,7 @@ namespace ProjetoBandejao.Services
             // 
             // btnEditar
             // 
+            btnEditar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnEditar.BorderColor = Color.FromArgb(40, 100, 40);
             btnEditar.BorderRadius = 8;
             btnEditar.BorderThickness = 1;
@@ -298,14 +300,15 @@ namespace ProjetoBandejao.Services
             // 
             // pctImage
             // 
+            pctImage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pctImage.BorderRadius = 12;
             pctImage.CustomizableEdges = customizableEdges7;
             pctImage.FillColor = Color.Transparent;
             pctImage.ImageRotate = 0F;
-            pctImage.Location = new Point(20, 3);
+            pctImage.Location = new Point(20, 20);
             pctImage.Name = "pctImage";
             pctImage.ShadowDecoration.CustomizableEdges = customizableEdges8;
-            pctImage.Size = new Size(280, 260);
+            pctImage.Size = new Size(280, 243);
             pctImage.SizeMode = PictureBoxSizeMode.StretchImage;
             pctImage.TabIndex = 1;
             pctImage.TabStop = false;

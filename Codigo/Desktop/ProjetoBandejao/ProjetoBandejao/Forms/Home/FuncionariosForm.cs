@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Guna.UI2.WinForms;
 using ProjetoBandejao.Models;
 using ProjetoBandejao.Services;
+using ProjetoBandejao.Forms.Login;
 
 namespace ProjetoBandejao.Forms.Home
 {
@@ -40,7 +41,7 @@ namespace ProjetoBandejao.Forms.Home
         {
             btnCadastrar.Click += (s, e) =>
             {
-                using var frmCad = new CadastroFuncionarioForm();
+                using var frmCad = new CadastroFuncionarioFormNovo();
                 frmCad.ShowDialog();
                 CarregarFuncionarios();
             };
@@ -151,7 +152,7 @@ namespace ProjetoBandejao.Forms.Home
 
         private void btnCadastrar_Click(object sender, EventArgs e)
         {
-            CadastroFuncionarioForm cadastro = new CadastroFuncionarioForm();
+            CadastroFuncionarioFormNovo cadastro = new CadastroFuncionarioFormNovo();
 
             cadastro.ShowDialog();
         }

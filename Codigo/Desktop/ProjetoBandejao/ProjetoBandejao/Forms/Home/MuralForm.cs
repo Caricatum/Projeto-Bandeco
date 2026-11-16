@@ -60,11 +60,11 @@ namespace ProjetoBandejao.Forms.Home
             bool maisRecente = cmbFiltroRecentes.SelectedIndex <= 0;
             if (maisRecente)
             {
-                filtrados = filtrados.OrderByDescending(a => a.DataCriacao ?? DateTime.MinValue);
+                filtrados = filtrados.OrderByDescending(a => a.DataCriacao ?? a.DataInicial ?? DateTime.MinValue);
             }
             else
             {
-                filtrados = filtrados.OrderBy(a => a.DataCriacao ?? DateTime.MinValue);
+                filtrados = filtrados.OrderBy(a => a.DataCriacao ?? a.DataInicial ?? DateTime.MinValue);
             }
 
             var listaFinal = filtrados.ToList();
@@ -205,7 +205,10 @@ namespace ProjetoBandejao.Forms.Home
             {
                 Titulo = txtNovoTitulo.Text.Trim(),
                 Descricao = txtMensagem.Text.Trim(),
-                User = UsuarioSession.UsuarioLogado
+                User = UsuarioSession.UsuarioLogado,
+                DataCriacao = DateTime.Now,
+                DataInicial = DateTime.Today,
+                DataFinal = DateTime.Today.AddDays(30)
             };
 
             bool sucesso = avisoService.Cadastrar(novoAviso);

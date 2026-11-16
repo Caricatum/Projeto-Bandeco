@@ -106,7 +106,7 @@ namespace ProjetoBandejao.Forms.Home
             btnCadastrar.Size = new Size(200, 45);
             btnCadastrar.TabIndex = 3;
             btnCadastrar.Text = "+ Cadastrar Funcionário";
-            btnCadastrar.Click += btnCadastrar_Click;
+
             // 
             // lblSubtitle
             // 

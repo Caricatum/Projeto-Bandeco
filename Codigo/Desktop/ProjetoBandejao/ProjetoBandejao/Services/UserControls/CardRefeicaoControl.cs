@@ -97,7 +97,7 @@ namespace ProjetoBandejao.Services
                     {
                         byte[] bytes = await imageClient.GetByteArrayAsync(imageUrl);
                         using var ms = new MemoryStream(bytes);
-                        pctImage.Image = Image.FromStream(ms);
+                        pctImage.Image = new Bitmap(Image.FromStream(ms));
                         return;
                     }
                 }
@@ -106,7 +106,7 @@ namespace ProjetoBandejao.Services
                 {
                     byte[] imageBytes = Convert.FromBase64String(prato.ImagemBase64);
                     using var ms = new MemoryStream(imageBytes);
-                    pctImage.Image = Image.FromStream(ms);
+                    pctImage.Image = new Bitmap(Image.FromStream(ms));
                     return;
                 }
 

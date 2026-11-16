@@ -17,6 +17,7 @@ namespace ProjetoBandejao.Forms.Home
         private string imagemBase64 = string.Empty;
         private readonly PratoService pratoService = new PratoService();
         private List<Categoria> categoriasDisponiveis = new List<Categoria>();
+        private Guna2CheckBox chkVegano;
 
         public FrmCadastroPratosNovo()
         {
@@ -26,6 +27,19 @@ namespace ProjetoBandejao.Forms.Home
             cbTipo.Items.Clear();
             cbTipo.Items.AddRange(new string[] { "Prato Principal", "Guarnição", "Salada", "Sobremesa", "Suco" });
             cbTipo.SelectedIndex = 0;
+
+            // Checkbox Vegano
+            chkVegano = new Guna2CheckBox
+            {
+                Text = "🌱 Opção Vegana",
+                Font = new Font("Segoe UI Semibold", 9.5F),
+                ForeColor = Color.ForestGreen,
+                CheckedState = { FillColor = Color.ForestGreen, BorderColor = Color.ForestGreen },
+                Location = new Point(170, 188),
+                AutoSize = true
+            };
+            cardMain.Controls.Add(chkVegano);
+            chkVegano.BringToFront();
 
             // Eventos
             btnAdicionarIngrediente.Click += BtnAdicionarIngrediente_Click;
@@ -138,6 +152,7 @@ namespace ProjetoBandejao.Forms.Home
         private void BtnLimpar_Click(object? sender, EventArgs e)
         {
             txtNome.Clear();
+            if (chkVegano != null) chkVegano.Checked = false;
             if (cbCategoria.Items.Count > 0) cbCategoria.SelectedIndex = 0;
             if (cbTipo.Items.Count > 0) cbTipo.SelectedIndex = 0;
             txtDescricao.Clear();
@@ -175,7 +190,8 @@ namespace ProjetoBandejao.Forms.Home
                 categoriaObj = new Categoria { Id = 1, Descricao = catNome };
             }
 
-            bool isVegano = catNome.Contains("Vegano", StringComparison.OrdinalIgnoreCase) || 
+            bool isVegano = (chkVegano != null && chkVegano.Checked) || 
+                            catNome.Contains("Vegano", StringComparison.OrdinalIgnoreCase) || 
                             catNome.Contains("Vegetariano", StringComparison.OrdinalIgnoreCase);
 
             // Parsing Nutricional
