@@ -100,7 +100,7 @@ class _CadastropratoState extends State<Cadastroprato> {
       salvando = true;
     });
 
-    final url = Uri.parse('http://localhost:8080/pratos/cadastrar');
+    final url = Uri.parse('http://localhost:8080/pratos');
 
     try {
       final prato = {

@@ -33,7 +33,7 @@ class _CadastraCardapioState extends State<CadastraCardapio> {
   Future<void> carregarPratos() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/pratos/all'),
+        Uri.parse('http://localhost:8080/pratos'),
       );
 
       if (response.statusCode != 200) {
@@ -75,7 +75,7 @@ class _CadastraCardapioState extends State<CadastraCardapio> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080/cardapio/cadastrar'),
+        Uri.parse('http://localhost:8080/cardapio'),
         headers: {
           'Content-Type': 'application/json',
         },

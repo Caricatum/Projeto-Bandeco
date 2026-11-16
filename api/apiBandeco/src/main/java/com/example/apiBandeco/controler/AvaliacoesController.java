@@ -1,6 +1,5 @@
 package com.example.apiBandeco.controler;
 
-
 import com.example.apiBandeco.model.Avaliacoes;
 import com.example.apiBandeco.model.Pratos;
 import com.example.apiBandeco.repository.AvaliacoesRepository;
@@ -14,9 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+
 @CrossOrigin
 @RestController
-@RequestMapping("/avaliacoes")
+@RequestMapping({"/avaliacoes", "/api/v1/avaliacoes"})
 @RequiredArgsConstructor
 public class AvaliacoesController {
     @Autowired
@@ -27,7 +27,8 @@ public class AvaliacoesController {
     UserRepository userRepository;
     private final GeminiAvaliacaoService geminiAvaliacaoService;
 
-    @GetMapping("/id/{id}")//busca avaliacao pelo id
+    // Busca avaliação por ID (REST: GET /avaliacoes/{id})
+    @GetMapping({"/{id}", "/id/{id}"})
     public Avaliacoes buscarPorId(@PathVariable("id") int id){
         return avaliacoesRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -35,10 +36,21 @@ public class AvaliacoesController {
                 ));
     }
 
-    @GetMapping("/all")//busca todas as avaliações
-    public List<Avaliacoes> buscarTodasAvaliacoes(){return avaliacoesRepository.findAll();}
+    // Listagem com suporte a filtros (REST: GET /avaliacoes?pratoId=...&userId=...)
+    @GetMapping
+    public List<Avaliacoes> buscarTodasAvaliacoes(
+            @RequestParam(required = false) Integer pratoId,
+            @RequestParam(required = false) Integer userId){
 
-    @PostMapping("/cadastrar")//cadastra uma avaliação
+        if (pratoId != null) {
+            return avaliacoesRepository.findByPratoId(pratoId);
+        }
+        return avaliacoesRepository.findAll();
+    }
+
+    // Cadastro de avaliação (REST: POST /avaliacoes)
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Avaliacoes cadastroAvaliacoes (@RequestBody @Valid Avaliacoes avaliacao){
         Integer pratoId = avaliacao.getPrato() != null
                 ? avaliacao.getPrato().getId() : null;
@@ -50,7 +62,8 @@ public class AvaliacoesController {
                     .orElseThrow(() -> new ResponseStatusException(
                             HttpStatus.NOT_FOUND, "Prato não encontrado"));
             avaliacao.setPrato(prato);
-        }if (userId != null){
+        }
+        if (userId != null){
             var user = userRepository.findById(userId)
                     .orElseThrow(() -> new ResponseStatusException(
                             HttpStatus.NOT_FOUND, "User não encontrado"));
@@ -71,7 +84,6 @@ public class AvaliacoesController {
                 avaliacoesRepository.findByPratoId(pratoId);
 
         if (avaliacoes.size() >= 3) {
-
             Pratos prato = pratosRepository.findById(pratoId)
                     .orElseThrow(() -> new ResponseStatusException(
                             HttpStatus.NOT_FOUND,
@@ -84,10 +96,12 @@ public class AvaliacoesController {
         return novaAvaliacao;
     }
 
-    @PutMapping("/atualizar")
-    public Avaliacoes atualizaAvaliacao (@RequestBody @Valid Avaliacoes avaliacao){
-
-        avaliacoesRepository.findById(avaliacao.getId())
+    // Atualização de avaliação (REST: PUT /avaliacoes/{id})
+    @PutMapping({"/{id}", "/atualizar", ""})
+    public Avaliacoes atualizaAvaliacao (@PathVariable(value = "id", required = false) Integer pathId,
+                                         @RequestBody @Valid Avaliacoes avaliacao){
+        int id = pathId != null ? pathId : avaliacao.getId();
+        avaliacoesRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Avaliação não encontrada"));
 
@@ -97,7 +111,7 @@ public class AvaliacoesController {
                 ? avaliacao.getUser().getId() : null;
 
         boolean jaExiste = avaliacoesRepository
-                .existsByUserIdAndPratoIdAndIdNot(userId, pratoId, avaliacao.getId());
+                .existsByUserIdAndPratoIdAndIdNot(userId, pratoId, id);
 
         if (jaExiste) {
             throw new ResponseStatusException(
@@ -109,16 +123,20 @@ public class AvaliacoesController {
                     .orElseThrow(() -> new ResponseStatusException(
                             HttpStatus.NOT_FOUND, "Prato não encontrado"));
             avaliacao.setPrato(prato);
-        }if (userId != null){
+        }
+        if (userId != null){
             var user = userRepository.findById(userId)
                     .orElseThrow(() -> new ResponseStatusException(
                             HttpStatus.NOT_FOUND, "User não encontrado"));
             avaliacao.setUser(user);
         }
+        avaliacao.setId(id);
         return avaliacoesRepository.save(avaliacao);
     }
 
-    @DeleteMapping("/deletar/{id}") //deleta Avaliação pelo id
+    // Exclusão de avaliação (REST: DELETE /avaliacoes/{id})
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarAvaliacao(@PathVariable(value = "id") int id){
         var avaliacao = avaliacoesRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -126,5 +144,4 @@ public class AvaliacoesController {
 
         avaliacoesRepository.delete(avaliacao);
     }
-
 }

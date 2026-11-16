@@ -23,7 +23,7 @@ namespace ProjetoBandejao.Services
         {
             try
             {
-                HttpResponseMessage response = client.GetAsync($"{API_URL}/all").Result;
+                HttpResponseMessage response = client.GetAsync(API_URL).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     string json = response.Content.ReadAsStringAsync().Result;
@@ -79,7 +79,7 @@ namespace ProjetoBandejao.Services
                 string json = JsonSerializer.Serialize(payload);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = client.PostAsync($"{API_URL}/cadastrar", content).Result;
+                HttpResponseMessage response = client.PostAsync(API_URL, content).Result;
                 if (!response.IsSuccessStatusCode)
                 {
                     string erroMsg = response.Content.ReadAsStringAsync().Result;
@@ -99,7 +99,7 @@ namespace ProjetoBandejao.Services
         {
             try
             {
-                HttpResponseMessage response = client.DeleteAsync($"{API_URL}/deletar/{id}").Result;
+                HttpResponseMessage response = client.DeleteAsync($"{API_URL}/{id}").Result;
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)

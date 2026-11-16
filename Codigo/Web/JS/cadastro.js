@@ -43,7 +43,7 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
     message.innerText = 'Processando cadastro e enviando código...';
     btnCadastrar.disabled = true;
 
-    fetchAPI('/user/cadastrar', {
+    fetchAPI('/user', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

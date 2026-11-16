@@ -75,7 +75,7 @@ if (btnNovoPrato) {
 // =============================================
 async function carregarPratos() {
     try {
-        const res = await fetch(`${API}/pratos/all`);
+        const res = await fetch(`${API}/pratos`);
         todosPratos = await res.json();
     } catch (e) {
         console.error('Erro ao carregar pratos:', e);
@@ -85,7 +85,7 @@ async function carregarPratos() {
 
 async function carregarAvaliacoes() {
     try {
-        const res = await fetch(`${API}/avaliacoes/all`);
+        const res = await fetch(`${API}/avaliacoes`);
         todasAvaliacoes = await res.json();
     } catch (e) {
         todasAvaliacoes = [];
@@ -95,7 +95,7 @@ async function carregarAvaliacoes() {
 async function carregarFavoritos() {
     if (!userId) return;
     try {
-        const res = await fetch(`${API}/pratosFavoritos/all`);
+        const res = await fetch(`${API}/pratosFavoritos`);
         const todos = await res.json();
         // filtra só os do usuário logado
         meusFavoritos = todos.filter(f => f.user && f.user.id === userId);
@@ -106,7 +106,7 @@ async function carregarFavoritos() {
 
 async function carregarCategorias() {
     try {
-        const res = await fetch(`${API}/categoria/all`);
+        const res = await fetch(`${API}/categoria`);
         const cats = await res.json();
         const sel = document.getElementById('filtroCategoria');
         cats.forEach(c => {
@@ -342,7 +342,7 @@ async function deletarPrato(pratoId, nome) {
     }
 
     try {
-        const res = await fetch(`${API}/pratos/deletar/${pratoId}`, { method: 'DELETE' });
+        const res = await fetch(`${API}/pratos/${pratoId}`, { method: 'DELETE' });
         if (!res.ok) throw new Error(await res.text() || 'Erro ao deletar prato.');
 
         alert('✅ Prato excluído com sucesso!');
@@ -404,7 +404,7 @@ function configurarModalAvaliar() {
         if (!nota) { msg.textContent = 'Selecione uma nota!'; return; }
 
         try {
-            const res = await fetch(`${API}/avaliacoes/cadastrar`, {
+            const res = await fetch(`${API}/avaliacoes`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -447,7 +447,7 @@ function configurarModalFavoritar() {
 
         try {
             // 1. Cadastra favorito
-            const res = await fetch(`${API}/pratosFavoritos/cadastrar`, {
+            const res = await fetch(`${API}/pratosFavoritos`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -461,7 +461,7 @@ function configurarModalFavoritar() {
             // 2. Se marcou notificação, cadastra notificação na API
             if (notificar) {
                 const nomePrato = document.getElementById('nomePratoFavoritar').textContent;
-                await fetch(`${API}/notificacoes/cadastrar`, {
+                await fetch(`${API}/notificacoes`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -490,7 +490,7 @@ async function desfavoritar(pratoId, favId) {
     if (!confirm('Remover dos favoritos?')) return;
 
     try {
-        const res = await fetch(`${API}/pratosFavoritos/deletar/${favId}`, { method: 'DELETE' });
+        const res = await fetch(`${API}/pratosFavoritos/${favId}`, { method: 'DELETE' });
         if (!res.ok) throw new Error(await res.text());
         await carregarFavoritos();
         renderizarPratos();
@@ -553,7 +553,7 @@ if (btnExcluirImg) {
         if (!pratoEmEdicao || !pratoEmEdicao.id) return;
         if (!confirm('Deseja realmente remover a imagem deste prato?')) return;
         try {
-            const res = await fetch(`${API}/pratos/excluirImagem/${pratoEmEdicao.id}`, { method: 'DELETE' });
+            const res = await fetch(`${API}/pratos/${pratoEmEdicao.id}/imagem`, { method: 'DELETE' });
             if (!res.ok) throw new Error(await res.text());
             pratoEmEdicao.imagem = null;
             document.getElementById('previewImagemContainer')?.classList.add('d-none');
@@ -615,8 +615,8 @@ document.getElementById("salvarNovoPrato").addEventListener("click", function (e
     }
 
     const url = pratoEmEdicao
-        ? `${API}/pratos/atualizar`
-        : `${API}/pratos/cadastrar`;
+        ? `${API}/pratos/${pratoEmEdicao.id}`
+        : `${API}/pratos`;
 
     fetch(url, {
         method: pratoEmEdicao ? 'PUT' : 'POST',

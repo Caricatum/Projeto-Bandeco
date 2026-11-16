@@ -26,7 +26,7 @@ namespace ProjetoBandejao.Services
         {
             try
             {
-                HttpResponseMessage response = client.GetAsync($"{API_URL}/all").Result;
+                HttpResponseMessage response = client.GetAsync(API_URL).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     string json = response.Content.ReadAsStringAsync().Result;
@@ -53,7 +53,7 @@ namespace ProjetoBandejao.Services
         {
             try
             {
-                HttpResponseMessage response = client.DeleteAsync($"{API_URL}/deletar/{id}").Result;
+                HttpResponseMessage response = client.DeleteAsync($"{API_URL}/{id}").Result;
                 if (response.IsSuccessStatusCode)
                 {
                     SQLiteDatabase.DeletarFuncionario(id);
@@ -85,12 +85,9 @@ namespace ProjetoBandejao.Services
                 };
 
                 string json = JsonSerializer.Serialize(dados);
-                using var multipartContent = new MultipartFormDataContent();
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                multipartContent.Add(content, "user");
 
-                HttpResponseMessage response = client.PutAsync($"{API_URL}/atualizar", multipartContent).Result;
+                HttpResponseMessage response = client.PutAsync($"{API_URL}/{usuario.Id}", content).Result;
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
@@ -108,19 +105,20 @@ namespace ProjetoBandejao.Services
 
             try
             {
-                string url =
-                    $"{API_URL}/validarFunc" +
-                    $"?login={Uri.EscapeDataString(usuario.Login)}" +
-                    $"&senhaHash={Uri.EscapeDataString(usuario.Senha)}";
+                var credenciais = new
+                {
+                    login = usuario.Login.Trim(),
+                    senha = usuario.Senha
+                };
 
-                HttpResponseMessage response =
-                    client.GetAsync(url).Result;
+                string json = JsonSerializer.Serialize(credenciais);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = client.PostAsync($"{API_URL}/login-funcionario", content).Result;
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    mensagemErro =
-                        response.Content.ReadAsStringAsync().Result;
-
+                    mensagemErro = response.Content.ReadAsStringAsync().Result;
                     return false;
                 }
 
@@ -150,15 +148,17 @@ namespace ProjetoBandejao.Services
             return ValidarLogin(usuario, out mensagemErro, out _);
         }
 
-        // Solicitar Reset Senha
+        // Solicitar Reset Senha (REST: POST /user/solicitarResetSenha com JSON body)
         public bool SolicitarResetSenha(string email, out string mensagemErro)
         {
             mensagemErro = string.Empty;
             try
             {
-                string url = $"{API_URL}/solicitarResetSenha?login={Uri.EscapeDataString(email.Trim())}";
+                var payload = new { login = email.Trim() };
+                string json = JsonSerializer.Serialize(payload);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = client.PostAsync(url, null).Result;
+                HttpResponseMessage response = client.PostAsync($"{API_URL}/solicitarResetSenha", content).Result;
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -188,23 +188,25 @@ namespace ProjetoBandejao.Services
             return SolicitarResetSenha(email, out _);
         }
 
-        // Resetar Senha
+        // Resetar Senha (REST: POST /user/resetSenha com JSON body)
         public bool ResetarSenha(string email, string codigo, string novaSenha, out string mensagemErro)
         {
             mensagemErro = string.Empty;
             try
             {
-                // Limpa espaços ou traços do código
                 string codigoLimpo = codigo.Replace(" ", "").Replace("_", "").Trim();
 
-                string url = $"{API_URL}/resetSenha" +
-                    $"?login={Uri.EscapeDataString(email.Trim())}" +
-                    $"&codigo={Uri.EscapeDataString(codigoLimpo)}" +
-                    $"&novaSenha={Uri.EscapeDataString(novaSenha)}";
+                var payload = new
+                {
+                    login = email.Trim(),
+                    codigo = codigoLimpo,
+                    novaSenha = novaSenha
+                };
 
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, url);
+                string json = JsonSerializer.Serialize(payload);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = client.SendAsync(request).Result;
+                HttpResponseMessage response = client.PostAsync($"{API_URL}/resetSenha", content).Result;
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -227,20 +229,24 @@ namespace ProjetoBandejao.Services
             return ResetarSenha(email, codigo, novaSenha, out _);
         }
 
-
-
-        // Confirmar Email
+        // Confirmar Email (REST: POST /user/confirmarEmail com JSON body)
         public bool ConfirmarEmail(string email, string codigo, out string respostaErro)
         {
             respostaErro = string.Empty;
             try
             {
-                // Limpa espaços ou traços do código
                 string codigoLimpo = codigo.Replace(" ", "").Replace("_", "").Trim();
 
-                string url = $"{API_URL}/confirmarEmail?email={Uri.EscapeDataString(email.Trim())}&codigo={Uri.EscapeDataString(codigoLimpo)}";
+                var payload = new
+                {
+                    email = email.Trim(),
+                    codigo = codigoLimpo
+                };
 
-                HttpResponseMessage response = client.PostAsync(url, null).Result;
+                string json = JsonSerializer.Serialize(payload);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = client.PostAsync($"{API_URL}/confirmarEmail", content).Result;
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -262,7 +268,7 @@ namespace ProjetoBandejao.Services
         {
             try
             {
-                string url = $"{API_URL}/login/{Uri.EscapeDataString(login)}";
+                string url = $"{API_URL}/login/{Uri.EscapeDataString(login.Trim())}";
                 HttpResponseMessage res = client.GetAsync(url).Result;
                 if (res.IsSuccessStatusCode)
                 {
@@ -284,19 +290,10 @@ namespace ProjetoBandejao.Services
             mensagemRetorno = string.Empty;
             try
             {
-                string urlUser = $"{API_URL}/login/{Uri.EscapeDataString(email.Trim())}";
-                HttpResponseMessage resUser = client.GetAsync(urlUser).Result;
-                if (!resUser.IsSuccessStatusCode)
-                {
-                    mensagemRetorno = "Usuário não localizado na base de dados.";
-                    return false;
-                }
-
-                string jsonUser = resUser.Content.ReadAsStringAsync().Result;
-                var usuario = JsonSerializer.Deserialize<Usuario>(jsonUser, jsonOptions);
+                var usuario = ObterPorLogin(email);
                 if (usuario == null || usuario.Id <= 0)
                 {
-                    mensagemRetorno = "Não foi possível recuperar o identificador do usuário.";
+                    mensagemRetorno = "Usuário não localizado na base de dados.";
                     return false;
                 }
 
@@ -320,7 +317,7 @@ namespace ProjetoBandejao.Services
             }
         }
 
-        // Cadastrar com retorno de mensagem de erro detalhada
+        // Cadastrar (REST: POST /user)
         public bool Cadastrar(Usuario usuario, out string mensagemErro)
         {
             mensagemErro = string.Empty;
@@ -335,13 +332,9 @@ namespace ProjetoBandejao.Services
                 };
 
                 string json = JsonSerializer.Serialize(dados);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                using var multipartContent = new MultipartFormDataContent();
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                multipartContent.Add(content, "user");
-
-                HttpResponseMessage response = client.PostAsync($"{API_URL}/cadastrar", multipartContent).Result;
+                HttpResponseMessage response = client.PostAsync(API_URL, content).Result;
 
                 if (!response.IsSuccessStatusCode)
                 {

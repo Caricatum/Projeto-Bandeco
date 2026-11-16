@@ -23,7 +23,7 @@ class _CardapioPratosState extends State<CardapioPratos> {
 
   // Mostra tudo
   Future<List<dynamic>> listarPratos() async {
-    final url = Uri.parse('http://localhost:8080/pratos/all');
+    final url = Uri.parse('http://localhost:8080/pratos');
 
     try {
       final response = await http.get(url);
@@ -41,10 +41,10 @@ class _CardapioPratosState extends State<CardapioPratos> {
   // Deletar prato
   Future<void> deletarPrato(int id) async {
     final response = await http.delete(
-      Uri.parse("http://localhost:8080/pratos/deletar/$id"),
+      Uri.parse("http://localhost:8080/pratos/$id"),
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode != 200 && response.statusCode != 204) {
       throw Exception("Erro ao excluir prato.");
     }
   }

@@ -7,59 +7,56 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
 
     message.innerText = 'Verificando...';
 
-    fetchAPI(`/user/validar?login=${encodeURIComponent(userDigitado)}&senhaHash=${encodeURIComponent(senhaDigitada)}`)
-        .then(res => {
-            if (!res.ok) {
-                throw new Error("Usuário ou senha incorretos!");
-            }
-            return res.json();
+    // Login seguro padrão REST (POST com credenciais no corpo)
+    fetchAPI('/user/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ login: userDigitado, senha: senhaDigitada })
+    })
+    .then(async res => {
+        if (!res.ok) {
+            let msgErro = "Usuário ou senha incorretos!";
+            try {
+                const jsonErro = await res.json();
+                if (jsonErro.erro) msgErro = jsonErro.erro;
+            } catch (_) {}
+            throw new Error(msgErro);
+        }
+        return res.json();
+    })
+    .then(user => {
+        // Sincroniza e registra a sessão segura no PHP do servidor
+        return fetch('auth.php?action=login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id: user.id,
+                nome: user.nome,
+                login: userDigitado,
+                funcionario: user.funcionario
+            })
         })
-        .then(dados => {
-            if (dados === true) {
-                // Login válido — agora busca os dados completos do usuário
-                return fetchAPI(`/user/login/${encodeURIComponent(userDigitado)}`)
-                    .then(res => {
-                        if (!res.ok) throw new Error("Não foi possível carregar os dados do usuário.");
-                        return res.json();
-                    })
-                    .then(user => {
-                        // Sincroniza e registra a sessão segura no PHP do servidor
-                        return fetch('auth.php?action=login', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                id: user.id,
-                                nome: user.nome,
-                                login: userDigitado,
-                                funcionario: user.funcionario
-                            })
-                        })
-                        .then(res => res.json())
-                        .then(authRes => {
-                            if (!authRes.sucesso) {
-                                throw new Error(authRes.erro || "Falha ao registrar sessão segura no servidor.");
-                            }
-
-                            // Define o estado no cliente
-                            sessionStorage.setItem('logado', 'true');
-
-                            // Armazena os dados do usuário na local storage para o frontend
-                            localStorage.setItem('username', userDigitado);
-                            localStorage.setItem('nome', user.nome);
-                            localStorage.setItem('id', user.id);
-                            localStorage.setItem('tipo', user.funcionario ? 'true' : 'false');
-
-                            // Redireciona para o início
-                            window.location.href = 'inicio.php';
-                        });
-                    });
-            } else {
-                message.innerText = 'Usuário ou senha incorretos!';
-                sessionStorage.setItem('logado', 'false');
+        .then(res => res.json())
+        .then(authRes => {
+            if (!authRes.sucesso) {
+                throw new Error(authRes.erro || "Falha ao registrar sessão segura no servidor.");
             }
-        })
-        .catch(error => {
-            message.innerText = error.message;
+
+            // Define o estado no cliente
+            sessionStorage.setItem('logado', 'true');
+
+            // Armazena os dados do usuário na local storage para o frontend
+            localStorage.setItem('username', userDigitado);
+            localStorage.setItem('nome', user.nome);
+            localStorage.setItem('id', user.id);
+            localStorage.setItem('tipo', user.funcionario ? 'true' : 'false');
+
+            // Redireciona para o início
+            window.location.href = 'inicio.php';
         });
-
+    })
+    .catch(error => {
+        message.innerText = error.message;
+        sessionStorage.setItem('logado', 'false');
+    });
 });

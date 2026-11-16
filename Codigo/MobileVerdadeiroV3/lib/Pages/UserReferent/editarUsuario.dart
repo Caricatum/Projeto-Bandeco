@@ -148,7 +148,7 @@ class _EditarUsuarioState extends State<EditarUsuario> {
     try {
       // Busca os dados completos do usuário.
       final usuarioResponse = await http.get(
-        Uri.parse('http://localhost:8080/user/id/${widget.usuario.id}'),
+        Uri.parse('http://localhost:8080/user/${widget.usuario.id}'),
       );
 
       if (usuarioResponse.statusCode != 200) {
@@ -175,7 +175,7 @@ class _EditarUsuarioState extends State<EditarUsuario> {
         'alergiaGergilim': usuarioAtual.alergiaGergilim,
       };
 
-      final uri = Uri.parse('http://localhost:8080/user/atualizar');
+      final uri = Uri.parse('http://localhost:8080/user/${widget.usuario.id}');
       final request = http.MultipartRequest('PUT', uri);
       request.files.add(
         http.MultipartFile.fromString(
@@ -435,7 +435,7 @@ class _EditarUsuarioState extends State<EditarUsuario> {
           validarResponse.statusCode == 204) {
         // Senha correta: agora exclui a conta.
         final response = await http.delete(
-          Uri.parse('http://localhost:8080/user/deletar/${widget.usuario.id}'),
+          Uri.parse('http://localhost:8080/user/${widget.usuario.id}'),
         );
 
         if (!mounted) return;
