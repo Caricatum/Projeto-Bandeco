@@ -50,6 +50,57 @@ namespace ProjetoBandejao.Models
         [JsonPropertyName("vegano")]
         public bool Vegano { get; set; }
 
+        [JsonIgnore]
+        public int Alergenicos { get; set; }
+
+        internal static IReadOnlyList<(string Campo, string Rotulo)> CamposAlergenicos { get; } =
+        [
+            ("leite", "Leite"),
+            ("ovo", "Ovo"),
+            ("amendoim", "Amendoim"),
+            ("castanhas", "Castanhas"),
+            ("frutosDoMar", "Frutos do mar"),
+            ("peixes", "Peixes"),
+            ("trigo", "Trigo"),
+            ("soja", "Soja"),
+            ("gergilim", "Gergelim"),
+        ];
+
+        [JsonPropertyName("leite")]
+        public bool Leite { get => TemAlergenico(0); set => DefinirAlergenico(0, value); }
+
+        [JsonPropertyName("ovo")]
+        public bool Ovo { get => TemAlergenico(1); set => DefinirAlergenico(1, value); }
+
+        [JsonPropertyName("amendoim")]
+        public bool Amendoim { get => TemAlergenico(2); set => DefinirAlergenico(2, value); }
+
+        [JsonPropertyName("castanhas")]
+        public bool Castanhas { get => TemAlergenico(3); set => DefinirAlergenico(3, value); }
+
+        [JsonPropertyName("frutosDoMar")]
+        public bool FrutosDoMar { get => TemAlergenico(4); set => DefinirAlergenico(4, value); }
+
+        [JsonPropertyName("peixes")]
+        public bool Peixes { get => TemAlergenico(5); set => DefinirAlergenico(5, value); }
+
+        [JsonPropertyName("trigo")]
+        public bool Trigo { get => TemAlergenico(6); set => DefinirAlergenico(6, value); }
+
+        [JsonPropertyName("soja")]
+        public bool Soja { get => TemAlergenico(7); set => DefinirAlergenico(7, value); }
+
+        [JsonPropertyName("gergilim")]
+        public bool Gergilim { get => TemAlergenico(8); set => DefinirAlergenico(8, value); }
+
+        internal bool TemAlergenico(int indice) => (Alergenicos & (1 << indice)) != 0;
+
+        private void DefinirAlergenico(int indice, bool presente)
+        {
+            int bit = 1 << indice;
+            Alergenicos = presente ? Alergenicos | bit : Alergenicos & ~bit;
+        }
+
         [JsonPropertyName("imagem")]
         public string? Imagem { get; set; }
 
@@ -67,6 +118,7 @@ namespace ProjetoBandejao.Models
         public string Tipo { get; set; } = "Prato Principal";
         public string Ingredientes { get; set; } = string.Empty;
         public string? ImagemBase64 { get; set; }
+        public string? LocalImagePath { get; set; }
 
         // Informações nutricionais
         public double Calorias { get; set; }

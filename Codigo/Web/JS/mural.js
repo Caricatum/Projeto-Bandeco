@@ -250,7 +250,7 @@ async function carregarCardapioDia(dataFiltro = null) {
             cardapio = await resData.json();
         } else {
             // Fallback de busca em /cardapioDia/all
-            const resAll = await fetch(`${API}/cardapioDia/all`);
+            const resAll = await fetch(`${API}/cardapioDia`);
             if (resAll.ok) {
                 const todos = await resAll.json();
                 cardapio = todos.find(c => {
@@ -308,7 +308,7 @@ window.carregarCardapioSemana = async function() {
         if (res.ok) {
             cardapios = await res.json();
         } else {
-            const resAll = await fetch(`${API}/cardapioDia/all`);
+            const resAll = await fetch(`${API}/cardapioDia`);
             if (resAll.ok) cardapios = await resAll.json();
         }
 
@@ -503,7 +503,7 @@ let todosPratos = [];
 
 async function carregarTodosPratos() {
     try {
-        const res = await fetch(`${API}/pratos/all`);
+        const res = await fetch(`${API}/pratos`);
         if (!res.ok) throw new Error('Erro ao buscar pratos');
         todosPratos = await res.json();
     } catch (e) {
@@ -578,7 +578,7 @@ async function salvarCardapioDia() {
         const idsCardapios = {};
 
         for (const chave of Object.keys(cardapios)) {
-            const res = await fetch(`${API}/cardapio/cadastrar`, {
+            const res = await fetch(`${API}/cardapio`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(cardapios[chave])
@@ -606,7 +606,7 @@ async function salvarCardapioDia() {
             user: { id: usuarioLogado.id },
         };
 
-        const resDia = await fetch(`${API}/cardapioDia/cadastrar`, {
+        const resDia = await fetch(`${API}/cardapioDia`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(cardapioDiaPayload)

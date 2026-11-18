@@ -35,37 +35,40 @@ namespace ProjetoBandejao.Forms
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(
-                txtNovaSenha.Text))
+            if (string.IsNullOrWhiteSpace(txtNovaSenha.Text))
             {
                 MessageBox.Show(
-                    "Digite a nova senha.");
+                    "Digite a nova senha.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
 
                 return;
             }
 
-            if (txtNovaSenha.Text !=
-                txtConfirmarSenha.Text)
+            if (txtNovaSenha.Text != txtConfirmarSenha.Text)
             {
                 MessageBox.Show(
-                    "As senhas não coincidem.");
+                    "As senhas não coincidem.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
 
                 return;
             }
 
-            UsuarioService service =
-                new UsuarioService();
+            UsuarioService service = new UsuarioService();
 
-            bool sucesso =
-                service.ResetarSenha(
-                    txtEmail.Text,
-                    txtCodigo.Text,
-                    txtNovaSenha.Text);
+            bool sucesso = service.ResetarSenha(
+                txtEmail.Text.Trim(),
+                txtCodigo.Text,
+                txtNovaSenha.Text,
+                out string mensagemErro);
 
             if (sucesso)
             {
                 MessageBox.Show(
-                    "Senha alterada com sucesso.",
+                    "Senha alterada com sucesso! Você já pode realizar o login.",
                     "Sucesso",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -74,8 +77,12 @@ namespace ProjetoBandejao.Forms
             }
             else
             {
+                string detalhe = string.IsNullOrWhiteSpace(mensagemErro)
+                    ? "Código inválido ou expirado."
+                    : mensagemErro;
+
                 MessageBox.Show(
-                    "Código inválido ou expirado.",
+                    $"Erro ao alterar senha:\n{detalhe}",
                     "Erro",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -93,22 +100,31 @@ namespace ProjetoBandejao.Forms
 
         private void linkReenviar_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            UsuarioService service =
-             new UsuarioService();
+            UsuarioService service = new UsuarioService();
 
-            bool sucesso =
-                service.SolicitarResetSenha(
-                    txtEmail.Text);
+            bool sucesso = service.SolicitarResetSenha(
+                txtEmail.Text.Trim(),
+                out string mensagemErro);
 
             if (sucesso)
             {
                 MessageBox.Show(
-                    "Novo código enviado.");
+                    "Novo código enviado com sucesso!\n\nVerifique sua caixa de entrada e também a pasta de Spam/Lixo Eletrônico.",
+                    "Sucesso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
             else
             {
+                string detalhe = string.IsNullOrWhiteSpace(mensagemErro)
+                    ? "Erro ao reenviar o código."
+                    : mensagemErro;
+
                 MessageBox.Show(
-                    "Erro ao reenviar.");
+                    $"Não foi possível reenviar o código:\n{detalhe}",
+                    "Erro",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
     }

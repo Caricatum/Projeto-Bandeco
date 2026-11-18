@@ -1,77 +1,90 @@
-using ProjetoBandejao.Models;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
+using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
-using System.Windows.Forms;
+using ProjetoBandejao.Data;
+using ProjetoBandejao.Models;
 
 namespace ProjetoBandejao.Services
 {
     public class AvisoService
     {
-        private readonly HttpClient client = new HttpClient();
-        private const string API_URL = "http://localhost:8080/avisos";
+        private static readonly HttpClient cliente = new() { Timeout = TimeSpan.FromSeconds(6) };
+        private const string Url = "http://localhost:8080/avisos";
 
-        private static readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
-
-        public List<Aviso> Listar()
+        public async Task<List<Aviso>> ListarAsync()
         {
             try
             {
-                HttpResponseMessage response = client.GetAsync($"{API_URL}/all").Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    string json = response.Content.ReadAsStringAsync().Result;
-                    var avisos = JsonSerializer.Deserialize<List<Aviso>>(json, jsonOptions);
-                    return avisos ?? new List<Aviso>();
-                }
+                var remotos = await cliente.GetFromJsonAsync<List<Aviso>>(Url);
+                if (remotos != null) SQLiteDatabase.SalvarAvisosApi(remotos);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is HttpRequestException or OperationCanceledException or JsonException)
             {
-                Console.WriteLine($"[AvisoService.Listar] Erro: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Mural: {ex.Message}");
             }
-            return new List<Aviso>();
+            return SQLiteDatabase.ObterAvisos();
         }
 
-        public bool Cadastrar(Aviso aviso)
+        public async Task<(bool Sucesso, string Mensagem)> SalvarAsync(Aviso aviso)
         {
+            if (aviso.Id < 0)
+                return SQLiteDatabase.AtualizarAvisoPendente(aviso)
+                    ? (true, "Aviso atualizado no SQLite. Envio pendente.")
+                    : (false, "Este aviso já saiu da fila local. Atualize o mural.");
+            if (aviso.User?.Id is not > 0)
+                return (false, "Entre com uma conta já sincronizada para publicar no mural.");
+
+            var dados = new
+            {
+                titulo = aviso.Titulo,
+                descricao = aviso.Descricao,
+                model = aviso.Model,
+                data_inicial = aviso.DataInicial?.ToString("yyyy-MM-dd"),
+                data_final = aviso.DataFinal?.ToString("yyyy-MM-dd"),
+                user = new { id = aviso.User.Id }
+            };
             try
             {
-                var payload = new
-                {
-                    titulo = aviso.Titulo,
-                    descricao = aviso.Descricao,
-                    user = aviso.User != null && aviso.User.Id > 0 ? new { id = aviso.User.Id } : null
-                };
+                using var resposta = aviso.Id > 0
+                    ? await cliente.PutAsJsonAsync($"{Url}/{aviso.Id}", dados)
+                    : await cliente.PostAsJsonAsync(Url, dados);
+                if (!resposta.IsSuccessStatusCode)
+                    return (false, UsuarioService.ExtrairMensagemErro(await resposta.Content.ReadAsStringAsync(),
+                        $"A API recusou o aviso (HTTP {(int)resposta.StatusCode})."));
 
-                string json = JsonSerializer.Serialize(payload);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = client.PostAsync($"{API_URL}/cadastrar", content).Result;
-                return response.IsSuccessStatusCode;
+                var salvo = await resposta.Content.ReadFromJsonAsync<Aviso>();
+                if (salvo != null) SQLiteDatabase.SalvarAvisosApi([salvo], listaCompleta: false);
+                return (true, aviso.Id > 0 ? "Aviso atualizado." : "Aviso publicado.");
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex) when (aviso.Id == 0 && ex.HttpRequestError == HttpRequestError.ConnectionError)
             {
-                MessageBox.Show($"Erro ao cadastrar aviso: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                return SQLiteDatabase.SalvarAvisoLocal(aviso) > 0
+                    ? (true, "Aviso salvo no SQLite. Envio pendente.")
+                    : (false, "Não foi possível gravar o aviso neste computador.");
+            }
+            catch (Exception ex) when (ex is HttpRequestException or OperationCanceledException or JsonException)
+            {
+                return (false, "A API não confirmou a operação. Atualize o mural antes de tentar novamente.");
             }
         }
 
-        public bool Deletar(int id)
+        public async Task<string?> DeletarAsync(int id)
         {
+            if (id < 0)
+                return SQLiteDatabase.DeletarAviso(id) ? null : "O aviso não está mais na fila local.";
             try
             {
-                HttpResponseMessage response = client.DeleteAsync($"{API_URL}/deletar/{id}").Result;
-                return response.IsSuccessStatusCode;
+                using var resposta = await cliente.DeleteAsync($"{Url}/{id}");
+                if (resposta.StatusCode == HttpStatusCode.MethodNotAllowed)
+                    return "A API atual não oferece exclusão de aviso por ID.";
+                if (!resposta.IsSuccessStatusCode)
+                    return $"A API recusou a exclusão (HTTP {(int)resposta.StatusCode}).";
+                SQLiteDatabase.DeletarAviso(id);
+                return null;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is HttpRequestException or OperationCanceledException)
             {
-                MessageBox.Show($"Erro ao deletar aviso: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                return "A API está indisponível. O aviso continua no mural.";
             }
         }
     }

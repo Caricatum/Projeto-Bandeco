@@ -1,164 +1,225 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Guna.UI2.WinForms;
+using System.Diagnostics;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using ProjetoBandejao.Models;
 
 namespace ProjetoBandejao.Services
 {
     public partial class CardRefeicaoControl : UserControl
     {
-        private Prato? _pratoAtual;
-        private static readonly HttpClient imageClient = new HttpClient();
+        private static readonly Uri baseApi = new("http://localhost:8080/");
+        private static readonly HttpClient imagens = new()
+        {
+            Timeout = TimeSpan.FromSeconds(4),
+            MaxResponseContentBufferSize = 12 * 1024 * 1024
+        };
+        private static readonly SemaphoreSlim limiteImagens = new(3);
+        private static readonly string pastaImagens = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BandejaoCotil", "imagens");
+        private static readonly string[] extensoesLegadas = [".png", ".jpg", ".jpeg", ".webp"];
+        private static readonly Lazy<string?> uploadsApiLocal = new(LocalizarUploadsDaApi);
+        private readonly CancellationTokenSource fechar = new();
+        private Prato? pratoAtual;
 
         public event EventHandler<Prato>? OnExcluirPrato;
+        public event EventHandler<Prato>? OnEditarPrato;
+        public event EventHandler<Prato>? OnVerAvaliacoes;
 
         public CardRefeicaoControl()
         {
             InitializeComponent();
-
-            btnEditar.Click += (s, e) =>
+            btnDetalhes.Click += (_, _) =>
             {
-                if (_pratoAtual != null)
-                {
-                    MessageBox.Show($"Detalhes do prato:\n\nNome: {_pratoAtual.Nome}\nCategoria: {_pratoAtual.CategoriaTexto}\nVegano: {(_pratoAtual.Vegano ? "Sim" : "Não")}\n\n{_pratoAtual.Descricao}", "Informações do Prato", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                if (pratoAtual is { } prato) OnEditarPrato?.Invoke(this, prato);
             };
-
-            btnVerDetalhes.Click += (s, e) =>
+            btnExcluir.Click += async (_, _) => await ExcluirAsync();
+            btnAvaliacoes.Click += (_, _) =>
             {
-                if (_pratoAtual != null)
-                {
-                    var result = MessageBox.Show($"Deseja excluir o prato '{_pratoAtual.Nome}' do sistema?", "Confirmar Exclusão", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (result == DialogResult.Yes)
-                    {
-                        var service = new PratoService();
-                        if (service.Deletar(_pratoAtual.Id))
-                        {
-                            MessageBox.Show("Prato excluído com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            OnExcluirPrato?.Invoke(this, _pratoAtual);
-                        }
-                    }
-                }
+                if (pratoAtual is { Id: > 0 } prato) OnVerAvaliacoes?.Invoke(this, prato);
             };
         }
 
         public void PreencherDados(Prato prato)
         {
-            _pratoAtual = prato;
-
-            // Preenche dados textuais
+            pratoAtual = prato;
+            btnAvaliacoes.Enabled = prato.Id > 0;
             lblTitle.Text = prato.Nome;
             lblDescription.Text = string.IsNullOrWhiteSpace(prato.Descricao) ? "Sem descrição cadastrada." : prato.Descricao;
-            
-            // Categoria e Tipo
-            string catNome = prato.Categoria?.Descricao ?? (prato.Vegano ? "Vegano" : "Tradicional");
-            lblCategoriaVal.Text = catNome;
-            lblTipoVal.Text = prato.Vegano ? "Vegano" : "Padrão";
-            
-            // Atualiza os Badges superiores
-            lblPratoPrincipalBadge.Text = prato.Vegano ? "🌱 Vegano" : $"🍽️ {catNome}";
+            lblCategoria.Text = prato.Vegano ? $"{prato.CategoriaTexto}  ·  Vegano" : prato.CategoriaTexto;
 
-            // Informações nutricionais
-            float kcal = prato.ValorNutricional?.Kcal ?? (float)prato.Calorias;
-            float carbs = prato.ValorNutricional?.Carboidratos ?? (float)prato.Carboidratos;
-            float prot = prato.ValorNutricional?.Proteinas ?? (float)prato.Proteinas;
-            float gord = prato.ValorNutricional?.Lipidios ?? (float)prato.Gorduras;
-
-            lblCalorias.Text = kcal > 0 ? $"🔥 {kcal:F0} kcal\nCalorias" : "🔥 - kcal\nCalorias";
-            lblCarbo.Text = carbs > 0 ? $"🌾 {carbs:F1} g\nCarboidratos" : "🌾 - g\nCarboidratos";
-            lblProtein.Text = prot > 0 ? $"🍗 {prot:F1} g\nProteínas" : "🍗 - g\nProteínas";
-            lblGordura.Text = gord > 0 ? $"💧 {gord:F1} g\nGorduras" : "💧 - g\nGorduras";
-
-            // Troca o botão "Ver Detalhes" para "Excluir" com estilo visual claro
-            btnVerDetalhes.Text = "🗑️ Excluir";
-            btnVerDetalhes.FillColor = Color.FromArgb(180, 40, 40);
-
-            // Carrega Imagem
-            CarregarImagem(prato);
-
-            // Ingredientes (Separados por vírgula)
-            LoadIngredientes(prato.Ingredientes);
+            var valores = prato.ValorNutricional;
+            valoresNutricionais[0].Text = FormatarValor(valores?.Kcal ?? prato.Calorias, "0", "kcal");
+            valoresNutricionais[1].Text = FormatarValor(valores?.Carboidratos ?? prato.Carboidratos, "0.#", "g");
+            valoresNutricionais[2].Text = FormatarValor(valores?.Proteinas ?? prato.Proteinas, "0.#", "g");
+            valoresNutricionais[3].Text = FormatarValor(valores?.Lipidios ?? prato.Gorduras, "0.#", "g");
         }
 
-        private async void CarregarImagem(Prato prato)
+        protected override async void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
+            if (pratoAtual == null || DesignMode) return;
+            var token = fechar.Token;
             try
             {
-                if (!string.IsNullOrWhiteSpace(prato.Imagem))
+                Bitmap? imagem = await ObterImagemAsync(pratoAtual, token);
+                if (IsDisposed || token.IsCancellationRequested)
                 {
-                    string imageUrl = prato.Imagem;
-                    if (imageUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase))
-                    {
-                        byte[] bytes = await imageClient.GetByteArrayAsync(imageUrl);
-                        using var ms = new MemoryStream(bytes);
-                        pctImage.Image = Image.FromStream(ms);
-                        return;
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(prato.ImagemBase64))
-                {
-                    byte[] imageBytes = Convert.FromBase64String(prato.ImagemBase64);
-                    using var ms = new MemoryStream(imageBytes);
-                    pctImage.Image = Image.FromStream(ms);
+                    imagem?.Dispose();
                     return;
                 }
 
-                // Imagem padrão caso não tenha imagem cadastrada
-                pctImage.Image = Properties.Resource.error;
+                pctImage.Image = imagem;
+                pctImage.Visible = imagem != null;
+                lblSemFoto.Visible = imagem == null;
             }
-            catch
+            catch (OperationCanceledException) when (token.IsCancellationRequested) { }
+            catch (Exception ex) when (ex is IOException or HttpRequestException or OperationCanceledException or UnauthorizedAccessException)
             {
-                pctImage.Image = Properties.Resource.error;
+                Debug.WriteLine($"Foto do prato {pratoAtual.Id}: {ex.Message}");
             }
         }
 
-        private void LoadIngredientes(string ingredientesStr)
+        protected override void Dispose(bool disposing)
         {
-            flpIngredientes.Controls.Clear();
-
-            if (string.IsNullOrWhiteSpace(ingredientesStr))
+            if (disposing && !IsDisposed)
             {
-                lblIngredientesTitle.Visible = false;
-                flpIngredientes.Visible = false;
-                return;
+                fechar.Cancel();
+                fechar.Dispose();
+                pctImage.Image?.Dispose();
             }
+            base.Dispose(disposing);
+        }
 
-            lblIngredientesTitle.Visible = true;
-            flpIngredientes.Visible = true;
-
-            var ingredientes = ingredientesStr.Split(',')
-                                              .Select(i => i.Trim())
-                                              .Where(i => !string.IsNullOrEmpty(i))
-                                              .ToList();
-
-            foreach (var ing in ingredientes)
+        private static async Task<Bitmap?> ObterImagemAsync(Prato prato, CancellationToken token)
+        {
+            await limiteImagens.WaitAsync(token).ConfigureAwait(false);
+            try
             {
-                var btn = new Guna2Button
+                Uri? url = Uri.TryCreate(baseApi, prato.Imagem, out var endereco)
+                    && !string.IsNullOrWhiteSpace(prato.Imagem)
+                    && (endereco.Scheme == Uri.UriSchemeHttp || endereco.Scheme == Uri.UriSchemeHttps) ? endereco : null;
+                string? arquivo = url == null ? null : Path.Combine(pastaImagens,
+                    $"foto_{Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(url.AbsoluteUri)))}.png");
+
+                Bitmap? local = await Task.Run(() =>
                 {
-                    Text = "● " + ing,
-                    Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point),
-                    ForeColor = Color.FromArgb(60, 80, 60),
-                    FillColor = Color.FromArgb(245, 250, 245),
-                    BorderColor = Color.FromArgb(230, 235, 230),
-                    BorderThickness = 1,
-                    BorderRadius = 12,
-                    AutoSize = true,
-                    Height = 28,
-                    Padding = new Padding(10, 2, 10, 2),
-                    Cursor = Cursors.Default
-                };
-                btn.HoverState.FillColor = btn.FillColor; 
-                btn.HoverState.BorderColor = btn.BorderColor;
-                
-                flpIngredientes.Controls.Add(btn);
+                    var imagem = LerImagem(prato.LocalImagePath) ?? LerImagem(arquivo) ?? LerImagem(ObterUploadLocal(url, "pratos"));
+                    if (imagem != null) return imagem;
+
+                    foreach (string extensao in extensoesLegadas)
+                    {
+                        imagem = LerImagem(Path.Combine(pastaImagens, $"prato_{prato.Id}{extensao}"));
+                        if (imagem != null) return imagem;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(prato.ImagemBase64)) return null;
+                    try { return Decodificar(Convert.FromBase64String(prato.ImagemBase64)); }
+                    catch (FormatException) { return null; }
+                }, token).ConfigureAwait(false);
+                if (local != null || url == null || arquivo == null) return local;
+
+                using var resposta = await imagens.GetAsync(url, token).ConfigureAwait(false);
+                if (resposta.StatusCode == HttpStatusCode.NotFound || !resposta.IsSuccessStatusCode) return null;
+                byte[] bytes = await resposta.Content.ReadAsByteArrayAsync(token).ConfigureAwait(false);
+                return await Task.Run(() =>
+                {
+                    var imagem = Decodificar(bytes);
+                    if (imagem == null) return null;
+                    try
+                    {
+                        Directory.CreateDirectory(pastaImagens);
+                        string temporario = arquivo + "." + Guid.NewGuid().ToString("N") + ".tmp";
+                        try
+                        {
+                            imagem.Save(temporario, System.Drawing.Imaging.ImageFormat.Png);
+                            File.Move(temporario, arquivo, overwrite: true);
+                        }
+                        finally
+                        {
+                            File.Delete(temporario);
+                        }
+                    }
+                    catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Runtime.InteropServices.ExternalException)
+                    {
+                        Debug.WriteLine($"Cache de imagem: {ex.Message}");
+                    }
+                    return imagem;
+                }, token).ConfigureAwait(false);
             }
+            finally
+            {
+                limiteImagens.Release();
+            }
+        }
+
+        private static Bitmap? LerImagem(string? caminho)
+        {
+            if (string.IsNullOrWhiteSpace(caminho) || !File.Exists(caminho)) return null;
+            try { return Decodificar(File.ReadAllBytes(caminho)); }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { return null; }
+        }
+
+        internal static string? ObterUploadLocal(Uri? url, string pastaUpload)
+        {
+            string prefixo = $"/uploads/{pastaUpload}/";
+            if (url == null || !url.IsLoopback || url.Port != baseApi.Port
+                || !url.AbsolutePath.StartsWith(prefixo, StringComparison.Ordinal))
+                return null;
+
+            string nome = Uri.UnescapeDataString(url.AbsolutePath[prefixo.Length..]);
+            if (nome.Length == 0 || nome is "." or ".." || nome.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+                return null;
+
+            string? pasta = uploadsApiLocal.Value;
+            return pasta == null ? null : Path.Combine(pasta, pastaUpload, nome);
+        }
+
+        private static string? LocalizarUploadsDaApi()
+        {
+            foreach (string inicio in new[] { AppContext.BaseDirectory, Environment.CurrentDirectory })
+            {
+                for (var pasta = new DirectoryInfo(inicio); pasta != null; pasta = pasta.Parent)
+                {
+                    string uploads = Path.Combine(pasta.FullName, "api", "apiBandeco", "uploads");
+                    if (Directory.Exists(uploads)) return uploads;
+                }
+            }
+            return null;
+        }
+
+        private static Bitmap? Decodificar(byte[] dados)
+        {
+            try
+            {
+                using var stream = new MemoryStream(dados);
+                using var original = Image.FromStream(stream);
+                double escala = Math.Min(1, 640.0 / Math.Max(original.Width, original.Height));
+                return new Bitmap(original, Math.Max(1, (int)(original.Width * escala)), Math.Max(1, (int)(original.Height * escala)));
+            }
+            catch (Exception ex) when (ex is ArgumentException or OutOfMemoryException or System.Runtime.InteropServices.ExternalException)
+            {
+                return null;
+            }
+        }
+
+        private static string FormatarValor(double valor, string formato, string unidade) =>
+            valor > 0 ? $"{valor.ToString(formato)} {unidade}" : "—";
+
+        private async Task ExcluirAsync()
+        {
+            if (pratoAtual is not { } prato || MessageBox.Show(this, $"Excluir o prato '{prato.Nome}'?", "Excluir prato",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+
+            btnExcluir.Enabled = false;
+            var servico = new PratoService();
+            bool excluido = await Task.Run(() => servico.Deletar(prato.Id));
+            if (IsDisposed) return;
+            btnExcluir.Enabled = true;
+            if (excluido)
+                OnExcluirPrato?.Invoke(this, prato);
+            else
+                MessageBox.Show(this, "Não foi possível excluir o prato.", "Excluir prato", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 }

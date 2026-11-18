@@ -37,8 +37,6 @@
             txtSenha = new TextBox();
             btnEntrar = new Button();
             lblMensagem = new Label();
-            linkCadastro = new LinkLabel();
-            linkEsqueciSenha = new LinkLabel();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -58,7 +56,7 @@
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTitulo.ForeColor = Color.Tomato;
-            lblTitulo.Location = new Point(525, 58);
+            lblTitulo.Location = new Point(525, 45);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(161, 45);
             lblTitulo.TabIndex = 1;
@@ -68,7 +66,7 @@
             // 
             lblEmail.AutoSize = true;
             lblEmail.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblEmail.Location = new Point(525, 154);
+            lblEmail.Location = new Point(525, 140);
             lblEmail.Name = "lblEmail";
             lblEmail.Size = new Size(59, 20);
             lblEmail.TabIndex = 2;
@@ -79,7 +77,7 @@
             lblSubtitulo.AutoSize = true;
             lblSubtitulo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblSubtitulo.ForeColor = Color.DimGray;
-            lblSubtitulo.Location = new Point(525, 103);
+            lblSubtitulo.Location = new Point(525, 90);
             lblSubtitulo.Name = "lblSubtitulo";
             lblSubtitulo.Size = new Size(157, 21);
             lblSubtitulo.TabIndex = 3;
@@ -89,7 +87,7 @@
             // 
             lblSenha.AutoSize = true;
             lblSenha.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblSenha.Location = new Point(525, 228);
+            lblSenha.Location = new Point(525, 210);
             lblSenha.Name = "lblSenha";
             lblSenha.Size = new Size(49, 20);
             lblSenha.TabIndex = 4;
@@ -99,7 +97,7 @@
             // 
             txtEmail.BorderStyle = BorderStyle.FixedSingle;
             txtEmail.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtEmail.Location = new Point(525, 177);
+            txtEmail.Location = new Point(525, 163);
             txtEmail.Name = "txtEmail";
             txtEmail.Size = new Size(220, 27);
             txtEmail.TabIndex = 5;
@@ -108,7 +106,7 @@
             // 
             txtSenha.BorderStyle = BorderStyle.FixedSingle;
             txtSenha.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtSenha.Location = new Point(525, 251);
+            txtSenha.Location = new Point(525, 233);
             txtSenha.Name = "txtSenha";
             txtSenha.Size = new Size(220, 27);
             txtSenha.TabIndex = 6;
@@ -117,9 +115,9 @@
             // btnEntrar
             // 
             btnEntrar.BackColor = Color.RosyBrown;
-            btnEntrar.Location = new Point(566, 320);
+            btnEntrar.Location = new Point(566, 305);
             btnEntrar.Name = "btnEntrar";
-            btnEntrar.Size = new Size(140, 45);
+            btnEntrar.Size = new Size(140, 42);
             btnEntrar.TabIndex = 7;
             btnEntrar.Text = "Entrar";
             btnEntrar.UseVisualStyleBackColor = false;
@@ -127,34 +125,12 @@
             // 
             // lblMensagem
             // 
-            lblMensagem.AutoSize = true;
             lblMensagem.ForeColor = Color.Red;
-            lblMensagem.Location = new Point(574, 377);
+            lblMensagem.Location = new Point(480, 352);
             lblMensagem.Name = "lblMensagem";
-            lblMensagem.Size = new Size(0, 15);
+            lblMensagem.Size = new Size(310, 36);
             lblMensagem.TabIndex = 8;
-            // 
-            // linkCadastro
-            // 
-            linkCadastro.AutoSize = true;
-            linkCadastro.Location = new Point(576, 401);
-            linkCadastro.Name = "linkCadastro";
-            linkCadastro.Size = new Size(121, 15);
-            linkCadastro.TabIndex = 9;
-            linkCadastro.TabStop = true;
-            linkCadastro.Text = "Cadastrar funcionário";
-            linkCadastro.LinkClicked += linkCadastro_LinkClicked;
-            // 
-            // linkEsqueciSenha
-            // 
-            linkEsqueciSenha.AutoSize = true;
-            linkEsqueciSenha.Location = new Point(624, 285);
-            linkEsqueciSenha.Name = "linkEsqueciSenha";
-            linkEsqueciSenha.Size = new Size(118, 15);
-            linkEsqueciSenha.TabIndex = 10;
-            linkEsqueciSenha.TabStop = true;
-            linkEsqueciSenha.Text = "Esqueci minha senha";
-            linkEsqueciSenha.LinkClicked += linkEsqueciSenha_LinkClicked;
+            lblMensagem.TextAlign = ContentAlignment.TopCenter;
             // 
             // LoginForm
             // 
@@ -162,8 +138,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(884, 461);
-            Controls.Add(linkEsqueciSenha);
-            Controls.Add(linkCadastro);
             Controls.Add(lblMensagem);
             Controls.Add(btnEntrar);
             Controls.Add(txtSenha);
@@ -195,7 +169,5 @@
         private TextBox txtSenha;
         private Button btnEntrar;
         private Label lblMensagem;
-        private LinkLabel linkCadastro;
-        private LinkLabel linkEsqueciSenha;
     }
 }

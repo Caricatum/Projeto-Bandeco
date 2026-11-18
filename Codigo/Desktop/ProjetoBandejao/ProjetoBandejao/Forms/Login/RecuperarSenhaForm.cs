@@ -13,12 +13,9 @@ namespace ProjetoBandejao.Forms
 {
     public partial class RecuperarSenhaForm : Form
     {
-
         public RecuperarSenhaForm()
         {
             InitializeComponent();
-
-
         }
 
         private void linkLblVoltar_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -44,19 +41,19 @@ namespace ProjetoBandejao.Forms
 
             bool sucesso =
                 service.SolicitarResetSenha(
-                    txtEmail.Text);
+                    txtEmail.Text.Trim(),
+                    out string mensagemErro);
 
             if (sucesso)
             {
                 MessageBox.Show(
-                    "Código enviado com sucesso.",
+                    "Código enviado com sucesso!\n\nVerifique sua caixa de entrada e também a pasta de Spam/Lixo Eletrônico.\nO código é válido por 15 minutos.",
                     "Sucesso",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
                 ResetarSenhaForm tela =
-                 new ResetarSenhaForm(txtEmail.Text);
-
+                    new ResetarSenhaForm(txtEmail.Text.Trim());
 
                 tela.ShowDialog();
 
@@ -64,8 +61,12 @@ namespace ProjetoBandejao.Forms
             }
             else
             {
+                string detalhe = string.IsNullOrWhiteSpace(mensagemErro)
+                    ? "Não foi possível enviar o código de verificação."
+                    : mensagemErro;
+
                 MessageBox.Show(
-                    "Não foi possível enviar o código.",
+                    $"Erro ao solicitar redefinição de senha:\n{detalhe}",
                     "Erro",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

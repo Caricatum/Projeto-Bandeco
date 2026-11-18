@@ -50,7 +50,6 @@ namespace ProjetoBandejao.Forms.Home
             txtNovoTitulo = new Guna.UI2.WinForms.Guna2TextBox();
             lblMensagem = new Label();
             txtMensagem = new Guna.UI2.WinForms.Guna2TextBox();
-            lblCores = new Label();
             btnCancelar = new Guna.UI2.WinForms.Guna2Button();
             btnPublicar = new Guna.UI2.WinForms.Guna2Button();
             lblInfoRodape = new Label();
@@ -166,7 +165,6 @@ namespace ProjetoBandejao.Forms.Home
             pnlCriarAviso.Controls.Add(txtNovoTitulo);
             pnlCriarAviso.Controls.Add(lblMensagem);
             pnlCriarAviso.Controls.Add(txtMensagem);
-            pnlCriarAviso.Controls.Add(lblCores);
             pnlCriarAviso.Controls.Add(btnCancelar);
             pnlCriarAviso.Controls.Add(btnPublicar);
             pnlCriarAviso.CustomizableEdges = customizableEdges19;
@@ -180,6 +178,7 @@ namespace ProjetoBandejao.Forms.Home
             // lblCriarAviso
             // 
             lblCriarAviso.AutoSize = true;
+            lblCriarAviso.BackColor = Color.Coral;
             lblCriarAviso.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold);
             lblCriarAviso.ForeColor = Color.Black;
             lblCriarAviso.Location = new Point(20, 20);
@@ -191,6 +190,7 @@ namespace ProjetoBandejao.Forms.Home
             // lblTipo
             // 
             lblTipo.AutoSize = true;
+            lblTipo.BackColor = Color.RosyBrown;
             lblTipo.Font = new Font("Segoe UI", 9.75F);
             lblTipo.ForeColor = Color.Black;
             lblTipo.Location = new Point(20, 70);
@@ -221,6 +221,7 @@ namespace ProjetoBandejao.Forms.Home
             // lblNovoTitulo
             // 
             lblNovoTitulo.AutoSize = true;
+            lblNovoTitulo.BackColor = Color.RosyBrown;
             lblNovoTitulo.Font = new Font("Segoe UI", 9.75F);
             lblNovoTitulo.Location = new Point(20, 145);
             lblNovoTitulo.Name = "lblNovoTitulo";
@@ -230,6 +231,7 @@ namespace ProjetoBandejao.Forms.Home
             // 
             // txtNovoTitulo
             // 
+            txtNovoTitulo.BackColor = Color.Transparent;
             txtNovoTitulo.BorderRadius = 6;
             txtNovoTitulo.CustomizableEdges = customizableEdges11;
             txtNovoTitulo.DefaultText = "";
@@ -245,6 +247,7 @@ namespace ProjetoBandejao.Forms.Home
             // lblMensagem
             // 
             lblMensagem.AutoSize = true;
+            lblMensagem.BackColor = Color.RosyBrown;
             lblMensagem.Font = new Font("Segoe UI", 9.75F);
             lblMensagem.Location = new Point(20, 220);
             lblMensagem.Name = "lblMensagem";
@@ -254,6 +257,7 @@ namespace ProjetoBandejao.Forms.Home
             // 
             // txtMensagem
             // 
+            txtMensagem.BackColor = Color.Transparent;
             txtMensagem.BorderRadius = 6;
             txtMensagem.CustomizableEdges = customizableEdges13;
             txtMensagem.DefaultText = "";
@@ -267,18 +271,9 @@ namespace ProjetoBandejao.Forms.Home
             txtMensagem.Size = new Size(294, 110);
             txtMensagem.TabIndex = 6;
             // 
-            // lblCores
-            // 
-            lblCores.AutoSize = true;
-            lblCores.Font = new Font("Segoe UI", 9.75F);
-            lblCores.Location = new Point(20, 370);
-            lblCores.Name = "lblCores";
-            lblCores.Size = new Size(91, 17);
-            lblCores.TabIndex = 7;
-            lblCores.Text = "Cor do post-it";
-            // 
             // btnCancelar
             // 
+            btnCancelar.BackColor = Color.Transparent;
             btnCancelar.BorderColor = Color.LightGray;
             btnCancelar.BorderRadius = 8;
             btnCancelar.BorderThickness = 1;
@@ -295,6 +290,7 @@ namespace ProjetoBandejao.Forms.Home
             // 
             // btnPublicar
             // 
+            btnPublicar.BackColor = Color.Transparent;
             btnPublicar.BorderRadius = 8;
             btnPublicar.CustomizableEdges = customizableEdges17;
             btnPublicar.FillColor = Color.ForestGreen;
@@ -323,7 +319,7 @@ namespace ProjetoBandejao.Forms.Home
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Salmon;
+            BackColor = Color.Bisque;
             ClientSize = new Size(1167, 716);
             Controls.Add(lblTitulo);
             Controls.Add(lblSubtitulo);
@@ -357,7 +353,6 @@ namespace ProjetoBandejao.Forms.Home
         private Guna.UI2.WinForms.Guna2TextBox txtNovoTitulo;
         private System.Windows.Forms.Label lblMensagem;
         private Guna.UI2.WinForms.Guna2TextBox txtMensagem;
-        private System.Windows.Forms.Label lblCores;
         private Guna.UI2.WinForms.Guna2Button btnCancelar;
         private Guna.UI2.WinForms.Guna2Button btnPublicar;
         private System.Windows.Forms.Label lblInfoRodape;

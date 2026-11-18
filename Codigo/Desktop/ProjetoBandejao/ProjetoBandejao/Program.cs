@@ -1,5 +1,6 @@
-using ProjetoBandejao.Data;
+﻿using ProjetoBandejao.Data;
 using ProjetoBandejao.Forms;
+using ProjetoBandejao.Forms.Home;
 using ProjetoBandejao.Services;
 
 namespace ProjetoBandejao
@@ -7,32 +8,45 @@ namespace ProjetoBandejao
     internal static class Program
     {
         [STAThread]
-        static async Task Main()
+        static void Main()
         {
             ApplicationConfiguration.Initialize();
 
-            // Cria/inicializa o banco local
+            // Cria/inicializa o banco local com suporte a modo offline completo
             SQLiteDatabase.Inicializar();
 
-            try
+            // Sincroniza em segundo plano com a API para abrir o login instantaneamente e manter cache atualizado
+            _ = Task.Run(async () =>
             {
-                // Busca os usuários da API
-                var api = new ApiService();
-                var usuarios = await api.ObterUsuarios();
+                try
+                {
+                    var api = new ApiService();
+                    var usuarios = await api.ObterUsuarios();
+                    if (usuarios != null && usuarios.Count > 0)
+                    {
+                        SQLiteDatabase.SalvarFuncionarios(usuarios);
+                        Console.WriteLine($"Sincronização de usuários concluída: {usuarios.Count} usuários.");
+                    }
 
-                // Salva/atualiza no SQLite local
-                SQLiteDatabase.SalvarFuncionarios(usuarios);
+                    var pratos = await api.ObterPratos();
+                    if (pratos != null)
+                    {
+                        SQLiteDatabase.SalvarPratosApi(pratos);
+                        Console.WriteLine($"Sincronização de pratos concluída: {pratos.Count} pratos.");
+                    }
 
-                Console.WriteLine(
-                    $"Sincronização concluída: {usuarios.Count} usuários."
-                );
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(
-                    $"Erro ao sincronizar com a API: {ex.Message}"
-                );
-            }
+                    var avisos = await api.ObterAvisos();
+                    if (avisos != null)
+                    {
+                        SQLiteDatabase.SalvarAvisosApi(avisos);
+                        Console.WriteLine($"Sincronização de avisos concluída: {avisos.Count} avisos.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[Program] Executando em contingência offline: {ex.Message}");
+                }
+            });
 
             Application.Run(new LoginForm());
         }

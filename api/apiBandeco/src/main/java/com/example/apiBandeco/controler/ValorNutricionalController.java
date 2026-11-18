@@ -13,25 +13,31 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/valorNutricional")
+@RequestMapping({"/valorNutricional", "/valores-nutricionais", "/api/v1/valores-nutricionais"})
 public class ValorNutricionalController {
     @Autowired
     PratosRepository pratosRepository;
     @Autowired
     ValorNutricionalRepository valorNutricionalRepository;
 
-    @GetMapping("/id/{id}")//busca valor nutricional pelo id
+    // Busca valor nutricional por ID (REST: GET /valores-nutricionais/{id})
+    @GetMapping({"/{id}", "/id/{id}"})
     public ValorNutricional buscarPorId(@PathVariable("id") int id){
         return valorNutricionalRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "valor Nutricional não encontrado"
+                        HttpStatus.NOT_FOUND, "Valor Nutricional não encontrado"
                 ));
     }
 
-    @GetMapping("/all")//busca todos os valores nutricionais
-    public List<ValorNutricional> buscarTodosValores(){return valorNutricionalRepository.findAll();}
+    // Listagem geral (REST: GET /valores-nutricionais)
+    @GetMapping
+    public List<ValorNutricional> buscarTodosValores(){
+        return valorNutricionalRepository.findAll();
+    }
 
-    @PostMapping("/cadastrar")//cadastra um valor nutricional
+    // Cadastro de valor nutricional (REST: POST /valores-nutricionais)
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ValorNutricional cadastroValoresNutricionais (@RequestBody @Valid ValorNutricional valorNutricional){
         Integer pratoId = valorNutricional.getPrato() != null
                 ? valorNutricional.getPrato().getId() : null;
@@ -45,18 +51,12 @@ public class ValorNutricionalController {
         return valorNutricionalRepository.save(valorNutricional);
     }
 
-    @DeleteMapping("/deletar/{id}") //deleta valor nutricional pelo id
-    public void deletarValor(@PathVariable(value = "id") int id){
+    // Atualização de valor nutricional (REST: PUT /valores-nutricionais/{id})
+    @PutMapping({"/{id}", "/atualizar", ""})
+    public ValorNutricional atualizaValor (@PathVariable(value = "id", required = false) Integer pathId,
+                                           @RequestBody @Valid ValorNutricional valorNutricional){
+        int id = pathId != null ? pathId : valorNutricional.getId();
         valorNutricionalRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Valor Nutricional não encontrado"));
-
-        valorNutricionalRepository.deleteById(id);
-    }
-
-    @PutMapping("/atualizar")
-    public ValorNutricional atualizaValor (@RequestBody @Valid ValorNutricional valorNutricional){
-        valorNutricionalRepository.findById(valorNutricional.getId())
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Valor Nutricional não encontrado"));
 
@@ -69,7 +69,18 @@ public class ValorNutricionalController {
                             HttpStatus.NOT_FOUND, "Prato não encontrado"));
             valorNutricional.setPrato(prato);
         }
-
+        valorNutricional.setId(id);
         return valorNutricionalRepository.save(valorNutricional);
+    }
+
+    // Exclusão de valor nutricional (REST: DELETE /valores-nutricionais/{id})
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletarValor(@PathVariable(value = "id") int id){
+        valorNutricionalRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Valor Nutricional não encontrado"));
+
+        valorNutricionalRepository.deleteById(id);
     }
 }

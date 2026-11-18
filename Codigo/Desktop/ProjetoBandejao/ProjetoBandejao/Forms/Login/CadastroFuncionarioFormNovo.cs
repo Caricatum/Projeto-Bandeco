@@ -311,7 +311,7 @@ namespace ProjetoBandejao.Forms.Login
                 // =========================
 
                 lblFuncionario = CriarLabel(
-                    "É funcionário/administrador?",
+                    "Acesso ao painel desktop",
                     510,
                     25);
 
@@ -322,7 +322,8 @@ namespace ProjetoBandejao.Forms.Login
                     new Guna2CheckBox();
 
                 chkAdministrador.Text =
-                    "Sim, este usuário possui acesso administrativo";
+                    "Funcionário do restaurante";
+                chkAdministrador.Checked = true;
 
                 chkAdministrador.Font =
                     new Font(
@@ -527,70 +528,60 @@ namespace ProjetoBandejao.Forms.Login
             // CADASTRAR
             // ==================================================
 
-            private void btnCadastrar_Click(
-                object sender,
-                EventArgs e)
+            private async void btnCadastrar_Click(object? sender, EventArgs e)
             {
-                if (string.IsNullOrWhiteSpace(txtNome.Text) ||
-                    string.IsNullOrWhiteSpace(txtEmail.Text) ||
-                    string.IsNullOrWhiteSpace(txtSenha.Text))
+                if (string.IsNullOrWhiteSpace(txtNome.Text) || string.IsNullOrWhiteSpace(txtEmail.Text)
+                    || string.IsNullOrWhiteSpace(txtSenha.Text))
                 {
-                    MessageBox.Show(
-                        "Preencha todos os campos.",
-                        "Atenção",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-
+                    MessageBox.Show(this, "Preencha nome, e-mail e senha.", "Cadastrar funcionário");
                     return;
                 }
 
-                Usuario usuario = new Usuario
+                var usuario = new Usuario
                 {
                     Nome = txtNome.Text.Trim(),
                     Login = txtEmail.Text.Trim(),
                     Senha = txtSenha.Text,
-                    Funcionario =
-                        chkAdministrador.Checked
+                    Funcionario = chkAdministrador.Checked
                 };
-
-                UsuarioService service =
-                    new UsuarioService();
-
-                bool sucesso =
-                    service.Cadastrar(
-                        usuario,
-                        out string mensagemErro);
-
-                if (sucesso)
+                btnCadastrar.Enabled = false;
+                try
                 {
-                    MessageBox.Show(
-                        "Funcionário cadastrado com sucesso!\n\n" +
-                        "Um código de confirmação foi enviado para o e-mail.",
-                        "Sucesso",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    var resultado = await Task.Run(() =>
+                    {
+                        bool sucesso = new UsuarioService().Cadastrar(usuario, out string erro);
+                        return (sucesso, erro);
+                    });
+                    if (IsDisposed) return;
+                    if (!resultado.sucesso)
+                    {
+                        if (resultado.erro.StartsWith("Este e-mail já está cadastrado", StringComparison.Ordinal)
+                            && MessageBox.Show(this, "Este e-mail já existe. Deseja abrir a confirmação da conta?",
+                                "E-mail cadastrado", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                        {
+                            using var confirmacao = new ConfirmarCodigoForm(usuario.Login);
+                            confirmacao.ShowDialog(this);
+                        }
+                        else if (!resultado.erro.StartsWith("Este e-mail já está cadastrado", StringComparison.Ordinal))
+                        {
+                            MessageBox.Show(this, resultado.erro, "Cadastrar funcionário", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                        return;
+                    }
 
-                    ConfirmarCodigoForm tela =
-                        new ConfirmarCodigoForm(
-                            txtEmail.Text.Trim());
-
-                    tela.ShowDialog();
-
-                    this.Close();
+                    if (usuario.Id < 0)
+                        MessageBox.Show(this, "Cadastro salvo neste computador. A confirmação por e-mail estará disponível após a sincronização.", "Cadastro offline");
+                    else
+                    {
+                        using var confirmacao = new ConfirmarCodigoForm(usuario.Login);
+                        confirmacao.ShowDialog(this);
+                    }
+                    DialogResult = DialogResult.OK;
+                    Close();
                 }
-                else
+                finally
                 {
-                    string detalhe =
-                        string.IsNullOrWhiteSpace(
-                            mensagemErro)
-                            ? "Falha ao comunicar com a API."
-                            : mensagemErro;
-
-                    MessageBox.Show(
-                        $"Erro ao cadastrar funcionário:\n{detalhe}",
-                        "Erro",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                    if (!IsDisposed) btnCadastrar.Enabled = true;
                 }
             }
 

@@ -100,12 +100,13 @@
             // 
             // lblQuantidadePratos
             // 
-            lblQuantidadePratos.BackColor = Color.Honeydew;
-            lblQuantidadePratos.BorderColor = Color.Gainsboro;
+            lblQuantidadePratos.BackColor = Color.Transparent;
+            lblQuantidadePratos.BorderColor = Color.Tomato;
             lblQuantidadePratos.BorderRadius = 12;
             lblQuantidadePratos.BorderThickness = 1;
             lblQuantidadePratos.Controls.Add(lblPratosCadastrados);
             lblQuantidadePratos.CustomizableEdges = customizableEdges2;
+            lblQuantidadePratos.FillColor = Color.Tomato;
             lblQuantidadePratos.Location = new Point(249, 15);
             lblQuantidadePratos.Name = "lblQuantidadePratos";
             lblQuantidadePratos.ShadowDecoration.CustomizableEdges = customizableEdges3;
@@ -115,14 +116,14 @@
             // lblPratosCadastrados
             // 
             lblPratosCadastrados.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblPratosCadastrados.BackColor = Color.Honeydew;
+            lblPratosCadastrados.BackColor = Color.Transparent;
             lblPratosCadastrados.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblPratosCadastrados.ForeColor = Color.ForestGreen;
+            lblPratosCadastrados.ForeColor = Color.White;
             lblPratosCadastrados.Location = new Point(12, 5);
             lblPratosCadastrados.Name = "lblPratosCadastrados";
-            lblPratosCadastrados.Size = new Size(123, 17);
+            lblPratosCadastrados.Size = new Size(116, 17);
             lblPratosCadastrados.TabIndex = 4;
-            lblPratosCadastrados.Text = "24 pratos cadastrados";
+            lblPratosCadastrados.Text = "x pratos cadastrados";
             // 
             // label2
             // 
@@ -180,7 +181,7 @@
             guna2Button2.DisabledState.CustomBorderColor = Color.DarkGray;
             guna2Button2.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             guna2Button2.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            guna2Button2.FillColor = Color.Green;
+            guna2Button2.FillColor = Color.OrangeRed;
             guna2Button2.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             guna2Button2.ForeColor = Color.White;
             guna2Button2.Location = new Point(556, 13);
@@ -192,7 +193,7 @@
             // 
             // guna2ComboBox2
             // 
-            guna2ComboBox2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            guna2ComboBox2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             guna2ComboBox2.BackColor = Color.Transparent;
             guna2ComboBox2.BorderRadius = 8;
             guna2ComboBox2.CustomizableEdges = customizableEdges8;
@@ -235,6 +236,7 @@
             // 
             // guna2TextBox1
             // 
+            guna2TextBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             guna2TextBox1.BorderColor = Color.Gainsboro;
             guna2TextBox1.BorderRadius = 8;
             guna2TextBox1.CustomizableEdges = customizableEdges12;
@@ -266,7 +268,7 @@
             btnNovoPrato.DisabledState.CustomBorderColor = Color.DarkGray;
             btnNovoPrato.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnNovoPrato.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnNovoPrato.FillColor = Color.Green;
+            btnNovoPrato.FillColor = Color.OrangeRed;
             btnNovoPrato.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnNovoPrato.ForeColor = Color.White;
             btnNovoPrato.Location = new Point(815, 28);
