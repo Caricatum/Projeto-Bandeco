@@ -1,3 +1,49 @@
+// ========================================================
+// CONTROLE DE PREVIEW DA FOTO DE PERFIL
+// ========================================================
+const inputFoto = document.getElementById('fotoPerfil');
+const imgPreview = document.getElementById('avatarImgPreview');
+const iconPreview = document.getElementById('avatarIconPreview');
+const btnRemoverFoto = document.getElementById('btnRemoverFoto');
+let arquivoFotoSelecionado = null;
+
+if (inputFoto) {
+    inputFoto.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            alert('Por favor, selecione um arquivo de imagem válido (JPG, PNG ou WEBP).');
+            inputFoto.value = '';
+            return;
+        }
+
+        arquivoFotoSelecionado = file;
+        const reader = new FileReader();
+        reader.onload = function (evt) {
+            imgPreview.src = evt.target.result;
+            imgPreview.classList.remove('d-none');
+            iconPreview.classList.add('d-none');
+            btnRemoverFoto.classList.remove('d-none');
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+if (btnRemoverFoto) {
+    btnRemoverFoto.addEventListener('click', function () {
+        arquivoFotoSelecionado = null;
+        if (inputFoto) inputFoto.value = '';
+        imgPreview.src = '';
+        imgPreview.classList.add('d-none');
+        iconPreview.classList.remove('d-none');
+        btnRemoverFoto.classList.add('d-none');
+    });
+}
+
+// ========================================================
+// SUBMISSÃO DO FORMULÁRIO DE CADASTRO
+// ========================================================
 document.getElementById('cadastroForm').addEventListener("submit", function(e){
     e.preventDefault();
 
@@ -14,7 +60,7 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
     // Validações no cliente
     if (!nomeDigitado || !userDigitado || !senhaDigitada) {
         message.style.color = '#D92243';
-        message.innerText = 'Por favor, preencha todos os campos.';
+        message.innerText = 'Por favor, preencha todos os campos obrigatórios.';
         return;
     }
 
@@ -37,7 +83,23 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
         nome: nomeDigitado,
         senhaHash: senhaDigitada,
         funcionario: false,
+        alergiaLeite: document.getElementById('alergiaLeite')?.checked || false,
+        alergiaOvo: document.getElementById('alergiaOvo')?.checked || false,
+        alergiaAmendoim: document.getElementById('alergiaAmendoim')?.checked || false,
+        alergiaCastanhas: document.getElementById('alergiaCastanhas')?.checked || false,
+        alergiaFrutosDoMar: document.getElementById('alergiaFrutosDoMar')?.checked || false,
+        alergiaPeixes: document.getElementById('alergiaPeixes')?.checked || false,
+        alergiaTrigo: document.getElementById('alergiaTrigo')?.checked || false,
+        alergiaSoja: document.getElementById('alergiaSoja')?.checked || false,
+        alergiaGergilim: document.getElementById('alergiaGergilim')?.checked || false
     };
+
+    // Monta o FormData multipart consumido pela API Spring Boot
+    const formData = new FormData();
+    formData.append('user', new Blob([JSON.stringify(usuario)], { type: 'application/json' }));
+    if (arquivoFotoSelecionado) {
+        formData.append('imagem', arquivoFotoSelecionado);
+    }
 
     message.style.color = '#7a1728';
     message.innerText = 'Processando cadastro e enviando código...';
@@ -45,10 +107,7 @@ document.getElementById('cadastroForm').addEventListener("submit", function(e){
 
     fetchAPI('/user', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(usuario)
+        body: formData
     })
     .then(async res => {
         if (!res.ok) {

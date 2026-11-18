@@ -1,8 +1,8 @@
 <?php
 /**
- * Proxy de imagens dos pratos.
- * Serve arquivos da pasta api/apiBandeco/uploads/pratos/ diretamente pelo PHP,
- * evitando dependencia do servidor de arquivos estaticos do Spring Boot.
+ * Proxy de imagens dos pratos e usuários.
+ * Serve arquivos das pastas api/apiBandeco/uploads/ diretamente pelo PHP,
+ * evitando dependência do servidor de arquivos estáticos do Spring Boot.
  *
  * Uso: imagem.php?arquivo=nome-do-arquivo.webp
  */
@@ -17,9 +17,11 @@ if (!$arquivo) {
     exit("Arquivo nao informado.");
 }
 
-
-// Caminhos possíveis até a pasta de uploads
+// Caminhos possíveis até as pastas de uploads (usuários e pratos)
 $pastasPossiveis = [
+    __DIR__ . "/../../../api/apiBandeco/uploads/user/",
+    __DIR__ . "/../../../uploads/user/",
+    __DIR__ . "/../../uploads/user/",
     __DIR__ . "/../../../api/apiBandeco/uploads/pratos/",
     __DIR__ . "/../../../uploads/pratos/",
     __DIR__ . "/../../uploads/pratos/",
@@ -37,21 +39,7 @@ foreach ($pastasPossiveis as $pasta) {
     }
 }
 
-if (!$caminho) {
-
-// Caminho absoluto ate a pasta de uploads
-$pastaUploads = __DIR__ . "/../../../api/apiBandeco/uploads/pratos/";
-$caminho = realpath($pastaUploads . $arquivo);
-
-// Garante que o arquivo esta dentro da pasta esperada (seguranca)
-$pastaNormalizada = realpath($pastaUploads);
-if (!$caminho || !$pastaNormalizada || strpos($caminho, $pastaNormalizada) !== 0) {
-    http_response_code(404);
-    exit("Imagem nao encontrada.");
-}
-
-if (!file_exists($caminho)) {
-
+if (!$caminho || !file_exists($caminho)) {
     http_response_code(404);
     exit("Imagem nao encontrada.");
 }
@@ -76,4 +64,3 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s", filemtime($caminho)) . " GMT
 
 readfile($caminho);
 exit;
-}

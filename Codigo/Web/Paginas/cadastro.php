@@ -9,13 +9,27 @@
 </head>
 <body id="bodyCadastro" class="bg-custom">
 
-    <div class="auth-card">
+    <div class="auth-card auth-card-cadastro">
         <div class="auth-header">
             <h2>Criar Conta</h2>
             <p class="auth-subtitle">Cadastre-se para acessar o Bandeco</p>
         </div>
 
         <form id="cadastroForm">
+            <!-- Foto de Perfil Opcional -->
+            <div class="avatar-upload-wrapper">
+                <div class="avatar-preview-box" id="avatarPreviewBox">
+                    <span id="avatarIconPreview">👤</span>
+                    <img id="avatarImgPreview" class="d-none" alt="Pré-visualização da foto">
+                </div>
+                <div>
+                    <label for="fotoPerfil" class="btn btn-sm btn-outline-danger">📷 Escolher Foto</label>
+                    <input type="file" id="fotoPerfil" accept="image/png, image/jpeg, image/jpg, image/webp" class="d-none">
+                    <button type="button" id="btnRemoverFoto" class="btn btn-sm btn-link text-muted d-none">Remover</button>
+                </div>
+                <small class="text-muted d-block mt-1" style="font-size: 0.78rem;">Foto opcional (JPG, PNG, WEBP)</small>
+            </div>
+
             <div class="input-group-custom">
                 <label for="name">👤 Nome Completo</label>
                 <input type="text" id="name" class="input-custom" placeholder="Seu nome completo" required>
@@ -49,6 +63,23 @@
                 <div class="password-wrapper">
                     <input type="password" id="confirmPassword" class="input-custom" placeholder="Repita sua senha" required>
                     <button type="button" class="btn-toggle-pass" id="btnToggleConfirmar" title="Mostrar/ocultar senha">👁️</button>
+                </div>
+            </div>
+
+            <!-- Restrições Alimentares / Alergias -->
+            <div class="input-group-custom">
+                <label class="mb-1">⚠️ Restrições Alimentares / Alergias (Opcional)</label>
+                <small class="text-muted d-block mb-2" style="font-size: 0.8rem;">Marque os itens aos quais você tem alergia ou intolerância:</small>
+                <div class="alergias-grid">
+                    <label class="alergia-chip"><input type="checkbox" id="alergiaLeite"> 🥛 Leite</label>
+                    <label class="alergia-chip"><input type="checkbox" id="alergiaOvo"> 🥚 Ovo</label>
+                    <label class="alergia-chip"><input type="checkbox" id="alergiaAmendoim"> 🥜 Amendoim</label>
+                    <label class="alergia-chip"><input type="checkbox" id="alergiaCastanhas"> 🌰 Castanhas</label>
+                    <label class="alergia-chip"><input type="checkbox" id="alergiaFrutosDoMar"> 🦐 Frutos Mar</label>
+                    <label class="alergia-chip"><input type="checkbox" id="alergiaPeixes"> 🐟 Peixes</label>
+                    <label class="alergia-chip"><input type="checkbox" id="alergiaTrigo"> 🌾 Glúten</label>
+                    <label class="alergia-chip"><input type="checkbox" id="alergiaSoja"> 🌱 Soja</label>
+                    <label class="alergia-chip"><input type="checkbox" id="alergiaGergilim"> ⚪ Gergelim</label>
                 </div>
             </div>
             

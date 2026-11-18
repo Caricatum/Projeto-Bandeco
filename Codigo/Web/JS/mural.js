@@ -1,4 +1,4 @@
-// =============================================
+﻿// =============================================
 // CONFIGURAÇÃO
 // =============================================
 const API = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:8080';
@@ -123,9 +123,56 @@ document.addEventListener('DOMContentLoaded', async () => {
     // =============================================
     // CARDÁPIO DO DIA E DA SEMANA
     // =============================================
+    await carregarRestricoesUsuario();
     inicializarSeletorData();
     await carregarCardapioDia();
 });
+
+// =============================================
+// RESTRIÇÕES ALIMENTARES DO USUÁRIO LOGADO
+// =============================================
+let restricoesUsuario = null;
+
+async function carregarRestricoesUsuario() {
+    const login = (usuarioLogado && usuarioLogado.username) ? usuarioLogado.username : localStorage.getItem('username');
+    if (!login) {
+        restricoesUsuario = null;
+        return;
+    }
+
+    const chaveCache = 'restricoesUsuario_' + login.toLowerCase();
+    const cache = sessionStorage.getItem(chaveCache);
+    if (cache) {
+        try {
+            restricoesUsuario = JSON.parse(cache);
+            return;
+        } catch (e) {}
+    }
+
+    try {
+        const res = await fetch(`${API}/user/login/${encodeURIComponent(login)}`);
+        if (res.ok) {
+            const data = await res.json();
+            restricoesUsuario = {
+                leite: Boolean(data.alergiaLeite),
+                ovo: Boolean(data.alergiaOvo),
+                amendoim: Boolean(data.alergiaAmendoim),
+                castanhas: Boolean(data.alergiaCastanhas),
+                frutosDoMar: Boolean(data.alergiaFrutosDoMar),
+                peixes: Boolean(data.alergiaPeixes),
+                trigo: Boolean(data.alergiaTrigo),
+                soja: Boolean(data.alergiaSoja),
+                gergilim: Boolean(data.alergiaGergilim)
+            };
+            sessionStorage.setItem(chaveCache, JSON.stringify(restricoesUsuario));
+        } else {
+            restricoesUsuario = null;
+        }
+    } catch (e) {
+        console.warn('Não foi possível carregar restrições do usuário para o cardápio:', e);
+        restricoesUsuario = null;
+    }
+}
 
 
 // =============================================
@@ -181,6 +228,9 @@ window.irParaHoje = function() {
 // CARDÁPIO DO DIA (POR DATA)
 // =============================================
 async function carregarCardapioDia(dataFiltro = null) {
+    if (restricoesUsuario === null && ((usuarioLogado && usuarioLogado.username) || localStorage.getItem('username'))) {
+        await carregarRestricoesUsuario();
+    }
     const area = document.getElementById('areaCardapio');
     if (!area) return;
 
@@ -240,6 +290,9 @@ async function carregarCardapioDia(dataFiltro = null) {
 // CARDÁPIO DA SEMANA
 // =============================================
 window.carregarCardapioSemana = async function() {
+    if (restricoesUsuario === null && ((usuarioLogado && usuarioLogado.username) || localStorage.getItem('username'))) {
+        await carregarRestricoesUsuario();
+    }
     const area = document.getElementById('areaCardapioSemana');
     if (!area) return;
 
@@ -378,31 +431,26 @@ function renderizarCardapio(c, area) {
     `).join('');
 }
 
-// Helper para gerar badges discretas no cardápio
+// Helper para gerar badges discretas no cardápio filtradas pelas restrições da conta do usuário
 function gerarBadgesPratoCardapio(prato) {
-    if (!prato) return '';
+    if (!prato || !restricoesUsuario) return '';
     const tags = [];
 
-    // Alérgenos
-    if (prato.leite)       tags.push({ tipo: 'alergia', texto: '🥛 Leite' });
-    if (prato.ovo)         tags.push({ tipo: 'alergia', texto: '🥚 Ovo' });
-    if (prato.amendoim)    tags.push({ tipo: 'alergia', texto: '🥜 Amendoim' });
-    if (prato.castanhas)   tags.push({ tipo: 'alergia', texto: '🌰 Castanhas' });
-    if (prato.frutosDoMar) tags.push({ tipo: 'alergia', texto: '🦐 Frutos do Mar' });
-    if (prato.peixes)      tags.push({ tipo: 'alergia', texto: '🐟 Peixes' });
-    if (prato.trigo)       tags.push({ tipo: 'alergia', texto: '🌾 Trigo/Glúten' });
-    if (prato.soja)        tags.push({ tipo: 'alergia', texto: '🌱 Soja' });
-    if (prato.gergilim)    tags.push({ tipo: 'alergia', texto: '⚪ Gergelim' });
-
-    // Rótulos Nutricionais
-    if (prato.altoAcucarAdicionado) tags.push({ tipo: 'rotulo', texto: '⚠️ Alto Açúcar' });
-    if (prato.altoGorduraSaturada)  tags.push({ tipo: 'rotulo', texto: '⚠️ Alto Gord. Sat.' });
-    if (prato.altoSodio)            tags.push({ tipo: 'rotulo', texto: '⚠️ Alto Sódio' });
+    // Alérgenos — apenas exibidos se o usuário tiver essa restrição salva na conta
+    if (prato.leite && restricoesUsuario.leite)             tags.push({ tipo: 'alergia', texto: '🥛 Leite' });
+    if (prato.ovo && restricoesUsuario.ovo)                 tags.push({ tipo: 'alergia', texto: '🥚 Ovo' });
+    if (prato.amendoim && restricoesUsuario.amendoim)       tags.push({ tipo: 'alergia', texto: '🥜 Amendoim' });
+    if (prato.castanhas && restricoesUsuario.castanhas)     tags.push({ tipo: 'alergia', texto: '🌰 Castanhas' });
+    if (prato.frutosDoMar && restricoesUsuario.frutosDoMar) tags.push({ tipo: 'alergia', texto: '🦐 Frutos do Mar' });
+    if (prato.peixes && restricoesUsuario.peixes)           tags.push({ tipo: 'alergia', texto: '🐟 Peixes' });
+    if (prato.trigo && restricoesUsuario.trigo)             tags.push({ tipo: 'alergia', texto: '🌾 Trigo/Glúten' });
+    if (prato.soja && restricoesUsuario.soja)               tags.push({ tipo: 'alergia', texto: '🌱 Soja' });
+    if (prato.gergilim && restricoesUsuario.gergilim)       tags.push({ tipo: 'alergia', texto: '⚪ Gergelim' });
 
     if (!tags.length) return '';
 
     return `
-        <span class="d-inline-flex flex-wrap gap-1 align-items-center ms-1">
+        <span class="d-inline-flex flex-wrap gap-1 align-items-center ms-1" title="Restrição alimentar salva na sua conta">
             ${tags.map(t => `
                 <span class="${t.tipo === 'rotulo' ? 'badge-cardapio-rotulo' : 'badge-cardapio-alergia'}">
                     ${t.texto}

@@ -15,9 +15,26 @@ const usuarioSessao = (typeof window.USUARIO_ATUAL !== 'undefined' && window.USU
 const loginLogado = (usuarioSessao.username || '').toLowerCase();
 const isFuncionarioLogado = Boolean(usuarioSessao.funcionario);
 
-let usuarioCarregado = null; // { id, login, nome, funcionario }
+let usuarioCarregado = null; // { id, login, nome, funcionario, ... }
 let todosUsuarios = []; // Lista completa de usuarios para funcionarios
 let filtroTipoAtual = 'todos'; // 'todos' | 'alunos' | 'funcionarios'
+
+// Helper de resolução de URL de imagem de forma robusta
+function resolverUrlImagem(url) {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
+    }
+    const nomeArquivo = url.substring(url.lastIndexOf('/') + 1);
+    return `imagem.php?arquivo=${encodeURIComponent(nomeArquivo)}`;
+}
+
+window.mostrarIconePadraoAvatar = function() {
+    const avatarFoto = document.getElementById('avatarFoto');
+    const avatarIcon = document.getElementById('avatarIcon');
+    if (avatarFoto) avatarFoto.classList.add('d-none');
+    if (avatarIcon) avatarIcon.classList.remove('d-none');
+};
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Limpa dados temporários de edição
@@ -194,10 +211,20 @@ function renderizarListaUsuarios() {
         const tipoLabel = u.funcionario ? 'Func' : 'Aluno';
         const badgeClass = u.funcionario ? 'badge bg-danger text-white' : 'badge bg-warning text-dark';
 
+        let avatarHtml = `<span style="font-size: 1.1rem;">${icon}</span>`;
+        if (u.imagem) {
+            const imgUrl = resolverUrlImagem(u.imagem);
+            avatarHtml = `
+                <img src="${imgUrl}" class="usuario-item-thumb" alt="${u.nome || u.login}" 
+                     onerror="this.style.display='none'; this.nextElementSibling.classList.remove('d-none');">
+                <span class="d-none" style="font-size: 1.1rem;">${icon}</span>
+            `;
+        }
+
         return `
             <div class="usuario-item-lista ${isSelected ? 'selecionado' : ''}" onclick="selecionarUsuarioPeloLogin('${encodeURIComponent(u.login)}')">
                 <div class="d-flex align-items-center gap-2 overflow-hidden me-2">
-                    <span style="font-size: 1.1rem;">${icon}</span>
+                    ${avatarHtml}
                     <div class="text-truncate">
                         <p class="usuario-item-nome text-truncate">${u.nome || u.login}</p>
                         <p class="usuario-item-email text-truncate">${u.login}</p>
@@ -239,27 +266,64 @@ async function carregarDadosUsuario(login) {
         const data = await res.json();
         usuarioCarregado = data;
 
-        // Atualiza campos
+        // Atualiza campos de texto
         document.getElementById('exibeNome').textContent = data.nome || '—';
         document.getElementById('exibeLogin').textContent = data.login || '—';
         
         const badge = document.getElementById('badgeTipoUsuario');
         const exibeTipo = document.getElementById('exibeTipo');
-        const avatar = document.getElementById('avatarIcon');
+        const avatarIcon = document.getElementById('avatarIcon');
+        const avatarFoto = document.getElementById('avatarFoto');
         const titulo = document.getElementById('tituloPagina');
         const btnDeletar = document.getElementById('btnDeletarUser');
         const btnVerMeu = document.getElementById('btnVerMeuPerfil');
 
+        // Tratamento da Imagem de Perfil
+        if (data.imagem) {
+            avatarFoto.src = resolverUrlImagem(data.imagem);
+            avatarFoto.classList.remove('d-none');
+            avatarIcon.classList.add('d-none');
+        } else {
+            avatarFoto.classList.add('d-none');
+            avatarIcon.classList.remove('d-none');
+        }
+
+        // Tipo de Acesso
         if (data.funcionario) {
             badge.className = 'badge-tipo-func';
             badge.textContent = '👔 Funcionário';
             exibeTipo.innerHTML = '<strong>Funcionário</strong> <span class="text-muted">(Acesso Administrativo)</span>';
-            avatar.textContent = '👔';
+            avatarIcon.textContent = '👔';
         } else {
             badge.className = 'badge-tipo-aluno';
             badge.textContent = '🎓 Aluno';
             exibeTipo.innerHTML = '<strong>Aluno</strong>';
-            avatar.textContent = '🎓';
+            avatarIcon.textContent = '🎓';
+        }
+
+        // Renderização das Restrições Alimentares / Alergias
+        const listaAlergias = [];
+        if (data.alergiaLeite) listaAlergias.push('🥛 Leite');
+        if (data.alergiaOvo) listaAlergias.push('🥚 Ovo');
+        if (data.alergiaAmendoim) listaAlergias.push('🥜 Amendoim');
+        if (data.alergiaCastanhas) listaAlergias.push('🌰 Castanhas');
+        if (data.alergiaFrutosDoMar) listaAlergias.push('🦐 Frutos do Mar');
+        if (data.alergiaPeixes) listaAlergias.push('🐟 Peixes');
+        if (data.alergiaTrigo) listaAlergias.push('🌾 Trigo / Glúten');
+        if (data.alergiaSoja) listaAlergias.push('🌱 Soja');
+        if (data.alergiaGergilim) listaAlergias.push('⚪ Gergelim');
+
+        const exibeAlergias = document.getElementById('exibeAlergias');
+        if (exibeAlergias) {
+            if (listaAlergias.length === 0) {
+                exibeAlergias.innerHTML = '<span class="text-muted small">Nenhuma restrição alimentar cadastrada</span>';
+            } else {
+                exibeAlergias.innerHTML = `
+                    <div class="alergias-container">
+                        ${listaAlergias.map(a => `<span class="badge-tag-alergia">${a}</span>`).join('')}
+                    </div>
+                `;
+            }
         }
 
         const isProprioPerfil = (data.login || '').toLowerCase() === loginLogado;

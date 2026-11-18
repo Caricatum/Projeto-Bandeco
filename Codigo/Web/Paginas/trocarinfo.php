@@ -23,7 +23,16 @@ verificarAutenticacao();
       
       <!-- Cabeçalho -->
       <div class="edit-header">
-        <div class="edit-avatar">✏️</div>
+        <div class="edit-avatar-wrapper">
+          <div class="edit-avatar" id="avatarIcon">✏️</div>
+          <img id="avatarFoto" class="edit-foto d-none" alt="Foto do Usuário" onerror="mostrarIconePadraoAvatar()">
+        </div>
+        <div class="mb-3">
+          <label for="fotoPerfil" class="btn btn-sm btn-outline-danger">📷 Trocar Foto</label>
+          <input type="file" id="fotoPerfil" accept="image/png, image/jpeg, image/jpg, image/webp" class="d-none">
+          <button type="button" id="btnRemoverFoto" class="btn btn-sm btn-outline-secondary ms-1 d-none">Remover Foto</button>
+          <small class="text-muted d-block mt-1" style="font-size:0.75rem;">Formatos aceitos: JPG, PNG, WEBP</small>
+        </div>
         <h2 class="edit-title" id="tituloEdicao">Editar Informações</h2>
         <p class="edit-subtitle" id="subtituloEdicao">Atualize os dados de cadastro</p>
       </div>
@@ -40,6 +49,23 @@ verificarAutenticacao();
         <div class="form-group-custom">
           <label class="form-label-custom" for="username">🔑 Login / E-mail</label>
           <input type="text" id="username" class="input-custom" placeholder="Digite seu login ou e-mail" required>
+        </div>
+
+        <!-- Restrições Alimentares / Alergias -->
+        <div class="form-group-custom">
+          <label class="form-label-custom mb-1">⚠️ Restrições Alimentares / Alergias</label>
+          <small class="text-muted d-block mb-2">Marque ou desmarque conforme suas necessidades:</small>
+          <div class="alergias-grid">
+            <label class="alergia-chip"><input type="checkbox" id="alergiaLeite"> 🥛 Leite</label>
+            <label class="alergia-chip"><input type="checkbox" id="alergiaOvo"> 🥚 Ovo</label>
+            <label class="alergia-chip"><input type="checkbox" id="alergiaAmendoim"> 🥜 Amendoim</label>
+            <label class="alergia-chip"><input type="checkbox" id="alergiaCastanhas"> 🌰 Castanhas</label>
+            <label class="alergia-chip"><input type="checkbox" id="alergiaFrutosDoMar"> 🦐 Frutos Mar</label>
+            <label class="alergia-chip"><input type="checkbox" id="alergiaPeixes"> 🐟 Peixes</label>
+            <label class="alergia-chip"><input type="checkbox" id="alergiaTrigo"> 🌾 Trigo/Glúten</label>
+            <label class="alergia-chip"><input type="checkbox" id="alergiaSoja"> 🌱 Soja</label>
+            <label class="alergia-chip"><input type="checkbox" id="alergiaGergilim"> ⚪ Gergelim</label>
+          </div>
         </div>
 
         <!-- Seção: Tipo de Usuário (Visível e Editável apenas para Funcionários) -->
@@ -76,7 +102,7 @@ verificarAutenticacao();
             💾 Salvar Alterações
           </button>
           
-          <button type="button" class="btn-cancelar-info" onclick="window.location.href='dadosperfil.php'">
+          <button type="button" class="btn-cancelar-info mt-2" onclick="window.location.href='dadosperfil.php'">
             ← Cancelar e Voltar
           </button>
         </div>
@@ -88,6 +114,6 @@ verificarAutenticacao();
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../JS/config.js"></script>
-  <script type="module" src="../JS/trocarinfo.js"></script>
+  <script src="../JS/trocarinfo.js"></script>
 </body>
 </html>

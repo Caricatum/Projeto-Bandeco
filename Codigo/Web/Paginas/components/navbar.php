@@ -26,6 +26,15 @@
                     <button class="btn-nav" onclick="window.location.href='sobrenos.php'">ℹ️ Sobre nós</button>
                 </li>
                 
+                <!-- Botão Dados do Perfil: visível se logado -->
+                <li class="nav-item" id="itemPerfil" style="display: none;">
+                    <button class="btn-nav btn-perfil" onclick="window.location.href='dadosperfil.php'" title="Meu Perfil">
+                        <img id="navAvatarFoto" class="nav-avatar-img d-none" alt="Foto de Perfil" onerror="this.classList.add('d-none'); document.getElementById('navAvatarIcon').classList.remove('d-none');">
+                        <span id="navAvatarIcon" class="nav-avatar-icon">👤</span>
+                        <span id="navNomeUsuario" class="d-none d-sm-inline">Perfil</span>
+                    </button>
+                </li>
+
                 <!-- Botão Login: visível se não logado -->
                 <li class="nav-item" id="itemLogin">
                     <button id="btnLogin" class="btn-nav" onclick="window.location.href='login.php'">Login</button>
@@ -62,7 +71,8 @@
                     nome: String(sessaoServidor.nome || ''),
                     username: String(sessaoServidor.login || ''),
                     tipo: sessaoServidor.funcionario ? 'true' : 'false',
-                    funcionario: Boolean(sessaoServidor.funcionario)
+                    funcionario: Boolean(sessaoServidor.funcionario),
+                    imagem: sessaoServidor.imagem ? String(sessaoServidor.imagem) : (localStorage.getItem('imagem') || '')
                 }),
                 writable: false,
                 configurable: false
@@ -78,6 +88,9 @@
         localStorage.setItem('nome', String(sessaoServidor.nome || ''));
         localStorage.setItem('username', String(sessaoServidor.login || ''));
         localStorage.setItem('tipo', sessaoServidor.funcionario ? 'true' : 'false');
+        if (sessaoServidor.imagem) {
+            localStorage.setItem('imagem', String(sessaoServidor.imagem));
+        }
     } else {
         window.USUARIO_ATUAL = null;
         sessionStorage.setItem('logado', 'false');
@@ -85,17 +98,50 @@
         localStorage.removeItem('nome');
         localStorage.removeItem('username');
         localStorage.removeItem('tipo');
+        localStorage.removeItem('imagem');
     }
 })();
+
+function resolverUrlImagemNav(url) {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
+    }
+    const nomeArquivo = url.substring(url.lastIndexOf('/') + 1);
+    return `imagem.php?arquivo=${encodeURIComponent(nomeArquivo)}`;
+}
 
 // Lógica global para gerenciamento do estado da Navbar
 document.addEventListener('DOMContentLoaded', () => {
     const isLogado = !!(window.USUARIO_ATUAL && window.USUARIO_ATUAL.id);
     const itemLogin = document.getElementById('itemLogin');
     const itemSair = document.getElementById('itemSair');
+    const itemPerfil = document.getElementById('itemPerfil');
 
     if (itemLogin) itemLogin.style.display = isLogado ? 'none' : 'block';
     if (itemSair) itemSair.style.display = isLogado ? 'block' : 'none';
+    if (itemPerfil) itemPerfil.style.display = isLogado ? 'block' : 'none';
+
+    if (isLogado) {
+        const foto = (window.USUARIO_ATUAL && window.USUARIO_ATUAL.imagem) || localStorage.getItem('imagem');
+        const nome = (window.USUARIO_ATUAL && window.USUARIO_ATUAL.nome) || localStorage.getItem('nome') || 'Perfil';
+        const primeiroNome = nome.split(' ')[0] || 'Perfil';
+
+        const navNome = document.getElementById('navNomeUsuario');
+        if (navNome) navNome.textContent = primeiroNome;
+
+        const navAvatarFoto = document.getElementById('navAvatarFoto');
+        const navAvatarIcon = document.getElementById('navAvatarIcon');
+
+        if (foto && navAvatarFoto && navAvatarIcon) {
+            navAvatarFoto.src = resolverUrlImagemNav(foto);
+            navAvatarFoto.classList.remove('d-none');
+            navAvatarIcon.classList.add('d-none');
+        } else if (navAvatarFoto && navAvatarIcon) {
+            navAvatarFoto.classList.add('d-none');
+            navAvatarIcon.classList.remove('d-none');
+        }
+    }
 });
 
 function logout() {
