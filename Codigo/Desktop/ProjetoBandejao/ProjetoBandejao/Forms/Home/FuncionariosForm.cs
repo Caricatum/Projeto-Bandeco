@@ -1,179 +1,185 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
-using Guna.UI2.WinForms;
+using ProjetoBandejao.Data;
+using ProjetoBandejao.Forms.Login;
 using ProjetoBandejao.Models;
 using ProjetoBandejao.Services;
-using ProjetoBandejao.Forms.Login;
 
 namespace ProjetoBandejao.Forms.Home
 {
     public partial class FuncionariosForm : Form
     {
-        private readonly UsuarioService usuarioService = new UsuarioService();
-        private List<Usuario> listaUsuariosAtual = new List<Usuario>();
+        private readonly UsuarioService usuarioService = new();
+        private List<Usuario> usuarios = [];
+        private int versao;
+        private bool operacaoEmAndamento;
 
         public FuncionariosForm()
         {
             InitializeComponent();
-            ConfigurarCoresUnicamp();
-            ConfigurarEventos();
-            CarregarFuncionarios();
+            MinimumSize = Size.Empty;
+            BackColor = Color.FromArgb(249, 244, 246);
+            lblTitle.ForeColor = Color.FromArgb(107, 29, 47);
+            iconHeader.Dispose();
+            lblTitle.Left = lblSubtitle.Left = 30;
+            lblSubtitle.Text = "Consulte as contas e seus tipos de acesso.";
+            btnCadastrar.Text = "Cadastrar funcionário";
+            btnRefresh.Text = "Atualizar";
+            int ajuste = Math.Max(0, 78 - btnRefresh.Width);
+            btnRefresh.Left -= ajuste;
+            btnRefresh.Width += ajuste;
+            cbFilter.Left -= ajuste;
+            btnPrev.Visible = btnPage1.Visible = btnNext.Visible = false;
+            btnCadastrar.FillColor = btnPage1.FillColor = Color.FromArgb(107, 29, 47);
+            colAvatar.HeaderText = "Foto";
+            colAvatar.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            colAvatar.DefaultCellStyle.NullValue = null;
+            colCargo.HeaderText = "Acesso";
+            colSetor.Visible = false;
+            colTelefone.Visible = false;
+            colEdit.HeaderText = "Editar";
+            colDelete.HeaderText = "Excluir";
+            colEdit.FlatStyle = colDelete.FlatStyle = FlatStyle.Flat;
+            colEdit.SortMode = colDelete.SortMode = DataGridViewColumnSortMode.NotSortable;
+            colEdit.Visible = colDelete.Visible = btnCadastrar.Visible = PermissoesDesktop.PodeAdministrarContas;
+            cbFilter.Items.Clear();
+            cbFilter.Items.AddRange(["Todas as contas", "Funcionários", "Administradores", "Outras contas"]);
+            cbFilter.SelectedIndex = 0;
+            dgvFuncionarios.CellContentClick += async (_, e) => await AcionarLinhaAsync(e);
+            txtSearch.TextChanged += (_, _) => AplicarFiltros();
+            cbFilter.SelectedIndexChanged += (_, _) => AplicarFiltros();
+            btnRefresh.Click += async (_, _) => await CarregarAsync();
+            btnCadastrar.Click += btnCadastrar_Click;
+            Load += async (_, _) => await CarregarAsync();
+            Disposed += (_, _) => LiberarAvatares();
         }
 
-        private void ConfigurarCoresUnicamp()
+        private async Task CarregarAsync()
         {
-            Color unicampRed = Color.FromArgb(179, 0, 0);
-
-            btnCadastrar.FillColor = unicampRed;
-            btnCadastrar.ForeColor = Color.White;
-
-            btnPage1.FillColor = unicampRed;
-            btnPage1.ForeColor = Color.White;
-
-            dgvFuncionarios.ColumnHeadersDefaultCellStyle.ForeColor = unicampRed;
-            dgvFuncionarios.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White;
-        }
-
-        private void ConfigurarEventos()
-        {
-            btnCadastrar.Click += (s, e) =>
-            {
-                using var frmCad = new CadastroFuncionarioFormNovo();
-                frmCad.ShowDialog();
-                CarregarFuncionarios();
-            };
-
-            btnRefresh.Click += (s, e) => CarregarFuncionarios();
-
-            txtSearch.TextChanged += (s, e) => AplicarFiltros();
-            cbFilter.SelectedIndexChanged += (s, e) => AplicarFiltros();
-
-            dgvFuncionarios.CellClick += (s, e) =>
-            {
-                if (e.RowIndex >= 0 && e.ColumnIndex == colDelete.Index)
-                {
-                    var row = dgvFuncionarios.Rows[e.RowIndex];
-                    string? login = row.Cells[colLogin.Index].Value?.ToString();
-                    var user = listaUsuariosAtual.FirstOrDefault(u => u.Login == login);
-                    if (user != null)
-                    {
-                        var confirm = MessageBox.Show($"Deseja realmente excluir o funcionário '{user.Nome}' ({user.Login})?", "Confirmar Exclusão", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                        if (confirm == DialogResult.Yes)
-                        {
-                            if (usuarioService.Deletar(user.Id))
-                            {
-                                MessageBox.Show("Funcionário excluído com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                CarregarFuncionarios();
-                            }
-                        }
-                    }
-                }
-            };
-        }
-
-        private void CarregarFuncionarios()
-        {
-            listaUsuariosAtual = usuarioService.ListarTodos();
+            int leitura = ++versao;
+            var cache = await Task.Run(SQLiteDatabase.ObterFuncionarios);
+            if (IsDisposed || leitura != versao) return;
+            usuarios = cache;
+            AplicarFiltros();
+            var atualizados = await Task.Run(usuarioService.ListarTodosAsync);
+            if (IsDisposed || leitura != versao) return;
+            usuarios = atualizados;
             AplicarFiltros();
         }
 
         private void AplicarFiltros()
         {
-            dgvFuncionarios.Rows.Clear();
-
             string busca = txtSearch.Text.Trim();
-            IEnumerable<Usuario> filtrados = listaUsuariosAtual;
-
-            if (!string.IsNullOrEmpty(busca))
-            {
-                filtrados = filtrados.Where(u =>
-                    (u.Nome != null && u.Nome.Contains(busca, StringComparison.OrdinalIgnoreCase)) ||
-                    (u.Login != null && u.Login.Contains(busca, StringComparison.OrdinalIgnoreCase))
-                );
-            }
-
-            string filtroCargo = cbFilter.SelectedItem?.ToString() ?? "Todos os Cargos";
-            if (filtroCargo != "Todos os Cargos" && !string.IsNullOrWhiteSpace(filtroCargo))
-            {
-                if (filtroCargo.Contains("Funcionário", StringComparison.OrdinalIgnoreCase) || filtroCargo.Contains("Administrador", StringComparison.OrdinalIgnoreCase))
+            int filtro = cbFilter.SelectedIndex;
+            var encontrados = usuarios.Where(usuario =>
+                (filtro switch
                 {
-                    filtrados = filtrados.Where(u => u.Funcionario);
-                }
-            }
-
-            var listaFinal = filtrados.ToList();
-            lblTotal.Text = $"Total de {listaFinal.Count} funcionário{(listaFinal.Count == 1 ? "" : "s")}";
-
-            foreach (var user in listaFinal)
+                    1 => usuario.Funcionario && !PermissoesDesktop.EhAdministrador(usuario),
+                    2 => PermissoesDesktop.EhAdministrador(usuario),
+                    3 => !usuario.Funcionario,
+                    _ => true
+                })
+                && (busca.Length == 0 || usuario.Nome.Contains(busca, StringComparison.CurrentCultureIgnoreCase)
+                    || usuario.Login.Contains(busca, StringComparison.OrdinalIgnoreCase)
+                    || PermissoesDesktop.Papel(usuario).Contains(busca, StringComparison.CurrentCultureIgnoreCase))).ToList();
+            LiberarAvatares();
+            dgvFuncionarios.Rows.Clear();
+            lblTotal.Text = $"{encontrados.Count} conta(s)";
+            foreach (var usuario in encontrados)
             {
-                string cargo = user.Funcionario ? "Funcionário" : "Cliente / Aluno";
-                string setor = user.Funcionario ? "Administração" : "Acadêmico";
-                string status = "Ativo";
-
-                dgvFuncionarios.Rows.Add(
-                    null,
-                    user.Nome,
-                    user.Login,
-                    cargo,
-                    setor,
-                    "-",
-                    status,
-                    null,
-                    null
-                );
+                int indice = dgvFuncionarios.Rows.Add(null, usuario.Nome, usuario.Login, PermissoesDesktop.Papel(usuario), null,
+                    usuario.Telefone, usuario.Id < 0 ? "Cadastro local" : usuario.StatusFormatado, "Editar", "Excluir");
+                var linha = dgvFuncionarios.Rows[indice];
+                linha.Tag = usuario;
+                if (!string.IsNullOrWhiteSpace(usuario.Imagem)) _ = PreencherFotoAsync(linha, usuario);
             }
+        }
+
+        private async Task PreencherFotoAsync(DataGridViewRow linha, Usuario usuario)
+        {
+            var foto = await FotoUsuario.CarregarAsync(usuario);
+            if (foto == null) return;
+            if (IsDisposed || linha.DataGridView != dgvFuncionarios)
+            {
+                foto.Dispose();
+                return;
+            }
+            linha.Cells[colAvatar.Index].Value = foto;
+        }
+
+        private void LiberarAvatares()
+        {
+            if (dgvFuncionarios.IsDisposed) return;
+            foreach (DataGridViewRow linha in dgvFuncionarios.Rows)
+                if (linha.Cells[colAvatar.Index].Value is Image foto) foto.Dispose();
+        }
+
+        private async Task AcionarLinhaAsync(DataGridViewCellEventArgs e)
+        {
+            if (!PermissoesDesktop.PodeAdministrarContas || operacaoEmAndamento || e.RowIndex < 0 || e.ColumnIndex < 0
+                || dgvFuncionarios.Rows[e.RowIndex].Tag is not Usuario usuario) return;
+
+            if (e.ColumnIndex == colEdit.Index)
+            {
+                using var edicao = new EditarFuncionarioForm(usuario, usuarioService);
+                if (edicao.ShowDialog(this) == DialogResult.OK && !IsDisposed) await CarregarAsync();
+            }
+            else if (e.ColumnIndex == colDelete.Index)
+            {
+                if (usuario.Id == UsuarioSession.UsuarioLogado?.Id)
+                {
+                    MessageBox.Show(this, "A conta em uso não pode ser excluída nesta sessão.", "Excluir conta");
+                    return;
+                }
+                if (MessageBox.Show(this, $"Excluir a conta de {usuario.Nome}?", "Excluir conta",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+                operacaoEmAndamento = true;
+                try
+                {
+                    bool excluido = await Task.Run(() => usuarioService.Deletar(usuario.Id));
+                    if (excluido && !IsDisposed) await CarregarAsync();
+                }
+                finally { operacaoEmAndamento = false; }
+            }
+        }
+
+        private async void btnCadastrar_Click(object sender, EventArgs e)
+        {
+            if (!PermissoesDesktop.PodeAdministrarContas) return;
+            using var cadastro = new CadastroFuncionarioFormNovo();
+            if (cadastro.ShowDialog(this) == DialogResult.OK && !IsDisposed) await CarregarAsync();
         }
 
         private void dgvFuncionarios_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
-            if (e.ColumnIndex == colStatus.Index && e.RowIndex >= 0 && e.Value != null)
+            if (e.RowIndex < 0 || e.Graphics == null
+                || dgvFuncionarios.Rows[e.RowIndex].Tag is not Usuario usuario) return;
+            if (e.ColumnIndex == colEdit.Index || e.ColumnIndex == colDelete.Index)
             {
                 e.PaintBackground(e.CellBounds, true);
-
-                string text = e.Value.ToString() ?? "Ativo";
-                Color bgColor = Color.FromArgb(235, 255, 240);
-                Color textColor = Color.FromArgb(40, 167, 69);
-
-                Rectangle badgeRect = new Rectangle(e.CellBounds.X + 10, e.CellBounds.Y + 10, e.CellBounds.Width - 20, e.CellBounds.Height - 20);
-
-                using (var brush = new SolidBrush(bgColor))
-                {
-                    e.Graphics?.FillRoundedRectangle(brush, badgeRect, 10);
-                }
-
-                TextRenderer.DrawText(e.Graphics, text, dgvFuncionarios.Font, badgeRect, textColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-
+                bool excluir = e.ColumnIndex == colDelete.Index;
+                bool propriaConta = excluir && PermissoesDesktop.EhContaAtual(usuario.Id);
+                var retangulo = new Rectangle(e.CellBounds.X + 4, e.CellBounds.Y + 11,
+                    Math.Max(1, e.CellBounds.Width - 8), Math.Max(1, e.CellBounds.Height - 22));
+                using var fundoAcao = new SolidBrush(propriaConta ? Color.FromArgb(231, 229, 230)
+                    : excluir ? Color.FromArgb(158, 36, 49) : Color.FromArgb(27, 108, 67));
+                e.Graphics.FillRectangle(fundoAcao, retangulo);
+                TextRenderer.DrawText(e.Graphics, excluir ? "Excluir" : "Editar", e.CellStyle.Font ?? dgvFuncionarios.Font,
+                    retangulo, propriaConta ? Color.DimGray : Color.White,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine);
+                e.Paint(e.ClipBounds, DataGridViewPaintParts.Focus);
                 e.Handled = true;
+                return;
             }
-        }
-
-        private void btnCadastrar_Click(object sender, EventArgs e)
-        {
-            CadastroFuncionarioFormNovo cadastro = new CadastroFuncionarioFormNovo();
-
-            cadastro.ShowDialog();
-        }
-    }
-
-    public static class GraphicsExtension
-    {
-        public static void FillRoundedRectangle(this Graphics graphics, Brush brush, Rectangle bounds, int cornerRadius)
-        {
-            if (graphics == null) throw new ArgumentNullException(nameof(graphics));
-            if (brush == null) throw new ArgumentNullException(nameof(brush));
-
-            using (System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath())
-            {
-                path.AddArc(bounds.X, bounds.Y, cornerRadius, cornerRadius, 180, 90);
-                path.AddArc(bounds.X + bounds.Width - cornerRadius, bounds.Y, cornerRadius, cornerRadius, 270, 90);
-                path.AddArc(bounds.X + bounds.Width - cornerRadius, bounds.Y + bounds.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90);
-                path.AddArc(bounds.X, bounds.Y + bounds.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90);
-                path.CloseFigure();
-                graphics.FillPath(brush, path);
-            }
+            if (e.ColumnIndex != colAvatar.Index || e.Value is Image) return;
+            e.PaintBackground(e.CellBounds, true);
+            string iniciais = string.Concat(usuario.Nome.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .Take(2).Select(parte => char.ToUpperInvariant(parte[0])));
+            var area = new Rectangle(e.CellBounds.X + (e.CellBounds.Width - 34) / 2,
+                e.CellBounds.Y + (e.CellBounds.Height - 34) / 2, 34, 34);
+            using var fundo = new SolidBrush(Color.FromArgb(245, 230, 237));
+            e.Graphics.FillEllipse(fundo, area);
+            TextRenderer.DrawText(e.Graphics, iniciais, dgvFuncionarios.Font, area, Color.FromArgb(107, 29, 47),
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+            e.Handled = true;
         }
     }
 }

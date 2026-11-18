@@ -40,6 +40,8 @@ namespace ProjetoBandejao.Models
         public string NomeDia { get; set; } = string.Empty;
         public DateTime Data { get; set; }
         public bool Definido { get; set; } = true;
+        public bool AlteradoLocalmente { get; set; }
+        public bool RecebidoDaApi { get; set; }
 
         public List<ItemRefeicao> AlmocoPadrao { get; set; } = new List<ItemRefeicao>();
         public List<ItemRefeicao> AlmocoVegano { get; set; } = new List<ItemRefeicao>();

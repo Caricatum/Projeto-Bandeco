@@ -1,120 +1,73 @@
-﻿using ProjetoBandejao.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using ProjetoBandejao.Services;
 
 namespace ProjetoBandejao.Forms
 {
     public partial class ConfirmarCodigoForm : Form
     {
+        private readonly UsuarioService service = new();
+
         public ConfirmarCodigoForm(string email)
         {
             InitializeComponent();
-
-            txtEmail.Text = email;
+            txtEmail.Text = email.Trim();
+            txtEmail.ReadOnly = !string.IsNullOrWhiteSpace(email);
+            btnConfirmar.Click += async (_, _) => await ConfirmarAsync();
+            linkReenviar.LinkClicked += async (_, _) => await ReenviarAsync();
+            Shown += (_, _) => mskCodigo.Focus();
         }
 
-        private void btnConfirmar_Click(object sender, EventArgs e)
+        private async Task ConfirmarAsync()
         {
-            if (string.IsNullOrWhiteSpace(txtEmail.Text))
+            if (string.IsNullOrWhiteSpace(txtEmail.Text) || !mskCodigo.MaskCompleted)
             {
-                MessageBox.Show(
-                    "Digite o e-mail.",
-                    "Atenção",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
+                status.Text = "Informe o e-mail e os seis dígitos do código.";
                 return;
             }
-
-            if (!mskCodigo.MaskCompleted)
+            string email = txtEmail.Text.Trim();
+            string codigo = mskCodigo.Text;
+            await ExecutarAsync(() =>
             {
-                MessageBox.Show(
-                    "Digite o código completo.",
-                    "Atenção",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            UsuarioService service =
-                new UsuarioService();
-
-            string codigo =
-                mskCodigo.Text.Replace(" ", "").Trim();
-
-            string mensagemErro;
-
-            bool sucesso =
-                service.ConfirmarEmail(
-                    txtEmail.Text.Trim(),
-                    codigo,
-                    out mensagemErro);
-
-            if (sucesso)
-            {
-                MessageBox.Show(
-                    "E-mail confirmado com sucesso!",
-                    "Sucesso",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show(
-                    string.IsNullOrWhiteSpace(mensagemErro)
-                        ? "Não foi possível confirmar o e-mail."
-                        : mensagemErro,
-                    "Erro",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+                bool sucesso = service.ConfirmarEmail(email, codigo, out string mensagem);
+                return (sucesso, mensagem);
+            }, fecharAoConfirmar: true);
         }
 
-        private void linkReenviar_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private async Task ReenviarAsync()
         {
-            if (string.IsNullOrWhiteSpace(txtEmail.Text))
+            string email = txtEmail.Text.Trim();
+            if (email.Length == 0)
             {
-                MessageBox.Show("Informe o e-mail para reenviar o código.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                status.Text = "Informe seu e-mail para pedir outro código.";
                 return;
             }
-
-            UsuarioService service = new UsuarioService();
-            bool sucesso = service.ReenviarCodigoCadastro(txtEmail.Text.Trim(), out string mensagemRetorno);
-
-            if (sucesso)
+            await ExecutarAsync(() =>
             {
-                MessageBox.Show(
-                    mensagemRetorno + "\n\nVerifique sua caixa de entrada e também a pasta de Spam/Lixo Eletrônico.",
-                    "Sucesso",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show(
-                    string.IsNullOrWhiteSpace(mensagemRetorno) ? "Erro ao reenviar código." : mensagemRetorno,
-                    "Erro",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+                bool sucesso = service.ReenviarCodigoCadastro(email, out string mensagem);
+                return (sucesso, mensagem);
+            }, fecharAoConfirmar: false);
         }
 
-        private void ConfirmarCodigoForm_Load(object sender, EventArgs e)
+        private async Task ExecutarAsync(Func<(bool Sucesso, string Mensagem)> enviar, bool fecharAoConfirmar)
         {
-            this.Shown += (s, e) =>
+            btnConfirmar.Enabled = linkReenviar.Enabled = false;
+            status.Text = "Aguardando a API…";
+            try
             {
-                ActiveControl = null;
-            };
+                var resultado = await Task.Run(enviar);
+                if (IsDisposed) return;
+                if (resultado.Sucesso && fecharAoConfirmar)
+                {
+                    DialogResult = DialogResult.OK;
+                    Close();
+                    return;
+                }
+                status.Text = string.IsNullOrWhiteSpace(resultado.Mensagem)
+                    ? "A API não confirmou a operação." : resultado.Mensagem;
+            }
+            finally
+            {
+                if (!IsDisposed) btnConfirmar.Enabled = linkReenviar.Enabled = true;
+            }
         }
     }
 }

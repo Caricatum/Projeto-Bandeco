@@ -59,8 +59,8 @@ namespace ProjetoBandejao.Forms.Home
             colSetor = new DataGridViewTextBoxColumn();
             colTelefone = new DataGridViewTextBoxColumn();
             colStatus = new DataGridViewTextBoxColumn();
-            colEdit = new DataGridViewImageColumn();
-            colDelete = new DataGridViewImageColumn();
+            colEdit = new DataGridViewButtonColumn();
+            colDelete = new DataGridViewButtonColumn();
             pnlFooter = new Guna.UI2.WinForms.Guna2Panel();
             btnNext = new Guna.UI2.WinForms.Guna2Button();
             btnPage1 = new Guna.UI2.WinForms.Guna2Button();
@@ -458,7 +458,7 @@ namespace ProjetoBandejao.Forms.Home
         private System.Windows.Forms.DataGridViewTextBoxColumn colSetor;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTelefone;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
-        private System.Windows.Forms.DataGridViewImageColumn colEdit;
-        private System.Windows.Forms.DataGridViewImageColumn colDelete;
+        private System.Windows.Forms.DataGridViewButtonColumn colEdit;
+        private System.Windows.Forms.DataGridViewButtonColumn colDelete;
     }
 }

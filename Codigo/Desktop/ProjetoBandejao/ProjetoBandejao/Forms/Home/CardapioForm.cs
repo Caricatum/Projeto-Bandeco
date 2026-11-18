@@ -18,17 +18,33 @@ namespace ProjetoBandejao.Forms.Home
         private List<DiaCardapio> _semana = new List<DiaCardapio>();
         private DiaCardapio _diaAtual = new DiaCardapio();
         private bool _isNoturno = false;
+        private CancellationTokenSource? _consultaSemana;
         private readonly CultureInfo _ptBr = new CultureInfo("pt-BR");
 
         public CardapioForm()
         {
             InitializeComponent();
             ConfigurarEventos();
+            AtualizarBotoesTurno();
             CarregarCardapio();
+            Load += async (_, _) => await AtualizarCardapioDaApiAsync();
+            Disposed += (_, _) => _consultaSemana?.Cancel();
         }
 
         private void ConfigurarEventos()
         {
+            btnCardapioDiurno.Text = "Almoço";
+            btnCardapioNoturno.Text = "Jantar";
+            btnEditarCardapio.Text = "Editar cardápio";
+            btnCopiarDia.Text = "Copiar dia";
+            btnLimparDia.Text = "Limpar dia";
+            pnlCircleIcon.Dispose();
+            lblHeaderSubtitle.Visible = false;
+            lblHeaderTitle.Left = 12;
+            lblHeaderTitle.Top = 14;
+            lblHeaderTitle.ForeColor = Color.FromArgb(107, 29, 47);
+            lblIconNota.Text = "N";
+            lblIconCafe.Text = "i";
             btnCardapioDiurno.Click += (s, e) =>
             {
                 if (_isNoturno)
@@ -65,6 +81,7 @@ namespace ProjetoBandejao.Forms.Home
                         if (d.DiaSemana != DayOfWeek.Saturday && d.DiaSemana != DayOfWeek.Sunday)
                         {
                             d.Definido = true;
+                            _cardapioService.SalvarAlteracaoLocal(d);
                         }
                     });
                     RenderizarBarraSemana();
@@ -77,6 +94,52 @@ namespace ProjetoBandejao.Forms.Home
             {
                 AbrirEditorDia();
             };
+
+            var publicarDia = new Guna2Button
+            {
+                Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                BorderRadius = 6,
+                FillColor = Color.FromArgb(107, 29, 47),
+                Font = btnEditarCardapio.Font,
+                Location = new Point(btnEditarCardapio.Left - 119, btnEditarCardapio.Top),
+                Size = new Size(112, btnEditarCardapio.Height),
+                Text = "Publicar dia"
+            };
+            publicarDia.Click += async (_, _) =>
+            {
+                var dia = _diaAtual;
+                int usuarioId = UsuarioSession.UsuarioLogado?.Id ?? 0;
+                if (usuarioId <= 0)
+                {
+                    MessageBox.Show(this, "Entre com uma conta cadastrada na API para publicar.", "Publicar dia");
+                    return;
+                }
+
+                if (MessageBox.Show(this,
+                    $"Publicar o cardápio de {dia.Data:dd/MM/yyyy} na API? A publicação inclui almoço e jantar. Pão e café ficam no desktop.",
+                    "Publicar dia", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                    return;
+
+                publicarDia.Enabled = false;
+                try
+                {
+                    await _cardapioService.PublicarDiaAsync(dia, usuarioId);
+                    if (!IsDisposed)
+                        MessageBox.Show(this, "Cardápio publicado.", "Publicar dia");
+                }
+                catch (Exception ex) when (ex is HttpRequestException or OperationCanceledException
+                    or System.Text.Json.JsonException or InvalidOperationException)
+                {
+                    if (!IsDisposed)
+                        MessageBox.Show(this, $"Falha ao publicar. O rascunho continua no desktop.\n{ex.Message}", "Publicar dia");
+                }
+                finally
+                {
+                    if (!IsDisposed)
+                        publicarDia.Enabled = true;
+                }
+            };
+            pnlDayActionHeader.Controls.Add(publicarDia);
 
             btnCopiarDia.Click += (s, e) =>
             {
@@ -119,11 +182,11 @@ namespace ProjetoBandejao.Forms.Home
                 btnCardapioNoturno.BorderThickness = 1;
                 btnCardapioNoturno.BorderColor = Color.FromArgb(220, 220, 220);
 
-                lblHeaderAlmoco.Text = "☀️  Almoço";
+                lblHeaderAlmoco.Text = "Almoço";
                 pnlHeaderAlmoco.FillColor = Color.FromArgb(245, 186, 66);
                 lblHeaderAlmoco.ForeColor = Color.FromArgb(50, 20, 28);
 
-                lblHeaderVegano.Text = "🌱  Opções Somente Veganas (Almoço)";
+                lblHeaderVegano.Text = "Opções veganas · Almoço";
                 pnlHeaderVegano.FillColor = Color.FromArgb(46, 125, 50);
             }
             else
@@ -138,11 +201,11 @@ namespace ProjetoBandejao.Forms.Home
                 btnCardapioDiurno.BorderThickness = 1;
                 btnCardapioDiurno.BorderColor = Color.FromArgb(220, 220, 220);
 
-                lblHeaderAlmoco.Text = "🌙  Jantar";
+                lblHeaderAlmoco.Text = "Jantar";
                 pnlHeaderAlmoco.FillColor = Color.FromArgb(107, 29, 47);
                 lblHeaderAlmoco.ForeColor = Color.White;
 
-                lblHeaderVegano.Text = "🌱  Opções Somente Veganas (Jantar)";
+                lblHeaderVegano.Text = "Opções veganas · Jantar";
                 pnlHeaderVegano.FillColor = Color.FromArgb(46, 125, 50);
             }
         }
@@ -175,6 +238,24 @@ namespace ProjetoBandejao.Forms.Home
             RenderizarCardapioDia();
         }
 
+        private async Task AtualizarCardapioDaApiAsync()
+        {
+            _consultaSemana?.Cancel();
+            using var consulta = new CancellationTokenSource();
+            _consultaSemana = consulta;
+            try
+            {
+                if (await _cardapioService.AtualizarSemanaDaApiAsync(_dataReferencia, consulta.Token)
+                    && !IsDisposed && !consulta.IsCancellationRequested)
+                    CarregarCardapio();
+            }
+            finally
+            {
+                if (ReferenceEquals(_consultaSemana, consulta))
+                    _consultaSemana = null;
+            }
+        }
+
         private void RenderizarBarraSemana()
         {
             pnlWeekBar.SuspendLayout();
@@ -195,10 +276,11 @@ namespace ProjetoBandejao.Forms.Home
                 Text = "◀",
                 Margin = new Padding(0, 0, 6, 0)
             };
-            btnNavAnt.Click += (s, e) =>
+            btnNavAnt.Click += async (s, e) =>
             {
                 _dataReferencia = _dataReferencia.AddDays(-7);
                 CarregarCardapio();
+                await AtualizarCardapioDaApiAsync();
             };
             pnlWeekBar.Controls.Add(btnNavAnt);
 
@@ -291,10 +373,11 @@ namespace ProjetoBandejao.Forms.Home
                 Text = "▶",
                 Margin = new Padding(0, 0, 6, 0)
             };
-            btnNavProx.Click += (s, e) =>
+            btnNavProx.Click += async (s, e) =>
             {
                 _dataReferencia = _dataReferencia.AddDays(7);
                 CarregarCardapio();
+                await AtualizarCardapioDaApiAsync();
             };
             pnlWeekBar.Controls.Add(btnNavProx);
 
@@ -311,33 +394,20 @@ namespace ProjetoBandejao.Forms.Home
                 Margin = new Padding(0, 0, 0, 0)
             };
 
-            var lblIconCal = new Label
-            {
-                Text = "📅",
-                Font = new Font("Segoe UI Emoji", 13F),
-                Location = new Point(2, 8),
-                Size = new Size(101, 20),
-                TextAlign = ContentAlignment.MiddleCenter,
-                BackColor = Color.Transparent
-            };
-
             var lblTextoCal = new Label
             {
                 Text = "Selecionar\nSemana",
                 Font = new Font("Segoe UI", 7.5F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(107, 29, 47),
-                Location = new Point(2, 30),
-                Size = new Size(101, 30),
+                Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleCenter,
                 BackColor = Color.Transparent
             };
 
-            btnSelSemana.Controls.Add(lblIconCal);
             btnSelSemana.Controls.Add(lblTextoCal);
 
             Action abrirCal = () => AbrirCalendarioSemana();
             btnSelSemana.Click += (s, e) => abrirCal();
-            lblIconCal.Click += (s, e) => abrirCal();
             lblTextoCal.Click += (s, e) => abrirCal();
 
             pnlWeekBar.Controls.Add(btnSelSemana);
@@ -385,11 +455,12 @@ namespace ProjetoBandejao.Forms.Home
                 ForeColor = Color.FromArgb(50, 50, 50),
                 Font = new Font("Segoe UI", 8.5F, FontStyle.Bold)
             };
-            btnHoje.Click += (s, e) =>
+            btnHoje.Click += async (s, e) =>
             {
                 _dataReferencia = DateTime.Today;
                 CarregarCardapio();
                 dlg.Close();
+                await AtualizarCardapioDaApiAsync();
             };
 
             var btnOk = new Guna2Button
@@ -403,11 +474,12 @@ namespace ProjetoBandejao.Forms.Home
                 ForeColor = Color.White,
                 Font = new Font("Segoe UI", 9F, FontStyle.Bold)
             };
-            btnOk.Click += (s, e) =>
+            btnOk.Click += async (s, e) =>
             {
                 _dataReferencia = monthCalendar.SelectionStart;
                 CarregarCardapio();
                 dlg.Close();
+                await AtualizarCardapioDaApiAsync();
             };
 
             var btnCancelar = new Guna2Button
@@ -481,13 +553,16 @@ namespace ProjetoBandejao.Forms.Home
             };
 
             // Thumbnail do prato
-            var pic = new PictureBox
+            var pic = new Label
             {
                 Location = new Point(6, 6),
                 Size = new Size(40, 40),
-                SizeMode = PictureBoxSizeMode.CenterImage,
                 BackColor = isVegano ? Color.FromArgb(232, 245, 233) : Color.FromArgb(254, 243, 224),
-                Image = GerarThumbnailIcone(item.Categoria, item.IconeEmoji, isVegano)
+                ForeColor = isVegano ? Color.FromArgb(36, 104, 48) : Color.FromArgb(107, 29, 47),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                Text = string.Concat(item.Categoria.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .Take(2).Select(parte => char.ToUpperInvariant(parte[0])))
             };
 
             // Categoria
@@ -509,7 +584,8 @@ namespace ProjetoBandejao.Forms.Home
                 ForeColor = Color.FromArgb(35, 35, 35),
                 Location = new Point(52, 23),
                 AutoSize = false,
-                Size = new Size(width - 130, 24),
+                Size = new Size(width - 185, 24),
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
                 AutoEllipsis = true,
                 BackColor = Color.Transparent
             };
@@ -517,14 +593,15 @@ namespace ProjetoBandejao.Forms.Home
             // Botão Editar (Lápis)
             var btnEdit = new Guna2Button
             {
-                Size = new Size(28, 28),
-                Location = new Point(width - 66, 12),
+                Size = new Size(58, 28),
+                Location = new Point(width - 125, 12),
                 BorderRadius = 6,
                 Cursor = Cursors.Hand,
                 FillColor = Color.FromArgb(254, 243, 220),
                 ForeColor = Color.FromArgb(190, 120, 20),
-                Font = new Font("Segoe UI Emoji", 8F),
-                Text = "✏️",
+                Font = new Font("Segoe UI", 8F),
+                Text = "Editar",
+                TextOffset = new Point(0, 0),
                 Anchor = AnchorStyles.Top | AnchorStyles.Right
             };
 
@@ -536,14 +613,14 @@ namespace ProjetoBandejao.Forms.Home
             // Botão Excluir (Lixeira)
             var btnDel = new Guna2Button
             {
-                Size = new Size(28, 28),
-                Location = new Point(width - 34, 12),
+                Size = new Size(61, 28),
+                Location = new Point(width - 66, 12),
                 BorderRadius = 6,
                 Cursor = Cursors.Hand,
                 FillColor = Color.FromArgb(254, 235, 235),
                 ForeColor = Color.FromArgb(210, 45, 45),
-                Font = new Font("Segoe UI Emoji", 8F),
-                Text = "🗑️",
+                Font = new Font("Segoe UI", 8F),
+                Text = "Limpar",
                 Anchor = AnchorStyles.Top | AnchorStyles.Right
             };
 
@@ -551,6 +628,7 @@ namespace ProjetoBandejao.Forms.Home
             {
                 item.Nome = "Não informado";
                 lblNome.Text = item.Nome;
+                _cardapioService.SalvarAlteracaoLocal(_diaAtual);
             };
 
             card.Controls.Add(pic);
@@ -560,26 +638,6 @@ namespace ProjetoBandejao.Forms.Home
             card.Controls.Add(btnDel);
 
             return card;
-        }
-
-        private Image GerarThumbnailIcone(string categoria, string? emoji, bool isVegano)
-        {
-            var bmp = new Bitmap(40, 40);
-            using var g = Graphics.FromImage(bmp);
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-
-            string texto = emoji ?? (isVegano ? "🌱" : "🍽️");
-            using var font = new Font("Segoe UI Emoji", 15F);
-            using var brush = new SolidBrush(Color.Black);
-
-            var sf = new StringFormat
-            {
-                Alignment = StringAlignment.Center,
-                LineAlignment = StringAlignment.Center
-            };
-
-            g.DrawString(texto, font, brush, new RectangleF(0, 0, 40, 40), sf);
-            return bmp;
         }
 
         private void AjustarLarguraItens()
@@ -604,6 +662,7 @@ namespace ProjetoBandejao.Forms.Home
             {
                 item.Nome = novoNome.Trim();
                 _diaAtual.Definido = true;
+                _cardapioService.SalvarAlteracaoLocal(_diaAtual);
                 RenderizarBarraSemana();
                 RenderizarCardapioDia();
             }
@@ -612,7 +671,7 @@ namespace ProjetoBandejao.Forms.Home
         private void AbrirEditorDia()
         {
             string msg = $"Selecione o que deseja fazer no cardápio de {_diaAtual.NomeDia} ({_diaAtual.Data:dd/MM/yyyy}):\n\n" +
-                         "• Clique no ícone de lápis (✏️) em cada prato para alterar o item individualmente.\n" +
+                         "• Clique em Editar no prato que deseja alterar.\n" +
                          "• Use 'Copiar para outro dia' para replicar o cardápio em outra data.\n" +
                          "• Use 'Limpar Dia' para resetar a seleção.";
 

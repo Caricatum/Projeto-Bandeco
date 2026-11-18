@@ -37,9 +37,6 @@
             txtSenha = new TextBox();
             btnEntrar = new Button();
             lblMensagem = new Label();
-            linkCadastro = new LinkLabel();
-            linkEsqueciSenha = new LinkLabel();
-            linkEntrarOffline = new LinkLabel();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -135,50 +132,12 @@
             lblMensagem.TabIndex = 8;
             lblMensagem.TextAlign = ContentAlignment.TopCenter;
             // 
-            // linkCadastro
-            // 
-            linkCadastro.AutoSize = true;
-            linkCadastro.Location = new Point(576, 395);
-            linkCadastro.Name = "linkCadastro";
-            linkCadastro.Size = new Size(121, 15);
-            linkCadastro.TabIndex = 9;
-            linkCadastro.TabStop = true;
-            linkCadastro.Text = "Cadastrar funcionário";
-            linkCadastro.LinkClicked += linkCadastro_LinkClicked;
-            // 
-            // linkEsqueciSenha
-            // 
-            linkEsqueciSenha.AutoSize = true;
-            linkEsqueciSenha.Location = new Point(624, 267);
-            linkEsqueciSenha.Name = "linkEsqueciSenha";
-            linkEsqueciSenha.Size = new Size(118, 15);
-            linkEsqueciSenha.TabIndex = 10;
-            linkEsqueciSenha.TabStop = true;
-            linkEsqueciSenha.Text = "Esqueci minha senha";
-            linkEsqueciSenha.LinkClicked += linkEsqueciSenha_LinkClicked;
-            // 
-            // linkEntrarOffline
-            // 
-            linkEntrarOffline.AutoSize = true;
-            linkEntrarOffline.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            linkEntrarOffline.LinkColor = Color.DarkSlateGray;
-            linkEntrarOffline.Location = new Point(566, 420);
-            linkEntrarOffline.Name = "linkEntrarOffline";
-            linkEntrarOffline.Size = new Size(140, 15);
-            linkEntrarOffline.TabIndex = 11;
-            linkEntrarOffline.TabStop = true;
-            linkEntrarOffline.Text = "⚡ Entrar em Modo Offline";
-            linkEntrarOffline.LinkClicked += linkEntrarOffline_LinkClicked;
-            // 
             // LoginForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(884, 461);
-            Controls.Add(linkEntrarOffline);
-            Controls.Add(linkEsqueciSenha);
-            Controls.Add(linkCadastro);
             Controls.Add(lblMensagem);
             Controls.Add(btnEntrar);
             Controls.Add(txtSenha);
@@ -210,8 +169,5 @@
         private TextBox txtSenha;
         private Button btnEntrar;
         private Label lblMensagem;
-        private LinkLabel linkCadastro;
-        private LinkLabel linkEsqueciSenha;
-        private LinkLabel linkEntrarOffline;
     }
 }

@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="administradores.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Compile Update="Properties\Resource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
